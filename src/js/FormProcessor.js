@@ -14,7 +14,6 @@ FlancheJs.defineClass("kat.FormProcessor", {
    */
   init: function (annotationDefinition) {
     this._annotationDefinition = annotationDefinition;
-    console.log(this._annotationDefinition);
   },
 
   methods: {
@@ -24,10 +23,15 @@ FlancheJs.defineClass("kat.FormProcessor", {
     parse: function () {
       console.log(this._annotationDefinition);
     }
+
   },
 
   internals: {
-    annotationDefinition: null
+    annotationDefinition: null,
+
+    parseByType : function(annotationField){
+
+    }
   }
 
 })
