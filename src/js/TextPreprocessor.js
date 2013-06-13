@@ -124,7 +124,12 @@ FlancheJs.defineClass("kat.TextPreprocessor", {
             $(this.getSelector()).mouseup(function() {
                 var selectedIds = self.getSelectedIds();
                 if(selectedIds){
-                    console.log(selectedIds);
+                    var tooltipOptions = {
+                        title: "gogu",
+                        trigger: ''
+                    };
+                    $("#" + selectedIds["extentNodeId"]).tooltip(tooltipOptions);
+                    $("#" + selectedIds["extentNodeId"]).tooltip('show');
                 }
             })
         },
