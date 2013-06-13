@@ -8,13 +8,26 @@
 
 FlancheJs.defineClass("kat.FormProcessor", {
 
-  init : function(formDefinition){
-    this._formDefinition = formDefinition;
-    console.log(this._formDefinition)
+  /**
+   * Constructor for the class
+   * @param {kat.util.XMLDoc} annotationDefinition an annotation:input xml element from which the form should be extracted
+   */
+  init: function (annotationDefinition) {
+    this._annotationDefinition = annotationDefinition;
+    console.log(this._annotationDefinition);
   },
 
-  internals : {
-    formDefinition : null
+  methods: {
+    /**
+     * Parses the annotation:input and return an html form as string
+     */
+    parse: function () {
+      console.log(this._annotationDefinition);
+    }
+  },
+
+  internals: {
+    annotationDefinition: null
   }
 
 })

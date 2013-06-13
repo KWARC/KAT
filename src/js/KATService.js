@@ -8,11 +8,25 @@
 
 FlancheJs.defineClass("kat.KATService", {
   init : function(ontologyDocString){
-    this._ontologyDocString = new kat.util.XMLDoc(ontologyDocString);
-    console.log(this._ontologyDocString);
+    this._ontologyDoc = new kat.util.XMLDoc(ontologyDocString);
+  },
+
+  methods : {
+    run : function(){
+      this._processAnnotationForm();
+    }
   },
 
   internals :{
-    ontologyDocString : null
+    ontologyDoc : null,
+
+    processAnnotationForm : function(){
+      var formProcessor = new kat.FormProcessor(this._ontologyDoc.filter(this.KAnnotationInputFilter));
+      formProcessor.parse();
+    }
+  },
+
+  statics : {
+    KAnnotationInputFilter : "//rdf:Description/annotation:annotation/annotation:input"
   }
 })

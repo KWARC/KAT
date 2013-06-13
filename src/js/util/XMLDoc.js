@@ -31,7 +31,7 @@ FlancheJs.defineClass("kat.util.XMLDoc", {
       do {
         var next = iter.iterateNext();
         if ((next instanceof Document) || (next instanceof Element)) {
-          next = new Rj.util.XMLDoc(next);
+          next = new kat.util.XMLDoc(next);
         }
         resultSet.push(next);
       } while (next != null);
