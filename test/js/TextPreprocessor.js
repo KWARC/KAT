@@ -5,4 +5,7 @@
  * @author <a href="mailto:v.merticariu@jacobs-university,de">Vlad Merticariu</a>
  */
 
-
+$(document).ready(function(){
+    textPreprocessor = new kat.TextPreprocessor("#text");
+    textPreprocessor.run();
+})
