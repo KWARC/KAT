@@ -5,28 +5,29 @@ LIBDIR=lib
 SRCDIR=src
 INSTALLDIR=/srv/http/kat
 
-fileseparatorBuild:
+init:
+	mkdir -p $(BINDIR)
 	echo -e "\n\n\n\n" > fileseparator
 
-libjs: fileseparatorBuild $(LIBDIR)/Bootstrap/js/bootstrap.min.js $(LIBDIR)/FlancheJs/flanchejs.js $(LIBDIR)/jQuery/jquery.js	$(LIBDIR)/underscorejs/underscore.js
+libjs: init $(LIBDIR)/Bootstrap/js/bootstrap.min.js $(LIBDIR)/FlancheJs/flanchejs.js $(LIBDIR)/jQuery/jquery.js	$(LIBDIR)/underscorejs/underscore.js
 	cat $(LIBDIR)/jQuery/jquery.js   fileseparator                     \
 	$(LIBDIR)/FlancheJs/flanchejs.js fileseparator                     \
 	$(LIBDIR)/underscorejs/underscore.js                               \
 	$(LIBDIR)/Bootstrap/js/bootstrap.min.js                            > $(BINDIR)/kat_lib.js
 
-libcss: fileseparatorBuild $(LIBDIR)/Bootstrap/css/bootstrap.min.css
+libcss: init $(LIBDIR)/Bootstrap/css/bootstrap.min.css
 	cat $(LIBDIR)/Bootstrap/css/bootstrap.min.css                      > $(BINDIR)/kat_lib.css
 
-srcjs: fileseparatorBuild 	$(SRCDIR)/js/util/Util.js
+srcjs: init 	$(SRCDIR)/js/util/Util.js
 	cat $(SRCDIR)/js/util/Util.js                                      > $(BINDIR)/kat_src.js
 
-srccss: fileseparatorBuild $(SRCDIR)/css/kat.css
+srccss: init $(SRCDIR)/css/kat.css
 	cat $(SRCDIR)/css/kat.css                                          > $(BINDIR)/kat_src.css
 
-js: fileseparatorBuild libjs srcjs
+js: init libjs srcjs
 	cat	$(BINDIR)/kat_lib.js fileseparator $(BINDIR)/kat_src.js        > $(BINDIR)/kat.js
 
-css: fileseparatorBuild libcss srccss
+css: init libcss srccss
 	cat $(BINDIR)/kat_lib.css fileseparator $(BINDIR)/kat_src.css      > $(BINDIR)/kat.css
 
 img: $(LIBDIR)/Bootstrap/img
@@ -36,7 +37,7 @@ all: js css	img
 	@echo -e "\n\n#>The build is complete\n\n"
 
 clean:
-	rm -rf $(BINDIR)/*
+	rm -rf $(BINDIR)
 	rm fileseparator
 
 install: test bin
