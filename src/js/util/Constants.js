@@ -8,7 +8,8 @@ FlancheJs.defineObject("kat.Constants", {
     statics: {
         TextPreprocessor:{
             IdPrexif: "kat",
-            Selector: "body"
+            Selector: "body",
+            SpanClass: "kat-counter"
         }
     }
 })
