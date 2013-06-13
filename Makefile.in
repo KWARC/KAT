@@ -7,7 +7,7 @@ INSTALLDIR=/srv/http/kat
 
 init:
 	mkdir -p $(BINDIR)
-	echo -e "\n\n\n\n" > fileseparator
+	printf "\n\n\n\n" > fileseparator
 
 libjs: init $(LIBDIR)/Bootstrap/js/bootstrap.min.js $(LIBDIR)/FlancheJs/flanchejs.js $(LIBDIR)/jQuery/jquery.js	$(LIBDIR)/underscorejs/underscore.js
 	cat $(LIBDIR)/jQuery/jquery.js   fileseparator                     \
