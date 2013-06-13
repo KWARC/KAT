@@ -13,12 +13,12 @@ $(document).ready(function(){
         {
             "idBase": "kat-140",
             "idExtent": "kat-155",
-            "content": "Annotation 1 content"
+            "content": "<b>Title:</b> Annotation 1 <br/> <b>Content:</b> This is the annotation content."
         },
         {
             "idBase": "kat-60",
             "idExtent": "kat-60",
-            "content": "Annotation 2 content"
+            "content": "<b>Title:</b> Annotation 2 <br/> <b>Content:</b> This is the annotation content.<br/>"
         }
     ]
     
