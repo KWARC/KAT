@@ -5,21 +5,26 @@
  */
 
 FlancheJs.defineObject("kat.Constants", {
-    init: function() {
+  init   : function () {
 
+  },
+  statics: {
+    TextPreprocessor: {
+      IdPrefix          : "kat",
+      Selector          : "body",
+      SpanClass         : "kat-counter",
+      AnnotationLinkText: "Annotate!"
     },
-    statics: {
-        TextPreprocessor: {
-            IdPrefix: "kat",
-            Selector: "body",
-            SpanClass: "kat-counter",
-        },
-        Display: {
-            SpecialClass: "kat-annotated",
-            Triger: "hover",
-            AnnotationIdPrefix: "kat-annotation"
-        }
+    Display         : {
+      SpecialClass       : "kat-annotated",
+      Triger             : "hover",
+      AnnotationIdPrefix : "kat-annotation",
+      AnnotationFormTitle: "Add Annotation"
+    },
+    Form            : {
+      FieldPrefix: "field-id-"
     }
+  }
 });
 
 

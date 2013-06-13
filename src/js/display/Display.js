@@ -1,6 +1,6 @@
-/* 
+/*
  * Creates and controls the annotation displays.
- * 
+ *
  * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
  * @author <a href="mailto:v.merticariu@jacobs-university,de">Vlad Merticariu</a>
  */
@@ -8,9 +8,9 @@
 FlancheJs.defineClass("kat.Display", {
     /**
      * Class constructor
-     * @param Array[Object{idBase, idExtent, content}] annotations The array of
+     * @param {Array[Object{idBase, idExtent, content}]} annotations The array of
      * annotations to be displayed.
-     * @param {string} specialClass The class to be added to the words having
+     * @param {String} specialClass The class to be added to the words having
      * annotations bound.
      */
     init: function(annotations, specialClass) {
@@ -29,7 +29,7 @@ FlancheJs.defineClass("kat.Display", {
     },
     methods: {
         /**
-         * Adds the class to the spans havin annotations bound
+         * Adds the class to the spans having annotations bound
          */
         addSpecialClassToSpans: function() {
             for (var i = 0; i < this.getAnnotations().length; i++) {
@@ -47,13 +47,13 @@ FlancheJs.defineClass("kat.Display", {
                     id2 = id1;
                     id1 = aux;
                 }
-                
+
                 var annotatedIds = [];
                 for (var j = id1; j <= id2; j++) {
                     annotatedIds[j-id1] = "#" + prefix + "-" + j;
                 }
                 var currentAnnotationId = kat.Constants.Display.AnnotationIdPrefix;
-                currentAnnotationId += "-" + parseInt(Math.random()*100000);                        
+                currentAnnotationId += "-" + parseInt(Math.random()*100000);
                 $(annotatedIds.join(",")).wrapAll("<span id='" + currentAnnotationId + "' class='" + this.getSpecialClass() + "'>");
                 this.$annotations[i]["id"] = currentAnnotationId;
 

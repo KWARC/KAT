@@ -21,12 +21,9 @@ FlancheJs.defineClass("kat.KATService", {
     ontologyDoc : null,
 
     processAnnotationForm : function(){
-      var formProcessor = new kat.FormProcessor(this._ontologyDoc.filter(this.KAnnotationInputFilter));
-      formProcessor.parse();
+      var formProcessor = new kat.input.form.FormParser(this._ontologyDoc.filter(this.KAnnotationInputFilter)[0]);
+      $("body").append(formProcessor.parse());
     }
   },
 
-  statics : {
-    KAnnotationInputFilter : "//rdf:Description/annotation:annotation/annotation:input"
-  }
 })

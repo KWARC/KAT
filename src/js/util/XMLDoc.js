@@ -32,8 +32,8 @@ FlancheJs.defineClass("kat.util.XMLDoc", {
         var next = iter.iterateNext();
         if ((next instanceof Document) || (next instanceof Element)) {
           next = new kat.util.XMLDoc(next);
+          resultSet.push(next);
         }
-        resultSet.push(next);
       } while (next != null);
       return resultSet;
     },
@@ -51,6 +51,16 @@ FlancheJs.defineClass("kat.util.XMLDoc", {
 
     getTextContents: function () {
       return this.getXmlDoc().textContent;
+    },
+
+    getAttribute: function (attribute) {
+      return this.getXmlDoc().getAttribute(attribute)
+    },
+
+    getChildren: function(){
+      return _.map(this.getXmlDoc().childNodes, function(node){
+        return new kat.util.XMLDoc(node);
+      });
     }
   },
 
