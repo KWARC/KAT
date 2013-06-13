@@ -1,3 +1,7 @@
 .tooltipster-content a {
     color: #fff;
 }
+
+.kat-annotated {
+    border-bottom: 1px #000 dashed;
+}

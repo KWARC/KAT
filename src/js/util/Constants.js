@@ -5,16 +5,21 @@
  */
 
 FlancheJs.defineObject("kat.Constants", {
-  init   : function () {
+    init: function() {
 
-  },
-  statics: {
-    TextPreprocessor: {
-      IdPrefix : "kat",
-      Selector : "body",
-      SpanClass: "kat-counter"
+    },
+    statics: {
+        TextPreprocessor: {
+            IdPrefix: "kat",
+            Selector: "body",
+            SpanClass: "kat-counter",
+        },
+        Display: {
+            SpecialClass: "kat-annotated",
+            Triger: "hover",
+            AnnotationIdPrefix: "kat-annotation"
+        }
     }
-  }
 });
 
 
