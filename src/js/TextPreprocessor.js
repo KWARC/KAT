@@ -81,7 +81,7 @@ FlancheJs.defineClass("kat.TextPreprocessor", {
             for (var i in splitText) {
                 markedText += "<span class='";
                 markedText += kat.Constants.TextPreprocessor.SpanClass;
-                markedText += "' id='" + kat.Constants.TextPreprocessor.IdPrefix + "-";
+                markedText += "' id='" + this.getIdPrefix() + "-";
                 markedText += (parseInt(startCounter) + parseInt(i)) + "'>" + splitText[i] + " </span>";
                 counter = parseInt(startCounter) + parseInt(i) + 1;
             }
@@ -89,6 +89,53 @@ FlancheJs.defineClass("kat.TextPreprocessor", {
             result.text = markedText;
             result.counter = counter;
             return result;
+        },
+        /**
+         * Returns the ids containing the selected text.
+         */
+        getSelectedIds: function() {
+            var t;
+            if (window.getSelection) {
+                t = window.getSelection();
+            } else if (document.getSelection) {
+                t = document.getSelection();
+            } else if (document.selection) {
+                t = document.selection.createRange().text;
+            }
+            var baseNodeId = $(t.baseNode.parentNode).attr('id');
+            var extentNodeId = $(t.extentNode.parentNode).attr('id');
+            if (t.toString()) {
+                return {
+                    "baseNodeId": baseNodeId,
+                    "extentNodeId": extentNodeId
+                }
+            }
+            else{
+                return null;
+            }
+
+        },
+        /**
+         * When text is selected, the container ids are sent for further
+         * processing.
+         */
+        addSelectionListener: function() {
+            var self = this;
+            $(this.getSelector()).mouseup(function() {
+                var selectedIds = self.getSelectedIds();
+                if(selectedIds){
+                    console.log(selectedIds);
+                }
+            })
+        },
+        /**
+         * Encapsulates the behavior of the text preprocessor.
+         * First, it adds counters to the text. The it addes selection
+         * listeners.
+         */
+        run: function() {
+            this.addCounter();
+            this.addSelectionListener();
         }
     }
 });
