@@ -3,7 +3,11 @@
 BINDIR=bin
 LIBDIR=lib
 SRCDIR=src
-SOURCES=$(wildcard $(SRCDIR)/*.js)
+SOURCES=$(shell find $(SRCDIR)/js/util -name '*.js') fileseparator\
+$(shell find $(SRCDIR)/js/preprocessor -name '*.js') fileseparator\
+$(shell find $(SRCDIR)/js/input -name '*.js')        fileseparator\
+$(shell find $(SRCDIR)/js/output -name '*.js')       fileseparator\
+$(shell find $(SRCDIR)/js/main -name '*.js')
 INSTALLDIR=/srv/http/kat
 
 init:
@@ -20,7 +24,7 @@ libcss: init $(LIBDIR)/Bootstrap/css/bootstrap.min.css
 	cat $(LIBDIR)/Bootstrap/css/bootstrap.min.css                      > $(BINDIR)/kat_lib.css
 
 srcjs: init 	$(SRCDIR)/js/util/Util.js
-	cat $(SOURCES) > $(BINDIR)/kat_src.js
+	cat $(SOURCES)                                                     > $(BINDIR)/kat_src.js
 
 srccss: init $(SRCDIR)/css/kat.css
 	cat $(SRCDIR)/css/kat.css                                          > $(BINDIR)/kat_src.css
