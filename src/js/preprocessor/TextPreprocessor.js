@@ -110,7 +110,7 @@ FlancheJs.defineClass("kat.TextPreprocessor", {
                     "extentNodeId": extentNodeId
                 }
             }
-            else{
+            else {
                 return null;
             }
 
@@ -123,13 +123,17 @@ FlancheJs.defineClass("kat.TextPreprocessor", {
             var self = this;
             $(this.getSelector()).mouseup(function() {
                 var selectedIds = self.getSelectedIds();
-                if(selectedIds){
+                if (selectedIds) {
+                    var tooltipsterOnClick = 'onClick = "(function(){';
+                    tooltipsterOnClick += 'console.log(\'' + selectedIds["baseNodeId"];
+                    tooltipsterOnClick += '\',\'' + selectedIds["extentNodeId"] + '\');})()"';
                     var tooltipOptions = {
-                        title: "gogu",
-                        trigger: ''
+                        trigger: "custom",
+                        interactive: true,
+                        content: "<a " + tooltipsterOnClick + " href='#'>Anotate!</a>"
                     };
-                    $("#" + selectedIds["extentNodeId"]).tooltip(tooltipOptions);
-                    $("#" + selectedIds["extentNodeId"]).tooltip('show');
+                    $("#" + selectedIds["extentNodeId"]).tooltipster(tooltipOptions);
+                    $("#" + selectedIds["extentNodeId"]).tooltipster('show');
                 }
             })
         },
