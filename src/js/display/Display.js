@@ -64,11 +64,19 @@ FlancheJs.defineClass("kat.Display", {
                 var tooltipsterOptions = {
                     //"trigger": kat.Constants.Display.Triger,
                     //"interactive": true,
+                    "title": 'Annottaion<button type="button" class="close" id="close-' + this.$annotations[i].id + '" aria-hidden="true">&times;</button>',
                     "html": true,
                     "placement": "bottom",
                     "content": this.$annotations[i].content
                 }
                 $("#" + this.$annotations[i].id).popover(tooltipsterOptions);
+                var annotationId = "#" + this.$annotations[i].id;
+                var annotationCloseId = "#" + 'close-' + this.$annotations[i].id; 
+                (function(annotationId, annotationCloseId){
+                    $("body").delegate(annotationCloseId, "click", function() {                        
+                        $(annotationId).popover('hide');
+                    })
+                })(annotationId, annotationCloseId)
             }
         },
         /**
