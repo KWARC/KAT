@@ -50,10 +50,10 @@ FlancheJs.defineClass("kat.Display", {
 
                 var annotatedIds = [];
                 for (var j = id1; j <= id2; j++) {
-                    annotatedIds[j-id1] = "#" + prefix + "-" + j;
+                    annotatedIds[j - id1] = "#" + prefix + "-" + j;
                 }
                 var currentAnnotationId = kat.Constants.Display.AnnotationIdPrefix;
-                currentAnnotationId += "-" + parseInt(Math.random()*100000);
+                currentAnnotationId += "-" + parseInt(Math.random() * 100000);
                 $(annotatedIds.join(",")).wrapAll("<span id='" + currentAnnotationId + "' class='" + this.getSpecialClass() + "'>");
                 this.$annotations[i]["id"] = currentAnnotationId;
 
@@ -62,11 +62,13 @@ FlancheJs.defineClass("kat.Display", {
         createTooltipDisplays: function() {
             for (var i = 0; i < this.getAnnotations().length; i++) {
                 var tooltipsterOptions = {
-                    "trigger": kat.Constants.Display.Triger,
-                    "interactive": true,
+                    //"trigger": kat.Constants.Display.Triger,
+                    //"interactive": true,
+                    "html": true,
+                    "placement": "bottom",
                     "content": this.$annotations[i].content
                 }
-                $("#" + this.$annotations[i].id).tooltipster(tooltipsterOptions);
+                $("#" + this.$annotations[i].id).popover(tooltipsterOptions);
             }
         },
         /**

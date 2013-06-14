@@ -3,5 +3,6 @@
 }
 
 .kat-annotated {
-    border-bottom: 1px #000 dashed;
+    cursor: pointer;
+    background-color: #FFFFB2;
 }
