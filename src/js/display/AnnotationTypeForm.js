@@ -18,11 +18,19 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
         .replace("{title}", kat.Constants.Display.AnnotationFormTitle)
         .replace("{renderSelect}", this._renderSelect())
         .replace("{renderForm}", this._renderForm());
-      var self = this;
       jQuery("body").append(containerHtml);
-      jQuery("#kat-form-save").on("click", function () {
+      jQuery("#" + this.KContainerId).modal();
 
+      var self = this;
+      jQuery("#kat-form-save").on("click", function () {
+        var annotation = new kat.annotation.Annotation(self._idBase, self._idExtent, self._selectedAnnotationTypeName, self._formParser.getFormValues());
+        kat.annotation.AnnotationRegistry.addAnnotation(annotation);
+        jQuery("#" + self.KContainerId).modal("hide");
         self.destroy();
+        var renderedAnnotation = (new kat.display.AnnotationRenderer(annotation)).render();
+        console.log(renderedAnnotation)
+        var display = new kat.Display([renderedAnnotation]);
+        display.run();
       })
     },
 
@@ -35,6 +43,7 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
     idBase                    : null,
     idExtent                  : null,
     selectedAnnotationTypeName: null,
+    formParser                : null,
 
     renderSelect: function () {
       var selectHtml = "<select id='annotation-type-selector'>{options}</select>";
@@ -60,8 +69,8 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
 
     renderForm: function () {
       var annotationType = kat.annotation.AnnotationTypeRegistry.lookupType(this._selectedAnnotationTypeName);
-      var formParser = new kat.input.form.FormParser(annotationType.getXmlOntology().filter(this.KAnnotationInputFilter));
-      var htmlForm = formParser.parse();
+      this._formParser = new kat.input.form.FormParser(annotationType.getXmlOntology().filter(this.KAnnotationInputFilter)[0]);
+      var htmlForm = this._formParser.parse();
       return htmlForm;
     }
   },

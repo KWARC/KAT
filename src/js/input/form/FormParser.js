@@ -11,11 +11,9 @@ FlancheJs.defineClass("kat.input.form.FormParser", {
   /**
    * Constructor for the class
    * @param {kat.util.XMLDoc} annotationDefinition an annotation:input xml element from which the form should be extracted
-   * @param {Function} submitCallback function to be called when the annotation submit button is clicked
    */
-  init: function (annotationDefinition, submitCallback) {
+  init: function (annotationDefinition) {
     this._annotationDefinition = annotationDefinition;
-    this._submitCallback = submitCallback;
   },
 
   methods: {
@@ -34,9 +32,13 @@ FlancheJs.defineClass("kat.input.form.FormParser", {
       return this.KFormTemplate.replace("{fields}", fieldsHtml);
     },
 
+    /**
+     * Returns the form values as a map of form name => value
+     * @return {Object}
+     */
     getFormValues: function () {
       var values = {};
-      for (var i = 0; i < this._fieldNames; i++) {
+      for (var i = 0; i < this._fieldNames.length; i++) {
         var currentId = this._fieldNames[i];
         values[currentId] = jQuery("#" + kat.Constants.Form.FieldPrefix + currentId).val();
       }
@@ -47,17 +49,16 @@ FlancheJs.defineClass("kat.input.form.FormParser", {
 
   internals: {
     annotationDefinition: null,
-    submitCallback      : null,
     fieldNames          : [],
 
     parseField: function (annotationField) {
       var registry = new kat.input.form.FieldParserRegistry();
-      return registry.getparser(annotationField).parse(annotationField);
+      return registry.getParser(annotationField).parse(annotationField);
     }
   },
 
   statics: {
-    KFormTemplate: '<form class="form-horizontal">{fields} <div class="control-group"><div class="controls"><button class="btn" id="form-annotation-submit">Annotate</button></div></div></form>'
+    KFormTemplate: '<form class="form-horizontal">{fields}</form>'
   }
 
 })

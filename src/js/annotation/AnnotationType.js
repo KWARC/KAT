@@ -10,17 +10,36 @@ FlancheJs.defineClass("kat.annotation.AnnotationType", {
   init: function (name, stringOntology) {
     this.setName(name);
     this.setXmlOntology(new kat.util.XMLDoc(stringOntology));
+    this.setXmlOntologyString(stringOntology);
   },
 
 
   properties: {
-    name       : {
+    name             : {
       value: null
     },
-    xmlOntology: {
+    xmlOntology      : {
+      value: null
+    },
+    xmlOntologyString: {
       value: null
     }
-  }
+  },
 
+  methods: {
+    serialize: function () {
+      return JSON.stringify({
+        name             : this.getName(),
+        xmlOntologyString: this.getXmlOntologyString()
+      })
+    }
+  },
+
+  statics: {
+    fromSerializedString: function (json) {
+      var obj = JSON.parse(json);
+      return new kat.annotation.AnnotationType(obj.name, obj.xmlOntologyString);
+    }
+  }
 
 })

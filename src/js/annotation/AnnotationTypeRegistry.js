@@ -8,7 +8,12 @@
 FlancheJs.defineObject("kat.annotation.AnnotationTypeRegistry", {
 
   init: function () {
-
+    if (window.localStorage.getItem(this.KLocalStorageRegistryKey)) {
+      this._loadRegistry();
+    }
+    else {
+      this._registry = {};
+    }
   },
 
   methods: {
@@ -17,7 +22,8 @@ FlancheJs.defineObject("kat.annotation.AnnotationTypeRegistry", {
      * @param {kat.annotation.AnnotationType} annotationType
      */
     addType: function (annotationType) {
-      this.registry[annotationType.getName()] = annotationType;
+      this._registry[annotationType.getName()] = annotationType;
+      this._saveRegistry();
     },
 
     /**
@@ -26,7 +32,7 @@ FlancheJs.defineObject("kat.annotation.AnnotationTypeRegistry", {
      * @return {kat.annotation.AnnotationType}
      */
     lookupType: function (annotationTypeName) {
-      return this.registry[annotationTypeName];
+      return this._registry[annotationTypeName];
     },
 
     /**
@@ -39,7 +45,26 @@ FlancheJs.defineObject("kat.annotation.AnnotationTypeRegistry", {
   },
 
   internals: {
-    registry: {}
+    registry: {},
+
+    saveRegistry: function () {
+      var values = {};
+      for(var name in this._registry){
+        values[name] = this._registry[name].serialize();
+      }
+      window.localStorage.setItem(this.KLocalStorageRegistryKey, JSON.stringify(values));
+    },
+
+    loadRegistry : function(){
+      var values = JSON.parse(window.localStorage.getItem(this.KLocalStorageRegistryKey));
+      for (var name in values){
+        this._registry[name] = kat.annotation.AnnotationType.fromSerializedString(values[name]);
+      }
+    }
+  },
+
+  statics: {
+    KLocalStorageRegistryKey: "annotationTypeRegistry"
   }
 
 })

@@ -125,8 +125,8 @@ FlancheJs.defineClass("kat.TextPreprocessor", {
         var selectedIds = self.getSelectedIds();
         if (selectedIds) {
           var tooltipsterOnClick = 'onClick = "(function(){';
-          tooltipsterOnClick += 'console.log(\'' + selectedIds["baseNodeId"];
-          tooltipsterOnClick += '\',\'' + selectedIds["extentNodeId"] + '\');})()"';
+          tooltipsterOnClick += '(new kat.display.AnnotationTypeForm(\'' + selectedIds["baseNodeId"];
+          tooltipsterOnClick += '\',\'' + selectedIds["extentNodeId"] + '\')).run();})()"';
           var tooltipOptions = {
             trigger    : "custom",
             interactive: true,

@@ -6,24 +6,28 @@
  * @author <a href="mailto:v.merticari@jacobs-university.de">Vlad Merticariu</a>
  */
 
-FlancheJs.defineClass("kat.KATService", {
-  init : function(ontologyDocString){
-    this._ontologyDoc = new kat.util.XMLDoc(ontologyDocString);
+FlancheJs.defineClass("kat.main.KATService", {
+  init: function (selector) {
+    this._selector = selector
   },
 
-  methods : {
-    run : function(){
-      this._processAnnotationForm();
+  methods: {
+    run: function () {
+      var preProcessor = new kat.TextPreprocessor(this._selector);
+      preProcessor.run();
+      var currentAnnotations = kat.annotation.AnnotationRegistry.getAnnotations();
+      var renderedAnnotations = [];
+      for (var i = 0; i < currentAnnotations.length; i++) {
+        var renderer = new kat.display.AnnotationRenderer(currentAnnotations[i]);
+        renderedAnnotations.push(renderer.render())
+      }
+      var displayer = new kat.Display(renderedAnnotations);
+      displayer.run();
     }
   },
 
-  internals :{
-    ontologyDoc : null,
-
-    processAnnotationForm : function(){
-      var formProcessor = new kat.input.form.FormParser(this._ontologyDoc.filter(this.KAnnotationInputFilter)[0]);
-      $("body").append(formProcessor.parse());
-    }
-  },
+  internals: {
+    selector : null
+  }
 
 })

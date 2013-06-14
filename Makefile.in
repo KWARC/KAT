@@ -8,7 +8,7 @@ $(shell find $(SRCDIR)/js/preprocessor -name '*.js') fileseparator\
 $(shell find $(SRCDIR)/js/input -name '*.js')        fileseparator\
 $(shell find $(SRCDIR)/js/output -name '*.js')       fileseparator\
 $(shell find $(SRCDIR)/js/display -name '*.js')      fileseparator\
-$(shell find $(SRCDIR)/js/annotation -name '*.js')   fileseparator\
+$(shell find $(SRCDIR)/js/annotation -name '*.js' | sort )   fileseparator\
 $(shell find $(SRCDIR)/js/main -name '*.js')
 INSTALLDIR=/srv/http/kat
 
@@ -19,8 +19,8 @@ init:
 libjs: init $(LIBDIR)/Bootstrap/js/bootstrap.min.js $(LIBDIR)/FlancheJs/flanchejs.js $(LIBDIR)/jQuery/jquery.js	$(LIBDIR)/underscorejs/underscore.js
 	cat $(LIBDIR)/jQuery/jquery.js   fileseparator                     \
 	$(LIBDIR)/FlancheJs/flanchejs.js fileseparator                     \
-	$(LIBDIR)/underscorejs/underscore.js                               \
-	$(LIBDIR)/Tooltipster/js/tooltipster.js                            \
+	$(LIBDIR)/underscorejs/underscore.js fileseparator                 \
+	$(LIBDIR)/Tooltipster/js/tooltipster.js fileseparator              \
 	$(LIBDIR)/Bootstrap/js/bootstrap.min.js                            > $(BINDIR)/kat_lib.js
 
 libcss: init $(LIBDIR)/Bootstrap/css/bootstrap.min.css
