@@ -6,3 +6,11 @@
     cursor: pointer;
     background-color: #FFFFB2;
 }
+
+.popover-content {
+    font-weight: normal!important;
+}
+
+.ui-pnotify-text{
+    font-size: 13px;
+}

@@ -27,8 +27,12 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
         kat.annotation.AnnotationRegistry.addAnnotation(annotation);
         jQuery("#" + self.KContainerId).modal("hide");
         self.destroy();
+        $.pnotify({
+          title: 'KAT Message',
+          text: 'Annotation was successfully saved.',
+          type: 'success'
+        });
         var renderedAnnotation = (new kat.display.AnnotationRenderer(annotation)).render();
-        console.log(renderedAnnotation)
         var display = new kat.Display([renderedAnnotation]);
         display.run();
       })
@@ -59,10 +63,12 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
       }
 
       var self = this;
-      jQuery("#annotation-type-selector").on("change", function (value) {
-        self._selectedAnnotationTypeName = value;
-        self._renderForm();
-      });
+      setTimeout(function () {
+        jQuery("#annotation-type-selector").on("change", function () {
+          self._selectedAnnotationTypeName = $(this).val();
+          $(".kat-form-display").html(self._renderForm());
+        });
+      }, 50);
 
       return selectHtml.replace("{options}", options.join("\n"));
     },

@@ -1,0 +1,86 @@
+<rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+        xmlns:owl="http://www.w3.org/2002/07/owl#"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:annotation="http://www.kwarc.org/annotationsNamespace">
+
+    <!-- OWL Header Omitted For Brevity -->
+
+    <!-- OWL Class Definition - Annotation Type -->
+    <owl:Class rdf:about="http://www.kwarc.org/annotation">
+
+        <rdfs:label>An annotation</rdfs:label>
+        <rdfs:comment>Useful for annotating things.</rdfs:comment>
+
+    </owl:Class>
+
+
+    <!-- Movie Annotation (Instance) Example -->
+    <rdf:Description rdf:about="http://www.kwarc.org/annotation#movie">
+
+        <annotation:annotation>
+            <annotation:input>
+                <annotation:field name="title" inputType="textfield" label="Title" required="true"/>
+                <annotation:field name="director" inputType="textfield" label="Director" defaultValue="Steven Spielberg"/>
+                <annotation:field name="plot" inputType="textarea" label="Summarize the plot"/>
+            </annotation:input>
+            <annotation:visualization>
+                <format>
+                    <em>{title}</em> was directed by <em>{director}</em>. <br/> <b>Plot summary:</b> {plot}.
+                </format>
+                <cssFile>
+                    http://kwarc.org/someStyles.css
+                </cssFile>
+            </annotation:visualization>
+        </annotation:annotation>
+
+        <rdf:type rdf:resource="http://www.kwarc.org/annotation"/>
+
+    </rdf:Description>
+
+</rdf:RDF>
+
+
+<rdf:RDF
+xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+xmlns:owl="http://www.w3.org/2002/07/owl#"
+xmlns:dc="http://purl.org/dc/elements/1.1/"
+xmlns:annotation="http://www.kwarc.org/annotationsNamespace">
+
+<!-- OWL Header Omitted For Brevity -->
+
+<!-- OWL Class Definition - Annotation Type -->
+<owl:Class rdf:about="http://www.kwarc.org/annotation">
+
+    <rdfs:label>An annotation</rdfs:label>
+    <rdfs:comment>Useful for annotating things.</rdfs:comment>
+
+</owl:Class>
+
+
+<!-- Phone Number Annotation (Instance) Example -->
+<rdf:Description rdf:about="http://www.kwarc.org/annotation#phonenumber">
+
+    <annotation:annotation>
+        <annotation:input>
+            <annotation:field name="first-name" inputType="textfield" label="First Name" required="true"/>
+            <annotation:field name="last-name" inputType="textfield" label="Last Name" defaultValue="Jones"/>
+            <annotation:field name="relation" inputType="textarea" label="Relation"/>
+        </annotation:input>
+        <annotation:visualization>
+            <format>
+                This phone number belongs to {first-name} {last-name}. He is a  <em>{relation}</em> of mine.
+            </format>
+            <cssFile>
+                http://kwarc.org/someStyles.css
+            </cssFile>
+        </annotation:visualization>
+    </annotation:annotation>
+
+    <rdf:type rdf:resource="http://www.kwarc.org/annotation"/>
+
+</rdf:Description>
+
+</rdf:RDF>

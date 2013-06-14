@@ -20,11 +20,13 @@ libjs: init $(LIBDIR)/Bootstrap/js/bootstrap.min.js $(LIBDIR)/FlancheJs/flanchej
 	cat $(LIBDIR)/jQuery/jquery.js   fileseparator                     \
 	$(LIBDIR)/FlancheJs/flanchejs.js fileseparator                     \
 	$(LIBDIR)/underscorejs/underscore.js fileseparator                 \
+	$(LIBDIR)/pNotify/js/pnotify.js fileseparator                      \
 	$(LIBDIR)/Tooltipster/js/tooltipster.js fileseparator              \
 	$(LIBDIR)/Bootstrap/js/bootstrap.min.js                            > $(BINDIR)/kat_lib.js
 
 libcss: init $(LIBDIR)/Bootstrap/css/bootstrap.min.css
 	cat $(LIBDIR)/Tooltipster/css/tooltipster.css                  \
+	$(LIBDIR)/pNotify/css/pnotify.css                          \
 	$(LIBDIR)/Bootstrap/css/bootstrap.min.css                      > $(BINDIR)/kat_lib.css
 
 srcjs: init 	$(SRCDIR)/js/util/Util.js
