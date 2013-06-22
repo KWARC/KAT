@@ -13,6 +13,13 @@ FlancheJs.defineClass("kat.main.KATService", {
 
   methods: {
     run: function () {
+      window.onerror = function (message) {
+        $.pnotify({
+          title: 'KAT Error',
+          text : message,
+          type : 'error'
+        })
+      }
       var preProcessor = new kat.TextPreprocessor(this._selector);
       preProcessor.run();
       var currentAnnotations = kat.annotation.AnnotationRegistry.getAnnotations();
@@ -23,11 +30,13 @@ FlancheJs.defineClass("kat.main.KATService", {
       }
       var displayer = new kat.Display(renderedAnnotations);
       displayer.run();
+      var ontologyViewer = new kat.display.AnnotationOntologyViewer();
+      ontologyViewer.run();
     }
   },
 
   internals: {
-    selector : null
+    selector: null
   }
 
 })

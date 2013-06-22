@@ -1,3 +1,5 @@
+<!--Movie Annotation Ontology-->
+<!--Contains comments inline to describe what each element does-->
 <rdf:RDF
         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
@@ -9,29 +11,65 @@
 
     <!-- OWL Class Definition - Annotation Type -->
     <owl:Class rdf:about="http://www.kwarc.org/annotation">
-
         <rdfs:label>An annotation</rdfs:label>
         <rdfs:comment>Useful for annotating things.</rdfs:comment>
-
     </owl:Class>
-
 
     <!-- Movie Annotation (Instance) Example -->
     <rdf:Description rdf:about="http://www.kwarc.org/annotation#movie">
-
+        <!--Here is where everything is defined-->
         <annotation:annotation>
+            <!--The annotation:input element contains all the field definitions needed to render an annotation form-->
             <annotation:input>
+                <!--Each field must have at least a name and an inputType-->
+                <!--Input types can be diverse, depending on which field renderer classes KAT has installed
+                    Right now, we only support textfield, textarea, and select. You can find an example of each below
+                -->
+                <!--Other attributes that an annotation:field can have are:
+                    * label - the label that is shown in front of the input field in the form
+                    * required - if the field is required, an error will be shown if the field is empty at submit
+                    * defaultValue - a default value for the field to show up in the form
+                -->
+                <!--Depending on the type of the field further attributes might be available (although in the future
+                    we might use child nodes for special field type parameters). One example is the options attribute
+                    for select field type, see below;
+                -->
                 <annotation:field name="title" inputType="textfield" label="Title" required="true"/>
-                <annotation:field name="director" inputType="textfield" label="Director" defaultValue="Steven Spielberg"/>
+                <annotation:field name="director" inputType="textfield" label="Director"
+                                  defaultValue="Steven Spielberg"/>
                 <annotation:field name="plot" inputType="textarea" label="Summarize the plot"/>
+                <annotation:field name="genre" inputType="select" label="Movie Genre" options="Drama|Comedy|Horror"/>
             </annotation:input>
+            <!--The annotation:visualization element contains the information needed to display an annotation of
+            this type.
+            -->
             <annotation:visualization>
+                <!--Format element describes how the annotation text is displayed. It accepts any html text with
+                    placeholder for the values collected from the annotation form (the mapping is done using the
+                    name attribute of each annotation:field).
+                -->
                 <format>
-                    <em>{title}</em> was directed by <em>{director}</em>. <br/> <b>Plot summary:</b> {plot}.
+                    <em>{title}</em>
+                    was directed by <em>{director}</em>.
+                    <br/>
+                    <b>Genre:</b> {genre} <br/>
+                    <b>Plot summary:</b>
+                    {plot}.
                 </format>
+                <!--This file will be loaded as a CSS resource when the annotation is displayed. This allows the admin
+                    to customize the display of the html added above.
+                    At the moment KAT does not support this.
+                -->
                 <cssFile>
                     http://kwarc.org/someStyles.css
                 </cssFile>
+                <!--This file will be loaded as a javascript resource when the annotation is displayed. This allows the
+                    administrator to customize the behaviour of the annotation.
+                    Currently not supported.
+                -->
+                <jsFile>
+                    http://kwarc.org/someScript.css
+                </jsFile>
             </annotation:visualization>
         </annotation:annotation>
 
@@ -42,6 +80,7 @@
 </rdf:RDF>
 
 
+<!--Phone ontology-->
 <rdf:RDF
 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
@@ -71,7 +110,9 @@ xmlns:annotation="http://www.kwarc.org/annotationsNamespace">
         </annotation:input>
         <annotation:visualization>
             <format>
-                This phone number belongs to {first-name} {last-name}. He is a  <em>{relation}</em> of mine.
+                This phone number belongs to {first-name} {last-name}. He is a
+                <em>{relation}</em>
+                of mine.
             </format>
             <cssFile>
                 http://kwarc.org/someStyles.css

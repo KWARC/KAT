@@ -27,6 +27,11 @@ FlancheJs.defineObject("kat.annotation.AnnotationRegistry", {
         annotations.push(this._registry[name]);
       }
       return annotations;
+    },
+
+    clearRegistry: function(){
+      this._registry = {};
+      this._saveRegistry();
     }
   },
 

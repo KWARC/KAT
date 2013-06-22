@@ -102,8 +102,10 @@ FlancheJs.defineClass("kat.TextPreprocessor", {
       } else if (document.selection) {
         t = document.selection.createRange().text;
       }
-      var baseNodeId = $(t.baseNode.parentNode).attr('id');
-      var extentNodeId = $(t.extentNode.parentNode).attr('id');
+      var baseNode = t.getRangeAt(0).startContainer;
+      var extentNode = t.getRangeAt(0).endContainer;
+      var baseNodeId = $(baseNode.parentNode).attr('id');
+      var extentNodeId = $(extentNode.parentNode).attr('id');
       if (t.toString()) {
         return {
           "baseNodeId"  : baseNodeId,

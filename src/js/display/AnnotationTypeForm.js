@@ -14,6 +14,7 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
 
   methods: {
     run: function () {
+      jQuery("#" + this.KContainerId).remove();
       var containerHtml = this.KModalTemplate.replace("{id}", this.KContainerId)
         .replace("{title}", kat.Constants.Display.AnnotationFormTitle)
         .replace("{renderSelect}", this._renderSelect())
@@ -75,6 +76,9 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
 
     renderForm: function () {
       var annotationType = kat.annotation.AnnotationTypeRegistry.lookupType(this._selectedAnnotationTypeName);
+      if(!annotationType){
+        throw Error("No annotation ontologies defined yet. Please use the Ontology viewer to add one.");
+      }
       this._formParser = new kat.input.form.FormParser(annotationType.getXmlOntology().filter(this.KAnnotationInputFilter)[0]);
       var htmlForm = this._formParser.parse();
       return htmlForm;

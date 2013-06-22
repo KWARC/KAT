@@ -28,7 +28,7 @@ FlancheJs.defineClass("kat.input.form.FieldParserRegistry", {
           return this._registry[i];
         }
       }
-      throw Error("No suitable field parser found for this input " + xmlField.to)
+      throw Error("No suitable field parser found for this input type" + xmlField.toString())
     }
   },
 

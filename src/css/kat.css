@@ -8,9 +8,23 @@
 }
 
 .popover-content {
-    font-weight: normal!important;
+    font-weight: normal !important;
 }
 
-.ui-pnotify-text{
+.ui-pnotify-text {
     font-size: 13px;
+}
+
+#annotation-viewer-link {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    padding: 3px;
+}
+
+#annotation-viewer-modal{
+    width: 800px;
+    margin-left: -400px;
 }

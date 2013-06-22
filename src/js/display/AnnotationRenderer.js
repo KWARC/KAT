@@ -24,7 +24,6 @@ FlancheJs.defineClass("kat.display.AnnotationRenderer", {
     buildContent: function () {
       var annotationType = kat.annotation.AnnotationTypeRegistry.lookupType(this._annotation.getAnnotationTypeName());
       var template = annotationType.getXmlOntology().filter("//annotation:visualization/format")[0].toString().replace("<format>", "").replace("</format>", "");
-      console.log(template);
       var replacements = this._annotation.getAnnotationValues();
       for (var name in replacements) {
         template = template.replace(new RegExp("{" + name + "}", "g"), replacements[name]);

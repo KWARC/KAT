@@ -36,11 +36,28 @@ FlancheJs.defineObject("kat.annotation.AnnotationTypeRegistry", {
     },
 
     /**
+     * Removes an annotation type from the registry.
+     * @param annotationTypeName
+     */
+    removeType: function (annotationTypeName) {
+      delete this._registry[annotationTypeName];
+    },
+
+    /**
      * Returns all the types in the registry as a map of form name => annotationType
      * @return {Object}
      */
     getAllTypes: function () {
       return this._registry;
+    },
+
+    /**
+     * Removes all entries from the registry
+     */
+    clearRegistry: function () {
+      this._registry = {};
+      this._saveRegistry();
+      kat.annotation.AnnotationRegistry.clearRegistry();
     }
   },
 
@@ -49,15 +66,15 @@ FlancheJs.defineObject("kat.annotation.AnnotationTypeRegistry", {
 
     saveRegistry: function () {
       var values = {};
-      for(var name in this._registry){
+      for (var name in this._registry) {
         values[name] = this._registry[name].serialize();
       }
       window.localStorage.setItem(this.KLocalStorageRegistryKey, JSON.stringify(values));
     },
 
-    loadRegistry : function(){
+    loadRegistry: function () {
       var values = JSON.parse(window.localStorage.getItem(this.KLocalStorageRegistryKey));
-      for (var name in values){
+      for (var name in values) {
         this._registry[name] = kat.annotation.AnnotationType.fromSerializedString(values[name]);
       }
     }
