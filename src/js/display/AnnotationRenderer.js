@@ -3,27 +3,30 @@
  */
 
 FlancheJs.defineClass("kat.display.AnnotationRenderer", {
-
-  init: function (annotation) {
-    this._annotation = annotation
+  init: function(annotation, conceptRegsitry) {
+    this._annotation = annotation;
+    this._conceptRegistry = conceptRegsitry;
   },
-
   methods: {
-    render: function () {
+    render: function() {
       return {
-        idBase  : this._annotation.getIdBase(),
+        idBase: this._annotation.getIdBase(),
         idExtent: this._annotation.getIdExtent(),
-        content : this._buildContent()
+        content: this._buildContent()
       }
     }
   },
-
   internals: {
     annotation: null,
-
-    buildContent: function () {
-      var annotationType = kat.annotation.AnnotationTypeRegistry.lookupType(this._annotation.getAnnotationTypeName());
-      var template = annotationType.getXmlOntology().filter("//annotation:visualization/format")[0].toString().replace("<format>", "").replace("</format>", "");
+    conceptRegistry: null,
+    
+    buildContent: function() {
+      var annotationType = this._conceptRegistry.lookupConcept(this._annotation.getConcept());
+      var display = annotationType.getDefinition().getXmlDoc().getElementsByTagName("template");  
+      if(!display.length){
+        throw Error("Each annotation concept must define a display!");
+      }   
+      var template = display[0].textContent;
       var replacements = this._annotation.getAnnotationValues();
       for (var name in replacements) {
         template = template.replace(new RegExp("{" + name + "}", "g"), replacements[name]);

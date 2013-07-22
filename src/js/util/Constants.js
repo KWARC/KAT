@@ -19,10 +19,16 @@ FlancheJs.defineObject("kat.Constants", {
       SpecialClass       : "kat-annotated",
       Triger             : "hover",
       AnnotationIdPrefix : "kat-annotation",
-      AnnotationFormTitle: "Add Annotation"
+      AnnotationFormTitle: "Add Annotation",
+      SelectOntologyText : "Select an ontology",
+      SelectConceptText  : "Select a concept",
+      FormText           : "Fill in the following form"
     },
     Form            : {
-      FieldPrefix: "field-id-"
+      FieldPrefix: "field-id-",
+      FieldWrapPrefix: "field-wrap-id-",
+      FieldWrapClass: "kat-form-field-wrapper",
+      FieldClass: "kat-form-field"
     }
   }
 });

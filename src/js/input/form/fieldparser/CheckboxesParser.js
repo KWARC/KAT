@@ -1,12 +1,11 @@
 /**
- * Describes an annotation that was collected from a user and can be saved and transported over
- * network
+ * Parses a field of type checkboxes outputing html
  *
  * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
  * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
  */
 
-FlancheJs.defineClass("kat.input.form.fieldparser.SelectParser", {
+FlancheJs.defineClass("kat.input.form.fieldparser.CheckboxesParser", {
 
   implements: [kat.input.form.fieldparser],
 
@@ -16,7 +15,7 @@ FlancheJs.defineClass("kat.input.form.fieldparser.SelectParser", {
 
   methods: {
     canParse: function (xmlField) {
-      if (xmlField.getAttribute("type") == "select") {
+      if (xmlField.getAttribute("type") == "checkboxes") {
         return true;
       }
       return false;
@@ -34,14 +33,14 @@ FlancheJs.defineClass("kat.input.form.fieldparser.SelectParser", {
       }
       var options = xmlField.getXmlDoc().getElementsByTagName("option");
       if (!options) {
-        throw Error("Error in the Annotation Ontology. No list of options provided for the select field!");
+        throw Error("Error in the Annotation Ontology. No list of options provided for the checkboxes field!");
       }
       var optionsHtml = _.map(options,function (value) {
         //check if the option is default
-        var isDefault = value.getAttribute("default") ? "default='true'" : "";
+        var isDefault = value.getAttribute("default") ? "checked " : "";
         //option value is mandatory
         var val = value.getElementsByTagName("value");
-        if(!val.length){
+        if(!val){
           throw Error("Error in the Annotation Ontology. All options must have a value!");
         }
         val = val[0].textContent
@@ -49,7 +48,8 @@ FlancheJs.defineClass("kat.input.form.fieldparser.SelectParser", {
         var label = value.getElementsByTagName("label").length ? value.getElementsByTagName("label")[0].textContent : val;
         //add documentation if present
         var documentation = value.getElementsByTagName("documentation").length ? "data-documentation='" + value.getElementsByTagName("documentation")[0].textContent + "'" : "";
-        return "<option value='" + val + "' " + isDefault + documentation + ">" + label + "</option>"
+        var checkBox = "<label class='checkbox'>" + "<input name='" + xmlField.getAttribute("name") + "' type='checkbox' value='" + val + "' " + isDefault + documentation + ">" + label + "</input>";
+        return checkBox + "</label>"
       }).join("\n");     
       //if no requirements, append to template
       if(!atLeast){
@@ -57,14 +57,11 @@ FlancheJs.defineClass("kat.input.form.fieldparser.SelectParser", {
         if(documentation != ""){
           documentation = "data-documentation='" + documentation + "'";
         }
-        var name="name='"+xmlField.getAttribute("name")+"'";
          ret = this.template
-        .replace(/{name}/g, name)
         .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-0")
         .replace(/{label}/g, xmlField.getAttribute("label") != null ? xmlField.getAttribute("label") : xmlField.getAttribute("name"))
         .replace(/{options}/g, optionsHtml)
         .replace(/{documentation}/g, documentation)
-        .replace(/{required}/g, "");
       }
       //if requirements, append as many as needed
       for(var i = 0; i < atLeast; i++){
@@ -72,14 +69,11 @@ FlancheJs.defineClass("kat.input.form.fieldparser.SelectParser", {
         if(documentation != ""){
           documentation = "data-documentation='" + documentation + "'";
         }
-         var name="name='"+xmlField.getAttribute("name")+"'";
          ret += this.template
-        .replace(/{name}/g, name)
         .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-" + i)
         .replace(/{label}/g, xmlField.getAttribute("label") != null ? xmlField.getAttribute("label") : xmlField.getAttribute("name"))
         .replace(/{options}/g, optionsHtml)
         .replace(/{documentation}/g, documentation)
-        .replace(/{required}/g, "required");
       }
       //adding a wrap over the added fields
       var dataAtMost = "";
@@ -94,7 +88,9 @@ FlancheJs.defineClass("kat.input.form.fieldparser.SelectParser", {
   },
 
   statics: {
-    template: "<div class='control-group'> <div class='controls'><select {name} {documentation} {required} id='{id}'>{options}</select></div></div>"
+    template: "<div class='control-group'><div class='controls'><div {documentation} id='{id}'>{options}</div></div></div>"
   }
 
 })
+
+

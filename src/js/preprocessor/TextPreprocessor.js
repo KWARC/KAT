@@ -7,7 +7,7 @@
  * @author <a href="mailto:v.merticariu@jacobs-university,de">Vlad Merticariu</a>
  */
 
-FlancheJs.defineClass("kat.TextPreprocessor", {
+FlancheJs.defineClass("kat.preprocessor.TextPreprocessor", {
   /**
    * Class constructor.
    * @param {string} selector A valid cs3 selector, indicating the region in
@@ -15,13 +15,16 @@ FlancheJs.defineClass("kat.TextPreprocessor", {
    * @param {string} idPrefix [optional] The prefix to be added to the span
    * ids.
    */
-  init      : function (selector, idPrefix) {
+  init      : function (selector, idPrefix, ontologyRegistry, conceptRegistry, anotationRegistry) {
     if (selector) {
       this.setSelector(selector);
     }
     if (idPrefix) {
       this.setIdPrefix(idPrefix)
     }
+    this._ontologyRegistry = ontologyRegistry;
+    this._conceptRegistry = conceptRegistry;
+    this._anotationRegistry = anotationRegistry;
   },
   properties: {
     selector: {
@@ -126,16 +129,19 @@ FlancheJs.defineClass("kat.TextPreprocessor", {
       $(this.getSelector()).mouseup(function () {
         var selectedIds = self.getSelectedIds();
         if (selectedIds) {
-          var tooltipsterOnClick = 'onClick = "(function(){';
-          tooltipsterOnClick += '(new kat.display.AnnotationTypeForm(\'' + selectedIds["baseNodeId"];
-          tooltipsterOnClick += '\',\'' + selectedIds["extentNodeId"] + '\')).run();})()"';
+          self._currentLinkId = "kat-add-annotation-" + parseInt(Math.random()*1000);
           var tooltipOptions = {
             trigger    : "custom",
             interactive: true,
-            content    : "<a " + tooltipsterOnClick + " href='#'>" + kat.Constants.TextPreprocessor.AnnotationLinkText + "</a>"
+            content    : "<a id='" + self._currentLinkId + "' href='#'>" + kat.Constants.TextPreprocessor.AnnotationLinkText + "</a>"
           };
           $("#" + selectedIds["extentNodeId"]).tooltipster(tooltipOptions);
           $("#" + selectedIds["extentNodeId"]).tooltipster('show');
+          //timeout necessary to allow the link to exist before registering an event to it
+          //to be removed when replaced by jobad callback
+          setTimeout(function(){
+            self._registerAddAnnotationHandler(selectedIds["baseNodeId"], selectedIds["extentNodeId"])},
+          500);
         }
       })
     },
@@ -147,6 +153,24 @@ FlancheJs.defineClass("kat.TextPreprocessor", {
     run                 : function () {
       this.addCounter();
       this.addSelectionListener();
+    }
+  },
+          
+  internals: {
+    ontologyRegistry: null,
+    
+    conceptRegistry: null,
+            
+    currentLinkId: "",
+            
+    registerAddAnnotationHandler: function(baseId, extentId){
+      var self = this;
+      $("#" + this._currentLinkId).off("click.kat");
+      $("#" + this._currentLinkId).on("click", function(e){
+        e.preventDefault();
+        var typeForm = new kat.display.AnnotationTypeForm(baseId, extentId, self._ontologyRegistry, self._conceptRegistry, self._anotationRegistry);
+        typeForm.run();
+      })
     }
   }
 });

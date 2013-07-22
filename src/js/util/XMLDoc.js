@@ -1,7 +1,7 @@
 /**
  * XMLDoc is a class that provides a series of utility functions for easier parsing of XML docs using XPath
  * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
- * @author <a href="mailto:v.merticari@jacobs-university.de">Vlad Merticariu</a>
+ * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
  * @version 3.0.0
  */
 FlancheJs.defineClass("kat.util.XMLDoc", {
@@ -26,6 +26,7 @@ FlancheJs.defineClass("kat.util.XMLDoc", {
   methods: {
     filter: function (xPath) {
       var doc = this.getXmlDoc();
+      console.log(doc);
       var iter = doc.evaluate(xPath, doc, this._resolver, XPathResult.ANY_TYPE, null);
       var resultSet = [];
       do {

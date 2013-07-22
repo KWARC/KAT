@@ -1,64 +1,98 @@
 /**
- * A FormParser object takes an annotation ontology form definition as an xml node and returns
- * an HTML string form that can be added inside a document
+ * A form parser can be used to parse the fields and documentation from a given concept object.
  *
  * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
- * @author <a href="mailto:v.merticari@jacobs-university.de">Vlad Merticariu</a>
+ * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
  */
 
 FlancheJs.defineClass("kat.input.form.FormParser", {
-
   /**
    * Constructor for the class
-   * @param {kat.util.XMLDoc} annotationDefinition an annotation:input xml element from which the form should be extracted
+   * @param {kat.annotation.Concept} concept an annotation:input xml element from which the form should be extracted
    */
-  init: function (annotationDefinition) {
-    this._annotationDefinition = annotationDefinition;
+  init: function(concept) {
+    this._concept = concept;
   },
-
   methods: {
     /**
-     * Parses the annotation:input and return an html form as string
+     * Parses the fields in xml format an returns an array of html input fields in string format.
+     * @return {String[]}
      */
-    parse: function () {
-      var fields = this._annotationDefinition.getChildren();
-      var fieldsHtml = "\n";
-      for (var i = 0; i < fields.length; i++) {
-        if (fields[i].getXmlDoc().nodeType == Node.ELEMENT_NODE) {
-          fieldsHtml += this._parseField(fields[i]) + "\n";
-          this._fieldNames.push(fields[i].getAttribute("name"));
-        }
+    parseFields: function() {
+      var xmlFields = this._concept.getDefinition().getXmlDoc().getElementsByTagName("field");
+      var fields = [];
+      for (var i = 0; i < xmlFields.length; i++) {
+        fields.push(this._parseField(new kat.util.XMLDoc(xmlFields[i])));
+        this._fieldNames.push(xmlFields[i].getAttribute("name"));
       }
-      return this.KFormTemplate.replace("{fields}", fieldsHtml);
+      return fields;
     },
-
+    /**
+     * Returns the documentation attached to the concept as a string.
+     * @return {String}
+     */
+    parseDocumentation: function() {
+      var documentation = "";
+      if (this._concept.getDefinition().getXmlDoc().getElementsByTagName("documentation").length) {
+        documentation = this._concept.getDefinition().getXmlDoc().getElementsByTagName("documentation")[0].textContent;
+      }
+      return documentation;
+    },
     /**
      * Returns the form values as a map of form name => value
      * @return {Object}
      */
-    getFormValues: function () {
+    getFormValues: function() {
       var values = {};
       for (var i = 0; i < this._fieldNames.length; i++) {
         var currentId = this._fieldNames[i];
-        values[currentId] = jQuery("#" + kat.Constants.Form.FieldPrefix + currentId).val();
+        values[currentId] = "";
+        //iterate over all of the inputs, possibly more than one
+        jQuery("[name='" + currentId + "']").each(function() {
+          //special handling for checkboxes
+          if ($(this).attr("type") == "checkbox") {
+            //take the ones that are checked
+            if ($(this).is(":checked")) {
+              //if it is the first one, just copy its value
+              if (values[currentId] == "") {
+                values[currentId] = $(this).val();
+              }
+              else {
+                //if there was another one before, add a comma
+                values[currentId] += "," + $(this).val();
+              }
+            }
+          }
+          else {
+            //any other input
+            //if it is the first one, just copy its value
+            if (values[currentId] == "") {
+              values[currentId] = $(this).val();
+            }
+            else {
+              //if there was another one before, add a comma
+              values[currentId] += "," + $(this).val();
+            }
+          }
+
+        });
       }
       return values;
     }
 
   },
-
   internals: {
-    annotationDefinition: null,
-    fieldNames          : [],
-
-    parseField: function (annotationField) {
+    concept: null,
+    fieldNames: [],
+    /**
+     * Looks for a parser for the given field and if one is found it returns the parsed result.
+     * @param {kat.util.XMLDoc} conceptField a concept field to be parsed
+     * @return {String} the html input element as string parsed from the concept field
+     */
+    parseField: function(conceptField) {
+      console.log(conceptField);
       var registry = new kat.input.form.FieldParserRegistry();
-      return registry.getParser(annotationField).parse(annotationField);
+      return registry.getParser(conceptField).parse(conceptField);
     }
-  },
-
-  statics: {
-    KFormTemplate: '<form class="form-horizontal">{fields}</form>'
   }
-
 })
