@@ -26,7 +26,6 @@ FlancheJs.defineClass("kat.util.XMLDoc", {
   methods: {
     filter: function (xPath) {
       var doc = this.getXmlDoc();
-      console.log(doc);
       var iter = doc.evaluate(xPath, doc, this._resolver, XPathResult.ANY_TYPE, null);
       var resultSet = [];
       do {

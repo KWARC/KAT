@@ -13,11 +13,13 @@ FlancheJs.defineClass("kat.Display", {
      * @param {String} specialClass The class to be added to the words having
      * annotations bound.
      */
-    init: function(annotations, specialClass) {
+    init: function (annotations, annotationRegsitry, conceptRegsitry, specialClass) {
         this.setAnnotations(annotations);
         if (specialClass) {
             this.setSetSpecialClass(specialClass);
         }
+        this._annotationRegistry = annotationRegsitry;
+        this._conceptRegistry = conceptRegsitry;
     },
     properties: {
         annotations: {
@@ -29,9 +31,25 @@ FlancheJs.defineClass("kat.Display", {
     },
     methods: {
         /**
+         * Adds an annotation to the display
+         */
+        addAnnotation: function (annotation) {
+            this.$annotations.push(annotation);
+        },
+        /**
+         * Removes an annotation from the display
+         */
+        deleteAnnotation: function (id) {
+            for (var i = 0; i < this.$annotations.length; i++) {
+                if (this.$annotations[i]["id"] == id) {
+                    this.$annotations.splice(i, 1);
+                }
+            }
+        },
+        /**
          * Adds the class to the spans having annotations bound
          */
-        addSpecialClassToSpans: function() {
+        addSpecialClassToSpans: function () {
             for (var i = 0; i < this.getAnnotations().length; i++) {
                 var prefixedId1 = this.$annotations[i]["idBase"].split("-");
                 var id1 = parseInt(prefixedId1[prefixedId1.length - 1]);
@@ -52,19 +70,29 @@ FlancheJs.defineClass("kat.Display", {
                 for (var j = id1; j <= id2; j++) {
                     annotatedIds[j - id1] = "#" + prefix + "-" + j;
                 }
-                var currentAnnotationId = kat.Constants.Display.AnnotationIdPrefix;
-                currentAnnotationId += "-" + parseInt(Math.random() * 100000);
+                var currentAnnotationId = this.$annotations[i]["id"];
                 $(annotatedIds.join(",")).wrapAll("<span id='" + currentAnnotationId + "' class='" + this.getSpecialClass() + "'>");
                 this.$annotations[i]["id"] = currentAnnotationId;
+                if (this.$annotations[i]["style"] != null) {
+                    var rules = this.$annotations[i]["style"].split(";");
+                    for (var j = 0; j < rules.length; j++) {
+                        var rule = rules[j].split(":");
+                        if (rule.length == 2) {
+                            $("#" + currentAnnotationId).css(rule[0].trim(), rule[1].trim());
+                        }
+                    }
+                }
 
             }
         },
-        createTooltipDisplays: function() {
+        createTooltipDisplays: function () {
             for (var i = 0; i < this.getAnnotations().length; i++) {
+                var editButton = '<i title="Edit" class="icon-edit pull-right edit-annotation" id="edit-annotation-' + this.$annotations[i].id + '"></i>';
+                var closeButton = '<i title="Close" class="icon-remove"></i>';
                 var tooltipsterOptions = {
                     //"trigger": kat.Constants.Display.Triger,
                     //"interactive": true,
-                    "title": 'Annotation<button type="button" class="close" id="close-' + this.$annotations[i].id + '" aria-hidden="true">&times;</button>',
+                    "title": 'Annotation <button type="button" class="close" id="close-' + this.$annotations[i].id + '" aria-hidden="true">' + closeButton + '</button>' + editButton,
                     "html": true,
                     "placement": "bottom",
                     "content": this.$annotations[i].content
@@ -72,20 +100,60 @@ FlancheJs.defineClass("kat.Display", {
                 $("#" + this.$annotations[i].id).popover(tooltipsterOptions);
                 var annotationId = "#" + this.$annotations[i].id;
                 var annotationCloseId = "#" + 'close-' + this.$annotations[i].id;
-                (function(annotationId, annotationCloseId){
-                    $("body").delegate(annotationCloseId, "click", function() {
+                (function (annotationId, annotationCloseId) {
+                    $("body").delegate(annotationCloseId, "click", function () {
                         $(annotationId).popover('hide');
                     })
                 })(annotationId, annotationCloseId)
             }
+            this._registerEditAnnotationCallback();
         },
         /**
          * Encapsulates the behavior of the Display by adding classes to
          * annotated spans and creating display handlers.
          */
-        run: function() {
+        run: function () {
             this.addSpecialClassToSpans();
             this.createTooltipDisplays();
+        },
+        /**
+         * Resets the display object
+         */
+        reset: function () {
+            //remove the popovers
+            for (var i = 0; i < this.$annotations.length; i++) {
+                $("#" + this.$annotations[i].id).popover('destroy');
+            }
+            //remove the special class span
+            $("." + this.getSpecialClass()).each(function () {
+                $(this).children().unwrap();
+            })
+        },
+        /**
+         * Updates the display
+         */
+        update: function () {
+            this.reset();
+            this.run();
         }
+    },
+
+    internals: {
+        registerEditAnnotationCallback: function () {
+            var self = this;
+            $("body").off("click.kat", ".edit-annotation");
+            $("body").on("click.kat", ".edit-annotation", function () {
+                var id = $(this).attr('id').split('edit-annotation-');
+                id = id[1];
+                $("#" + id).popover('hide');
+                var annotation = self._annotationRegistry.getAnnotation(id);
+                var concept = self._conceptRegistry.lookupConcept(annotation["$concept"]);
+                var annotationEditForm = new kat.display.AnnotationEditForm(annotation, concept, self._annotationRegistry, self._conceptRegistry, self);
+                annotationEditForm.run();
+            });
+        },
+
+        annotationRegistry: null,
+        conceptRegistry: null
     }
 });

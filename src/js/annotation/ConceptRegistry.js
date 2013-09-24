@@ -32,7 +32,6 @@ FlancheJs.defineClass("kat.annotation.ConceptRegistry", {
      * @return {kat.annotation.Concept}
      */
     lookupConcept: function (concept) {
-      console.log("lookup result is: ", this._registry[concept]);
       return this._registry[concept];
     },
 

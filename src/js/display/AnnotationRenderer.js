@@ -12,20 +12,28 @@ FlancheJs.defineClass("kat.display.AnnotationRenderer", {
       return {
         idBase: this._annotation.getIdBase(),
         idExtent: this._annotation.getIdExtent(),
-        content: this._buildContent()
+        content: this._buildContent(),
+        id: this._annotation.getId(),
+        style: this._style
       }
     }
   },
   internals: {
     annotation: null,
     conceptRegistry: null,
-    
+    style: null,
+
     buildContent: function() {
       var annotationType = this._conceptRegistry.lookupConcept(this._annotation.getConcept());
       var display = annotationType.getDefinition().getXmlDoc().getElementsByTagName("template");  
       if(!display.length){
         throw Error("Each annotation concept must define a display!");
-      }   
+      }
+      //get the eventual style definition
+      var style = annotationType.getDefinition().getXmlDoc().getElementsByTagName("style");
+      if(style.length){
+          this._style = style[0].textContent.trim();
+      }
       var template = display[0].textContent;
       var replacements = this._annotation.getAnnotationValues();
       for (var name in replacements) {

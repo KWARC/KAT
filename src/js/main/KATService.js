@@ -16,6 +16,15 @@ FlancheJs.defineClass("kat.main.KATService", {
 
   methods: {
     run: function () {
+      /**
+       * Clear local storage to remove old versions of kat registry
+       */
+      if(window.localStorage.getItem("kat.2") == null){
+        window.localStorage.clear();
+        window.localStorage.setItem("kat.2", true);
+      }
+      
+      //
       window.onerror = function (message) {
         $.pnotify({
           title: 'KAT Error',
@@ -31,8 +40,10 @@ FlancheJs.defineClass("kat.main.KATService", {
         var renderer = new kat.display.AnnotationRenderer(currentAnnotations[i], this._conceptRegistry);
         renderedAnnotations.push(renderer.render())
       }
-      var displayer = new kat.Display(renderedAnnotations);
+      var displayer = new kat.Display(renderedAnnotations, this._annotationRegistry, this._conceptRegistry);
       displayer.run();
+      preProcessor.setDisplay(displayer);
+      this._annotationRegistry.setDisplay(displayer);
       var ontologyViewer = new kat.display.AnnotationOntologyViewer(this._ontologyRegistry, this._conceptRegistry, this._annotationRegistry);
       ontologyViewer.run();
     }

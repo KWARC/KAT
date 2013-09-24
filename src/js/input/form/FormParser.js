@@ -10,8 +10,9 @@ FlancheJs.defineClass("kat.input.form.FormParser", {
    * Constructor for the class
    * @param {kat.annotation.Concept} concept an annotation:input xml element from which the form should be extracted
    */
-  init: function(concept) {
+  init: function(concept, annotationRegistry) {
     this._concept = concept;
+    this._annotationRegistry = annotationRegistry;
   },
   methods: {
     /**
@@ -59,7 +60,7 @@ FlancheJs.defineClass("kat.input.form.FormParser", {
               }
               else {
                 //if there was another one before, add a comma
-                values[currentId] += "," + $(this).val();
+                values[currentId] += kat.Constants.Form.ValuesSeparator + $(this).val();
               }
             }
           }
@@ -71,7 +72,7 @@ FlancheJs.defineClass("kat.input.form.FormParser", {
             }
             else {
               //if there was another one before, add a comma
-              values[currentId] += "," + $(this).val();
+              values[currentId] += kat.Constants.Form.ValuesSeparator + $(this).val();
             }
           }
 
@@ -83,6 +84,7 @@ FlancheJs.defineClass("kat.input.form.FormParser", {
   },
   internals: {
     concept: null,
+    annotationRegistry: null,
     fieldNames: [],
     /**
      * Looks for a parser for the given field and if one is found it returns the parsed result.
@@ -90,8 +92,7 @@ FlancheJs.defineClass("kat.input.form.FormParser", {
      * @return {String} the html input element as string parsed from the concept field
      */
     parseField: function(conceptField) {
-      console.log(conceptField);
-      var registry = new kat.input.form.FieldParserRegistry();
+      var registry = new kat.input.form.FieldParserRegistry(this._annotationRegistry);
       return registry.getParser(conceptField).parse(conceptField);
     }
   }

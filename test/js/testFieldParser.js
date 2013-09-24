@@ -31,7 +31,6 @@ $(document).ready(function(){
     '<number atleast="2" atmost="5"/>'+
 	'</field></xml>';
   var fieldParser = new kat.input.form.fieldparser.CheckboxesParser();
-  console.log(new kat.util.XMLDoc(textField).filter("//field")[0]);
   var html = fieldParser.parse(new kat.util.XMLDoc(textField).filter("//field")[0]);
   $("#fieldDisplay").html(html);
 })

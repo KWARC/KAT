@@ -20,15 +20,19 @@ FlancheJs.defineObject("kat.Constants", {
       Triger             : "hover",
       AnnotationIdPrefix : "kat-annotation",
       AnnotationFormTitle: "Add Annotation",
+      EditAnnotationFormTitle: "Edit annotation",
       SelectOntologyText : "Select an ontology",
       SelectConceptText  : "Select a concept",
-      FormText           : "Fill in the following form"
+      FormText           : "Fill in the following form",
+      EditFormText       : "",
+      CPanelTitle        : "KAT Control Panel"
     },
     Form            : {
       FieldPrefix: "field-id-",
       FieldWrapPrefix: "field-wrap-id-",
       FieldWrapClass: "kat-form-field-wrapper",
-      FieldClass: "kat-form-field"
+      FieldClass: "kat-form-field",
+      ValuesSeparator: " | "
     }
   }
 });

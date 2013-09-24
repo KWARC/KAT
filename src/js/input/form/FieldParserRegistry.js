@@ -7,10 +7,10 @@
  */
 
 FlancheJs.defineClass("kat.input.form.FieldParserRegistry", {
-  init: function () {
+  init: function (annotationRegistry) {
     for (var parserName in kat.input.form.fieldparser) {
       if (kat.input.form.fieldparser[parserName] instanceof Function) {
-        var parser = new kat.input.form.fieldparser[parserName]();
+        var parser = new kat.input.form.fieldparser[parserName](annotationRegistry);
         this._registry.push(parser);
       }
     }

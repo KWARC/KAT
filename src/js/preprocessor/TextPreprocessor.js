@@ -32,7 +32,8 @@ FlancheJs.defineClass("kat.preprocessor.TextPreprocessor", {
     },
     idPrefix: {
       value: kat.Constants.TextPreprocessor.IdPrefix
-    }
+    },
+    display: {}
   },
   methods   : {
     /**
@@ -168,7 +169,7 @@ FlancheJs.defineClass("kat.preprocessor.TextPreprocessor", {
       $("#" + this._currentLinkId).off("click.kat");
       $("#" + this._currentLinkId).on("click", function(e){
         e.preventDefault();
-        var typeForm = new kat.display.AnnotationTypeForm(baseId, extentId, self._ontologyRegistry, self._conceptRegistry, self._anotationRegistry);
+        var typeForm = new kat.display.AnnotationTypeForm(baseId, extentId, self._ontologyRegistry, self._conceptRegistry, self._anotationRegistry, self.getDisplay());
         typeForm.run();
       })
     }
