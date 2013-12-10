@@ -1,7 +1,7 @@
 kat
 ===
 
-Yet Another Annotation Tool
+kat Annotation Tool
 
 Deployment
 ==========
