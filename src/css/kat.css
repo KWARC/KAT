@@ -71,3 +71,8 @@
     margin: 4px 10px 0 10px;
     cursor: pointer;
 }
+
+#show-all-connections{
+    margin: 4px 5px 0 5px;
+    cursor: pointer;
+}

@@ -12,6 +12,7 @@ FlancheJs.defineClass("kat.annotation.Concept", {
    * Constructor for the class
    * @param {String} name the name of the concept
    * @param {String} definition the definition in xml format of the concept
+   * @param {String} ontology definition
    */
   init: function (name, definition, ontology) {
     this.setName(name);
@@ -50,7 +51,7 @@ FlancheJs.defineClass("kat.annotation.Concept", {
     /**
      * Constructs a new Concept from a json representation
      * @param {String} json the json representation
-     * @return {kat.annotation.AnnotationType}
+     * @return {kat.annotation.Concept}
      */
     fromSerializedString: function (json) {
       var obj = JSON.parse(json);

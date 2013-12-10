@@ -36,6 +36,20 @@ FlancheJs.defineClass("kat.annotation.ConceptRegistry", {
     },
 
     /**
+     * Returns a concept by the resource type its rdf representation contains.
+     * @param {String} resourceUrl any valid resource url
+     * @return {kat.annotation.Concept}
+     */
+    lookupConceptByResource: function (resourceUrl) {
+      for (var conceptName in this._registry) {
+        if (this._registry[conceptName].getDefinition().filter("rdf:type").getAttribute("rdf:resource") == resourceUrl) {
+          return this._registry[conceptName];
+        }
+      }
+      return null;
+    },
+
+    /**
      * Removes an annotation concept from the registry.
      * @param {String} conceptName the name of the concept
      */
@@ -55,15 +69,15 @@ FlancheJs.defineClass("kat.annotation.ConceptRegistry", {
       }
       return concepts;
     },
-    
+
     /**
      * Returns all the concepts corresponding to the given ontology
      * @return {kat.annotation.Concept[]}
      */
-    getConceptsByOntology: function(ontology) {
+    getConceptsByOntology: function (ontology) {
       var concepts = [];
       for (var name in this._registry) {
-        if(this._registry[name].getOntology() == ontology){
+        if (this._registry[name].getOntology() == ontology) {
           concepts.push(this._registry[name]);
         }
       }

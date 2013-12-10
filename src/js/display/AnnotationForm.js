@@ -30,6 +30,7 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
         ontologyRegistry: null,
         conceptRegistry: null,
         annotationRegistry: null,
+
         renderContainer: function () {
             jQuery("#" + this.KContainerId).remove();
             var containerHtml = this.KModalTemplate.replace("{id}", this.KContainerId)
@@ -38,6 +39,7 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             jQuery("#" + this.KContainerId).modal();
             this._renderOntologySelector();
         },
+
         renderOntologySelector: function () {
             var ontologies = _.map(this._ontologyRegistry.getAllOntologies(), function (val) {
                 return {name: val.getName()};
@@ -58,6 +60,7 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             kat.util.Util.registerDocumentationPopover("#annotation-ontology-documentation");
             this._registerConceptForOntology();
         },
+
         registerConceptForOntology: function () {
             var ontology = $("#annotation-ontology-selector").val();
             if (ontology != "") {
@@ -75,6 +78,7 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
                 }
             }
         },
+
         renderConceptSelector: function (ontology) {
             var selectHtml = "<h5>" + kat.Constants.Display.SelectConceptText + "</h5>";
             var documentationI = "<a data-documentation='Please select a concept.' id='annotation-concept-documentation' href='#'><i class='icon-question-sign'></i></a>";
@@ -95,6 +99,7 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             kat.util.Util.registerDocumentationPopover("#annotation-concept-documentation");
             self._registerFormForConcept();
         },
+
         registerFormForConcept: function () {
             var concept = $("#annotation-concept-selector").val();
             if (concept != "") {
@@ -116,6 +121,7 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
                 }
             }
         },
+
         renderForm: function (concept) {
             this._selectedConceptName = concept;
             var conceptObject = this._conceptRegistry.lookupConcept(concept);
@@ -129,6 +135,7 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             this._addFormDocumentation();
             this._addFormExpandableInputs();
         },
+
         addFormDocumentation: function () {
             var documentedItems = $("#annotation-form-input").find("[data-documentation]");
             for (var i = 0; i < documentedItems.length; i++) {
@@ -145,6 +152,7 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
                 }
             }
         },
+
         addFormExpandableInputs: function () {
             var expandableItems = $("#annotation-form-input").find("[data-atmost]");
             for (var i = 0; i < expandableItems.length; i++) {
@@ -169,16 +177,23 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
                 }
             }
         },
+
         registerFormSaveHandler: function () {
             var self = this;
-            var form = $("#kat-form-save");
-            form.off("click.raswct");
-            form.on("click.raswct", function () {
-                var annotation = new kat.annotation.Annotation(self._idBase, self._idExtent, self._selectedConceptName, self._formParser.getFormValues());
+            var formSaveButton = $("#kat-form-save");
+            formSaveButton.off("click.kat");
+            formSaveButton.on("click.kat", function () {
+                var form = jQuery(".kat-form-display");
+                var extraData = {};
+                if (form.find(".reference-field")) {
+                    extraData.referenceId = form.find(".reference-field :selected").attr("data-annotation-id");
+                }
+                var annotation = new kat.annotation.Annotation(self._idBase, self._idExtent, self._selectedConceptName, self._formParser.getFormValues(), null, extraData);
                 self._registerNewAnnotation(annotation);
                 self._destroy();
             })
         },
+
         displaySuccessMessage: function () {
             $.pnotify({
                 title: 'KAT Message',
@@ -186,6 +201,7 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
                 type: 'success'
             });
         },
+
         registerNewAnnotation: function (annotation) {
             this._annotationRegistry.addAnnotation(annotation);
             var renderedAnnotation = (new kat.display.AnnotationRenderer(annotation, this._conceptRegistry)).render();
@@ -193,6 +209,7 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             this.getDisplay().update();
             this._displaySuccessMessage();
         },
+
         destroy: function () {
             jQuery("#" + this.KContainerId).modal("hide");
             jQuery("#" + this.KContainerId).remove();

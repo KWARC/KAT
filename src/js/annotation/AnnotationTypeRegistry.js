@@ -7,6 +7,9 @@
 
 FlancheJs.defineObject("kat.annotation.AnnotationTypeRegistry", {
 
+  /**
+   * Constructor for the class.
+   */
   init: function () {
     if (window.localStorage.getItem(this.KLocalStorageRegistryKey)) {
       this._loadRegistry();

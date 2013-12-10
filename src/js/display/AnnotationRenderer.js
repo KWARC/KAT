@@ -25,7 +25,7 @@ FlancheJs.defineClass("kat.display.AnnotationRenderer", {
 
     buildContent: function() {
       var annotationType = this._conceptRegistry.lookupConcept(this._annotation.getConcept());
-      var display = annotationType.getDefinition().getXmlDoc().getElementsByTagName("template");  
+      var display = annotationType.getDefinition().getXmlDoc().getElementsByTagName("template");
       if(!display.length){
         throw Error("Each annotation concept must define a display!");
       }
@@ -40,6 +40,10 @@ FlancheJs.defineClass("kat.display.AnnotationRenderer", {
         template = template.replace(new RegExp("{" + name + "}", "g"), replacements[name]);
       }
       return template;
+    },
+
+    displayReference: function(){
+
     }
   }
 

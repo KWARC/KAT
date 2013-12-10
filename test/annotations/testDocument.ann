@@ -1,0 +1,205 @@
+[
+  {
+    "$idBase"          : "kat-283",
+    "$idExtent"        : "kat-283",
+    "$concept"         : "OMDOC.Symbol",
+    "$annotationValues": {
+      "name": "Symbol"
+    },
+    "$id"              : "f8668dcf-3967-47fa-abd4-48a4aafe85da",
+    "$extraData"       : {}
+  },
+  {
+    "$idBase"          : "kat-449",
+    "$idExtent"        : "kat-449",
+    "$concept"         : "OMDOC.Definition",
+    "$annotationValues": {
+      "for" : "fermentum. ",
+      "type": "simple"
+    },
+    "$id"              : "e14de627-9504-4371-9f32-b80e75a0a403",
+    "$extraData"       : {}
+  },
+  {
+    "$idBase"          : "kat-413",
+    "$idExtent"        : "kat-413",
+    "$concept"         : "OMDOC.Definition",
+    "$annotationValues": {
+      "for" : "fermentum. ",
+      "type": "simple"
+    },
+    "$id"              : "c30b4137-e533-4610-8087-39286f60be96",
+    "$extraData"       : {
+      "referenceId": "f8668dcf-3967-47fa-abd4-48a4aafe85da"
+    }
+  },
+  {
+    "$idBase"          : "kat-442",
+    "$idExtent"        : "kat-442",
+    "$concept"         : "OMDOC.Definition",
+    "$annotationValues": {
+      "for" : "fermentum. ",
+      "type": "simple"
+    },
+    "$id"              : "c1e28525-18ef-4b4d-ae46-bf1e76fad4c7",
+    "$extraData"       : {
+      "referenceId": "f8668dcf-3967-47fa-abd4-48a4aafe85da"
+    }
+  },
+  {
+    "$idBase"          : "kat-542",
+    "$idExtent"        : "kat-542",
+    "$concept"         : "OMDOC.Definition",
+    "$annotationValues": {
+      "for" : "fermentum. ",
+      "type": "simple"
+    },
+    "$id"              : "8ff8cbc2-c501-457f-ba82-929acaeec280",
+    "$extraData"       : {
+      "referenceId": "f8668dcf-3967-47fa-abd4-48a4aafe85da"
+    }
+  },
+  {
+    "$idBase"          : "kat-660",
+    "$idExtent"        : "kat-660",
+    "$concept"         : "OMDOC.Symbol",
+    "$annotationValues": {
+      "name": "Symbolic"
+    },
+    "$id"              : "a43f8930-943f-4842-af49-3a68e4b72f98",
+    "$extraData"       : {}
+  },
+  {
+    "$idBase"          : "kat-742",
+    "$idExtent"        : "kat-742",
+    "$concept"         : "OMDOC.Symbol",
+    "$annotationValues": {
+      "name": "Symbol"
+    },
+    "$id"              : "be295e5f-aa27-42e2-9dee-732750db8d4a",
+    "$extraData"       : {}
+  },
+  {
+    "$idBase"          : "kat-705",
+    "$idExtent"        : "kat-705",
+    "$concept"         : "OMDOC.Symbol",
+    "$annotationValues": {
+      "name": "Symbol"
+    },
+    "$id"              : "2e45a1bc-084a-4041-a13d-a5ab6c523221",
+    "$extraData"       : {}
+  },
+  {
+    "$idBase"          : "kat-636",
+    "$idExtent"        : "kat-636",
+    "$concept"         : "OMDOC.Symbol",
+    "$annotationValues": {
+      "name": "Symbol"
+    },
+    "$id"              : "0adff0f9-cded-4c82-bdd5-e3335a32d006",
+    "$extraData"       : {}
+  },
+  {
+    "$idBase"          : "kat-408",
+    "$idExtent"        : "kat-408",
+    "$concept"         : "OMDOC.Symbol",
+    "$annotationValues": {
+      "name": "Symbol"
+    },
+    "$id"              : "6303cdf6-d6cd-4d73-b00a-7f90d5e02e78",
+    "$extraData"       : {}
+  },
+  {
+    "$idBase"          : "kat-518",
+    "$idExtent"        : "kat-518",
+    "$concept"         : "OMDOC.Symbol",
+    "$annotationValues": {
+      "name": "Symbol"
+    },
+    "$id"              : "dcccbf9e-07cd-4cbb-972d-93b56af276c8",
+    "$extraData"       : {}
+  },
+  {
+    "$idBase"          : "kat-246",
+    "$idExtent"        : "kat-246",
+    "$concept"         : "OMDOC.Symbol",
+    "$annotationValues": {
+      "name": "Symbol"
+    },
+    "$id"              : "e352fd18-0e75-41cc-871c-e72293edc99d",
+    "$extraData"       : {}
+  },
+  {
+    "$idBase"          : "kat-317",
+    "$idExtent"        : "kat-317",
+    "$concept"         : "OMDOC.Symbol",
+    "$annotationValues": {
+      "name": "Symbol"
+    },
+    "$id"              : "0b28149b-9c10-43a3-8572-dde9e4df7da7",
+    "$extraData"       : {}
+  },
+  {
+    "$idBase"          : "kat-393",
+    "$idExtent"        : "kat-393",
+    "$concept"         : "OMDOC.Symbol",
+    "$annotationValues": {
+      "name": "Symbol"
+    },
+    "$id"              : "ff164336-e44b-41ee-a567-5ed231067460",
+    "$extraData"       : {}
+  },
+  {
+    "$idBase"          : "kat-122",
+    "$idExtent"        : "kat-122",
+    "$concept"         : "OMDOC.Symbol",
+    "$annotationValues": {
+      "name": "Symbol"
+    },
+    "$id"              : "d24da08e-156f-4e0b-9116-b0e2d9011a4c",
+    "$extraData"       : {}
+  },
+  {
+    "$idBase"          : "kat-631",
+    "$idExtent"        : "kat-631",
+    "$concept"         : "OMDOC.Symbol",
+    "$annotationValues": {
+      "name": "Symbol"
+    },
+    "$id"              : "af52bae5-6ddd-4bdc-9027-d36e7a6440f3",
+    "$extraData"       : {}
+  },
+  {
+    "$idBase"          : "kat-846",
+    "$idExtent"        : "kat-846",
+    "$concept"         : "OMDOC.Definition",
+    "$annotationValues": {
+      "for" : "laoreet ",
+      "type": "simple"
+    },
+    "$id"              : "2e36b233-0f6e-4a78-bfb9-8349f08bca79",
+    "$extraData"       : {
+      "referenceId": "0adff0f9-cded-4c82-bdd5-e3335a32d006"
+    }
+  },
+  {
+    "$idBase"          : "kat-529",
+    "$idExtent"        : "kat-529",
+    "$concept"         : "OMDOC.Symbol",
+    "$annotationValues": {
+      "name": "Symbol"
+    },
+    "$id"              : "d5f472cc-302b-4fd3-b660-3f16aaf4ee3e",
+    "$extraData"       : {}
+  },
+  {
+    "$idBase"          : "kat-634",
+    "$idExtent"        : "kat-634",
+    "$concept"         : "OMDOC.Symbol",
+    "$annotationValues": {
+      "name": "Symbol"
+    },
+    "$id"              : "0cf13f7d-5e5c-45db-b71d-549149870ee7",
+    "$extraData"       : {}
+  }
+]

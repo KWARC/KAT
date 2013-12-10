@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!-- A KAT annotations specification for OMDoc annotations
-     copyright 2013 Michael Kohlhase released under the GPL --><annotation xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:o="http://omdoc.org/ontology#" name="OMDoc">
+     copyright 2013 Michael Kohlhase released under the GPL -->
+<annotation xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:o="http://omdoc.org/ontology#" name="OMDoc">
     <documentation>
         The OMDoc ontology is a flexiformal data model for matheamtical (and general STEM) documents
     </documentation>
