@@ -1,5 +1,5 @@
 /**
- * This class provides a tool for displaying and loading ontologies into the systen
+ * This class provides a tool for displaying and handling the KAT Control Panel.
  *
  * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
  * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>

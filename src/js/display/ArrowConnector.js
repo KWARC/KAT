@@ -1,6 +1,6 @@
 /**
  * Creates an svg arrow that can be used to connect two dom elements, for example a
- * reference field annotation to the referenced item
+ * reference field annotation to the referenced item.
  *
  * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
  * @author <a href="mailto:v.merticariu@jacobs-university,de">Vlad Merticariu</a>

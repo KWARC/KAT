@@ -1,5 +1,5 @@
 /**
- * Parses a field of type checkboxes outputing html
+ * Parses a field of type checkboxes outputing html.
  *
  * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
  * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>

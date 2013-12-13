@@ -1,5 +1,5 @@
 /**
- * A registry to keep track of all available annotation types
+ * Class for handling the form displayed when an annotation is added.
  *
  * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
  * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>

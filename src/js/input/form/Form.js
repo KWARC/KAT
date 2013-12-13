@@ -1,5 +1,8 @@
 /**
- * @author <a href="mailto:alex@flanche.net">Alex Dumitru</a>
+ * The Form class decides which fields to be displayed in the current form.
+ *
+ * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
+ * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
  */
 
 FlancheJs.defineClass("kat.form.Form", {
