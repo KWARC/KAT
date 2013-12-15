@@ -1,7 +1,7 @@
 kat
 ===
 
-kwark Annotation Tool
+KWARC Annotation Tool
 
 Deployment
 ==========
