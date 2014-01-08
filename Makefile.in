@@ -8,6 +8,7 @@ $(shell find $(SRCDIR)/js/preprocessor -name '*.js') fileseparator\
 $(shell find $(SRCDIR)/js/input -name '*.js')        fileseparator\
 $(shell find $(SRCDIR)/js/output -name '*.js')       fileseparator\
 $(shell find $(SRCDIR)/js/display -name '*.js')      fileseparator\
+$(shell find $(SRCDIR)/js/remote -name '*.js')       fileseparator\
 $(shell find $(SRCDIR)/js/annotation -name '*.js' | sort )   fileseparator\
 $(shell find $(SRCDIR)/js/main -name '*.js')
 INSTALLDIR=/srv/http/kat
@@ -22,6 +23,10 @@ libjs: init $(LIBDIR)/Bootstrap/js/bootstrap.min.js $(LIBDIR)/FlancheJs/flanchej
 	$(LIBDIR)/underscorejs/underscore.js fileseparator                 \
 	$(LIBDIR)/pNotify/js/pnotify.js fileseparator                      \
 	$(LIBDIR)/Tooltipster/js/tooltipster.js fileseparator              \
+	$(LIBDIR)/bootbox/bootbox.min.js fileseparator                     \
+	$(LIBDIR)/jsplumb/jsplumb.min.js fileseparator                     \
+  $(LIBDIR)/raphael/raphael.min.js fileseparator                     \
+	$(LIBDIR)/UUID/uuid.js fileseparator                               \
 	$(LIBDIR)/Bootstrap/js/bootstrap.min.js                            > $(BINDIR)/kat_lib.js
 
 libcss: init $(LIBDIR)/Bootstrap/css/bootstrap.min.css
@@ -56,4 +61,5 @@ install: test bin
 	mkdir -p $(INSTALLDIR)
 	cp -R test $(INSTALLDIR)/test
 	cp -R bin  $(INSTALLDIR)/bin
+	chmod -R 777 $(INSTALLDIR)/test/annotations
 	@echo -e "\n\n#>Installation complete\n\n"
