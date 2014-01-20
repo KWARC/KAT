@@ -8,7 +8,7 @@
 
 FlancheJs.defineClass("kat.input.form.fieldparser.SelectParser", {
 
-  implements: [kat.input.form.fieldparser],
+  implements: ["kat.input.form.fieldparser"],
 
   init: function () {
 

@@ -7,7 +7,7 @@
 
 FlancheJs.defineClass("kat.input.form.fieldparser.ReferenceParser", {
 
-  implements: [kat.input.form.fieldparser],
+  implements: ["kat.input.form.fieldparser"],
 
   init: function (annotationRegistry) {
     this._annotationRegistry = annotationRegistry;

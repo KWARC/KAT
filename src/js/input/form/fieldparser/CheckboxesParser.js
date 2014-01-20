@@ -7,7 +7,7 @@
 
 FlancheJs.defineClass("kat.input.form.fieldparser.CheckboxesParser", {
 
-  implements: [kat.input.form.fieldparser],
+  implements: ["kat.input.form.fieldparser"],
 
   init: function () {
 
