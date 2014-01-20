@@ -1,0 +1,78 @@
+.tooltipster-content a {
+    color: #fff;
+}
+
+.kat-annotated {
+    cursor: pointer;
+    background-color: #FFFFB2;
+}
+
+.popover-content {
+    font-weight: normal !important;
+}
+
+.ui-pnotify-text {
+    font-size: 13px;
+}
+
+#annotation-viewer-link {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    padding: 3px;
+}
+
+#annotation-viewer-modal {
+    width: 800px;
+    margin-left: -400px;
+}
+
+#annotation-viewer-modal>.modal-body {
+    overflow: hidden;
+}
+
+.form-horizontal .control-label {
+    width: 90px;
+}
+
+.form-horizontal .controls {
+    margin-left: 110px;
+}
+
+.form-documentation-a {
+    margin-left: 20px;
+}
+
+.form-expand-a {
+    margin-right: 15px;
+}
+
+#annotation-concept-documentation i, #annotation-ontology-documentation i {
+    margin-top: -4px;
+    margin-left: 20px;
+}
+
+.edit-annotation {
+    cursor: pointer;
+}
+
+.kat-annotation-text {
+    font-style: italic;
+}
+
+#show-all-annotations {
+    margin-top: 4px;
+    cursor: pointer;
+}
+
+#hide-all-annotations {
+    margin: 4px 10px 0 10px;
+    cursor: pointer;
+}
+
+#show-all-connections{
+    margin: 4px 5px 0 5px;
+    cursor: pointer;
+}

@@ -4,5 +4,4 @@ node_modules
 *.iml
 *.iws
 Makefile
-bin
 fileseparator
