@@ -3,7 +3,7 @@ kat
 
 KWARC Annotation Tool
 
-Deployment
+Updating Deployment
 ==========
 
 * In Makefile.in, change INSTALLDIR to the desired installation directory (e.g. /srv/http/kat or /var/www/kat).
