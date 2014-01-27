@@ -61,7 +61,7 @@ FlancheJs.defineClass("kat.Display", {
           id1 = aux;
         }
         console.log("ids ", id1, id2);
-        var annotatedIds = $("#" + id1).nextAll("#" + id2).andSelf();
+        var annotatedIds = $("#" + id1).nextUntil("#" + id2).andSelf().add($('#' + id2));
         console.log(annotatedIds);
         var currentAnnotationId = this.$annotations[i]["id"];
         annotatedIds.wrapAll("<span id='" + currentAnnotationId + "' class='" + this.getSpecialClass() + "'>");
