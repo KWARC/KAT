@@ -79,7 +79,6 @@ FlancheJs.defineClass("kat.Display", {
       }
     },
     createTooltipDisplays : function () {
-      console.log(this._annotationRegistry)
       for (var i = 0; i < this.getAnnotations().length; i++) {
         var editButton = '<i title="Edit" class="icon-edit pull-right edit-annotation" id="edit-annotation-' + this.$annotations[i].id + '"></i>';
         var closeButton = '<i title="Close" class="icon-remove"></i>';
