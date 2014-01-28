@@ -27,12 +27,14 @@ libjs: init $(LIBDIR)/Bootstrap/js/bootstrap.min.js $(LIBDIR)/FlancheJs/flanchej
 	$(LIBDIR)/jsplumb/jsplumb.min.js fileseparator                     \
   $(LIBDIR)/raphael/raphael.min.js fileseparator                     \
 	$(LIBDIR)/UUID/uuid.js fileseparator                               \
-	$(LIBDIR)/Bootstrap/js/bootstrap.min.js                            > $(BINDIR)/kat_lib.js
+	$(LIBDIR)/Bootstrap/js/bootstrap.min.js fileseparator              \
+	$(LIBDIR)/SearchSelect/search-select.js                            > $(BINDIR)/kat_lib.js
 
 libcss: init $(LIBDIR)/Bootstrap/css/bootstrap.min.css
 	cat $(LIBDIR)/Tooltipster/css/tooltipster.css                  \
-	$(LIBDIR)/pNotify/css/pnotify.css                          \
-	$(LIBDIR)/Bootstrap/css/bootstrap.min.css                      > $(BINDIR)/kat_lib.css
+	$(LIBDIR)/pNotify/css/pnotify.css                              \
+	$(LIBDIR)/Bootstrap/css/bootstrap.min.css                      \
+	$(LIBDIR)/SearchSelect/search-select.css                       > $(BINDIR)/kat_lib.css
 
 srcjs: init 	$(SRCDIR)/js/util/Util.js
 	cat $(SOURCES)                                                     > $(BINDIR)/kat_src.js
