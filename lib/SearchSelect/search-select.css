@@ -1,4 +1,8 @@
-.searchSelect, .searchSelect * { box-sizing: border-box; }
+.searchSelect, .searchSelect * {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
 .searchSelect {
   display: inline-block;

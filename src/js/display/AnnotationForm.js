@@ -212,6 +212,7 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
         },
 
         destroy: function () {
+            jQuery("#annotation-concept-selector").searchSelect('destroy');
             jQuery("#" + this.KContainerId).modal("hide");
             jQuery("#" + this.KContainerId).remove();
         }
