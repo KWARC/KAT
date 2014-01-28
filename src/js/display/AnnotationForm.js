@@ -94,7 +94,8 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
 
             jQuery("#annotation-concept-selector").on("change", function () {
                 self._registerFormForConcept();
-            });
+            }).searchSelect();
+
             //register documentation popover
             kat.util.Util.registerDocumentationPopover("#annotation-concept-documentation");
             self._registerFormForConcept();
