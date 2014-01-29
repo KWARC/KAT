@@ -13,6 +13,8 @@ FlancheJs.defineClass("kat.display.AnnotationRenderer", {
   methods: {
     render: function() {
       return {
+        ontology: this._annotation.getOntology(),
+        concept: this._annotation.getConcept(),
         idBase: this._annotation.getIdBase(),
         idExtent: this._annotation.getIdExtent(),
         content: this._buildContent(),

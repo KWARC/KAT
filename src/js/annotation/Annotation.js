@@ -20,6 +20,7 @@ FlancheJs.defineClass("kat.annotation.Annotation", {
   init: function (idBase, idExtent, concept, values, id, extraData) {
     this.$idBase = idBase;
     this.$idExtent = idExtent;
+    this.$ontology = concept.slice(0, concept.indexOf('.'));
     this.$concept = concept;
     this.$annotationValues = values;
     this.$id = id || kat.util.Util.generateUUID();
@@ -29,6 +30,7 @@ FlancheJs.defineClass("kat.annotation.Annotation", {
   properties: {
     idBase          : {value: null, writable: false},
     idExtent        : {value: null, writable: false},
+    ontology        : {value: null, writable: false},
     concept         : {value: null, writable: false},
     annotationValues: {value: null, writable: false},
     id              : {value: null, writable: false},
@@ -46,6 +48,7 @@ FlancheJs.defineClass("kat.annotation.Annotation", {
       return JSON.stringify({
         idBase          : this.getIdBase(),
         idExtent        : this.getIdExtent(),
+        ontology        : this.getOntology(),
         concept         : this.getConcept(),
         annotationValues: this.getAnnotationValues(),
         id              : this.getId(),

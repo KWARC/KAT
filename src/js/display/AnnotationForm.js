@@ -88,6 +88,9 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             for (var i = 0; i < concepts.length; i++) {
                 options += "<option>" + concepts[i].getName() + "</option>\n";
             }
+
+            // Remove any previous installation of searchSelect
+            jQuery("#annotation-concept-selector").searchSelect('destroy');
             $(".kat-concept-selector").html(selectHtml.replace("{options}", options));
 
             var self = this;
@@ -189,6 +192,7 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
                 if (form.find(".reference-field")) {
                     extraData.referenceId = form.find(".reference-field :selected").attr("data-annotation-id");
                 }
+                extraData.yolo = 'aloha';
                 var annotation = new kat.annotation.Annotation(self._idBase, self._idExtent, self._selectedConceptName, self._formParser.getFormValues(), null, extraData);
                 self._registerNewAnnotation(annotation);
                 self._destroy();

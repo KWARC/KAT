@@ -51,8 +51,9 @@ FlancheJs.defineClass("kat.Display", {
      */
     addSpecialClassToSpans: function () {
       for (var i = 0; i < this.getAnnotations().length; i++) {
-        var id1 = this.$annotations[i]["idBase"];
-        var id2 = this.$annotations[i]["idExtent"];
+        var annotation = this.$annotations[i];
+        var id1 = annotation["idBase"];
+        var id2 = annotation["idExtent"];
 
         //exchange if necessary, to start from the smallest
         if ($("#" + id1).index() > $("#" + id2).index()) {
@@ -63,11 +64,19 @@ FlancheJs.defineClass("kat.Display", {
         console.log("ids ", id1, id2);
         var annotatedIds = $("#" + id1).nextUntil("#" + id2).andSelf().add($('#' + id2));
         console.log(annotatedIds);
-        var currentAnnotationId = this.$annotations[i]["id"];
-        annotatedIds.wrapAll("<span id='" + currentAnnotationId + "' class='" + this.getSpecialClass() + "'>");
-        this.$annotations[i]["id"] = currentAnnotationId;
-        if (this.$annotations[i]["style"] != null) {
-          var rules = this.$annotations[i]["style"].split(";");
+        var ontologyClass = 'ontology-' + annotation.ontology;
+        var conceptClass = 'concept-' + annotation.concept.replace(/\./g, '-');
+        var classes = [this.getSpecialClass(), ontologyClass, conceptClass].join(" ");
+        var currentAnnotationId = annotation["id"];
+        annotatedIds.wrapAll("<span " +
+          "id='" + currentAnnotationId + "' " +
+          "class='" + classes + "' " +
+          "ontology='" + annotation.ontology + "' " +
+          "concept='" + annotation.concept + "'>"
+        );
+        annotation["id"] = currentAnnotationId;
+        if (annotation["style"] != null) {
+          var rules = annotation["style"].split(";");
           for (var j = 0; j < rules.length; j++) {
             var rule = rules[j].split(":");
             if (rule.length == 2) {
