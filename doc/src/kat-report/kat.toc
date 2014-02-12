@@ -1,0 +1,17 @@
+\contentsline {chapter}{\numberline {1}Project Overview}{3}
+\contentsline {section}{\numberline {1.1}Introduction}{3}
+\contentsline {section}{\numberline {1.2}State of the art}{3}
+\contentsline {subsection}{\numberline {1.2.1}brat Annotation Tool}{4}
+\contentsline {subsection}{\numberline {1.2.2}Yawas Annotation Tool}{6}
+\contentsline {subsection}{\numberline {1.2.3}Annotatie Systeem Annotation Tool}{6}
+\contentsline {chapter}{\numberline {2}KAT - The KWARC Annotator Tool}{8}
+\contentsline {section}{\numberline {2.1}Annotation Data Model}{8}
+\contentsline {subsection}{\numberline {2.1.1}Concept Architecture}{9}
+\contentsline {section}{\numberline {2.2}Annotation Representation}{10}
+\contentsline {subsection}{\numberline {2.2.1}Adding an annotation}{10}
+\contentsline {subsection}{\numberline {2.2.2}Displaying an annotation}{12}
+\contentsline {section}{\numberline {2.3}Storage}{12}
+\contentsline {chapter}{\numberline {A}}{13}
+\contentsline {section}{\numberline {A.1}Installation Guide}{13}
+\contentsline {section}{\numberline {A.2}Example Annotation Ontology}{13}
+\contentsline {section}{\numberline {A.3}Developer Guide}{15}
