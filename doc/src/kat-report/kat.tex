@@ -1,0 +1,421 @@
+\documentclass[a4paper, 12pt, notitlepage]{report}
+
+\usepackage{amsfonts} % if you want blackboard bold symbols e.g. for real numbers
+\usepackage{graphicx} % if you want to include jpeg or pdf pictures
+\usepackage{listings}
+
+\title{KAT: Annotation Tool for STEM Documents} % change this
+\author{Alex Dumitru, Vlad Merticariu} % change this
+\date{\today} % change this
+
+\begin{document}
+
+%%%%%%%%%% PRELIMINARY MATERIAL %%%%%%%%%%
+\maketitle
+\begin{center}
+Computer Science,  Jacobs University Bremen % change this
+\\[12pt]
+\end{center}
+\thispagestyle{empty}
+\newpage
+
+\tableofcontents 
+
+%%%%%%%%%% MAIN TEXT STARTS HERE %%%%%%%%%%
+
+%%%%%%%%%% SAMPLE CHAPTER %%%%%%%%%%
+
+\chapter{Project Overview}
+%
+
+\section{Introduction}\label{sec:intro}
+Text annotation is the practice of adding a note to a text, which may include highlights
+or underlining, comments, footnotes or links.  In most of the cases,annotations can be
+thought of as text-metadata because they are usually added post hoc and provide
+information about the text without fundamentally altering it.
+
+A web annotation is an online annotation associated with a web resource. The annotation of
+web-based documents by user communities is a widely used method of augmenting and adding
+value to these resources and there are numerous use cases where the process can
+disambiguate contexts or improve the overall readability.
+\section{State of the art}
+In this section we will present a few of the current annotation tools available on the web, extracting the most relevant features that were taken into account when building KAT.
+
+Different types of web-based projects will 
+require different approaches to annotations, allowing us to distinguish between 2 main categories:
+\begin{enumerate}
+ \item Dynamic annotations: implemented by systems which allow the annotation of the text itself. In such a system, the anchor of an annotation is a piece of digitized text.
+ \item Static annotations: implemented by systems which allow the annotation of a specific region of content. In this case, the anchor of an annotation is the fixed, in-page, position of
+ the annotated region.
+\end{enumerate}
+Digitized, mathematical text lays in the center of our research direction during this project and, for this reason, we are going to focus mainly on the first category. However, in order to 
+have a complete overview of the available features, the last subsection of this part presents one example from the second category.
+
+An important aspect of our desired system is that, even though it is very close to a dynamic annotation system, we are looking for a more stable and semantically rich format, such as OMDoc, to anchor the annotations.
+
+\subsection{brat Annotation Tool} % Custom section title
+brat\footnote{http://brat.nlplab.org/} is a web based tool for text annotation. It is designed in particular for structured annotation, where the notes are not freeform text but have a fixed form that can 
+be automatically processed and interpreted by a computer and implicitly belongs to the category of dynamic annotation tools.
+\begin{center}
+ \includegraphics[width=3.7in]{brat.png}
+\end{center}
+The most important features that we identified were:
+\begin{enumerate}
+ \item The text must be preprocessed into a particular, fixed format before being annotated.
+ \item There are 2 types of annotation supported:
+ \begin{itemize}
+  \item text span annotations: simple annotation of a piece of text:\\[0.1in] 
+   \includegraphics[width=3.5in]{brat-text-span.png}
+
+  \item relation annotations: two separated pieces of text are annotated and a connection between them is created:\\[0.1in]
+   \includegraphics[width=3.5in]{brat-relation.png}
+ \end{itemize}
+ \item Extensive search functionality for annotations:\\[0.1in]
+  \includegraphics[width=3.5in]{brat-search.png}
+ \item Export interface: annotations can be exported in an internal format, which can then be converted in other formats such as PDF or HTML. Furthermore, visualizations can be exported as 
+ well, into SVG and bitmap formats (PNG).
+ \item Each annotation is accessible by URL: every brat annotation can be uniquely addressed within the brat server. Together with the URL of the server, this form of addressing provides a 
+ globally unique address for every brat annotation.
+ \item Brat provides a validation system for its annotations: the admin can define validation grammar rules, forcing the user to adhere to a specific annotation format.
+ \item Annotations are anchored based on a word-counter: this makes the annotated text unchangeable and constitutes one of our main concerns regarding the system. 
+\end{enumerate}
+ 
+\subsection{Yawas Annotation Tool} % Roman numerals
+Yawas\footnote{http://www.keeness.net/yawas/index.htm} is an annotation system designed as an extension for Firefox and Google Chrome.\\[0.1in]
+\begin{center}
+\includegraphics[width=2.5in]{yawas.jpg}
+\end{center}
+It is different than the other systems that we analyzed in that the annotation doesn't belong to the text but to the user. After installing the extension, the use can navigate to any page
+and can highlight any piece of text. The annotation is saved in the user's google account and is displayed every time the user accesses the page.\vspace{10pt}
+
+Feature-wise the system is much weaker than the previously analyzed brat (and much older), however it contains a potentially useful idea: user-specific annotations which can later be made accessible only to
+specific users or groups of users.
+ 
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 4
+%----------------------------------------------------------------------------------------
+
+\subsection{Annotatie Systeem Annotation Tool} % Roman numerals
+Annotatie\footnote{http://www.annotatiesysteem.nl/} is an annotation tool for printed documents and belongs to the static annotation category.\vspace{10pt}
+
+The anchoring of the annotations is done by page positioning: this seems inflexible at a first glance, however, it constitutes a good alternative when the text in the page is not digitized.
+The feature that caught our attention is the extensive comment sectioned derived from the annotations:
+\begin{itemize}
+ \item Each annotation represents a new comment thread.
+ \item In each comment thread other users can further discuss on both the contents of the annotated text and the annotation itself.
+ \item All the annotations in a page are displayed in the right side of the page, as collapsed threads.
+\end{itemize}
+We believe that allowing discussion based on one user's annotation is an important feature in such a system, as the context introduced by annotations is one which emphases user collaboration.
+ 
+
+\chapter{KAT - The KWARC Annotator Tool}
+KAT is an annotation tool for (X)HTML documents, built with the following strong points in
+mind:
+\begin{enumerate}
+\item Usability - The tool should be convenient and easy to use by regular internet users
+  allowing them varying degrees of complexity in the user interface.
+\item Easy to integrate - The tool should be easy to integrate into existing projects, and
+  should have minimal to none dependencies on the server side.
+\item Semantic Richness - The annotations provided by our users should contain the
+  necessary level of information for NLP tools to use.
+\end{enumerate}
+\section{Annotation Data Model}
+The annotations that the users will provide must be well structured in order for our third
+requirement to be accomplished. This assures us that the work of annotators can best be
+put to use by automatic processors or computer interpretors.
+
+A good example of a use case is a self-learning software that translates text fragments
+from one language to another.  For it to function properly it needs to know the
+grammatical structure of the languages and here is where annotation tools can help.  Users
+can annotate predefined sentences or paragraphs and identify specific parts of speech
+(e.g. a noun) that the translation tool software developers can then use as a training
+material for their machine-learning product.
+
+Our system is flexible enough for administrators to
+define how annotations should be structured and what connections can be made between
+different annotations.  Furthermore this flexibility is also be applicable in the
+visual interfaces with which users interact. In a typical system you will have users
+coming from different backgrounds with various skills and interests. We believe that this
+variety should not be suppressed but rather encouraged by allowing for multiple annotation
+interfaces to be presented to the user so that he can choose the best suited one for his
+contributions. This feature helps projects where crowdsourcing is detrimental by making
+the users comfortable with the UI and allowing them to become proficient without a steep
+learning curve.
+
+\subsection{Concept Architecture}
+At the center of our system is the \textbf{annotation concept}, several of which being described by a user-supplied
+ontology. The format in which the ontology should be provided is the standard OWL model.
+Each annotation concept should correspond to an OWL instance that is a member of the annotation class to which the following elements should be added:\\
+\begin{itemize}
+ \item fields - this section describes how a user can input the necessary
+information for the annotation to be valid according to its concept. The section
+should contain for each field describing the annotation concept an entry that describes how a user can populate this information in a form.\\
+Each child of the entry should be of the following form:
+  \begin{itemize}
+   \item filed - the field wrapper, all further options are children of this element. It has \textit{name} and \textit{type} as attributes. The \textit{type} can be  
+   one of: text, select, reference, radios or textarea.
+   \item documentation - further information about the field, to be displayed to the user.
+   \item value - a default value for the field.
+   \item validation - a regular expression that the user input must match.
+   \item number - a field having 2 attributes: \textit{atleast} and \textit{atmost}, indicating how many inputs of this type can the user make in the same annotation.
+   \item options [only available for field type = "select"] - the options from which the user should choose from. Each new option is an individual element having children 
+   of type \textit{documentation} and \textit{value}.
+   \item referencedType [only available for field type = "reference"] - indicates the concept name that should be referenced by this input.
+  \end{itemize}
+  \item display - this section describes how an annotation is displayed. It consist of the following fields:
+  \begin{itemize}
+   \item template - an HTML string containing the desired display format of the annotation fields. Each annotation field that is mentioned between curly
+  braces will be replaced by the actual value of the field.
+   \item style - a list of CSS valid rules to be applied to the annotation display.
+  \end{itemize}
+
+\end{itemize}
+
+In Appendix A2 you can find an example of an annotation ontology. It defines 2 concepts which allow the user to annotate text as Symbols or
+definitions of Symbols. As you can see in the example, the model gives us the necessary flexibility at the administrator level
+while at the same time providing for a clear customizable method of displaying the
+annotation form and representation for the user.
+
+\section{Annotation Representation}
+
+\subsection{Adding an annotation}
+
+The following steps must be followed for adding a KAT annotation:
+\begin{enumerate}
+\item The target text of the annotation is highlighted (by simple selection).
+\begin{center}
+  \includegraphics[width=2.5in]{annotate.png} \\
+  \tiny{Figure 1: Selecting the word "suscipit" for annotation.}
+\end{center}
+
+\item The first step triggers an annotation-menu.
+\item The annotation-menu is populated with the available annotation types, given by the
+  available ontology.
+\item The user clicks on the desired annotation concept.
+\item A modal box containing the annotation form opens.
+\item The annotation form is populated with the fields indicated in the ontology.
+\begin{center}
+ \includegraphics[width=2.5in]{add-symbol.png} \\
+ \tiny{Figure 2: Annotating "suscipit" as an OMDoc.Symbol with the name "Conjuction".}
+\end{center}
+
+\item After completing the form fields, the user saves the annotation.
+\end{enumerate}
+
+
+This approach ensures 2 things:
+
+\begin{itemize}
+\item The navigation flow is never interrupted: adding an annotation is done via pop-up
+  and modal boxes and windows, so after completing the steps, the user finds himself in
+  the same place in the document.
+\item Annotation type checking is implicit: the annotation form is populated with the
+  fields indicated in the ontology so the user doesn’t have to check the required types
+  himself.
+\end{itemize}
+
+\begin{center}
+ \includegraphics[width=2.5in]{add-definition.png}\\
+ \tiny{Figure 3: Annotating a definition for "suscipit". In the ontology, the OMDoc.Definition concept is defined to be for annotations of type Symbol. The "for" field is
+ automatically populated with all the annotations of this type.}
+\end{center}
+
+\subsection{Displaying an annotation}
+
+Annotated text is marked with special CSS style so it becomes easily identifiable. At click, 
+a pop-up window containing the annotation display opens.\\
+
+The annotation display consists of the following elements:
+
+\begin{enumerate}
+\item The type of the annotation.
+\item The formatted annotation input according to the rules described in the ontology.
+\item For the annotations of type reference, an arrow indicated the referenced element.
+\end{enumerate}
+
+\begin{center}
+\includegraphics[width=2in]{suscipit.png} \includegraphics[width=3in]{definition.png}\\
+\tiny{Figure 4: Display for simple text and reference annotations.}
+\end{center}
+
+\section{Storage}
+The annotation tool is storage agnostic per-se. As no back-end platform is provided
+alongside the application, administrators are free to develop their own custom workflows
+of storing an annotation. By default annotations are stored in the user's browser database
+(or localStorage if the browser is older) and can be automatically transferred to a given
+URI through a POST request. Annotations can also be loaded through GET requests from a
+configurable URI or from the user's local storage.
+
+Although the system is flexible in this regard, we recommend the storage of annotations in
+a triple store as it provides a nicely continuity with the existing ontology based model.
+The annotations can be easily represented as RDF structures and the application itself
+stores it as so internally. Furthermore we believe that graph database are best suited for
+storing and querying this kind of metadata.
+%%%%%%%%%% APPENDIX %%%%%%%%%%
+\appendix
+\chapter{}
+
+\section{Installation Guide}
+
+In order to deploy kat, please follow the next steps:
+
+\begin{enumerate}
+ \item In Makefile.in, change INSTALLDIR to the desired installation directory (e.g. /srv/http/kat or /var/www/kat).
+ \item Rename Makefile.in into Makefile. Run \textbf{make all \&\& make install}. 
+ \item You will find a proof of concept demo at http://localhost/katInstallDir/test.
+ \item In order to add annotations, you need to add an annotation ontology first. You can do that in the KAT Control Panel 
+(link in the bottom-right of the page). For starting you can copy the example you find in test/annotations.xml.
+ \item The default storage environment is the browser's local storage. An API to connect to different storage environment
+can be found in the classes from the \textbf{remote/} directory.
+\end{enumerate} 
+
+%
+\section{Example Annotation Ontology}
+%
+\small{
+\begin{verbatim}
+
+<?xml version="1.0" encoding="UTF-8"?><!-- A KAT annotations specification for 
+OMDoc annotations copyright 2013 Michael Kohlhase released under the GPL -->
+<annotation xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+xmlns:o="http://omdoc.org/ontology#" name="OMDoc">
+  <documentation>
+    The OMDoc ontology is a flexiformal data model for matheamtical (and 
+    general STEM) documents
+  </documentation>
+    <concepts>
+      <concept name="Symbol">
+        <documentation>An OpenMath/OMDoc Symbol</documentation>
+          <fields>
+            <field name="name" type="text">
+              <documentation>
+                The name of the symbol defines it in a theory
+              </documentation>
+              <value>Name</value>
+              <default>Symbol</default>
+              <validation>[A-Z][a-z]*</validation>
+              <number atleast="1" atmost="2"></number>
+            </field>
+          </fields>
+          <display>
+            <template>
+              <b>Symbol:</b>
+              <br/>
+              {name}
+             </template>
+           </display>
+           <rdf:RDF>
+             <rdf:Description>
+             <rdf:type rdf:resource="http://omdoc.org/ontology#Symbol"></rdf:type>
+               <o:symbolname>{name}</o:symbolname>
+             </rdf:Description>
+            </rdf:RDF>
+      </concept>
+
+      <concept name="Definition">
+        <fields>
+          <field name="for" type="reference">
+            <value>For</value>
+            <referencedType>OMDoc.Symbol</referencedType>
+            <number atleast="1"></number>
+          </field>
+          <field name="type" type="select">
+            <options>
+              <option default="true">
+                <value>simple</value>
+                <documentation>
+                  Definiens is does not contain the definiendum
+                </documentation>
+              </option>
+              <option>
+                <documentation>
+                  definiendum applied to formal variables               
+                </documentation>
+                <value>pattern</value>
+              </option>
+            </options>
+          </field>
+        </fields>
+        <display>
+          <template>
+            <b>Definition</b>
+            <br/>
+            {for}
+            <br/>
+            {type}
+          </template>
+        </display>
+        <rdf:RDF>
+          <rdf:Description>
+            <rdf:type rdf:resource="http://omdoc.org/ontology#GeneralDefinition">
+            </rdf:type>
+            <o:defines rdf:resource="{for}"></o:defines>
+          </rdf:Description>
+        </rdf:RDF>
+      </concept>
+    </concepts>
+  </annotation>  
+\end{verbatim}
+}
+
+\section{Developer Guide}
+KAT is written using FlancheJS: a simple library that provides javascript classical inheritance. The classes are structured java-like, having:
+\begin{itemize}
+ \item constructors: provided by the method \textit{\textit{init}}.
+ \item properties: the library automatically generates getters and setters.
+ \item methods: publicly available functions.
+ \item internals: properties and methods available only by underscore (\textbf{\textit{\_}}) prefixing.
+\end{itemize}
+
+The table below describes the kat classes (available under \textbf{src/js/}) and their behavior:
+
+\begin{tabular}{p{6cm} | p{8cm} }
+ \large{\textbf{Class Name}} & \large{\textbf{Class Description}}\\ \\ \hline
+ \textbf{main} namespace: \\\\ \hline
+ \textit{kat.main.KATService} & The main entry point of the service. The KAT Service requires a CSS3/XPATH selector to identify the container on which annotations can be made, 
+ and optionally a coretex service url and a document identifier for the annotated document.\\ \hline
+ \textbf{annotation} namespace: \\\\ \hline
+ \textit{kat.annotation.Annotation} & Describes an annotation that was collected from a user and can be saved and transported over
+ network.\\ \hline
+ \textit{kat.annotation.AnnotationRegistry} & Describes an annotation registry that keeps track of all the annotations for the current document \\ \hline
+ \textit{kat.annotation.Concept} & Class to describe an annotation concept. Annotation concepts describe the annotation model (i.e. the fields contained
+ by the annotation) and the behavior of the annotation (i.e. user interaction and display).\\ \hline 
+ \textit{kat.annotation.ConceptRegistry} & A registry to keep track of all available concepts for this document.\\ \hline
+ \textit{kat.annotation.Ontology} & Class to describe an annotation ontology. Annotation ontologies describe the annotation concepts.\\ \hline
+ \textit{kat.annotation.OntologyRegistry} & A registry to keep track of all available ontologies for this document.\\ \hline
+ \textit{kat.annotation.AnnotationForm} & Class for handling the form displayed when an annotation is added.\\ \hline
+ \textbf{display} namespace: \\\\ \hline
+ \textit{kat.display.AnnotationEditForm} & Class for handling the form displayed when an annotation is edited.\\ \hline
+ \textit{kat.display.ControlPanel} & This class provides a tool for displaying and handling the KAT Control Panel.\\ \hline
+ \textit{kat.display.AnnotationRenderer} & Class for handling the display of a singe annotation.\\ \hline
+ \textit{kat.display.ArrowConnector} &  Creates an svg arrow that can be used to connect two dom elements, for example a reference field annotation to the referenced item.\\ \hline
+ \textit{kat.display.Display} & Creates and controls the annotation displays.\\ \hline
+\end{tabular}
+\newpage
+\begin{tabular}{p{6cm} | p{8cm} }
+ \large{\textbf{Class Name}} & \large{\textbf{Class Description}}\\ \\ \hline
+ \textbf{input} namespace: \\\\ \hline
+ \textit{kat.input.Form} & The Form class decides which fields to be displayed in the current form. \\ \hline
+ \textit{kat.input.FormParser} & A form parser can be used to parse the fields and documentation from a given concept object.\\ \hline
+ \textit{kat.input.FieldParserRegistry} & The Field Parser Registry contains all the field parsers that are available to parse for a concept.\\ \hline
+ \textbf{input.fieldparser} namespace: \\\\ \hline
+ \textit{kat.input.fieldparser.FieldParser} & A field parser parses an annotation:field into an html string. This trait serves only as an interface that the extending classes follow. \\ \hline
+ \textit{kat.input.fieldparser.Checkboxes} & Parses a field of type checkboxes outputting html. \\ \hline
+ \textit{kat.input.fieldparser.Reference} & Parses a field of type reference outputting html. \\ \hline
+ \textit{kat.input.fieldparser.Select} & Parses a field of type select outputting html. \\ \hline
+ \textit{kat.input.fieldparser.TextArea} & Parses a field of type textarea outputting html. \\ \hline
+ \textit{kat.input.fieldparser.TextField} & Parses a field of type text outputting html. \\ \hline
+ \textbf{input.fieldparser} namespace: \\\\ \hline
+ \textit{kat.input.view.Form} & Class that renders an annotation form containing the fields described in the concept. \\ \hline
+ \textit{kat.input.view.ConceptSelector} & Class to describe an input element in the form container that is used to select a concept to be used in the annotation form.\\ \hline
+ \textit{kat.input.view.FormContainer} & Describes a class that acts as a container for an annotation form and a concept selector.\\ \hline 
+ \textbf{preprocessor} namespace: \\\\ \hline
+ \textit{kat.preprocessor.TextPreprocessor} & Used to add counters around text but this functionality has been deprecated. Now it only adds selection listeners in the text, for adding annotations.\\ \hline
+ \textbf{remote} namespace: \\\\ \hline
+ \textit{kat.remote.CoreTexAnnotationInserter} & Sends the annotations being created on this document to the CoreTeX system.\\ \hline
+ \textit{kat.remote.CoreTeXAnnotationReceiver} & Retrieves the document and the annotations from the CoreTeX service and populates the internal registry. \\ \hline
+ 
+\end{tabular}
+
+\end{document}
