@@ -192,7 +192,6 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
                 if (form.find(".reference-field")) {
                     extraData.referenceId = form.find(".reference-field :selected").attr("data-annotation-id");
                 }
-                extraData.yolo = 'aloha';
                 var annotation = new kat.annotation.Annotation(self._idBase, self._idExtent, self._selectedConceptName, self._formParser.getFormValues(), null, extraData);
                 self._registerNewAnnotation(annotation);
                 self._destroy();
