@@ -16,6 +16,7 @@ FlancheJs.defineClass("kat.annotation.Concept", {
    */
   init: function (name, definition, ontology) {
     this.setName(name);
+    this.setConceptName(name.slice(name.indexOf('.') + 1));
     this.setDefinition(new kat.util.XMLDoc(definition));
     this.setOntology(ontology);
   },
@@ -24,6 +25,9 @@ FlancheJs.defineClass("kat.annotation.Concept", {
   properties: {
     name      : {
       value: null
+    },
+    conceptName : {
+      value: null,
     },
     definition: {
       value: null
