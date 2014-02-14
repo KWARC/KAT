@@ -1,0 +1,108 @@
+
+<script src="jquery.js"></script>
+<script>
+
+  var url = "http://localhost:8000/stanford.owl"; // URL of the ontology
+
+  String.prototype.format = function (obj) {
+    var result = this;
+    for (var key in obj) {
+      result = result.replace(new RegExp('{{' + key + '}}', 'g'), obj[key]);
+    }
+    return result;
+  }
+
+  // The content of each of the keys will be replaced by the HTML of their selectors.
+  var templates = {
+    wrapper: '#template-wrapper',
+    concept: '#template-concept',
+  };
+
+  function init () {
+    Object.keys(templates).forEach(function (name) {
+      var $target = $(templates[name]);
+      if ($target.length == 0) {
+        console.warn('Template `%s` not found for selector `%s`', name, templates[name]);
+        return;
+      }
+      templates[name] = $target.html();
+    });
+
+    $.get(url, function (response) {
+      var xml = $($.parseXML(response));
+
+      var types = xml.find('owl\\:NamedIndividual hasTag').
+        map(function () { return $(this).attr('rdf:datatype'); }).
+        get().
+        filter(function (str, index, arr) { return arr.indexOf(str) == index; });
+      console.log('Types:\n', types.join('\n    '));
+
+      var classes = xml.find('Class').map(function () {
+        var $this = $(this);
+        var about = $this.attr('rdf:about');
+        return {
+          name: about.slice(about.lastIndexOf('#') + 1),
+          about: about,
+          subclassOf: $this.find('subClassOf').attr('rdf:resource'),
+          comment: $this.find('comment').text(),
+        };
+      }).get();
+
+      var ontology = templates.wrapper.format({
+        name: 'OLiA',
+        documentation: xml.find('Ontology').find('comment').text(),
+        concepts: classes.map(getTemplate).join('\n'),
+      });
+
+      $('#container').html(ontology.replace(/</g, '&lt;').trim());
+    });
+  }
+
+  function getTemplate (cls) {
+    return templates.concept.format(cls);
+  }
+
+  $(init);
+
+</script>
+
+<pre id="container" style="font-size:8pt;"></pre>
+
+<script type="text/x-template" id="template-wrapper">
+<?xml version="1.0" encoding="UTF-8"?>
+<annotation xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:o="http://omdoc.org/ontology#" name="{{name}}">
+  <documentation>
+    {{documentation}}
+  </documentation>
+  <concepts>
+    {{concepts}}
+  </concepts>
+</annotation>
+</script>
+
+<script type="text/x-template" id="template-concept">
+    <concept name="{{name}}">
+      <documentation>{{comment}}</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>{{about}}</documentation>
+            <value>Name</value>
+            <default>{{name}}</default>
+            <validation>[A-Z][a-z]*</validation>
+          </field>
+      </fields>
+      <display>
+          <template>
+              <b>{{name}}:</b>
+              <br/>
+              {name}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="{{about}}"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+</script>
