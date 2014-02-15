@@ -7,4 +7,5 @@
 *.run.xml
 *.ind
 *.idx
+*.bcf
 auto
