@@ -1,0 +1,91 @@
+
+/*Page CSS*/
+
+.NI-hover {
+  border-width: 2px!important;
+  border-style: dashed!important;
+  border-color: #0067d2!important;
+  background-color: #b3daff!important;
+  color: #000!important;
+}
+
+.NI-highlight {
+  border-width: 1px!important;
+  border-style: solid!important;
+  border-color: #8c4cb4!important;
+  background-color: #d9bef3!important;
+  color: #000!important;
+}
+
+/*Options Panel CSS*/
+
+#NI-container {
+  position: fixed;
+  z-index: 100000000;
+  right: 10px;
+  top: 10px;
+  border: 1px solid #ccc;
+  background: #fff;
+  padding: 5px;
+  font-size: 10pt;
+  font-family: sans-serif, arial;
+}
+
+#NI-start-selection {
+  display: block;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 5px;
+  padding: 5px;
+  color: #007fff;
+}
+
+#NI-query-header {
+  margin: 5px 0;
+  font-size: 1.15em;
+  font-weight: bold;
+}
+
+#NI-query, .NI-query-elem {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.NI-query-elem {
+  padding: 0 0 0 10px;
+}
+
+.NI-query-elem.NI-query-hover {
+  background: lightblue;
+}
+
+.NI-query-elem > * {
+  display: inline-block;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background: #fafafa;
+  margin: 1px;
+  padding: 2px 4px;
+}
+
+.NI-query-elem > .NI-query-item + .NI-query-item {
+  margin-left: 3px;
+}
+
+.NI-query-tag {
+  font-weight: bold;
+}
+
+.NI-query-id {
+  color: darkgreen;
+}
+
+.NI-query-index {
+  color: crimson;
+}
+
+#NI-xpath-wrapper {
+  border-top: 1px solid #ccc;
+  margin-top: 5px;
+  padding: 5px 0;
+}

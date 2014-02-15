@@ -1,0 +1,21 @@
+{
+  "name": "KAT",
+  "description": "to be added.",
+  "manifest_version": 2,
+  "browser_action": {
+    "default_icon": "images/browseraction.png",
+    "default_title": "Activate KAT on current page"
+  },
+  "background": {
+    "scripts": ["js/utils.js", "js/background.js"]
+  },
+  "icons": {
+    "128": "images/logo-128.png"
+  },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "permissions": [
+    "tabs",
+    "activeTab"
+   ],
+  "version": "0.1"
+}

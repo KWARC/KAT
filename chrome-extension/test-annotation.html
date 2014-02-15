@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Testing the KAT extension</title>
+</head>
+<body>
+
+  <div id="main" style="width:600px;padding:5px;" class="some-class">
+    <h3>Enable the extension by pressing the <img src="images/browseraction.png" height="16" /> icon</h3>
+    <p>How to use:</p>
+    <ol id="instructions">
+      <li>Click <i>"select new tag".</i></li>
+      <li><i>Move your mouse</i> over elements to highlight them.</li>
+      <li><i>Right-click</i> the element you want to annotate.</li>
+      <li>This can be enabled on <b>any website</b> and it will work just the same.</li>
+    </ol>
+
+    <p class="hint">The idea behind this is that generally <b>relevant content</b> will be confined to a tag</p>
+
+    <p class="hint">Documents <i>don't have to be pre-compiled</i> by wrapping <i>every word</i> into tags, which might <b>break the page styles</b></p>
+
+    <p>Here's some nested <b>HTML</b> elements for better testing:</p>
+    <div id="test-content">
+      <ul class="first-ul">
+        <li>Some LI: <b>001</b></li>
+        <li>
+          Some LI: <b>002</b>
+          <ul>
+            <li>Some LI: <b>001</b></li>
+            <li>Some LI: <b>002</b></li>
+            <li>Some LI: <b>003</b></li>
+            <li>Some LI: <b>004</b></li>
+          </ul>
+        </li>
+        <li>Some LI: <b>003</b></li>
+        <li>Some LI: <b>004</b></li>
+      </ul>
+      <ul class="second-ul">
+        <li>Some LI: <b>001</b></li>
+        <li>Some LI: <b>002</b></li>
+        <li>
+          Some LI: <b>003</b>
+          <ul>
+            <li>Some LI: <b>001</b></li>
+            <li>Some LI: <b>002</b></li>
+            <li>Some LI: <b>003</b></li>
+            <li>Some LI: <b>004</b></li>
+          </ul>
+        </li>
+        <li>Some LI: <b>004</b></li>
+      </ul>
+      <ul class="third-ul">
+        <li>Some LI: <b>001</b></li>
+        <li>Some LI: <b>002</b></li>
+        <li>Some LI: <b>003</b></li>
+        <li>
+          Some LI: <b>004</b>
+          <ul>
+            <li>Some LI: <b>001</b></li>
+            <li>Some LI: <b>002</b></li>
+            <li>Some LI: <b>003</b></li>
+            <li>Some LI: <b>004</b></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</body>
+</html>
