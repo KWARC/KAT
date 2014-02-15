@@ -1,3 +1,28 @@
+\section{\KAT System \& Information Architecture}\label{sec:sysarch}
+
+\begin{figure}[ht]
+\begin{tikzpicture}[yscale=1.5]
+\tikzstyle{doc}=[draw,align=center,color=black,shape=document]
+\tikzstyle{database}=[cylinder,shape border rotate=90,aspect=0.25,draw, 
+     cylinder uses custom fill,cylinder body fill=yellow!30,cylinder end fill=yellow!30]
+  \pgfdeclareimage[width=1cm]{user}{user};
+  \node (user) at (-1,2) {\pgfuseimage{user}};
+  \node[doc] (onto) at (6,2) {\begin{tabular}{c}Annotation\\Ontology\end{tabular}};
+  \node[database] (docstore) at (0,0) {\begin{tabular}{c}Document
+      \\Store\\\hline tHTML5 \end{tabular}};
+  \node[database] (semblack) at (5,0) {\begin{tabular}{c}Semantic
+      \\Blackboard\\\hline RDF\end{tabular}};
+  \node[draw,rounded corners] (kat) at (2.5,2) {\begin{tabular}{c}KAT\\Annotator \end{tabular}};
+  \draw[->] (docstore) -- node[left]{import} (kat);
+  \draw[<-] (kat) to[out=-65,in=155] node[left]{import} (semblack);
+  \draw[->] (kat) to[out=-25,in=105] node[right,near end]{export} (semblack);
+  \draw[->,dotted] (semblack) -- node[above]{references} (docstore);
+  \draw[<->] (user) -- node[above] {interact} (kat);
+  \draw[->] (onto) -- node[above]{read} (kat);
+\end{tikzpicture}
+\caption{The \KAT System Architecture}\label{fig:kat-arch}
+\end{figure}
+
 \section{\KAT Annotation Data Model}
 The annotations that the users will provide must be well structured in order for our third
 requirement to be accomplished. This assures us that the work of annotators can best be

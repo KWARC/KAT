@@ -1,4 +1,5 @@
 *.toc
+*.log
 *.out
 *.aux
 *.bbl
