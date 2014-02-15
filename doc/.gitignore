@@ -1,5 +1,10 @@
 *.toc
+*.out
 *.aux
 *.bbl
 *.blg
+*.synctex.gz
+*.run.xml
+*.ind
+*.idx
 auto
