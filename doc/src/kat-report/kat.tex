@@ -1,5 +1,5 @@
-\documentclass[a4paper, 12pt, notitlepage]{article}
-
+\documentclass[a4paper, 12pt]{article}
+\usepackage{a4wide}
 \usepackage{amsfonts} % if you want blackboard bold symbols e.g. for real numbers
 \usepackage{graphicx} % if you want to include jpeg or pdf pictures
 \usepackage{listings}\lstset{columns=fullflexible}
@@ -7,6 +7,14 @@
 \usepackage[show]{ed}
 \usepackage{tikz}
 \usepackage{longtable}
+
+\usepackage[hyperref=auto,style=alphabetic,isbn=false]{biblatex}
+\addbibresource{kwarcpubs.bib}
+\addbibresource{extpubs.bib}
+\addbibresource{kwarccrossrefs.bib}
+\addbibresource{extcrossrefs.bib}
+\addbibresource{kat.bib}
+
 
 \def\defemph#1{\textbf{#1}}
 
@@ -31,7 +39,8 @@ Computer Science,  Jacobs University Bremen} % change this
 \input{datamodel}
 \input{workflows}
 \input{storage}
-
+\newpage
+\printbibliography\newpage
 \appendix
 \input{installation}
 \input{annospec}

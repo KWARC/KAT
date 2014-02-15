@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2014.2.7)  15 FEB 2014 07:08
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2014.2.7)  15 FEB 2014 07:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -20,6 +20,12 @@ File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
+(/usr/local/texlive/2013/texmf-dist/tex/latex/a4wide/a4wide.sty
+Package: a4wide 1994/08/30
+
+(/usr/local/texlive/2013/texmf-dist/tex/latex/ntgclass/a4.sty
+Package: a4 2004/04/15 v1.2g A4 based page layout
+))
 (/usr/local/texlive/2013/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \@emptytoks=\toks14
@@ -391,43 +397,282 @@ Package: longtable 2004/02/01 v4.11 Multi-page Table package (DPC)
 \c@LT@tables=\count119
 \c@LT@chunks=\count120
 \LT@p@ftn=\toks27
-) (./kat.aux)
-\openout1 = `kat.aux'.
-
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-
-(/usr/local/texlive/2013/texmf-dist/tex/context/base/supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count121
-\scratchdimen=\dimen153
-\scratchbox=\box41
-\nofMPsegments=\count122
-\nofMParguments=\count123
-\everyMPshowfont=\toks28
-\MPscratchCnt=\count124
-\MPscratchDim=\dimen154
-\MPnumerator=\count125
-\makeMPintoPDFobject=\count126
-\everyMPtoPDFconversion=\toks29
-) (/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
-Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
 )
+(/usr/local/texlive/2013/texmf-dist/tex/latex/biblatex/biblatex.sty
+Package: biblatex 2013/11/25 v2.8a programmable bibliographies (PK/JW/AB)
+
+
+Package biblatex Warning: No "backend" specified, using Biber backend.
+(biblatex)                To use BibTeX, load biblatex with 
+(biblatex)                the "backend=bibtex" option.
+
+(/usr/local/texlive/2013/texmf-dist/tex/latex/biblatex/biblatex2.sty
+Package: biblatex2 2013/11/25 v2.8a programmable bibliographies (biber) (PK/JW/
+AB)
+
+(/usr/local/texlive/2013/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2011/01/03 v2.1 e-TeX tools for LaTeX
+
+(/usr/local/texlive/2013/texmf-dist/tex/latex/etex-pkg/etex.sty
+Package: etex 1998/03/26 v2.0 eTeX basic definition package (PEB)
+\et@xins=\count121
+)
+\etb@tempcnta=\count122
+)
+(/usr/local/texlive/2013/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
+
+(/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
+
+(/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
 
 (/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/ifluatex.sty
 Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
 Package ifluatex Info: LuaTeX not detected.
 )
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+(/usr/local/texlive/2013/texmf-dist/tex/latex/logreq/logreq.sty
+Package: logreq 2010/08/04 v1.0 xml request logger
+\lrq@indent=\count123
+
+(/usr/local/texlive/2013/texmf-dist/tex/latex/logreq/logreq.def
+File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
+))
+(/usr/local/texlive/2013/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
+)
+(/usr/local/texlive/2013/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip10
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+\c@tabx@nest=\count124
+\c@listtotal=\count125
+\c@listcount=\count126
+\c@liststart=\count127
+\c@liststop=\count128
+\c@citecount=\count129
+\c@citetotal=\count130
+\c@multicitecount=\count131
+\c@multicitetotal=\count132
+\c@instcount=\count133
+\c@maxnames=\count134
+\c@minnames=\count135
+\c@maxitems=\count136
+\c@minitems=\count137
+\c@citecounter=\count138
+\c@savedcitecounter=\count139
+\c@uniquelist=\count140
+\c@uniquename=\count141
+\c@refsection=\count142
+\c@refsegment=\count143
+\c@maxextratitle=\count144
+\c@maxextratitleyear=\count145
+\c@maxextrayear=\count146
+\c@maxextraalpha=\count147
+\c@abbrvpenalty=\count148
+\c@highnamepenalty=\count149
+\c@lownamepenalty=\count150
+\c@maxparens=\count151
+\c@parenlevel=\count152
+\blx@tempcnta=\count153
+\blx@tempcntb=\count154
+\blx@tempcntc=\count155
+\blx@maxsection=\count156
+\blx@maxsegment@0=\count157
+\blx@notetype=\count158
+\blx@parenlevel@text=\count159
+\blx@parenlevel@foot=\count160
+\blx@sectionciteorder@0=\count161
+\labelnumberwidth=\skip51
+\labelalphawidth=\skip52
+\shorthandwidth=\skip53
+\biblabelsep=\skip54
+\bibitemsep=\skip55
+\bibnamesep=\skip56
+\bibinitsep=\skip57
+\bibparsep=\skip58
+\bibhang=\skip59
+\blx@bcfin=\read2
+\blx@bcfout=\write4
+\c@mincomprange=\count162
+\c@maxcomprange=\count163
+\c@mincompwidth=\count164
+Package biblatex Info: Trying to load biblatex default data model...
+Package biblatex Info: ... file 'blx-dm.def' found.
+
+(/usr/local/texlive/2013/texmf-dist/tex/latex/biblatex/blx-dm.def)
+Package biblatex Info: Trying to load biblatex style data model...
+Package biblatex Info: ... file 'alphabetic.dbx' not found.
+Package biblatex Info: Trying to load biblatex custom data model...
+Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
+\c@afterword=\count165
+\c@savedafterword=\count166
+\c@annotator=\count167
+\c@savedannotator=\count168
+\c@author=\count169
+\c@savedauthor=\count170
+\c@bookauthor=\count171
+\c@savedbookauthor=\count172
+\c@commentator=\count173
+\c@savedcommentator=\count174
+\c@editor=\count175
+\c@savededitor=\count176
+\c@editora=\count177
+\c@savededitora=\count178
+\c@editorb=\count179
+\c@savededitorb=\count180
+\c@editorc=\count181
+\c@savededitorc=\count182
+\c@foreword=\count183
+\c@savedforeword=\count184
+\c@holder=\count185
+\c@savedholder=\count186
+\c@introduction=\count187
+\c@savedintroduction=\count188
+\c@namea=\count189
+\c@savednamea=\count190
+\c@nameb=\count191
+\c@savednameb=\count192
+\c@namec=\count193
+\c@savednamec=\count194
+\c@shortauthor=\count195
+\c@savedshortauthor=\count196
+\c@shorteditor=\count197
+\c@savedshorteditor=\count198
+\c@translator=\count199
+\c@savedtranslator=\count200
+\c@labelname=\count201
+\c@savedlabelname=\count202
+\c@institution=\count203
+\c@savedinstitution=\count204
+\c@lista=\count205
+\c@savedlista=\count206
+\c@listb=\count207
+\c@savedlistb=\count208
+\c@listc=\count209
+\c@savedlistc=\count210
+\c@listd=\count211
+\c@savedlistd=\count212
+\c@liste=\count213
+\c@savedliste=\count214
+\c@listf=\count215
+\c@savedlistf=\count216
+\c@location=\count217
+\c@savedlocation=\count218
+\c@organization=\count219
+\c@savedorganization=\count220
+\c@origlocation=\count221
+\c@savedoriglocation=\count222
+\c@origpublisher=\count223
+\c@savedorigpublisher=\count224
+\c@publisher=\count225
+\c@savedpublisher=\count226
+\c@language=\count227
+\c@savedlanguage=\count228
+\c@pageref=\count229
+\c@savedpageref=\count230
+Package biblatex Info: Trying to load compatibility code...
+Package biblatex Info: ... file 'blx-compat.def' found.
+
+(/usr/local/texlive/2013/texmf-dist/tex/latex/biblatex/blx-compat.def
+File: blx-compat.def 2013/11/25 v2.8a biblatex compatibility (PK/JW/AB)
+)
+Package biblatex Info: Trying to load generic definitions...
+Package biblatex Info: ... file 'biblatex.def' found.
+
+(/usr/local/texlive/2013/texmf-dist/tex/latex/biblatex/biblatex.def
+File: biblatex.def 
+\c@textcitecount=\count231
+\c@textcitetotal=\count232
+\c@textcitemaxnames=\count233
+Normal \count register pool exhausted, switching to extended pool.
+\c@biburlnumpenalty=\count277
+\c@biburlucpenalty=\count278
+\c@biburllcpenalty=\count279
+\c@smartand=\count280
+)
+Package biblatex Info: Trying to load bibliography style 'alphabetic'...
+Package biblatex Info: ... file 'alphabetic.bbx' found.
+
+(/usr/local/texlive/2013/texmf-dist/tex/latex/biblatex/bbx/alphabetic.bbx
+File: alphabetic.bbx 2013/11/25 v2.8a biblatex bibliography style (PK/JW/AB)
+Package biblatex Info: Trying to load bibliography style 'standard'...
+Package biblatex Info: ... file 'standard.bbx' found.
+
+(/usr/local/texlive/2013/texmf-dist/tex/latex/biblatex/bbx/standard.bbx
+File: standard.bbx 2013/11/25 v2.8a biblatex bibliography style (PK/JW/AB)
+\c@bbx:relatedcount=\count281
+\c@bbx:relatedtotal=\count282
+))
+Package biblatex Info: Trying to load citation style 'alphabetic'...
+Package biblatex Info: ... file 'alphabetic.cbx' found.
+
+(/usr/local/texlive/2013/texmf-dist/tex/latex/biblatex/cbx/alphabetic.cbx
+File: alphabetic.cbx 2013/11/25 v2.8a biblatex citation style (PK/JW/AB)
+Package biblatex Info: Redefining '\cite'.
+Package biblatex Info: Redefining '\parencite'.
+Package biblatex Info: Redefining '\footcite'.
+Package biblatex Info: Redefining '\footcitetext'.
+Package biblatex Info: Redefining '\smartcite'.
+Package biblatex Info: Redefining '\textcite'.
+Package biblatex Info: Redefining '\textcites'.
+Package biblatex Info: Redefining '\cites'.
+Package biblatex Info: Redefining '\parencites'.
+Package biblatex Info: Redefining '\smartcites'.
+)
+Package biblatex Info: Trying to load configuration file...
+Package biblatex Info: ... file 'biblatex.cfg' found.
+
+(/usr/local/texlive/2013/texmf-dist/tex/latex/biblatex/biblatex.cfg
+File: biblatex.cfg 
+)))
+Package biblatex Info: Trying to load language 'english'...
+Package biblatex Info: ... file 'english.lbx' found.
+
+(/usr/local/texlive/2013/texmf-dist/tex/latex/biblatex/lbx/english.lbx
+File: english.lbx 2013/11/25 v2.8a biblatex localization (PK/JW/AB)
+)
+\@quotelevel=\count283
+\@quotereset=\count284
+
+(./kat.aux)
+\openout1 = `kat.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+ (/usr/local/texlive/2013/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count285
+\scratchdimen=\dimen153
+\scratchbox=\box41
+\nofMPsegments=\count286
+\nofMParguments=\count287
+\everyMPshowfont=\toks28
+\MPscratchCnt=\count288
+\MPscratchDim=\dimen154
+\MPnumerator=\count289
+\makeMPintoPDFobject=\count290
+\everyMPtoPDFconversion=\toks29
+) (/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
+)
+
 (/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/ifpdf.sty
 Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
 Package ifpdf Info: pdfTeX in PDF mode is detected.
@@ -446,19 +691,6 @@ Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
 (/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
 Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
 ))
-(/usr/local/texlive/2013/texmf-dist/tex/latex/oberdiek/kvoptions.sty
-Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
-
-(/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
-Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
-
-(/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/etexcmds.sty
-Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
-Package etexcmds Info: Could not find \expanded.
-(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
-(etexcmds)             that some package has redefined \expanded.
-(etexcmds)             In the latter case, load this package earlier.
-)))
 Package grfext Info: Graphics extension search list:
 (grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
 G,.JBIG2,.JB2,.eps]
@@ -468,15 +700,26 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-\c@lstlisting=\count127
+\c@lstlisting=\count291
 
 ABD: EveryShipout initializing macros
-LaTeX Font Info:    Try loading font information for U+msa on input line 20.
+Package biblatex Info: No input encoding detected.
+(biblatex)             Assuming 'ascii'.
+Package biblatex Info: Automatic encoding selection.
+(biblatex)             Assuming data encoding 'ascii'.
+\openout4 = `kat.bcf'.
+
+Package biblatex Info: Trying to load bibliographic data...
+Package biblatex Info: ... file 'kat.bbl' found.
+ (./kat.bbl)
+Package biblatex Info: Reference section=0 on input line 27.
+Package biblatex Info: Reference segment=0 on input line 27.
+LaTeX Font Info:    Try loading font information for U+msa on input line 28.
 
 (/usr/local/texlive/2013/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 20.
+LaTeX Font Info:    Try loading font information for U+msb on input line 28.
 
 (/usr/local/texlive/2013/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -485,10 +728,10 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 {/usr/local/texlive/2013/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 (./kat.toc)
-\tf@toc=\write4
-\openout4 = `kat.toc'.
+\tf@toc=\write5
+\openout5 = `kat.toc'.
 
- [2] (./intro.tex) (./soa.tex
+ [2] (./intro.tex EdNote!) (./soa.tex
 <figures/brat.png, id=23, 481.8pt x 361.35pt>
 File: figures/brat.png Graphic file (type png)
  <use figures/brat.png>
@@ -503,86 +746,88 @@ File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 41.
 
-<figures/brat-text-span.png, id=29, 803.0pt x 224.84pt>
+<figures/brat-text-span.png, id=30, 803.0pt x 224.84pt>
 File: figures/brat-text-span.png Graphic file (type png)
 
 <use figures/brat-text-span.png>
 Package pdftex.def Info: figures/brat-text-span.png used on input line 43.
 (pdftex.def)             Requested size: 252.94499pt x 70.82497pt.
 
-<figures/brat-relation.png, id=30, 602.25pt x 162.6075pt>
+<figures/brat-relation.png, id=31, 602.25pt x 162.6075pt>
 File: figures/brat-relation.png Graphic file (type png)
 
 <use figures/brat-relation.png>
 Package pdftex.def Info: figures/brat-relation.png used on input line 47.
 (pdftex.def)             Requested size: 252.94499pt x 68.29468pt.
- [4 <./figures/brat.png> <./figures/brat-text-span.png>] <figures/brat-search.p
-ng, id=37, 381.67593pt x 313.17pt>
+ [4 <./figures/brat.png> <./figures/brat-text-span.png> <./figures/brat-relatio
+n.png>]
+<figures/brat-search.png, id=39, 381.67593pt x 313.17pt>
 File: figures/brat-search.png Graphic file (type png)
 
 <use figures/brat-search.png>
 Package pdftex.def Info: figures/brat-search.png used on input line 62.
 (pdftex.def)             Requested size: 252.94499pt x 207.54341pt.
 
-<figures/yawas.jpg, id=38, 265.74281pt x 237.88875pt>
+<figures/yawas.jpg, id=40, 265.74281pt x 237.88875pt>
 File: figures/yawas.jpg Graphic file (type jpg)
  <use figures/yawas.jpg>
-Package pdftex.def Info: figures/yawas.jpg used on input line 74.
+Package pdftex.def Info: figures/yawas.jpg used on input line 75.
 (pdftex.def)             Requested size: 180.67499pt x 161.74042pt.
 
-[5 <./figures/brat-relation.png>]) [6 <./figures/brat-search.png>] [7 <./figure
-s/yawas.jpg>] [8] <figures/annotate.png, id=55, 538.01pt x 214.8025pt>
+[5 <./figures/brat-search.png>]) (./datamodel.tex [6 <./figures/yawas.jpg>]
+[7]) (./workflows.tex <figures/annotate.png, id=52, 538.01pt x 214.8025pt>
 File: figures/annotate.png Graphic file (type png)
 
 <use figures/annotate.png>
-Package pdftex.def Info: figures/annotate.png used on input line 114.
+Package pdftex.def Info: figures/annotate.png used on input line 7.
 (pdftex.def)             Requested size: 180.67499pt x 72.1338pt.
 
-<figures/add-symbol.png, id=56, 584.1825pt x 473.77pt>
+<figures/add-symbol.png, id=53, 584.1825pt x 473.77pt>
 File: figures/add-symbol.png Graphic file (type png)
 
 <use figures/add-symbol.png>
-Package pdftex.def Info: figures/add-symbol.png used on input line 119.
+Package pdftex.def Info: figures/add-symbol.png used on input line 12.
 (pdftex.def)             Requested size: 180.67499pt x 146.5274pt.
- [9 <./figures/annotate.png>]
+ [8 <./figures/annotate.png> <./figures/add-symbol.png>]
 Missing character: There is no â in font cmr12!
 Missing character: There is no € in font cmr12!
 Missing character: There is no ™ in font cmr12!
-
-<figures/add-definition.png, id=61, 586.19pt x 526.96875pt>
+ <figures/add-definition.png, id=59, 586.19pt x 526.96875pt>
 File: figures/add-definition.png Graphic file (type png)
 
 <use figures/add-definition.png>
-Package pdftex.def Info: figures/add-definition.png used on input line 144.
+Package pdftex.def Info: figures/add-definition.png used on input line 38.
 (pdftex.def)             Requested size: 180.67499pt x 162.41783pt.
- [10 <./figures/add-symbol.png>]
-<figures/suscipit.png, id=66, 280.04625pt x 191.71625pt>
+ [9 <./figures/add-definition.png>]
+<figures/suscipit.png, id=64, 280.04625pt x 191.71625pt>
 File: figures/suscipit.png Graphic file (type png)
 
 <use figures/suscipit.png>
-Package pdftex.def Info: figures/suscipit.png used on input line 166.
+Package pdftex.def Info: figures/suscipit.png used on input line 60.
 (pdftex.def)             Requested size: 144.54pt x 98.9529pt.
 
-<figures/definition.png, id=67, 456.70625pt x 305.14pt>
+<figures/definition.png, id=65, 456.70625pt x 305.14pt>
 File: figures/definition.png Graphic file (type png)
 
 <use figures/definition.png>
-Package pdftex.def Info: figures/definition.png used on input line 167.
+Package pdftex.def Info: figures/definition.png used on input line 61.
 (pdftex.def)             Requested size: 216.81pt x 144.85452pt.
- [11 <./figures/add-definition.png> <./figures/suscipit.png> <./figures/definit
-ion.png>]
-<figures/review.png, id=73, 896.85063pt x 382.93062pt>
+
+<figures/review.png, id=66, 896.85063pt x 382.93062pt>
 File: figures/review.png Graphic file (type png)
 
 <use figures/review.png>
-Package pdftex.def Info: figures/review.png used on input line 186.
+Package pdftex.def Info: figures/review.png used on input line 80.
 (pdftex.def)             Requested size: 361.34999pt x 154.28554pt.
- [12 <./figures/review.png>]
-Overfull \hbox (21.59435pt too wide) in paragraph at lines 216--217
-[]\OT1/cmr/m/n/12 You will find a proof of con-cept demo at http://localhost/ka
-tInstallDir/test. 
+) (./storage.tex [10 <./figures/suscipit.png> <./figures/definition.png>]) [11 
+<./figures/review.png>]
+Overfull \hbox (0.8525pt too wide) in paragraph at lines 43--43
+[]\OT1/cmr/m/it/12 Annotation tool\OT1/cmr/m/n/12 . \OT1/cmr/m/sc/12 url\OT1/cm
+r/m/n/12 : $\OT1/cmtt/m/n/12 Http : / / www . annotatiesysteem . nl$ \OT1/cmr/m
+/n/12 (vis-ited on 02/15/2014). 
  []
 
+[12] (./installation.tex) (./annospec.tex EdNote!
 (/usr/local/texlive/2013/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2013/08/26 1.5b listings language file
 )
@@ -610,53 +855,46 @@ LaTeX Font Warning: Font shape `OMS/cmss/m/n' undefined
 (Font)              using `OMS/cmsy/m/n' instead
 (Font)              for symbol `textasteriskcentered' on input line 20.
 
-[13] [14])
-Overfull \hbox (6.77126pt too wide) in paragraph at lines 249--249
+[13] [14])) (./developers.tex
+Overfull \hbox (6.77126pt too wide) in paragraph at lines 21--21
 []|\OT1/cmr/m/it/12 kat.annotation.AnnotationRegistry| 
  []
 
 
-Overfull \hbox (32.33856pt too wide) in alignment at lines 241--264
- [] [] 
- []
-
-
-Overfull \hbox (1.73799pt too wide) in paragraph at lines 279--279
+Overfull \hbox (1.73799pt too wide) in paragraph at lines 51--51
 []|\OT1/cmr/m/it/12 kat.preprocessor.TextPreprocessor| 
  []
 
 
-Overfull \hbox (28.32155pt too wide) in paragraph at lines 281--281
+Overfull \hbox (28.32155pt too wide) in paragraph at lines 53--53
 []|\OT1/cmr/m/it/12 kat.remote.CoreTexAnnotationInserter| 
  []
 
 
-Overfull \hbox (33.43268pt too wide) in paragraph at lines 282--282
+Overfull \hbox (33.43268pt too wide) in paragraph at lines 54--54
 []|\OT1/cmr/m/it/12 kat.remote.CoreTeXAnnotationReceiver| 
  []
 
+[15] [16])
 
-Overfull \hbox (32.33856pt too wide) in alignment at lines 264--283
- [] [] 
- []
-
-[15] [16]
-
-There are still 1 EdNotes, New/Oldparts, and Issues to resolve!
+There are still 3 EdNotes, New/Oldparts, and Issues to resolve!
 
 [17] (./kat.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
+Package logreq Info: Writing requests to 'kat.run.xml'.
+\openout1 = `kat.run.xml'.
+
  ) 
 Here is how much of TeX's memory you used:
- 11665 strings out of 493308
- 215804 string characters out of 6137817
- 4275396 words of memory out of 9222977
- 14847 multiletter control sequences out of 15000+600000
- 18372 words of font info for 69 fonts, out of 8000000 for 9000
+ 16909 strings out of 493308
+ 307885 string characters out of 6137817
+ 4676210 words of memory out of 9623791
+ 20002 multiletter control sequences out of 15000+600000
+ 18842 words of font info for 71 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 56i,8n,55p,422b,1576s stack positions out of 10000i,1000n,20000p,200000b,80000s
+ 56i,8n,55p,830b,1574s stack positions out of 10000i,1000n,20000p,200000b,80000s
 </usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb>
@@ -672,11 +910,12 @@ live/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmss17.pfb></usr/local/texl
 ive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/tex
 live/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pfb></usr/local/tex
 live/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texl
-ive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on kat.pdf (17 pages, 608221 bytes).
+ive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texli
+ve/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
+Output written on kat.pdf (17 pages, 614333 bytes).
 PDF statistics:
- 147 PDF objects out of 1000 (max. 8388607)
- 91 compressed objects within 1 object stream
+ 151 PDF objects out of 1000 (max. 8388607)
+ 94 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  68 words of extra memory for PDF output out of 10000 (max. 10000000)
 
