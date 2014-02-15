@@ -1,0 +1,88 @@
+\section{Annotation Workflows}
+
+\subsection{Adding an annotation}
+
+The following steps must be followed for adding a \KAT annotation:
+\begin{figure}[ht]\centering
+  \includegraphics[width=2.5in]{figures/annotate} 
+  \caption{Selecting the word ``suscipit'' for annotation}\label{fig:kat-annotate}
+\end{figure}
+
+\begin{figure}[ht]\centering
+ \includegraphics[width=2.5in]{figures/add-symbol} 
+ \caption{Annotating ``suscipit'' as an OMDoc.Symbol with the name
+   ``Conjunction''}\label{fig:kat-symbol}
+\end{figure}
+
+\begin{enumerate}
+\item The target text of the annotation is highlighted (by simple selection), see Figure~\ref{fig:kat-annotate}
+\item The first step triggers an annotation-menu.
+\item The annotation-menu is populated with the available annotation types, given by the
+  available ontology.
+\item The user clicks on the desired annotation concept.
+\item A modal box containing the annotation form opens.
+\item The annotation form is populated with the fields indicated in the ontology, see Figure~\ref{fig:kat-symbol}
+\item After completing the form fields, the user saves the annotation.
+\end{enumerate}
+This approach ensures 2 things:
+\begin{itemize}
+\item The navigation flow is never interrupted: adding an annotation is done via pop-up
+  and modal boxes and windows, so after completing the steps, the user finds himself in
+  the same place in the document.
+\item Annotation type checking is implicit: the annotation form is populated with the
+  fields indicated in the ontology so the user doesn’t have to check the required types
+  himself, see Figure~\ref{fig:kat-definition}
+\end{itemize}
+
+\begin{figure}[ht]\centering
+ \includegraphics[width=2.5in]{figures/add-definition}
+ \caption{Annotating a definition for ``suscipit''. In the ontology, the OMDoc.Definition
+   concept is defined to be for annotations of type Symbol. The ``for'' field is
+   automatically populated with all the annotations of this type.}\label{fig:kat-definition}
+\end{figure}
+
+\subsection{Displaying an annotation}
+
+Annotated text is marked with special CSS style so it becomes easily identifiable.  The
+type of the annotation is also displayed above the annotation itself so one can have a
+clear overview of the whole document.
+
+At click, a pop-up window containing the annotation display opens.
+
+The annotation display consists of the following elements:
+\begin{enumerate}
+\item The type of the annotation.
+\item The formatted annotation input according to the rules described in the ontology.
+\item For the annotations of type reference, an arrow indicated the referenced element.
+\end{enumerate}
+
+\begin{figure}[ht]\centering
+\includegraphics[width=2in]{figures/suscipit}
+\includegraphics[width=3in]{figures/definition}
+\caption{Display for simple text and reference annotations}\label{fig:suscipit-definition}
+\end{figure}
+
+\subsection{Reviewing annotation versions}
+Reviewing is done in a side-by-side view which allows the user to see two versions of the
+same document in order to see discrepancies and correct them; see
+Figure~\ref{fig:kat-review}. The viewer allows to toggle view one ontology at a time which
+can be toggled individually on each panel by clicking on the.
+
+While reviewing, the left panel (also called the main panel) is the current document with
+the local annotations while the right panel (referred to as the mirror panel) is the the
+different version of the document being reviewed against.
+
+\KAT is only enabled in the main panel so changes/edits/annotations can still be done
+while reviewing, while the mirror panel is read-only. Scrolling the main panel will cause
+the mirror panel to automatically follow suite.
+
+\begin{figure}[ht]\centering
+ \includegraphics[width=5in]{figures/review}
+ \caption{Reviewing two ontologies of the same document side-by-side}\label{fig:kat-review}
+\end{figure}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "kat"
+%%% End: 

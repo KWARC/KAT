@@ -1,0 +1,70 @@
+\section{\KAT Annotation Data Model}
+The annotations that the users will provide must be well structured in order for our third
+requirement to be accomplished. This assures us that the work of annotators can best be
+put to use by automatic processors or computer interpretors.
+
+A good example of a use case is a self-learning software that translates text fragments
+from one language to another.  For it to function properly it needs to know the
+grammatical structure of the languages and here is where annotation tools can help.  Users
+can annotate predefined sentences or paragraphs and identify specific parts of speech
+(e.g. a noun) that the translation tool software developers can then use as a training
+material for their machine-learning product.
+
+Our system is flexible enough for administrators to
+define how annotations should be structured and what connections can be made between
+different annotations.  Furthermore this flexibility is also be applicable in the
+visual interfaces with which users interact. In a typical system you will have users
+coming from different backgrounds with various skills and interests. We believe that this
+variety should not be suppressed but rather encouraged by allowing for multiple annotation
+interfaces to be presented to the user so that he can choose the best suited one for his
+contributions. This feature helps projects where crowdsourcing is detrimental by making
+the users comfortable with the UI and allowing them to become proficient without a steep
+learning curve.
+
+\subsection{Concept Architecture}
+At the center of our system is the \textbf{annotation concept}, several of which being
+described by a user-supplied ontology. The format in which the ontology should be provided
+is the standard OWL model.  Each annotation concept should correspond to an OWL instance
+that is a member of the annotation class to which the following elements should be added:
+\begin{itemize}
+\item fields - this section describes how a user can input the necessary information for
+  the annotation to be valid according to its concept. The section should contain for each
+  field describing the annotation concept an entry that describes how a user can populate
+  this information in a form.
+  
+  Each child of the entry should be of the following form:
+  \begin{itemize}
+  \item filed - the field wrapper, all further options are children of this element. It
+    has \textit{name} and \textit{type} as attributes. The \textit{type} can be one of:
+    text, select, reference, radios or text area.
+  \item documentation - further information about the field, to be displayed to the user.
+  \item value - a default value for the field.
+  \item validation - a regular expression that the user input must match.
+  \item number - a field having 2 attributes: \textit{atleast} and \textit{atmost},
+    indicating how many inputs of this type can the user make in the same annotation.
+  \item options [only available for field type = "select"] - the options from which the
+    user should choose from. Each new option is an individual element having children of
+    type \textit{documentation} and \textit{value}.
+  \item referencedType [only available for field type = "reference"] - indicates the
+    concept name that should be referenced by this input.
+  \end{itemize}
+\item display - this section describes how an annotation is displayed. It consist of the
+  following fields:
+  \begin{itemize}
+  \item template - an HTML string containing the desired display format of the annotation
+    fields. Each annotation field that is mentioned between curly braces will be replaced
+    by the actual value of the field.
+  \item style - a list of CSS valid rules to be applied to the annotation display.
+  \end{itemize}
+\end{itemize}
+
+In Appendix A2 you can find an example of an annotation ontology. It defines 2 concepts
+which allow the user to annotate text as Symbols or definitions of Symbols. As you can see
+in the example, the model gives us the necessary flexibility at the administrator level
+while at the same time providing for a clear customizable method of displaying the
+annotation form and representation for the user.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "kat"
+%%% End: 

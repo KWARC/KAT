@@ -1,0 +1,21 @@
+\section{Installation Guide}
+
+In order to deploy \KAT, please follow the next steps:
+
+\begin{enumerate}
+\item In Makefile.in, change INSTALLDIR to the desired installation directory
+  (e.g. /srv/http/kat or /var/www/kat).
+\item Rename Makefile.in into Makefile. Run \textbf{make all \&\& make install}.
+\item You will find a proof of concept demo at http://localhost/katInstallDir/test.
+\item In order to add annotations, you need to add an annotation ontology first. You can
+  do that in the \KAT Control Panel (link in the bottom-right of the page). For starting
+  you can copy the example you find in test/annotations.xml.
+\item The default storage environment is the browser's local storage. An API to connect to
+  different storage environment can be found in the classes from the \textbf{remote/}
+  directory.
+\end{enumerate}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "kat"
+%%% End: 

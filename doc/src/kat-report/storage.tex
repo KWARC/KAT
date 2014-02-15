@@ -1,0 +1,20 @@
+\section{Storage}
+
+The annotation tool is storage agnostic per-se. As no back-end platform is provided
+alongside the application, administrators are free to develop their own custom workflows
+of storing an annotation. By default annotations are stored in the user's browser database
+(or localStorage if the browser is older) and can be automatically transferred to a given
+URI through a POST request. Annotations can also be loaded through GET requests from a
+configurable URI or from the user's local storage.
+
+Although the system is flexible in this regard, we recommend the storage of annotations in
+a triple store as it provides a nicely continuity with the existing ontology based model.
+The annotations can be easily represented as RDF structures and the application itself
+stores it as so internally. Furthermore we believe that graph database are best suited for
+storing and querying this kind of metadata.
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "kat"
+%%% End: 
