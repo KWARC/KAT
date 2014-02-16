@@ -83,7 +83,6 @@ FlancheJs.defineClass("kat.Display", {
         }
         console.log("ids ", id1, id2);
         var annotatedIds = $("#" + id1).nextUntil("#" + id2).andSelf().add($('#' + id2));
-        console.log(annotatedIds);
         var ontologyClass = 'ontology-' + annotation.ontology;
         var conceptClass = 'concept-' + annotation.concept.replace(/\./g, '-');
         var classes = [this.getSpecialClass(), ontologyClass, conceptClass].join(" ");

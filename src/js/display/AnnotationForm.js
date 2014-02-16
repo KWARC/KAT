@@ -106,7 +106,8 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             var options = "";
             var concepts = this._conceptRegistry.getConceptsByOntology(ontology);
             for (var i = 0; i < concepts.length; i++) {
-                options += "<option>" + concepts[i].getConceptName() + "</option>\n";
+                options += '<option value="' + concepts[i].getName() + '">' +
+                                concepts[i].getConceptName() + '</option>\n';
             }
 
             // Remove any previous installation of searchSelect
