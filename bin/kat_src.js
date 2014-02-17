@@ -1,3 +1,23 @@
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * A singleton containing all the configuration parameters that can be tweaked.
  *
@@ -16,6 +36,26 @@ FlancheJs.defineObject("kat.util.ConfigManager", {
     newAnnotationFormTitle : "Add new annotation"
   }
 })
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /*
  * KAT Constants.
  * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
@@ -57,6 +97,26 @@ FlancheJs.defineObject("kat.Constants", {
 
 
 
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * Contains utility functionality to be used by the service
  * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
@@ -88,6 +148,26 @@ FlancheJs.defineObject("kat.util.Util", {
   }
 
 })
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * XMLDoc is a class that provides a series of utility functions for easier parsing of XML docs using XPath
  * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
@@ -167,6 +247,26 @@ FlancheJs.defineClass("kat.util.XMLDoc", {
 
 
 
+
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
 
 /**
  * Class for text preprocessing. It adds text selection listeners.
@@ -295,6 +395,26 @@ FlancheJs.defineClass("kat.preprocessor.TextPreprocessor", {
 
 
 
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * Parses a field of type checkboxes outputing html.
  *
@@ -391,6 +511,26 @@ FlancheJs.defineClass("kat.input.form.fieldparser.CheckboxesParser", {
 })
 
 
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * A field parser parses an annotation:field into an html string. This trait serves only as
  * an interface that the extending classes follow
@@ -405,6 +545,26 @@ FlancheJs.defineTrait("kat.input.form.fieldparser.FieldParser", {
     parse   : Function
   }
 })
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * Parses the fields of type reference
  *
@@ -470,6 +630,26 @@ FlancheJs.defineClass("kat.input.form.fieldparser.ReferenceParser", {
   }
 
 })
+
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
 
 /**
  * Describes an annotation that was collected from a user and can be saved and transported over
@@ -571,6 +751,26 @@ FlancheJs.defineClass("kat.input.form.fieldparser.SelectParser", {
   }
 
 })
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * Field processor for text fields. For more details see @link{kat.input.form.fieldparser.FieldParser}
  *
@@ -645,6 +845,26 @@ FlancheJs.defineClass("kat.input.form.fieldparser.TextAreaParser", {
   }
 
 });
+
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
 
 /**
  * Field processor for text fields. For more details see @link{kat.input.form.fieldparser.FieldParser}
@@ -721,6 +941,26 @@ FlancheJs.defineClass("kat.input.form.fieldparser.TextFieldParser", {
 
 });
 
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * The Field Parser Registry contains all the field parsers that are available to parse
  * an annotation field.
@@ -759,6 +999,26 @@ FlancheJs.defineClass("kat.input.form.FieldParserRegistry", {
     registry: []
   }
 })
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * The Form class decides which fields to be displayed in the current form.
  *
@@ -816,6 +1076,26 @@ FlancheJs.defineClass("kat.form.Form", {
   }
 
 })
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * A form parser can be used to parse the fields and documentation from a given concept object.
  *
@@ -915,6 +1195,26 @@ FlancheJs.defineClass("kat.input.form.FormParser", {
     }
   }
 })
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * Class to describe an input element in the form container that is used to select a concept to be used in the
  * annotation form.
@@ -970,6 +1270,26 @@ FlancheJs.defineClass("kat.form.view.ConceptSelector", {
   }
 
 })
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * Describes a class that renders an annotation form containing the fields described in the concept
  *
@@ -1011,6 +1331,26 @@ FlancheJs.defineClass("kat.form.view.Form", {
   }
 
 })
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * Describes a class that acts as a container for an annotation form and a concept selector.
  *
@@ -1095,6 +1435,26 @@ FlancheJs.defineClass("kat.form.view.FormContainer", {
 
 
 
+
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
 
 /**
  * Class for handling the form displayed when an annotation is being edited.
@@ -1272,7 +1632,27 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
         KModalTemplate: '<div id="{id}" class="modal hide fade"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h3>{title}</h3></div><div class="modal-body"><form class="form-horizontal"><div class="kat-form-display"></div></form> </div><div class="modal-footer"><button class="btn btn-danger pull-left delete-kat-annotation">Delete</button></button><a href="#" data-dismiss="modal" class="btn">Close</a><a href="#" id="kat-form-save" class="btn btn-primary">Save</a></div></div>'
     }
 
-})/**
+})/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
+/**
  * Class for handling the form displayed when an annotation is added.
  *
  * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
@@ -1360,8 +1740,12 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             var options = "";
             var concepts = this._conceptRegistry.getConceptsByOntology(ontology);
             for (var i = 0; i < concepts.length; i++) {
-                options += "<option>" + concepts[i].getName() + "</option>\n";
+                options += '<option value="' + concepts[i].getName() + '">' +
+                                concepts[i].getConceptName() + '</option>\n';
             }
+
+            // Remove any previous installation of searchSelect
+            jQuery("#annotation-concept-selector").searchSelect('destroy');
             $(".kat-concept-selector").html(selectHtml.replace("{options}", options));
 
             var self = this;
@@ -1486,6 +1870,7 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
         },
 
         destroy: function () {
+            jQuery("#annotation-concept-selector").searchSelect('destroy');
             jQuery("#" + this.KContainerId).modal("hide");
             jQuery("#" + this.KContainerId).remove();
         }
@@ -1497,6 +1882,26 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
     }
 
 })
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * Class for handling the display of a singe annotation.
  *
@@ -1512,6 +1917,8 @@ FlancheJs.defineClass("kat.display.AnnotationRenderer", {
   methods: {
     render: function() {
       return {
+        ontology: this._annotation.getOntology(),
+        concept: this._annotation.getConcept(),
         idBase: this._annotation.getIdBase(),
         idExtent: this._annotation.getIdExtent(),
         content: this._buildContent(),
@@ -1550,6 +1957,26 @@ FlancheJs.defineClass("kat.display.AnnotationRenderer", {
   }
 
 })
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * Creates an svg arrow that can be used to connect two dom elements, for example a
  * reference field annotation to the referenced item.
@@ -1607,6 +2034,26 @@ FlancheJs.defineClass("kat.display.ArrowConnector", {
 
 
 })
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * This class provides a tool for displaying and handling the KAT Control Panel.
  *
@@ -1857,6 +2304,26 @@ FlancheJs.defineClass("kat.display.AnnotationOntologyViewer", {
 
 })
 /*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
+/*
  * Creates and controls the annotation displays.
  *
  * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
@@ -1909,8 +2376,9 @@ FlancheJs.defineClass("kat.Display", {
      */
     addSpecialClassToSpans: function () {
       for (var i = 0; i < this.getAnnotations().length; i++) {
-        var id1 = this.$annotations[i]["idBase"];
-        var id2 = this.$annotations[i]["idExtent"];
+        var annotation = this.$annotations[i];
+        var id1 = annotation["idBase"];
+        var id2 = annotation["idExtent"];
 
         //exchange if necessary, to start from the smallest
         if ($("#" + id1).index() > $("#" + id2).index()) {
@@ -1920,12 +2388,19 @@ FlancheJs.defineClass("kat.Display", {
         }
         console.log("ids ", id1, id2);
         var annotatedIds = $("#" + id1).nextUntil("#" + id2).andSelf().add($('#' + id2));
-        console.log(annotatedIds);
-        var currentAnnotationId = this.$annotations[i]["id"];
-        annotatedIds.wrapAll("<span id='" + currentAnnotationId + "' class='" + this.getSpecialClass() + "'>");
-        this.$annotations[i]["id"] = currentAnnotationId;
-        if (this.$annotations[i]["style"] != null) {
-          var rules = this.$annotations[i]["style"].split(";");
+        var ontologyClass = 'ontology-' + annotation.ontology;
+        var conceptClass = 'concept-' + annotation.concept.replace(/\./g, '-');
+        var classes = [this.getSpecialClass(), ontologyClass, conceptClass].join(" ");
+        var currentAnnotationId = annotation["id"];
+        annotatedIds.wrapAll("<span " +
+          "id='" + currentAnnotationId + "' " +
+          "class='" + classes + "' " +
+          "ontology='" + annotation.ontology + "' " +
+          "concept='" + annotation.concept + "'>"
+        );
+        annotation["id"] = currentAnnotationId;
+        if (annotation["style"] != null) {
+          var rules = annotation["style"].split(";");
           for (var j = 0; j < rules.length; j++) {
             var rule = rules[j].split(":");
             if (rule.length == 2) {
@@ -1937,7 +2412,6 @@ FlancheJs.defineClass("kat.Display", {
       }
     },
     createTooltipDisplays : function () {
-      console.log(this._annotationRegistry)
       for (var i = 0; i < this.getAnnotations().length; i++) {
         var editButton = '<i title="Edit" class="icon-edit pull-right edit-annotation" id="edit-annotation-' + this.$annotations[i].id + '"></i>';
         var closeButton = '<i title="Close" class="icon-remove"></i>';
@@ -2031,6 +2505,26 @@ FlancheJs.defineClass("kat.Display", {
 
 
 
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * Sends the annotations being created on this document to the CoreTeX system.
  *
@@ -2109,6 +2603,26 @@ FlancheJs.defineClass("kat.remote.CoreTexAnnotationInserter", {
     KJSONAnnotationsParameter: "jsannotations"
   }
 })
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * Retrieves the document and the annotations from the CoreTeX service and populates
  * the internal registry
@@ -2184,6 +2698,26 @@ FlancheJs.defineClass("kat.remote.CoreTeXAnnotationRetriever", {
 
 
 
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * Describes an annotation that was collected from a user and can be saved and transported over
  * network
@@ -2206,6 +2740,7 @@ FlancheJs.defineClass("kat.annotation.Annotation", {
   init: function (idBase, idExtent, concept, values, id, extraData) {
     this.$idBase = idBase;
     this.$idExtent = idExtent;
+    this.$ontology = concept.slice(0, concept.indexOf('.'));
     this.$concept = concept;
     this.$annotationValues = values;
     this.$id = id || kat.util.Util.generateUUID();
@@ -2215,6 +2750,7 @@ FlancheJs.defineClass("kat.annotation.Annotation", {
   properties: {
     idBase          : {value: null, writable: false},
     idExtent        : {value: null, writable: false},
+    ontology        : {value: null, writable: false},
     concept         : {value: null, writable: false},
     annotationValues: {value: null, writable: false},
     id              : {value: null, writable: false},
@@ -2232,6 +2768,7 @@ FlancheJs.defineClass("kat.annotation.Annotation", {
       return JSON.stringify({
         idBase          : this.getIdBase(),
         idExtent        : this.getIdExtent(),
+        ontology        : this.getOntology(),
         concept         : this.getConcept(),
         annotationValues: this.getAnnotationValues(),
         id              : this.getId(),
@@ -2284,6 +2821,26 @@ FlancheJs.defineClass("kat.annotation.Annotation", {
   }
 
 })
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * Describes an annotation registry that keeps track of all the annotations for the current document.
  *
@@ -2425,6 +2982,26 @@ FlancheJs.defineClass("kat.annotation.AnnotationRegistry", {
   }
 
 });
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * Class to describe an annotation concept. Annotation concepts describe the annotation model (i.e. the fields contained
  * by the annotation) and the behaviour of the annotation (i.e. user interaction and display).
@@ -2443,6 +3020,7 @@ FlancheJs.defineClass("kat.annotation.Concept", {
    */
   init: function (name, definition, ontology) {
     this.setName(name);
+    this.setConceptName(name.slice(name.indexOf('.') + 1));
     this.setDefinition(new kat.util.XMLDoc(definition));
     this.setOntology(ontology);
   },
@@ -2451,6 +3029,9 @@ FlancheJs.defineClass("kat.annotation.Concept", {
   properties: {
     name      : {
       value: null
+    },
+    conceptName : {
+      value: null,
     },
     definition: {
       value: null
@@ -2487,6 +3068,26 @@ FlancheJs.defineClass("kat.annotation.Concept", {
   }
 
 })
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * A registry to keep track of all available concepts for this document.
  *
@@ -2612,6 +3213,26 @@ FlancheJs.defineClass("kat.annotation.ConceptRegistry", {
   }
 
 })
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * Class to describe an annotation ontology. Annotation ontologies describe the annotation model (i.e. the fields contained
  * by the annotation) and the behaviour of the annotation (i.e. user interaction and display).
@@ -2674,6 +3295,26 @@ FlancheJs.defineClass("kat.annotation.Ontology", {
 
 })
 
+
+/*
+ * This file is part of KAT, the KWARC Annotation Tool,
+ * see https://github.com/KWARC/KAT
+ *
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ *
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
 
 /**
  * A registry to keep track of all available ontologies for this document.
@@ -2771,10 +3412,329 @@ FlancheJs.defineClass("kat.annotation.OntologyRegistry", {
     KLocalStorageRegistryKey: "ontologiesRegistry"
   }
 
-})
+});
 
 
 
+
+/*
+ * This file is part of KAT, the KWARC Annotation Tool,
+ * see https://github.com/KWARC/KAT
+ *
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ *
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
+/**
+ * Provides a split-pane viewer of the document for review.
+ *
+ * @author <a href="mailto:steven.mirea@gmail.com">Stefan Mirea</a>
+ */
+
+(function ($) {
+
+  FlancheJs.defineClass("kat.review.ReviewViewer", {
+    /**
+     * Instantiates the review viewer.
+     * @param  {kat.main.KATService} service An instance of the service.
+     */
+    init: function (service) {
+      this._service = service;
+      this._target = service._coretexRetriever._container;
+      this._ontologies = service._ontologyRegistry.getAllOntologies();
+    },
+
+    methods: {
+      /**
+       * Enable the Viewer on the DOM.
+       */
+      apply: function () {
+        var structure = {
+          container: jqElem('div').addClass('reviewViewer'),
+          panels: {
+            source: this._makePanel('source'),
+            mirror: this._makePanel('mirror'),
+          },
+        };
+
+        // source is panel containing this._target
+        var source = structure.panels.source;
+
+        // mirror will be our cloned object.
+        var mirror = structure.panels.mirror;
+
+        // Add to the DOM.
+        structure.container.insertBefore(this._target);
+
+        source.content.append(this._target);
+        mirror.content.append(this._target.clone());
+
+        structure.container.append(structure.panels.source.container);
+        structure.container.append(structure.panels.mirror.container);
+
+        // Add events.
+        source.content.on('scroll', function (event) {
+          mirror.content.scrollTop(source.content.scrollTop());
+        });
+
+        // Save the objects.
+        this._structure = structure;
+
+        // Trigger events.
+        source.actions.find('.reviewViewer-action').eq(0).click();
+        mirror.actions.find('.reviewViewer-action').eq(0).click();
+
+        // Monkey-patch the annotation creation function
+        var _addAnnotation = this._service._annotationRegistry.addAnnotation;
+        this._service._annotationRegistry.addAnnotation = function (annotation) {
+          // Add a mirror annotation
+          this._mirrorAnnotate(
+            annotation.getIdBase(),
+            annotation.getIdExtent(),
+            annotation.getId(),
+            annotation.getOntology(),
+            annotation.getConcept()
+          );
+
+          // play nice...
+          return _addAnnotation.apply(this._service._annotationRegistry, arguments);
+        }.bind(this);
+
+        // Rename IDs so you don't have conflicts
+        var idSuffix = this._idSuffix;
+        mirror.content.find('.kat-counter').each(function () {
+          $(this).attr('id', $(this).attr('id') + idSuffix);
+        });
+
+        // Remove any previous annotations cloned from the source.
+        mirror.content.find('.kat-annotated').each(function () {
+          $(this).replaceWith($(this).html());
+        });
+
+        // Migrate all current annotations over to the mirror panel.
+        source.content.find('.kat-annotated').each(function (index, elem) {
+          var $elem = $(elem);
+          this._mirrorAnnotate(
+            $elem.children().first().attr('id'),
+            $elem.children().last().attr('id'),
+            $elem.attr('id'),
+            $elem.attr('ontology'),
+            $elem.attr('concept')
+          );
+        }.bind(this));
+      },
+
+      /**
+       * Cleanup function.
+       */
+      destroy: function () {
+        if (!this._structure) return;
+
+        this._target.insertBeofre(this._structure.container);
+        for (var name in this._structure) {
+          this._structure[name].remove();
+        }
+      },
+    },
+
+    internals: {
+      idSuffix: '-mirror',
+      service: null,
+      target: null,
+      structure: null,
+      ontologies: [],
+
+      mirrorAnnotate: function (startId, endId, id, ontology, concept) {
+        var ontologyClass = 'ontology-' + ontology;
+        var conceptClass = 'concept-' + concept.replace(/\./g, '-');
+        var classes = ['kat-annotated-mirror', ontologyClass, conceptClass].join(" ");
+        var mirror = this._structure.panels.mirror;
+
+        var annotatedIds = mirror.content.
+          find("#" + startId + this._idSuffix).
+          nextUntil("#" + endId + this._idSuffix).
+          andSelf().
+          add(mirror.content.find('#' + endId + this._idSuffix));
+
+        var $elem = jqElem('span');
+        $elem.attr({
+          id: id + this._idSuffix,
+          class: classes,
+          ontology: ontology,
+          concept: concept,
+          conceptName: concept.slice(concept.indexOf('.') + 1),
+        });
+
+        // HACK: for some reason this doesn't work otherwise.
+        // Deferred to a later time when I have more time ...
+        setTimeout(function () {
+          $elem.insertBefore(annotatedIds.eq(0));
+          $elem.append(annotatedIds);
+          this._update_annotation_counters();
+          this._structure.panels.source.content.find('.kat-annotated').each(function () {
+            var cpt = $(this).attr('concept');
+            $(this).attr('conceptName', cpt.slice(cpt.indexOf('.') + 1));
+          });
+        }.bind(this), 200);
+      },
+
+      /**
+       * Sets the ontology for the given panel.
+       * @param {String} panelName
+       * @param {String} ontologyName
+       */
+      setOntology: function (panelName, ontologyName) {
+        var panel = this._structure.panels[panelName];
+        panel.stylesheet.reset();
+        // Source rules
+        panel.stylesheet.addRule(
+          '.kat-annotated:not(.ontology-' + ontologyName + ')',
+          'background:transparent; cursor:auto;'
+        );
+        panel.stylesheet.addRule(
+          '.kat-annotated:not(.ontology-' + ontologyName + '):before',
+          'display:none;'
+        );
+        // Mirror rules
+        panel.stylesheet.addRule(
+          '.kat-annotated-mirror:not(.ontology-' + ontologyName + ')',
+          'background:transparent; cursor:auto;'
+        );
+        panel.stylesheet.addRule(
+          '.kat-annotated-mirror:not(.ontology-' + ontologyName + '):before',
+          'display:none;'
+        );
+      },
+
+      /**
+       * Returns an object containing the components of a panel.
+       * @param  {String} name
+       * @return {Object}
+       */
+      makePanel: function (name) {
+        var $actions = jqElem('div').addClass('reviewViewer-panel-actions');
+        var $content = jqElem('div').addClass('reviewViewer-panel-content');
+        var $container = jqElem('div').addClass('reviewViewer-panel');
+
+        var self = this;
+
+        // Build the actions menu.
+        $actions.html('Profile:');
+        if (self._ontologies.length == 0) {
+          $actions.html(
+            '<div class="alert">' +
+              ' Add some ontologies from the KAT Control Panel and refresh the page.' +
+            '</div>'
+          );
+        } else {
+          self._ontologies.forEach(function (ontology) {
+            var ontologyName = ontology.getName();
+            var $elem = jqElem('a');
+            $elem.
+              attr('href', 'javascript:void(0)').
+              addClass('reviewViewer-action').
+              data('ontology-name', ontologyName).
+              html(ontologyName + '<span class="reviewViewer-counter">0</span>').
+              on('click.setOntology', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                self._setOntology(name, ontologyName);
+                $actions.find('.reviewViewer-action').removeClass('reviewViewer-selected');
+                $elem.addClass('reviewViewer-selected');
+              });
+
+            $actions.append($elem);
+          });
+        }
+
+        var stylesheet = {
+          element: null,
+
+          reset: function () {
+            this.element && this.element.remove();
+            this.element = jqElem('style').addClass('reviewViewer-style');
+            this.element.appendTo($container);
+          },
+
+          addRule: function (selector, rules) {
+            selector = '#' + $container.attr('id') + ' ' + selector;
+            this.element.append(selector + '{ ' + rules + '} ');
+          },
+        };
+
+        stylesheet.reset();
+
+        $container.
+          data('panel-name', name).
+          attr('id', 'panel-' + Math.floor(Math.random() * 100000000)).
+          append($actions, $content);
+
+        return {
+          container: $container,
+          actions: $actions,
+          content: $content,
+          stylesheet: stylesheet,
+        };
+      },
+
+      update_annotation_counters: function () {
+        var structure = this._structure;
+        structure.container.find('.reviewViewer-counter').each(function () {
+          var ontology = $(this).parent().data('ontology-name');
+          $(this).html(
+            structure.panels.source.content.
+              find('.kat-annotated.ontology-' + ontology).
+              length
+          );
+        });
+      },
+    },
+  });
+
+  /**
+   * Returns a new jQuery DOM Node
+   * @param  {String} type
+   * @return {jQuery}
+   */
+  function jqElem (type) {
+    return $(document.createElement(type));
+  }
+
+})(jQuery);
+
+
+
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
 
 /**
  * The main entry point of the service. The KAT Service requires a CSS3/XPATH selector to identify

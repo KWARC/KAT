@@ -1580,6 +1580,7 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
       setValue: setValue,
       hide: hide,
       show: show,
+      destroy: destroy,
     },
   };
 
@@ -1649,9 +1650,10 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
 
       // Build options.
       data.forEach(function (option, index) {
+        var value = option[0] !== null ? option[0] : option[1];
         $listWrapper.append(
           jqElement('div').
-            data('value', option[0] !== null ? option[0] : option[1]).
+            data('value', value).
             data('index', index).
             addClass(cls.element).
             addClass(cls.searchable).
@@ -1666,6 +1668,7 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
       $this.
         addClass(cls.handle).
         data(infoName, {
+          events: {},
           options: opt,
           classes: cls,
           wrapper: $wrapper,
@@ -1680,13 +1683,81 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
       // Post Setup.
       addSearchEvents($this);
       addDisplayEvents($this);
-      select($this, opt.selectedIndex);
-      setValue($this, opt.selectedIndex);
       hide($this, true);
-      $searchField[0].focus();
+      setValue($this, opt.selectedIndex, true);
+      select($this, opt.selectedIndex);
     });
 
   };
+
+  /**
+   * Revers back to the state before the plugin was used.
+   * @param  {jQuery} $elem
+   * @return {jQuery}
+   */
+  function destroy ($elem) {
+    var info = $elem.data(infoName);
+
+    // Detach events.
+    for (var name in info.events) {
+      detach_event($elem, name);
+    }
+
+    // Remove and restore elements.
+    info.wrapper.remove();
+    $elem.show();
+
+    // Reset the data object.
+    $elem.removeData(infoName);
+
+    return $elem;
+  }
+
+  /**
+   * Attach an event to an element.
+   * This keeps track of all events for cleanup purposes.
+   *
+   * @param {jQuery}    $elem The target root $elem.
+   * @param  {String}   name
+   * @param  {jQuery}   $target The element you want to attach the event to.
+   * @param  {String}   eventType
+   * @param  {Function} callback
+   * @return {jQuery} Returns back the target
+   */
+  function attach_event ($elem, name, $target, eventType, callback) {
+    if (arguments.length < 5) {
+      throw new Error('[$.' + pluginName + '.attach_event()] Too few arguments: ' +
+                      arguments.length);
+    }
+
+    var info = $elem.data(infoName);
+
+    if (name in info.events) {
+      console.warn('[$.' + pluginName + '.attach_event()] Overwriting event: ' + name);
+      detach_event($elem, name);
+    }
+
+    $target.on(eventType, callback);
+    info.events[name] = [$target, eventType, callback];
+
+    return $target;
+  }
+
+  /**
+   * Remove an event attached with attach_event().
+   * @param  {jQuery} $elem
+   * @param  {String} name
+   * @return {jQuery} Returns back the element
+   */
+  function detach_event ($elem, name) {
+    var info = $elem.data(infoName);
+
+    if (!info.events[name]) { return; }
+
+    info.events[name][0].off(info.events[name][1], info.events[name][2]);
+
+    return info.events[name][0];
+  }
 
   /**
    * Checks to see if the menu is open/visible.
@@ -1705,16 +1776,17 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
    * @return {jQuery}
    */
   function show ($elem, instant) {
+    // Check if the element exists and it's attached to the DOM.
+    if (!$elem || !$.contains(document, $elem[0])) { return; }
+
     instant = !!instant;
 
     $elem.trigger('show-before', [instant]);
 
+    removeHighlighted($elem);
+
     var info = $elem.data(infoName);
-    if (instant) {
-      info.listWrapper.show();
-    } else {
-      info.listWrapper.fadeIn('fast');
-    }
+    instant ? info.listWrapper.show() : info.listWrapper.fadeIn('fast');
     $elem.addClass(info.options.openClass);
     var offset = $elem.offset();
     info.listWrapper.css({
@@ -1722,6 +1794,8 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
       top: info.searchField.outerHeight(),
       left: 0,
     });
+
+    select($elem, $elem[0].selectedIndex);
 
     $elem.trigger('show-after', [instant]);
 
@@ -1735,6 +1809,9 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
    * @return {jQuery}
    */
   function hide ($elem, instant) {
+    // Check if the element exists and it's attached to the DOM.
+    if (!$elem || !$.contains(document, $elem[0])) { return; }
+
     instant = !!instant;
 
     $elem.trigger('hide-before', [instant]);
@@ -1742,6 +1819,7 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
     var info = $elem.data(infoName);
     instant ? info.listWrapper.hide() : info.listWrapper.fadeOut('fast');
     $elem.removeClass(info.options.openClass);
+    setValue($elem, $elem[0].selectedIndex, true);
 
     $elem.trigger('hide-after', [instant]);
 
@@ -1758,16 +1836,12 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
     $elem.trigger('select-before', [index]);
 
     var info = $elem.data(infoName);
-
     index = wrapAround(index, info.searchable.length);
-
     var $selected = info.searchable.
                           removeClass(info.classes.selected).
                           eq(index).
                           addClass(info.classes.selected);
-
     !noScroll && $selected[0].scrollIntoView(false);
-
     info.selected = index;
 
     $elem.trigger('select-after', [index]);
@@ -1779,19 +1853,22 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
    * Sets the value of the given element.
    * @param {jQuery} $elem
    * @param {Number} index
+   * @param {Boolean} noHide
    */
-  function setValue ($elem, index) {
+  function setValue ($elem, index, noHide) {
     $elem.trigger('setValue-before', [index]);
 
     var info = $elem.data(infoName);
-
     index = wrapAround(index, info.searchable.length);
-
     var $target = info.searchable.eq(index);
-    $elem.val($target.data('value')).trigger('change');
-    info.searchField.val($target.text())[0].focus();
-    hide($elem);
 
+    $elem.val($target.data('value'));
+    info.searchField.val($target.html());
+
+    !noHide && info.searchField[0].focus();
+    !noHide && hide($elem);
+
+    $elem.trigger('change');
     $elem.trigger('setValue-after', [index]);
 
     return $elem;
@@ -1816,26 +1893,29 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
   function addDisplayEvents ($elem) {
     var info = $elem.data(infoName);
 
-    info.trigger.on('click.show-options', function on_click (event) {
-      show($elem);
-      info.searchField[0].focus();
-    });
+    attach_event($elem, 'trigger-show-options', info.trigger, 'click.show-options',
+      function on_click (event) {
+        show($elem);
+        info.searchField[0].focus();
+      });
 
-    info.searchField.on('focus.show-options', function on_focus (event) {
-      show($elem);
-    });
+    attach_event($elem, 'search-show-options', info.searchField, 'focus.show-options',
+      function on_focus (event) {
+        show($elem);
+      });
 
     // Clicking outside of the menu, closes the menu.
-    $(document).on('click.closeMenu', function on_close_menu (event) {
-      var $target = $(event.target);
-      while ($target && $target.length > 0) {
-        if ($target.is(info.wrapper) || $target.is($elem)) {
-          return;
+    attach_event($elem, 'global-close', $(document), 'click.closeMenu',
+      function on_close_menu (event) {
+        var $target = $(event.target);
+        while ($target && $target.length > 0) {
+          if ($target.is(info.wrapper) || $target.is($elem)) {
+            return;
+          }
+          $target = $target.parent();
         }
-        $target = $target.parent();
-      }
-      hide($elem);
-    });
+        hide($elem);
+      });
   }
 
   /**
@@ -1846,64 +1926,85 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
     var info = $elem.data(infoName);
 
     // Search events.
-    info.searchField.on('keyup.search', function on_search (event) {
+    attach_event($elem, 'search', info.searchField, 'keyup.search', function on_search (event) {
       var val = $(this).val();
+
+      if (searchExcludeKeys.indexOf(event.keyCode) > -1) { return; }
 
       // Apparently CMD+delete does not re-trigger show, so just re-check for it.
       if (val.length == 0) {
-        search($elem, false);
+        removeHighlighted($elem);
+        info.searchable.show();
         return;
       }
-
-      if (searchExcludeKeys.indexOf(event.keyCode) > -1) { return; }
 
       search($elem, val);
     });
 
     // Meta events (e.g. UP/DOWN/ENTER/etc).
-    info.wrapper.on('keydown.search-actions', function on_search_actions (event) {
-      var stopEvent = true;
+    attach_event($elem, 'search-actions', info.wrapper, 'keydown.search-actions',
+      function on_search_actions (event) {
+        var stopEvent = true;
 
-      switch (event.keyCode) {
-        case KEYS.ENTER: setValue($elem, info.selected); break;
-        case KEYS.UP:
-        case KEYS.DOWN:
-          if (!isOpen($elem)) {
-            show($elem);
-            select($elem, 0);
-            return;
-          }
+        switch (event.keyCode) {
+          case KEYS.ENTER: setValue($elem, info.selected); break;
+          case KEYS.UP:
+          case KEYS.DOWN:
+            if (!isOpen($elem)) {
+              show($elem);
+              select($elem, 0);
+              return;
+            }
 
-          var $visible = info.searchable.filter(':visible');
-          // Convert from global to visible index.
-          var index = $visible.index(info.searchable.eq(info.selected));
-          index = wrapAround(index + (event.keyCode == KEYS.UP ? -1 : 1), $visible.length);
+            var $visible = info.searchable.filter(':visible');
+            // Convert from global to visible index.
+            var index = $visible.index(info.searchable.eq(info.selected));
+            index = wrapAround(index + (event.keyCode == KEYS.UP ? -1 : 1), $visible.length);
 
-          // Convert from visible to global index.
-          select($elem, info.searchable.index($visible.eq(index)), true);
+            // Convert from visible to global index.
+            select($elem, info.searchable.index($visible.eq(index)), true);
 
-          // Scroll into view the next element in line, if it exists.
-          var viz_index = Math.min(index + 1, $visible.length - 1);
-          $visible[viz_index].scrollIntoView(false);
-          break;
-        default:
-          stopEvent = false;
-      }
+            // Scroll into view the next element in line, if it exists.
+            var viz_index = Math.min(index + 1, $visible.length - 1);
+            $visible[viz_index].scrollIntoView(false);
+            break;
+          default:
+            stopEvent = false;
+        }
 
-      if (stopEvent) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-      }
+        if (stopEvent) {
+          event.preventDefault();
+          event.stopPropagation();
+          event.stopImmediatePropagation();
+        }
+      });
+
+    attach_event($elem, 'element-hover', info.searchable, 'mouseenter',
+      function on_searchable_hover (event) {
+        select($elem, $(this).data('index'), true);
+      });
+
+    attach_event($elem, 'element-click', info.searchable, 'click',
+      function on_searchable_click (event) {
+        setValue($elem, $(this).data('index'));
+      });
+  }
+
+  /**
+   * Removes all the highlighted tags as a result of the search function.
+   * @param  {jQuery} $elem
+   * @return {jQuery}
+   */
+  function removeHighlighted ($elem) {
+
+    var info = $elem.data(infoName);
+
+    // Remove old matches.
+    info.searchable.find('.' + info.classes.highlighted).each(function () {
+      $(this).replaceWith(this.innerHTML);
     });
 
-    info.searchable.on('mouseenter', function on_searchable_hover (event) {
-      select($elem, $(this).data('index'), true);
-    });
-
-    info.searchable.on('click', function on_searchable_click (event) {
-      setValue($elem, $(this).data('index'));
-    });
+    return $elem;
   }
 
   /**
@@ -1911,23 +2012,14 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
    * Side-effect: selects the first element in the remaining set.
    *
    * @param  {jQuery} $elem
-   * @param  {String} str   If false is passed, the search will only do a cleanup and not the search part.
+   * @param  {String} str
    * @return {jQuery}
    */
   function search ($elem, str) {
-    $elem.trigger('search-before', [str]);
-
-    show($elem);
-
     var info = $elem.data(infoName);
 
-    // Remove old matches.
-    info.searchable.show().find('.' + info.classes.highlighted).each(function () {
-      $(this).replaceWith(this.innerHTML);
-    });
-
-    if (str === false) { return; }
-
+    $elem.trigger('search-before', [str]);
+    show($elem);
     str = str.toLowerCase();
 
     // Highlight new matches.
@@ -1942,6 +2034,8 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
       }
 
       var end = begin + str.length;
+
+      $this.show();
       this.innerHTML = text.slice(0, begin) +
                       '<span class="' + info.classes.highlighted + '">' +
                         text.slice(begin, end) +
