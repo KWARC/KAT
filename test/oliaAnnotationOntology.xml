@@ -1,0 +1,921 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<annotation xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:o="http://omdoc.org/ontology#" name="OLiA">
+  <documentation>
+    OLiA Annotation Model for Penn Treebank (PTB) part-of-speech annotation (Santorini 1990)
+
+Unless specified otherwise, all comments are taken from Santorini (1990).
+
+References
+Beatrice Santorini (1990), Part-of-Speech tagging guidelines for the Penn Treebank Project, 3rd revision, 2nd printing, ftp://ftp.cis.upenn.edu/pub/treebank/doc/tagguide.ps.gz
+  </documentation>
+  <concepts>
+
+    <concept name="Adjective">
+      <documentation>These are adjectives, ordinal numerals, and ordinal numbers.
+Hyphenated compounds that are used as modifiers are tagged as adjectives, e.g. "happy-go-lucky", "one-of-a-kind", "run-of-the-mill". Ordinal numbers are tagged as adjectives, as are compounds of the form "n-th" or "X-est", like "fourth-largest".</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>Adjective:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Adjective"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Adverb">
+      <documentation>This category includes most words that end in -ly as well as degree words like "quite", "too" and "very", posthead modifiers like "enough" and "indeed" (as in "good enough", "very well indeed"), and negative markers like "not", "n' t" and "never".</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>Adverb:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Adverb"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="BackwardDoubleQuote">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>BackwardDoubleQuote:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#BackwardDoubleQuote"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="BaseForm">
+      <documentation>This tag subsumes imperatives, infinitives and subjunctives.
+EXAMPLES:
+Imperative: Do/VB it.
+Infinitive: You should do/VB it.
+                We want them to do/VB it.
+                We made them do/VB it.
+Subjunctive: We suggested that he do/VB it.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>BaseForm:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#BaseForm"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="BePastTense">
+      <documentation>This category includes the conditional form of the verb to be.
+EXAMPLES:
+If I were/VBD rich...
+If I were/VBD to win the lottery...</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>BePastTense:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#BePastTense"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="BePresentTense">
+      <documentation>These are verbforms in present tense. This class includes 3rd person singular or other than 3rd person singular verbforms.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>BePresentTense:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#BePresentTense"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="CardinalNumber">
+      <documentation>These are cardinal numbers.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>CardinalNumber:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#CardinalNumber"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Colon">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>Colon:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Colon"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Comma">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>Comma:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Comma"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="CommonNoun">
+      <documentation>These are common nouns in singular or plural, or mass nouns.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>CommonNoun:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#CommonNoun"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="ComparativeAdjective">
+      <documentation>These are adjectives mostly with the comparative ending -er and a comparative meaning. "More" or "less" should be tagged as a comparative adjective when it is used without a head noun and it
+corresponds to the object of a verb or preposition.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>ComparativeAdjective:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ComparativeAdjective"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="ComparativeAdverb">
+      <documentation>These are comparative adverbs.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>ComparativeAdverb:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ComparativeAdverb"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Conjunction">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>Conjunction:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Conjunction"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="CoordinatingConjunction">
+      <documentation>This category includes "and", "but", "nor", "or", "yet" (as in "Yet it's cheap", "cheap yet good"), as well as the mathematical operators "plus", "minus", "less", "times" (in the sense of "multiplied by") and "over" (in the sense of "divided by"), when they are spelled out.
+For in the sense of "because" is a coordinating conjunction.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>CoordinatingConjunction:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#CoordinatingConjunction"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Determiner">
+      <documentation>This category includes the articles "a(n)", "every", "no" and "the", the indefinite determiners "another",  "any" and "some", "each", "either" (as in "either way"), "neither" (as in "neither decision"), "that", "these", "this" and "those", and instances of "all" and "both" when they do not precede a determiner or possessive pronoun (as in "all roads" or "both times").</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>Determiner:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Determiner"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Dollar">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>Dollar:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Dollar"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="DoubleQuote">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>DoubleQuote:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#DoubleQuote"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="ExistentialThere">
+      <documentation>Existential "there" is the unstressed "there" that triggers inversion of the inflected verb and the logical subject of a sentence, e.g. "There/EX was a party in progress.", "There/EX ensued a melee.".</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>ExistentialThere:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ExistentialThere"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="ForeignWord">
+      <documentation>These are foreign words.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>ForeignWord:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ForeignWord"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="ForwardDoubleQuote">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>ForwardDoubleQuote:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ForwardDoubleQuote"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="FullStop">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>FullStop:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#FullStop"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="GerundOrPresentParticiple">
+      <documentation>This is a verb in present participle or in gerund.</documentation>
+      <fields></field>
+      </fields>
+      <display>
+          <template>
+            <b>GerundOrPresentParticiple:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#GerundOrPresentParticiple"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Interjection">
+      <documentation>This category includes "my" (as in "My, what a gorgeous day"), "oh", "please",  "see" (as in "See   it's like this"), "uh", "well" and "yes", among others.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>Interjection:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Interjection"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="LeftBracket">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>LeftBracket:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#LeftBracket"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="LeftCurlyBracket">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>LeftCurlyBracket:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#LeftCurlyBracket"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="LeftRoundBracket">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>LeftRoundBracket:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#LeftRoundBracket"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="LeftSquareBracket">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>LeftSquareBracket:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#LeftSquareBracket"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="ListItemMarker">
+      <documentation>This category includes letters and numerals when they are used to identify items in a list.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>ListItemMarker:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ListItemMarker"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="ModalVerb">
+      <documentation>This category includes all verbs that don't take an -s ending in the third person singular present: "can",
+"could", ("dare"), "may", "might", "must", "ought", "shall", "should", "will", "would".</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>ModalVerb:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ModalVerb"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Noun">
+      <documentation>This is a class, we inserted to structure the tagset.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>Noun:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Noun"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Particle">
+      <documentation>This category includes a number of mostly monosyllabic words that also double as directional adverbs and prepositions.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>Particle:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Particle"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="PastParticiple">
+      <documentation>This is a verb in past participle.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>PastParticiple:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#PastParticiple"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="PersonalPronoun">
+      <documentation>This category includes the personal pronouns proper,  without regard for case distinctions ("I", "me", "you", "he", "him", etc.), the reflexive pronouns ending in -self or -selves, and the nominal possessive pronouns "mine", "yours", "his", "hers", "ours" and "theirs".</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>PersonalPronoun:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#PersonalPronoun"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="PossessiveEnding">
+      <documentation>The possessive ending on nouns ending in 's or  is split off by the tagging algorithm and tagged as if it
+were a separate word. e.g. "John/ NP 's/POS idea", "the parents/NNS'/POS distress".</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>PossessiveEnding:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#PossessiveEnding"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="PossessivePronoun">
+      <documentation>This category includes the adjectival possessive forms "my", "your", "his", "her", "its", "one's", "our" and "their".</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>PossessivePronoun:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#PossessivePronoun"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="PossessiveWhPronoun">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>PossessiveWhPronoun:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#PossessiveWhPronoun"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Predeterminer">
+      <documentation>This category includes the following determinerlike elements when they precede an article or possessive pronoun.
+EXAMPLES:
+all/PDT his marbles
+nary/PDT a soul
+both/PDT the girls
+quite/PDT a mess
+half/PDT his time
+rather/PDT a nuisance
+many/PDT a moon
+such/PDT a good time</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>Predeterminer:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Predeterminer"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="PrepositionOrSubordinatingConjunction">
+      <documentation>We make no explicit distinction between prepositions and subordinating conjunctions. (The distinction is not lost, however - a preposition is an IN that precedes a noun phrase or a prepositional phrase, and a subordinate conjunction is an IN that precedes a clause).
+The preposition "to" has its own special tag TO.</documentation>
+      <fields></field>
+      </fields>
+      <display>
+          <template>
+            <b>PrepositionOrSubordinatingConjunction:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#PrepositionOrSubordinatingConjunction"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Pronoun">
+      <documentation>This is a class, we inserted to structure the tagset.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>Pronoun:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Pronoun"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="ProperNoun">
+      <documentation>These are singular or plural proper nouns.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>ProperNoun:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ProperNoun"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Punctuation">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>Punctuation:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Punctuation"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="RightBracket">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>RightBracket:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#RightBracket"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="RightCurlyBracket">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>RightCurlyBracket:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#RightCurlyBracket"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="RightRoundBracket">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>RightRoundBracket:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#RightRoundBracket"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="RightSquareBracket">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>RightSquareBracket:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#RightSquareBracket"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="SuperlativeAdjective">
+      <documentation>These are adjectives with the superlative ending -est (as well as "worst"). "Most" and "least" can also be tagged as superlative adjective when they occur by themselves.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>SuperlativeAdjective:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#SuperlativeAdjective"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="SuperlativeAdverb">
+      <documentation>These are superlative adverbs.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>SuperlativeAdverb:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#SuperlativeAdverb"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Symbol">
+      <documentation>This tag should be used for mathematical, scientific and technical symbols or expressions that aren't words of English. It should not used for any and all technical expressions. For instance, the names of chemicals, units of measurements (including abbreviations thereof)  and the like should be tagged as nouns.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>Symbol:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Symbol"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Tag">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>Tag:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Tag"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="To">
+      <documentation>"To" is tagged TO, regardless of whether it is a preposition or an infinitival marker.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>To:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#To"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Verb">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>Verb:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Verb"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="WhAdverb">
+      <documentation>This category includes "how", "where", "why", etc. When in a temporal sense is tagged as wh-adverb.  In the sense of "if",  on the other hand, it is a subordinating conjunction.
+EXAMPLES:
+"When/WRB he finally arrived,  I was on my way out."</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>WhAdverb:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#WhAdverb"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="WhDeterminer">
+      <documentation>This category includes "which", as well as that when it is used as a relative pronoun.</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>WhDeterminer:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#WhDeterminer"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="WhPronoun">
+      <documentation>This category includes "what", "who" and "whom".</documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>WhPronoun:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#WhPronoun"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="LinguisticAnnotation">
+      <documentation></documentation>
+      <fields></fields>
+      <display>
+          <template>
+            <b>LinguisticAnnotation:</b>
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/system.owl#LinguisticAnnotation"></rdf:type>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+  </concepts>
+</annotation>

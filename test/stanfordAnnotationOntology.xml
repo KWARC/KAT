@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<annotation xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:o="http://omdoc.org/ontology#" name="OLiA">
+<annotation xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:o="http://omdoc.org/ontology#" name="stanford">
   <documentation>
     OLiA Annotation Model of Stanford Parser dependency labels (de Marneffe and Manning 2011)
 
@@ -21,13 +21,25 @@ abbrev(Corporation, ABC)</documentation>
             <value>Name</value>
             <default>AbbreviationModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>AbbreviationModifier:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -50,13 +62,25 @@ acomp(looks, beautiful)</documentation>
             <value>Name</value>
             <default>AdjectivalComplement</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>AdjectivalComplement:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -79,13 +103,25 @@ amod(meat, red)</documentation>
             <value>Name</value>
             <default>AdjectivalModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>AdjectivalModifier:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -111,13 +147,25 @@ advcl(tell, know)</documentation>
             <value>Name</value>
             <default>AdverbialClauseModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>AdverbialClauseModifier:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -143,13 +191,25 @@ advmod(often, less)</documentation>
             <value>Name</value>
             <default>AdverbialModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>AdverbialModifier:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -175,13 +235,25 @@ agent(caused, protein)</documentation>
             <value>Name</value>
             <default>Agent</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>Agent:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -207,13 +279,25 @@ appos(Bill, cousin)</documentation>
             <value>Name</value>
             <default>AppositionalModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>AppositionalModifier:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -233,6 +317,7 @@ appos(Bill, cousin)</documentation>
             <value>Name</value>
             <default>Argument</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
       </fields>
       <display>
@@ -262,13 +347,25 @@ attr (is, What)</documentation>
             <value>Name</value>
             <default>Attributive</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>Attributive:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -294,13 +391,25 @@ aux(leave, should)</documentation>
             <value>Name</value>
             <default>Auxiliary</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>Auxiliary:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -326,13 +435,25 @@ xcomp(ready, leave)</documentation>
             <value>Name</value>
             <default>ClausalComplementWithExternalSubject</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>ClausalComplementWithExternalSubject:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -361,13 +482,25 @@ ccomp(fact, honest)</documentation>
             <value>Name</value>
             <default>ClausalComplementWithInternalSubject</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>ClausalComplementWithInternalSubject:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -393,13 +526,25 @@ csubj (true, said)</documentation>
             <value>Name</value>
             <default>ClausalSubject</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>ClausalSubject:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -419,6 +564,7 @@ csubj (true, said)</documentation>
             <value>Name</value>
             <default>Complement</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
       </fields>
       <display>
@@ -448,6 +594,7 @@ complm(like, that)</documentation>
             <value>Name</value>
             <default>Complementizer</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
       </fields>
       <display>
@@ -477,13 +624,25 @@ number($, billion)</documentation>
             <value>Name</value>
             <default>CompountNumberElement</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>CompountNumberElement:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -510,13 +669,25 @@ conj (ski, snowboard)</documentation>
             <value>Name</value>
             <default>Conjunct</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>Conjunct:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -539,13 +710,25 @@ xsubj (eat, Tom)</documentation>
             <value>Name</value>
             <default>ControllingSubject</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>ControllingSubject:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -571,13 +754,25 @@ cc(ski, or)</documentation>
             <value>Name</value>
             <default>Coordination</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>Coordination:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -603,13 +798,25 @@ cop(man, is)</documentation>
             <value>Name</value>
             <default>Copula</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>Copula:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -629,6 +836,7 @@ cop(man, is)</documentation>
             <value>Name</value>
             <default>DependencyLabel</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
       </fields>
       <display>
@@ -655,6 +863,7 @@ cop(man, is)</documentation>
             <value>Name</value>
             <default>DependencyRelation</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
       </fields>
       <display>
@@ -686,13 +895,25 @@ dep(show, if)</documentation>
             <value>Name</value>
             <default>Dependent</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>Dependent:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -718,13 +939,25 @@ det(book, which)</documentation>
             <value>Name</value>
             <default>Determiner</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>Determiner:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -750,13 +983,25 @@ dobj (win, lottery)</documentation>
             <value>Name</value>
             <default>DirectObject</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>DirectObject:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -779,13 +1024,25 @@ expl(is, There)</documentation>
             <value>Name</value>
             <default>Expletive</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>Expletive:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -808,13 +1065,25 @@ iobj (gave, me)</documentation>
             <value>Name</value>
             <default>IndirectObject</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>IndirectObject:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -840,13 +1109,25 @@ infmod(anything, say)</documentation>
             <value>Name</value>
             <default>InfinitivalModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>InfinitivalModifier:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -869,13 +1150,25 @@ mark(attacked, after)</documentation>
             <value>Name</value>
             <default>Marker</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>Marker:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -895,6 +1188,7 @@ mark(attacked, after)</documentation>
             <value>Name</value>
             <default>MeasurePhraseModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
       </fields>
       <display>
@@ -921,6 +1215,7 @@ mark(attacked, after)</documentation>
             <value>Name</value>
             <default>Modifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
       </fields>
       <display>
@@ -956,13 +1251,25 @@ mwe(of, because)</documentation>
             <value>Name</value>
             <default>MultiWordExpression</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>MultiWordExpression:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -988,13 +1295,25 @@ neg(drive, n't)</documentation>
             <value>Name</value>
             <default>NegationModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>NegationModifier:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1020,13 +1339,25 @@ nsubj (cute, baby)</documentation>
             <value>Name</value>
             <default>NominalSubject</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>NominalSubject:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1051,13 +1382,25 @@ nn(futures, price)</documentation>
             <value>Name</value>
             <default>NounCompoundModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>NounCompoundModifier:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1095,13 +1438,25 @@ npadvmod(like, most)</documentation>
             <value>Name</value>
             <default>NounPhraseAsAdverbialModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>NounPhraseAsAdverbialModifier:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1124,13 +1479,25 @@ num(sheep, 3)</documentation>
             <value>Name</value>
             <default>NumericModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>NumericModifier:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1150,6 +1517,7 @@ num(sheep, 3)</documentation>
             <value>Name</value>
             <default>Object</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
       </fields>
       <display>
@@ -1179,13 +1547,25 @@ pobj (on, chair)</documentation>
             <value>Name</value>
             <default>ObjectOfPreposition</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>ObjectOfPreposition:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1208,13 +1588,25 @@ parataxis(left, said)</documentation>
             <value>Name</value>
             <default>Parataxis</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>Parataxis:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1240,13 +1632,25 @@ partmod(shoot, demonstrating)</documentation>
             <value>Name</value>
             <default>ParticipalModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>ParticipalModifier:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1273,13 +1677,25 @@ auxpass(killed, was/got)</documentation>
             <value>Name</value>
             <default>PassiveAuxiliary</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>PassiveAuxiliary:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1302,13 +1718,25 @@ csubjpass(suspected, lied)</documentation>
             <value>Name</value>
             <default>PassiveClausalSubject</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>PassiveClausalSubject:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1331,13 +1759,25 @@ nsubjpass(defeated, Dole)</documentation>
             <value>Name</value>
             <default>PassiveNominalSubject</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>PassiveNominalSubject:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1360,13 +1800,25 @@ prt(shut, down)</documentation>
             <value>Name</value>
             <default>PhrasalVerbParticle</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>PhrasalVerbParticle:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1392,13 +1844,25 @@ poss(clothes, Bill)</documentation>
             <value>Name</value>
             <default>PossessionModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>PossessionModifier:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1421,13 +1885,25 @@ possessive(John, 's)</documentation>
             <value>Name</value>
             <default>PossessiveModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>PossessiveModifier:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1450,13 +1926,25 @@ preconj (boys, both)</documentation>
             <value>Name</value>
             <default>Preconjunct</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>Preconjunct:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1479,13 +1967,25 @@ predet(boys, all)</documentation>
             <value>Name</value>
             <default>Predeterminer</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>Predeterminer:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1508,6 +2008,7 @@ prepc_without(purchased, paying)</documentation>
             <value>Name</value>
             <default>PrepositionalClausalModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
       </fields>
       <display>
@@ -1540,13 +2041,25 @@ pcomp(about, missing)</documentation>
             <value>Name</value>
             <default>PrepositionalComplement</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>PrepositionalComplement:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1575,13 +2088,25 @@ prep(responsible, for)</documentation>
             <value>Name</value>
             <default>PrepositionalModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>PrepositionalModifier:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1604,13 +2129,25 @@ punct(Go, !)</documentation>
             <value>Name</value>
             <default>Punctuation</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>Punctuation:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1633,13 +2170,25 @@ purpcl(talked, secure)</documentation>
             <value>Name</value>
             <default>PurposeClauseModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>PurposeClauseModifier:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1662,13 +2211,25 @@ quantmod(200, About)</documentation>
             <value>Name</value>
             <default>QuantifierModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>QuantifierModifier:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1691,13 +2252,25 @@ ref (book, which)</documentation>
             <value>Name</value>
             <default>Referent</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>Referent:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1720,13 +2293,25 @@ rel (love, wife)</documentation>
             <value>Name</value>
             <default>Relative</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>Relative:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1752,13 +2337,25 @@ rcmod(book,bought)</documentation>
             <value>Name</value>
             <default>RelativeClauseModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>RelativeClauseModifier:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1784,13 +2381,25 @@ root(ROOT, man)</documentation>
             <value>Name</value>
             <default>Root</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>Root:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1810,6 +2419,7 @@ root(ROOT, man)</documentation>
             <value>Name</value>
             <default>SemanticDependent</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
       </fields>
       <display>
@@ -1836,6 +2446,7 @@ root(ROOT, man)</documentation>
             <value>Name</value>
             <default>Subject</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
       </fields>
       <display>
@@ -1865,13 +2476,25 @@ tmod(swam, night)</documentation>
             <value>Name</value>
             <default>TemporalModifier</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
       </fields>
       <display>
           <template>
               <b>TemporalModifier:</b>
               <br/>
-              {name}
+              {name} from {from} to {to}
           </template>
       </display>
       <rdf:RDF>
@@ -1891,6 +2514,7 @@ tmod(swam, night)</documentation>
             <value>Name</value>
             <default>Token</default>
             <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
           </field>
       </fields>
       <display>
