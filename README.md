@@ -1,6 +1,6 @@
 # KWARC Annotation Tool
 
-KWARC Annotation Tool
+KWARC Annotation Tool: An Annotation Tool for STEM Documents. 
 
 ## Installation
 
