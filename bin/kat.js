@@ -1503,677 +1503,6 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
 
 
 
-
-(function init_jquery_spaceSwitcher ($) {
-
-  var pluginName = 'searchSelect';
-  var infoName = pluginName;
-
-  var KEYS = {
-    ENTER: 13,
-    ESC: 27,
-    SHIFT: 16,
-    CONTROL: 17,
-    ALT: 18,
-    PAUSE: 19,
-    CAPS_LOCK: 20,
-    PAGE_UP: 33,
-    PAGE_DOWN: 34,
-    END: 35,
-    HOME: 36,
-    LEFT: 37,
-    UP: 38,
-    RIGHT: 39,
-    DOWN: 40,
-    PRINTSCREEN: 44,
-    INSERT: 45,
-    COMMAND: 91,
-    CONTEXT_MENU: 93,
-    NUM_LOCK: 144,
-    SCROLL_LOCK: 145,
-    META: 224,
-  };
-
-  // When any of the meta keys are pressed, don't perform search.
-  var searchExcludeKeys = Object.keys(KEYS).map(function (name) {
-    return KEYS[name];
-  });
-
-  // Setup global defaults for the plugin
-  $[pluginName] = {
-    // All the default options supported are defined here.
-    options: {
-      // Pass an array of Category objects each containing an array of Element
-      //  objects to be used as the selectors.
-      data: null,
-
-      // The class to be added to the handler when the menu is open.
-      openClass: 'selected',
-
-      // Whether to hide the original target or not.
-      hideTarget: true,
-
-      // Which element # to be selected.
-      selectedIndex: 0,
-    },
-
-    // All the classes being used in the plugin are defined here.
-    classes: {
-      wrapper: pluginName,
-      handle: pluginName + '-handle',
-      search: pluginName + '-search',
-      listWrapper: pluginName + '-listWrapper',
-      element: pluginName + '-element',
-      trigger: pluginName + '-trigger',
-      selected: pluginName + '-selected',
-      highlighted: pluginName + '-highlighted',
-      searchable: pluginName + '-searchable',
-      addElement: pluginName + '-addElement',
-    },
-
-    // All methods that the plugin supports are bellow.
-    // Methods are passed as the first argument the jQuery element.
-    methods: {
-      search: search,
-      select: select,
-      isOpen: isOpen,
-      setValue: setValue,
-      hide: hide,
-      show: show,
-      destroy: destroy,
-    },
-  };
-
-  /**
-   * Creates a new searchSelect on the matched elements.
-   *
-   * @param  {Object} options Optional. Overwrite the default options provided
-   *                            in $.spaceSwitcher.options;
-   * @param  {Object} classes Optional. Overwrite the default classes provided
-   *                            in $.spaceSwitcher.classes;
-   * @return {jQuery}
-   */
-  $.fn[pluginName] = function init_jquery_plugin (options, classes) {
-    // If the first argument is a string, treat this as a method name.
-    if (typeof options == 'string') {
-      if (!(options in $[pluginName].methods)) {
-        throw new Error('[$.' + pluginName + '] Unknown method `' + options + '`');
-      }
-      var args = toArray(arguments);
-      return this.each(function () {
-        var tmp_args = toArray(args);
-        tmp_args[0] = $(this);
-        $[pluginName].methods[options].apply(null, tmp_args);
-      });
-    };
-
-    // Apply the plugin on every selected element.
-    return this.each(function init () {
-      var $this = $(this);
-
-      // Extend arguments with defaults.
-      var opt = $.extend(true, {}, $[pluginName].options, options);
-      var cls = $.extend(true, {}, $[pluginName].classes, classes);
-
-      var data = opt.data;
-
-      // Don't apply the plugin if it has already been initialized.
-      if ($this.data(infoName)) { return; }
-
-      // If no data is passed, try to auto-generate it.
-      if (!data) {
-        if (this.tagName.toLowerCase() != 'select') {
-          throw new Error('[$.' + pluginName + '] Invalid data object and target element is not a <select> tag');
-        }
-        data = $this.find('option').get().map(function (elem, index) {
-          if (elem.getAttribute('selected') !== null) {
-            opt.selectedIndex = index;
-          }
-          return [elem.getAttribute('value'), elem.innerHTML];
-        });
-      } else {
-        data = data.map(function (option) {
-          if (Array.isArray(option)) { return option; }
-          return [option, option];
-        });
-      }
-
-      // input[type="search"] has huge style limitations, so we'll go the classic way.
-      var $searchField = jqElement('input').attr({type:'text'});
-      var $trigger = jqElement('span').addClass(cls.trigger).addClass('icon-chevron-down');
-      var $search = jqElement('span').addClass(cls.search).append($searchField, $trigger);
-
-      var $listWrapper = jqElement('div').addClass(cls.listWrapper);
-
-      var $wrapper = jqElement('span');
-      $wrapper.addClass(cls.wrapper).append($search).append($listWrapper);
-
-      // Build options.
-      data.forEach(function (option, index) {
-        var value = option[0] !== null ? option[0] : option[1];
-        $listWrapper.append(
-          jqElement('div').
-            data('value', value).
-            data('index', index).
-            addClass(cls.element).
-            addClass(cls.searchable).
-            html(option[1])
-        );
-      });
-
-      $wrapper.insertAfter($this);
-      opt.hideTarget && $this.hide();
-
-      // Save info.
-      $this.
-        addClass(cls.handle).
-        data(infoName, {
-          events: {},
-          options: opt,
-          classes: cls,
-          wrapper: $wrapper,
-          searchField: $searchField,
-          trigger: $trigger,
-          search: $search,
-          listWrapper: $listWrapper,
-          searchable: $listWrapper.find('.' + cls.searchable),
-          addElements: $(),
-        });
-
-      // Post Setup.
-      addSearchEvents($this);
-      addDisplayEvents($this);
-      hide($this, true);
-      setValue($this, opt.selectedIndex, true);
-      select($this, opt.selectedIndex);
-    });
-
-  };
-
-  /**
-   * Revers back to the state before the plugin was used.
-   * @param  {jQuery} $elem
-   * @return {jQuery}
-   */
-  function destroy ($elem) {
-    var info = $elem.data(infoName);
-
-    // Detach events.
-    for (var name in info.events) {
-      detach_event($elem, name);
-    }
-
-    // Remove and restore elements.
-    info.wrapper.remove();
-    $elem.show();
-
-    // Reset the data object.
-    $elem.removeData(infoName);
-
-    return $elem;
-  }
-
-  /**
-   * Attach an event to an element.
-   * This keeps track of all events for cleanup purposes.
-   *
-   * @param {jQuery}    $elem The target root $elem.
-   * @param  {String}   name
-   * @param  {jQuery}   $target The element you want to attach the event to.
-   * @param  {String}   eventType
-   * @param  {Function} callback
-   * @return {jQuery} Returns back the target
-   */
-  function attach_event ($elem, name, $target, eventType, callback) {
-    if (arguments.length < 5) {
-      throw new Error('[$.' + pluginName + '.attach_event()] Too few arguments: ' +
-                      arguments.length);
-    }
-
-    var info = $elem.data(infoName);
-
-    if (name in info.events) {
-      console.warn('[$.' + pluginName + '.attach_event()] Overwriting event: ' + name);
-      detach_event($elem, name);
-    }
-
-    $target.on(eventType, callback);
-    info.events[name] = [$target, eventType, callback];
-
-    return $target;
-  }
-
-  /**
-   * Remove an event attached with attach_event().
-   * @param  {jQuery} $elem
-   * @param  {String} name
-   * @return {jQuery} Returns back the element
-   */
-  function detach_event ($elem, name) {
-    var info = $elem.data(infoName);
-
-    if (!info.events[name]) { return; }
-
-    info.events[name][0].off(info.events[name][1], info.events[name][2]);
-
-    return info.events[name][0];
-  }
-
-  /**
-   * Checks to see if the menu is open/visible.
-   * @param  {jQuery}  $elem
-   * @return {Boolean}
-   */
-  function isOpen ($elem) {
-    var info = $elem.data(infoName);
-    return info.listWrapper.is(':visible');
-  }
-
-  /**
-   * Display the menu.
-   * @param  {jQuery} $elem
-   * @param  {Boolean} instant=false Whether to animate or just .show();
-   * @return {jQuery}
-   */
-  function show ($elem, instant) {
-    // Check if the element exists and it's attached to the DOM.
-    if (!$elem || !$.contains(document, $elem[0])) { return; }
-
-    instant = !!instant;
-
-    $elem.trigger('show-before', [instant]);
-
-    removeHighlighted($elem);
-
-    var info = $elem.data(infoName);
-    instant ? info.listWrapper.show() : info.listWrapper.fadeIn('fast');
-    $elem.addClass(info.options.openClass);
-    var offset = $elem.offset();
-    info.listWrapper.css({
-      position: 'absolute',
-      top: info.searchField.outerHeight(),
-      left: 0,
-    });
-
-    select($elem, $elem[0].selectedIndex);
-
-    $elem.trigger('show-after', [instant]);
-
-    return $elem;
-  }
-
-  /**
-   * Hide the menu.
-   * @param  {jQuery} $elem
-   * @param  {Boolean} instant=false Whether to animate or just .hide();
-   * @return {jQuery}
-   */
-  function hide ($elem, instant) {
-    // Check if the element exists and it's attached to the DOM.
-    if (!$elem || !$.contains(document, $elem[0])) { return; }
-
-    instant = !!instant;
-
-    $elem.trigger('hide-before', [instant]);
-
-    var info = $elem.data(infoName);
-    instant ? info.listWrapper.hide() : info.listWrapper.fadeOut('fast');
-    $elem.removeClass(info.options.openClass);
-    setValue($elem, $elem[0].selectedIndex, true);
-
-    $elem.trigger('hide-after', [instant]);
-
-    return $elem;
-  }
-
-  /**
-   * Selects an Element name by an index.
-   * @param  {jQuery} $elem
-   * @param  {Number} index
-   * @return {jQuery}
-   */
-  function select ($elem, index, noScroll) {
-    $elem.trigger('select-before', [index]);
-
-    var info = $elem.data(infoName);
-    index = wrapAround(index, info.searchable.length);
-    var $selected = info.searchable.
-                          removeClass(info.classes.selected).
-                          eq(index).
-                          addClass(info.classes.selected);
-    !noScroll && $selected[0].scrollIntoView(false);
-    info.selected = index;
-
-    $elem.trigger('select-after', [index]);
-
-    return $elem;
-  }
-
-  /**
-   * Sets the value of the given element.
-   * @param {jQuery} $elem
-   * @param {Number} index
-   * @param {Boolean} noHide
-   */
-  function setValue ($elem, index, noHide) {
-    $elem.trigger('setValue-before', [index]);
-
-    var info = $elem.data(infoName);
-    index = wrapAround(index, info.searchable.length);
-    var $target = info.searchable.eq(index);
-
-    $elem.val($target.data('value'));
-    info.searchField.val($target.html());
-
-    !noHide && info.searchField[0].focus();
-    !noHide && hide($elem);
-
-    $elem.trigger('change');
-    $elem.trigger('setValue-after', [index]);
-
-    return $elem;
-  }
-
-  /**
-   * Makes sure that a value wraps around a 0 based interval.
-   * Used for navigating up/down.
-   *
-   * @param  {Number} value
-   * @param  {Number} interval
-   * @return {Number}
-   */
-  function wrapAround (value, interval) {
-    return value < 0 ? interval - 1 : value % interval;
-  }
-
-  /**
-   * Adds show/hide events
-   * @param {jQUery} $elem
-   */
-  function addDisplayEvents ($elem) {
-    var info = $elem.data(infoName);
-
-    attach_event($elem, 'trigger-show-options', info.trigger, 'click.show-options',
-      function on_click (event) {
-        show($elem);
-        info.searchField[0].focus();
-      });
-
-    attach_event($elem, 'search-show-options', info.searchField, 'focus.show-options',
-      function on_focus (event) {
-        show($elem);
-      });
-
-    // Clicking outside of the menu, closes the menu.
-    attach_event($elem, 'global-close', $(document), 'click.closeMenu',
-      function on_close_menu (event) {
-        var $target = $(event.target);
-        while ($target && $target.length > 0) {
-          if ($target.is(info.wrapper) || $target.is($elem)) {
-            return;
-          }
-          $target = $target.parent();
-        }
-        hide($elem);
-      });
-  }
-
-  /**
-   * Add the search events to the textfield
-   * @param {jQuery} $elem
-   */
-  function addSearchEvents ($elem) {
-    var info = $elem.data(infoName);
-
-    // Search events.
-    attach_event($elem, 'search', info.searchField, 'keyup.search', function on_search (event) {
-      var val = $(this).val();
-
-      if (searchExcludeKeys.indexOf(event.keyCode) > -1) { return; }
-
-      // Apparently CMD+delete does not re-trigger show, so just re-check for it.
-      if (val.length == 0) {
-        removeHighlighted($elem);
-        info.searchable.show();
-        return;
-      }
-
-      search($elem, val);
-    });
-
-    // Meta events (e.g. UP/DOWN/ENTER/etc).
-    attach_event($elem, 'search-actions', info.wrapper, 'keydown.search-actions',
-      function on_search_actions (event) {
-        var stopEvent = true;
-
-        switch (event.keyCode) {
-          case KEYS.ENTER: setValue($elem, info.selected); break;
-          case KEYS.UP:
-          case KEYS.DOWN:
-            if (!isOpen($elem)) {
-              show($elem);
-              select($elem, 0);
-              return;
-            }
-
-            var $visible = info.searchable.filter(':visible');
-            // Convert from global to visible index.
-            var index = $visible.index(info.searchable.eq(info.selected));
-            index = wrapAround(index + (event.keyCode == KEYS.UP ? -1 : 1), $visible.length);
-
-            // Convert from visible to global index.
-            select($elem, info.searchable.index($visible.eq(index)), true);
-
-            // Scroll into view the next element in line, if it exists.
-            var viz_index = Math.min(index + 1, $visible.length - 1);
-            $visible[viz_index].scrollIntoView(false);
-            break;
-          default:
-            stopEvent = false;
-        }
-
-        if (stopEvent) {
-          event.preventDefault();
-          event.stopPropagation();
-          event.stopImmediatePropagation();
-        }
-      });
-
-    attach_event($elem, 'element-hover', info.searchable, 'mouseenter',
-      function on_searchable_hover (event) {
-        select($elem, $(this).data('index'), true);
-      });
-
-    attach_event($elem, 'element-click', info.searchable, 'click',
-      function on_searchable_click (event) {
-        setValue($elem, $(this).data('index'));
-      });
-  }
-
-  /**
-   * Removes all the highlighted tags as a result of the search function.
-   * @param  {jQuery} $elem
-   * @return {jQuery}
-   */
-  function removeHighlighted ($elem) {
-
-    var info = $elem.data(infoName);
-
-    // Remove old matches.
-    info.searchable.find('.' + info.classes.highlighted).each(function () {
-      $(this).replaceWith(this.innerHTML);
-    });
-
-    return $elem;
-  }
-
-  /**
-   * Search through the elements for the given string and highlighted the matches.
-   * Side-effect: selects the first element in the remaining set.
-   *
-   * @param  {jQuery} $elem
-   * @param  {String} str
-   * @return {jQuery}
-   */
-  function search ($elem, str) {
-    var info = $elem.data(infoName);
-
-    $elem.trigger('search-before', [str]);
-    show($elem);
-    str = str.toLowerCase();
-
-    // Highlight new matches.
-    info.searchable.each(function highlight_matches () {
-      var $this = $(this);
-      var text = this.textContent;
-      var begin = text.toLowerCase().indexOf(str);
-
-      if (begin === -1) {
-        $this.hide();
-        return;
-      }
-
-      var end = begin + str.length;
-
-      $this.show();
-      this.innerHTML = text.slice(0, begin) +
-                      '<span class="' + info.classes.highlighted + '">' +
-                        text.slice(begin, end) +
-                      '</span>' +
-                      text.slice(end);
-    });
-
-    // Select first visible element.
-    select($elem, info.searchable.index(info.searchable.filter(':visible').eq(0)));
-
-    $elem.trigger('search-after', [str]);
-
-    return $elem;
-  }
-
-  /**
-   * Create a new jQuery element of specified type.
-   * @param {String} type
-   * @return {jQuery}
-   */
-  function jqElement (type) {
-    return $(document.createElement(type));
-  }
-
-  /**
-   * Either clones an array or converts form arguments to an actual array.
-   * Note: No deep-clone
-   *
-   * @param  {Array|Object} obj
-   * @return {Array}
-   */
-  function toArray (obj) {
-    return Array.prototype.slice.call(obj);
-  }
-
-})(jQuery);
-
-
-
-/*
- * This file is part of KAT, the KWARC Annotation Tool, 
- * see https://github.com/KWARC/KAT
- * 
- * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
- * 
- * KAT is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * KAT is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with KAT.  If not, see <http://www.gnu.org/licenses/>
- */
-
-/**
- * A singleton containing all the configuration parameters that can be tweaked.
- *
- * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
- * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
- */
-
-FlancheJs.defineObject("kat.util.ConfigManager", {
-
-  init: function () {
-
-  },
-
-  properties : {
-    //the title displayed in the annotation form
-    newAnnotationFormTitle : "Add new annotation"
-  }
-})
-/*
- * This file is part of KAT, the KWARC Annotation Tool, 
- * see https://github.com/KWARC/KAT
- * 
- * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
- * 
- * KAT is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * KAT is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with KAT.  If not, see <http://www.gnu.org/licenses/>
- */
-
-/*
- * KAT Constants.
- * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
- * @author <a href="mailto:v.merticariu@jacobs-university,de">Vlad Merticariu</a>
- */
-
-FlancheJs.defineObject("kat.Constants", {
-  init   : function () {
-
-  },
-  statics: {
-    TextPreprocessor: {
-      IdPrefix          : "kat",
-      Selector          : "body",
-      SpanClass         : "kat-counter",
-      AnnotationLinkText: "Annotate!"
-    },
-    Display         : {
-      SpecialClass       : "kat-annotated",
-      Triger             : "hover",
-      AnnotationIdPrefix : "kat-annotation",
-      AnnotationFormTitle: "Add Annotation",
-      EditAnnotationFormTitle: "Edit annotation",
-      SelectOntologyText : "Select an ontology",
-      SelectConceptText  : "Select a concept",
-      FormText           : "Fill in the following form",
-      EditFormText       : "",
-      CPanelTitle        : "KAT Control Panel"
-    },
-    Form            : {
-      FieldPrefix: "field-id-",
-      FieldWrapPrefix: "field-wrap-id-",
-      FieldWrapClass: "kat-form-field-wrapper",
-      FieldClass: "kat-form-field",
-      ValuesSeparator: " | "
-    }
-  }
-});
-
-
-
 /*
  * This file is part of KAT, the KWARC Annotation Tool, 
  * see https://github.com/KWARC/KAT
@@ -2224,6 +1553,44 @@ FlancheJs.defineObject("kat.util.Util", {
     },
   }
 
+})
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
+/**
+ * A singleton containing all the configuration parameters that can be tweaked.
+ *
+ * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
+ * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
+ */
+
+FlancheJs.defineObject("kat.util.ConfigManager", {
+
+  init: function () {
+
+  },
+
+  properties : {
+    //the title displayed in the annotation form
+    newAnnotationFormTitle : "Add new annotation"
+  }
 })
 /*
  * This file is part of KAT, the KWARC Annotation Tool, 
@@ -2321,6 +1688,67 @@ FlancheJs.defineClass("kat.util.XMLDoc", {
   }
 
 })
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
+/*
+ * KAT Constants.
+ * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
+ * @author <a href="mailto:v.merticariu@jacobs-university,de">Vlad Merticariu</a>
+ */
+
+FlancheJs.defineObject("kat.Constants", {
+  init   : function () {
+
+  },
+  statics: {
+    TextPreprocessor: {
+      IdPrefix          : "kat",
+      Selector          : "body",
+      SpanClass         : "kat-counter",
+      AnnotationLinkText: "Annotate!"
+    },
+    Display         : {
+      SpecialClass       : "kat-annotated",
+      Triger             : "hover",
+      AnnotationIdPrefix : "kat-annotation",
+      AnnotationFormTitle: "Add Annotation",
+      EditAnnotationFormTitle: "Edit annotation",
+      SelectOntologyText : "Select an ontology",
+      SelectConceptText  : "Select a concept",
+      FormText           : "Fill in the following form",
+      EditFormText       : "",
+      CPanelTitle        : "KAT Control Panel"
+    },
+    Form            : {
+      FieldPrefix: "field-id-",
+      FieldWrapPrefix: "field-wrap-id-",
+      FieldWrapClass: "kat-form-field-wrapper",
+      FieldClass: "kat-form-field",
+      ValuesSeparator: " | "
+    }
+  }
+});
+
+
+
 
 
 
@@ -2493,687 +1921,6 @@ FlancheJs.defineClass("kat.preprocessor.TextPreprocessor", {
  */
 
 /**
- * Parses a field of type checkboxes outputing html.
- *
- * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
- * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
- */
-
-FlancheJs.defineClass("kat.input.form.fieldparser.CheckboxesParser", {
-
-  implements: ["kat.input.form.fieldparser"],
-
-  init: function () {
-
-  },
-
-  methods: {
-    canParse: function (xmlField) {
-      if (xmlField.getAttribute("type") == "checkboxes") {
-        return true;
-      }
-      return false;
-    },
-
-    parse: function (xmlField) {
-      var ret = "";
-      //check if there is a number of instances of the field required
-      var atLeast = 0;
-      var atMost = 0;
-      var number = xmlField.getXmlDoc().getElementsByTagName("number");
-      if(number.length){
-        atLeast = parseInt(number[0].getAttribute("atleast"));
-        atMost = parseInt(number[0].getAttribute("atmost"));
-      }
-      var options = xmlField.getXmlDoc().getElementsByTagName("option");
-      if (!options) {
-        throw Error("Error in the Annotation Ontology. No list of options provided for the checkboxes field!");
-      }
-      var optionsHtml = _.map(options,function (value) {
-        //check if the option is default
-        var isDefault = value.getAttribute("default") ? "checked " : "";
-        //option value is mandatory
-        var val = value.getElementsByTagName("value");
-        if(!val){
-          throw Error("Error in the Annotation Ontology. All options must have a value!");
-        }
-        val = val[0].textContent
-        //check if a label exists, if not, use the value
-        var label = value.getElementsByTagName("label").length ? value.getElementsByTagName("label")[0].textContent : val;
-        //add documentation if present
-        var documentation = value.getElementsByTagName("documentation").length ? "data-documentation='" + value.getElementsByTagName("documentation")[0].textContent + "'" : "";
-        var checkBox = "<label class='checkbox'>" + "<input name='" + xmlField.getAttribute("name") + "' type='checkbox' value='" + val + "' " + isDefault + documentation + ">" + label + "</input>";
-        return checkBox + "</label>"
-      }).join("\n");     
-      //if no requirements, append to template
-      if(!atLeast){
-        var documentation = xmlField.getXmlDoc().getElementsByTagName("documentation").length ? xmlField.getXmlDoc().getElementsByTagName("documentation")[0].textContent : "";
-        if(documentation != ""){
-          documentation = "data-documentation='" + documentation + "'";
-        }
-         ret = this.template
-        .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-0")
-        .replace(/{label}/g, xmlField.getAttribute("label") != null ? xmlField.getAttribute("label") : xmlField.getAttribute("name"))
-        .replace(/{options}/g, optionsHtml)
-        .replace(/{documentation}/g, documentation)
-      }
-      //if requirements, append as many as needed
-      for(var i = 0; i < atLeast; i++){
-        var documentation = xmlField.getXmlDoc().getElementsByTagName("documentation").length ? xmlField.getXmlDoc().getElementsByTagName("documentation")[0].textContent : "";
-        if(documentation != ""){
-          documentation = "data-documentation='" + documentation + "'";
-        }
-         ret += this.template
-        .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-" + i)
-        .replace(/{label}/g, xmlField.getAttribute("label") != null ? xmlField.getAttribute("label") : xmlField.getAttribute("name"))
-        .replace(/{options}/g, optionsHtml)
-        .replace(/{documentation}/g, documentation)
-      }
-      //adding a wrap over the added fields
-      var dataAtMost = "";
-      if(atMost){
-        dataAtMost = "data-atmost='"+ atMost +"'";
-      }
-      var wrapperClass = "class='" + kat.Constants.Form.FieldWrapClass + "'";
-      var label = xmlField.getXmlDoc().getElementsByTagName("label").length ? xmlField.getXmlDoc().getElementsByTagName("label")[0].textContent : xmlField.getAttribute("name");
-      ret = "<div " + wrapperClass + dataAtMost + " id='" + kat.Constants.Form.FieldWrapPrefix + xmlField.getAttribute("name") + "'>"+ "<label class='control-label'>" + label + "</label>"  + ret + "</div>";
-      return ret;
-    }
-  },
-
-  statics: {
-    template: "<div class='control-group'><div class='controls'><div {documentation} id='{id}'>{options}</div></div></div>"
-  }
-
-})
-
-
-/*
- * This file is part of KAT, the KWARC Annotation Tool, 
- * see https://github.com/KWARC/KAT
- * 
- * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
- * 
- * KAT is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * KAT is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with KAT.  If not, see <http://www.gnu.org/licenses/>
- */
-
-/**
- * A field parser parses an annotation:field into an html string. This trait serves only as
- * an interface that the extending classes follow
- *
- * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
- * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
- */
-
-FlancheJs.defineTrait("kat.input.form.fieldparser.FieldParser", {
-  needs: {
-    canParse: Function,
-    parse   : Function
-  }
-})
-/*
- * This file is part of KAT, the KWARC Annotation Tool, 
- * see https://github.com/KWARC/KAT
- * 
- * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
- * 
- * KAT is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * KAT is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with KAT.  If not, see <http://www.gnu.org/licenses/>
- */
-
-/**
- * Parses the fields of type reference
- *
- * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
- * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
- */
-
-FlancheJs.defineClass("kat.input.form.fieldparser.ReferenceParser", {
-
-  implements: ["kat.input.form.fieldparser"],
-
-  init: function (annotationRegistry) {
-    this._annotationRegistry = annotationRegistry;
-  },
-
-  methods: {
-    canParse: function (xmlField) {
-      if (xmlField.getAttribute("type") == "reference") {
-        return true;
-      }
-      return false;
-    },
-
-    parse: function (xmlField) {
-      var documentation = xmlField.getXmlDoc().getElementsByTagName("documentation").length ? xmlField.getXmlDoc().getElementsByTagName("documentation")[0].textContent : "";
-      if (documentation != "") {
-        documentation = "data-documentation='" + documentation + "'";
-      }
-      var referencedType = xmlField.getXmlDoc().getElementsByTagName("referencedType").length ? xmlField.getXmlDoc().getElementsByTagName("referencedType")[0].textContent : "";
-      if (referencedType == "") {
-        throw Error("Error in the Annotation Ontology. No referencedType provided for the reference field!");
-      }
-      var name = "name='" + xmlField.getAttribute("name") + "'";
-      var annotations = this._annotationRegistry.getAnnotationsForConcept(referencedType);
-      var options = "";
-      for (var i = 0; i < annotations.length; i++) {
-        var annotationText = annotations[i].getText();
-        options += '<option data-annotation-id="' + annotations[i].getId() + '" value="' + annotationText["text"] + '">' + annotationText["trimmedText"] + '</option>\n';
-      }
-      if (options == "") {
-        options = '<option value="undefined">No annotation found</option>';
-      }
-      var ret = this.template
-        .replace(/{name}/g, name)
-        .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-0")
-        .replace(/{label}/g, xmlField.getAttribute("label") != null ? xmlField.getAttribute("label") : xmlField.getAttribute("name"))
-        .replace(/{documentation}/g, documentation)
-        .replace(/{options}/g, options);
-
-      var wrapperClass = "class='" + kat.Constants.Form.FieldWrapClass + "'";
-      var label = xmlField.getXmlDoc().getElementsByTagName("label").length ? xmlField.getXmlDoc().getElementsByTagName("label")[0].textContent : xmlField.getAttribute("name");
-      ret = "<div " + wrapperClass + " id='" + kat.Constants.Form.FieldWrapPrefix + xmlField.getAttribute("name") + "'>" + "<label class='control-label'>" + label + "</label>" + ret + "</div>";
-      return ret;
-    }
-  },
-
-  internals: {
-    annotationRegistry: null
-  },
-
-  statics: {
-    template: "<div class='control-group'> <div class='controls'><select class='reference-field' {name} {documentation} required='true' id='{id}'>{options}</select></div></div>"
-  }
-
-})
-
-/*
- * This file is part of KAT, the KWARC Annotation Tool, 
- * see https://github.com/KWARC/KAT
- * 
- * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
- * 
- * KAT is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * KAT is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with KAT.  If not, see <http://www.gnu.org/licenses/>
- */
-
-/**
- * Describes an annotation that was collected from a user and can be saved and transported over
- * network
- *
- * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
- * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
- */
-
-FlancheJs.defineClass("kat.input.form.fieldparser.SelectParser", {
-
-  implements: ["kat.input.form.fieldparser"],
-
-  init: function () {
-
-  },
-
-  methods: {
-    canParse: function (xmlField) {
-      if (xmlField.getAttribute("type") == "select") {
-        return true;
-      }
-      return false;
-    },
-
-    parse: function (xmlField) {
-      var ret = "";
-      //check if there is a number of instances of the field required
-      var atLeast = 0;
-      var atMost = 0;
-      var number = xmlField.getXmlDoc().getElementsByTagName("number");
-      if(number.length){
-        atLeast = parseInt(number[0].getAttribute("atleast"));
-        atMost = parseInt(number[0].getAttribute("atmost"));
-      }
-      var options = xmlField.getXmlDoc().getElementsByTagName("option");
-      if (!options) {
-        throw Error("Error in the Annotation Ontology. No list of options provided for the select field!");
-      }
-      var optionsHtml = _.map(options,function (value) {
-        //check if the option is default
-        var isDefault = value.getAttribute("default") ? "default='true'" : "";
-        //option value is mandatory
-        var val = value.getElementsByTagName("value");
-        if(!val.length){
-          throw Error("Error in the Annotation Ontology. All options must have a value!");
-        }
-        val = val[0].textContent
-        //check if a label exists, if not, use the value
-        var label = value.getElementsByTagName("label").length ? value.getElementsByTagName("label")[0].textContent : val;
-        //add documentation if present
-        var documentation = value.getElementsByTagName("documentation").length ? "data-documentation='" + value.getElementsByTagName("documentation")[0].textContent + "'" : "";
-        return "<option value='" + val + "' " + isDefault + documentation + ">" + label + "</option>"
-      }).join("\n");     
-      //if no requirements, append to template
-      if(!atLeast){
-        var documentation = xmlField.getXmlDoc().getElementsByTagName("documentation").length ? xmlField.getXmlDoc().getElementsByTagName("documentation")[0].textContent : "";
-        if(documentation != ""){
-          documentation = "data-documentation='" + documentation + "'";
-        }
-        var name="name='"+xmlField.getAttribute("name")+"'";
-         ret = this.template
-        .replace(/{name}/g, name)
-        .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-0")
-        .replace(/{label}/g, xmlField.getAttribute("label") != null ? xmlField.getAttribute("label") : xmlField.getAttribute("name"))
-        .replace(/{options}/g, optionsHtml)
-        .replace(/{documentation}/g, documentation)
-        .replace(/{required}/g, "");
-      }
-      //if requirements, append as many as needed
-      for(var i = 0; i < atLeast; i++){
-        var documentation = xmlField.getXmlDoc().getElementsByTagName("documentation").length ? xmlField.getXmlDoc().getElementsByTagName("documentation")[0].textContent : "";
-        if(documentation != ""){
-          documentation = "data-documentation='" + documentation + "'";
-        }
-         var name="name='"+xmlField.getAttribute("name")+"'";
-         ret += this.template
-        .replace(/{name}/g, name)
-        .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-" + i)
-        .replace(/{label}/g, xmlField.getAttribute("label") != null ? xmlField.getAttribute("label") : xmlField.getAttribute("name"))
-        .replace(/{options}/g, optionsHtml)
-        .replace(/{documentation}/g, documentation)
-        .replace(/{required}/g, "required");
-      }
-      //adding a wrap over the added fields
-      var dataAtMost = "";
-      if(atMost){
-        dataAtMost = "data-atmost='"+ atMost +"'";
-      }
-      var wrapperClass = "class='" + kat.Constants.Form.FieldWrapClass + "'";
-      var label = xmlField.getXmlDoc().getElementsByTagName("label").length ? xmlField.getXmlDoc().getElementsByTagName("label")[0].textContent : xmlField.getAttribute("name");
-      ret = "<div " + wrapperClass + dataAtMost + " id='" + kat.Constants.Form.FieldWrapPrefix + xmlField.getAttribute("name") + "'>"+ "<label class='control-label'>" + label + "</label>"  + ret + "</div>";
-      return ret;
-    }
-  },
-
-  statics: {
-    template: "<div class='control-group'> <div class='controls'><select {name} {documentation} {required} id='{id}'>{options}</select></div></div>"
-  }
-
-})
-/*
- * This file is part of KAT, the KWARC Annotation Tool, 
- * see https://github.com/KWARC/KAT
- * 
- * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
- * 
- * KAT is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * KAT is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with KAT.  If not, see <http://www.gnu.org/licenses/>
- */
-
-/**
- * Field processor for text fields. For more details see @link{kat.input.form.fieldparser.FieldParser}
- *
- * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
- * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
- */
-
-FlancheJs.defineClass("kat.input.form.fieldparser.TextAreaParser", {
-  //implements: [kat.input.form.fieldparser],
-
-  init: function () {
-
-  },
-
-  methods: {
-    canParse: function (xmlField) {
-      if (xmlField.getAttribute("type") == "textarea") {
-        return true;
-      }
-      return false;
-    },
-
-    parse: function (xmlField) {
-      var ret = "";
-      //check if there is a number of instances of the field required
-      var atLeast = 0;
-      var atMost = 0;
-      var number = xmlField.getXmlDoc().getElementsByTagName("number");
-      if(number.length){
-        atLeast = parseInt(number[0].getAttribute("atleast"));
-        atMost = parseInt(number[0].getAttribute("atmost"));
-      }
-      //if no requirements, append the template
-      if(!atLeast){
-        var name="name='"+xmlField.getAttribute("name")+"'";
-        ret = this.template
-        .replace(/{name}/g, name)
-        .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-0")
-        .replace(/{label}/g, xmlField.getXmlDoc().getElementsByTagName("label").length ? xmlField.getXmlDoc().getElementsByTagName("label")[0].textContent : xmlField.getAttribute("name"))
-        .replace(/{value}/g, xmlField.getXmlDoc().getElementsByTagName("default").length ? xmlField.getXmlDoc().getElementsByTagName("default")[0].textContent : "")
-        .replace(/{required}/g, "false")
-        .replace(/{validation}/g, xmlField.getXmlDoc().getElementsByTagName("validation").length ? xmlField.getXmlDoc().getElementsByTagName("validation")[0].textContent : "")
-        .replace(/{documentation}/g, xmlField.getXmlDoc().getElementsByTagName("documentation").length ? xmlField.getXmlDoc().getElementsByTagName("documentation")[0].textContent : "")
-      }
-      //if any requirements, append the minimum required numbers of instances
-      for(var i = 0; i < atLeast; i++){
-        var name="name='"+xmlField.getAttribute("name")+"'";
-        ret += this.template
-        .replace(/{name}/g, name)
-        .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-" + i)
-        .replace(/{label}/g, xmlField.getXmlDoc().getElementsByTagName("label").length != null ? xmlField.getXmlDoc().getElementsByTagName("label")[0].textContent : xmlField.getAttribute("name"))
-        .replace(/{value}/g, xmlField.getXmlDoc().getElementsByTagName("default").length ? xmlField.getXmlDoc().getElementsByTagName("default")[0].textContent : "")
-        .replace(/{required}/g, "true")
-        .replace(/{validation}/g, xmlField.getXmlDoc().getElementsByTagName("validation").length ? xmlField.getXmlDoc().getElementsByTagName("validation")[0].textContent : "")
-        .replace(/{documentation}/g, xmlField.getXmlDoc().getElementsByTagName("documentation").length ? xmlField.getXmlDoc().getElementsByTagName("documentation")[0].textContent : "")
-      }
-      
-      //adding a wrap over the added fields
-      var dataAtMost = "";
-      if(atMost){
-        dataAtMost = "data-atmost='"+ atMost +"'";
-      }
-      var label = xmlField.getXmlDoc().getElementsByTagName("label").length ? xmlField.getXmlDoc().getElementsByTagName("label")[0].textContent : xmlField.getAttribute("name");
-      var wrapperClass = "class='" + kat.Constants.Form.FieldWrapClass + "'";
-      ret = "<div " + wrapperClass + dataAtMost + " id='" + kat.Constants.Form.FieldWrapPrefix + xmlField.getAttribute("name") + "'>"+ "<label class='control-label'>" + label + "</label>" + ret + "</div>";
-      return ret;
-    }
-  },
-
-  statics: {
-    template: "<div class='control-group'><div class='controls'><textarea class='" + kat.Constants.Form.FieldClass + "' name='{name}' data-documentation='{documentation}' data-validation='{validation}' id='{id}' required='{required}'>{value}</textarea></div></div>"
-  }
-
-});
-
-/*
- * This file is part of KAT, the KWARC Annotation Tool, 
- * see https://github.com/KWARC/KAT
- * 
- * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
- * 
- * KAT is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * KAT is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with KAT.  If not, see <http://www.gnu.org/licenses/>
- */
-
-/**
- * Field processor for text fields. For more details see @link{kat.input.form.fieldparser.FieldParser}
- *
- * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
- * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
- */
-
-FlancheJs.defineClass("kat.input.form.fieldparser.TextFieldParser", {
-  //implements: [kat.input.form.fieldparser],
-
-  init: function () {
-
-  },
-
-  methods: {
-    canParse: function (xmlField) {
-      if (xmlField.getAttribute("type") == "text") {
-        return true;
-      }
-      return false;
-    },
-
-    parse: function (xmlField) {
-      var ret = "";
-      //check if there is a number of instances of the field required
-      var atLeast = 0;
-      var atMost = 0;
-      var number = xmlField.getXmlDoc().getElementsByTagName("number");
-      if(number.length){
-        atLeast = parseInt(number[0].getAttribute("atleast"));
-        atMost = parseInt(number[0].getAttribute("atmost"));
-      }
-      //if no requirements, append the template
-      if(!atLeast){
-        var name="name='"+xmlField.getAttribute("name")+"'";
-        ret = this.template
-        .replace(/{name}/g, name)
-        .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-0")
-        .replace(/{label}/g, xmlField.getXmlDoc().getElementsByTagName("label").length ? xmlField.getXmlDoc().getElementsByTagName("label")[0].textContent : xmlField.getAttribute("name"))
-        .replace(/{value}/g, xmlField.getXmlDoc().getElementsByTagName("default").length ? xmlField.getXmlDoc().getElementsByTagName("default")[0].textContent : "")
-        .replace(/{required}/g, "false")
-        .replace(/{validation}/g, xmlField.getXmlDoc().getElementsByTagName("validation").length ? xmlField.getXmlDoc().getElementsByTagName("validation")[0].textContent : "")
-        .replace(/{documentation}/g, xmlField.getXmlDoc().getElementsByTagName("documentation").length ? xmlField.getXmlDoc().getElementsByTagName("documentation")[0].textContent : "")
-      }
-      //if any requirements, append the minimum required numbers of instances
-      for(var i = 0; i < atLeast; i++){
-        var name="name='"+xmlField.getAttribute("name")+"'";
-        ret += this.template
-        .replace(/{name}/g, name)
-        .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-" + i)
-        .replace(/{label}/g, xmlField.getXmlDoc().getElementsByTagName("label").length ? xmlField.getXmlDoc().getElementsByTagName("label")[0].textContent : xmlField.getAttribute("name"))
-        .replace(/{value}/g, xmlField.getXmlDoc().getElementsByTagName("default").length ? xmlField.getXmlDoc().getElementsByTagName("default")[0].textContent : "")
-        .replace(/{required}/g, "true")
-        .replace(/{validation}/g, xmlField.getXmlDoc().getElementsByTagName("validation").length ? xmlField.getXmlDoc().getElementsByTagName("validation")[0].textContent : "")
-        .replace(/{documentation}/g, xmlField.getXmlDoc().getElementsByTagName("documentation").length ? xmlField.getXmlDoc().getElementsByTagName("documentation")[0].textContent : "")
-      }
-      var label = xmlField.getXmlDoc().getElementsByTagName("label").length ? xmlField.getXmlDoc().getElementsByTagName("label")[0].textContent : xmlField.getAttribute("name");
-      //adding a wrap over the added fields
-      var dataAtMost = "";
-      if(atMost){
-        dataAtMost = "data-atmost='"+ atMost +"'";
-      }
-      var wrapperClass = "class='" + kat.Constants.Form.FieldWrapClass + "'";
-      ret = "<div " + wrapperClass + dataAtMost + " id='" + kat.Constants.Form.FieldWrapPrefix + xmlField.getAttribute("name") + "'>" + "<label class='control-label'>" + label + "</label>" + ret + "</div>";
-      return ret;
-    }
-  },
-
-  statics: {
-    template: "<div class='control-group'> \n\
-<div class='controls'><input class='" + kat.Constants.Form.FieldClass + "' {name} data-documentation='{documentation}' data-validation='{validation}' type='text' id='{id}' value='{value}' required='{required}' /></div></div>"
-  }
-
-});
-
-/*
- * This file is part of KAT, the KWARC Annotation Tool, 
- * see https://github.com/KWARC/KAT
- * 
- * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
- * 
- * KAT is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * KAT is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with KAT.  If not, see <http://www.gnu.org/licenses/>
- */
-
-/**
- * The Field Parser Registry contains all the field parsers that are available to parse
- * an annotation field.
- *
- * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
- * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
- */
-
-FlancheJs.defineClass("kat.input.form.FieldParserRegistry", {
-  init: function (annotationRegistry) {
-    for (var parserName in kat.input.form.fieldparser) {
-      if (kat.input.form.fieldparser[parserName] instanceof Function) {
-        var parser = new kat.input.form.fieldparser[parserName](annotationRegistry);
-        this._registry.push(parser);
-      }
-    }
-  },
-
-  methods: {
-    /**
-     * Returns a parser for the given field or throws an error if one
-     * @param {kat.util.XMLDoc} xmlField the field to pe parsed
-     * @return {*}
-     */
-    getParser: function (xmlField) {
-      for (var i = 0; i < this._registry.length; i++) {
-        if (this._registry[i].canParse(xmlField) === true) {
-          return this._registry[i];
-        }
-      }
-      throw Error("No suitable field parser found for this input type" + xmlField.toString())
-    }
-  },
-
-  internals: {
-    registry: []
-  }
-})
-/*
- * This file is part of KAT, the KWARC Annotation Tool, 
- * see https://github.com/KWARC/KAT
- * 
- * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
- * 
- * KAT is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * KAT is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with KAT.  If not, see <http://www.gnu.org/licenses/>
- */
-
-/**
- * The Form class decides which fields to be displayed in the current form.
- *
- * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
- * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
- */
-
-FlancheJs.defineClass("kat.form.Form", {
-
-  /**
-   * Constructor for the class
-   * @param {kat.annotation.ConceptRegistry} conceptsRegistry a registry containing the available concepts
-   * @param {kat.annotation.AnnotationRegistry} annotationRegistry an annotation registry where the submitted annotation will be added
-   */
-  init: function (conceptsRegistry, annotationRegistry) {
-    this.$conceptsRegistry = conceptsRegistry;
-    this.$annotationRegistry = annotationRegistry;
-    this._conceptName = this.getConceptsRegistry().getAllConcepts()[0].getName();
-  },
-
-  methods: {
-    run: function () {
-
-    }
-  },
-
-  properties: {
-    conceptsRegistry  : {value: null, writable: false},
-    annotationRegistry: {value: null, writable: false}
-  },
-
-  internals: {
-    concept: null,
-
-    setConceptName: function (conceptName) {
-      this._conceptName = conceptName;
-    },
-
-    parseForm : function(){
-      var parser = new kat.form.FormParser();
-      return parser.getFields();
-    },
-
-    /**
-     * Handler for the change event on the select box component of the selector
-     */
-    registerSelectorChangeHandler: function () {
-      var self = this;
-      jQuery("#" + kat.form.Concept.KSelectorId).on("change", function () {
-        var conceptName = $(this).val();
-        self._setConceptName(conceptName);
-      });
-    }
-
-  }
-
-})
-/*
- * This file is part of KAT, the KWARC Annotation Tool, 
- * see https://github.com/KWARC/KAT
- * 
- * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
- * 
- * KAT is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * KAT is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with KAT.  If not, see <http://www.gnu.org/licenses/>
- */
-
-/**
  * A form parser can be used to parse the fields and documentation from a given concept object.
  *
  * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
@@ -3271,6 +2018,161 @@ FlancheJs.defineClass("kat.input.form.FormParser", {
       return registry.getParser(conceptField).parse(conceptField);
     }
   }
+})
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
+/**
+ * The Field Parser Registry contains all the field parsers that are available to parse
+ * an annotation field.
+ *
+ * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
+ * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
+ */
+
+FlancheJs.defineClass("kat.input.form.FieldParserRegistry", {
+  init: function (annotationRegistry) {
+    for (var parserName in kat.input.form.fieldparser) {
+      if (kat.input.form.fieldparser[parserName] instanceof Function) {
+        var parser = new kat.input.form.fieldparser[parserName](annotationRegistry);
+        this._registry.push(parser);
+      }
+    }
+  },
+
+  methods: {
+    /**
+     * Returns a parser for the given field or throws an error if one
+     * @param {kat.util.XMLDoc} xmlField the field to pe parsed
+     * @return {*}
+     */
+    getParser: function (xmlField) {
+      for (var i = 0; i < this._registry.length; i++) {
+        if (this._registry[i].canParse(xmlField) === true) {
+          return this._registry[i];
+        }
+      }
+      throw Error("No suitable field parser found for this input type" + xmlField.toString())
+    }
+  },
+
+  internals: {
+    registry: []
+  }
+})
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
+/**
+ * Describes a class that acts as a container for an annotation form and a concept selector.
+ *
+ * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
+ * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
+ */
+
+FlancheJs.defineClass("kat.form.view.FormContainer", {
+
+  /**
+   * Constructor for the class
+   * @param {String[]} fields
+   */
+  init: function (fields) {
+    this._fields = fields;
+  },
+
+  methods: {
+    /**
+     * Renders the container with both the concept selector and annotation form
+     */
+    render: function () {
+      this._createContainer();
+      this._createSelector();
+      this._createForm();
+    }
+  },
+
+  internals: {
+    fields: null,
+
+    /**
+     * Creates the concept selector
+     */
+    createSelector: function () {
+      var selector = new kat.form.view.ConceptSelector($("#" + this.KSelectorContainerId), this._form);
+      selector.render();
+    },
+
+    /**
+     * Creates the container in which the selector and annotation form will be rendered
+     */
+    createContainer: function () {
+      var template = this.KContainerTemplate.replace("id", this.KContainerId)
+        .replace("{title}", kat.util.ConfigManager.getNewAnnotationFormTitle())
+        .replace("{conceptSelectorId}", this.KSelectorContainerId)
+        .replace("{annotationFormId}", this.KAnnotationFormId);
+      $("body").append(template);
+    },
+
+    /**
+     * Creates the annotation form
+     */
+    createForm: function () {
+      var form = new kat.form.view.Form($("#" + this.KAnnotationFormId), fields);
+      form.render();
+    }
+  },
+
+  statics: {
+    KContainerId        : 'kat-form-container',
+    KSelectorContainerId: 'kat-form-concept-selector',
+    KAnnotationFormId   : 'kat-form-annotation-form',
+    KContainerTemplate  : '<div id="{id}" class="modal hide fade">' +
+      '<div class="modal-header">' +
+      '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+      '<h3>{title}</h3>' +
+      '</div>' +
+      '<div class="modal-body">' +
+      '<div id="{conceptSelectorId}"></div> ' +
+      '<div id="{annotationFormId}"></div> ' +
+      '</div>' +
+      '<div class="modal-footer"><a href="#" class="btn">Close</a><a href="#" id="kat-form-save" class="btn btn-primary">Save</a></div>' +
+      '</div>'
+  }
+
 })
 /*
  * This file is part of KAT, the KWARC Annotation Tool, 
@@ -3429,82 +2331,608 @@ FlancheJs.defineClass("kat.form.view.Form", {
  */
 
 /**
- * Describes a class that acts as a container for an annotation form and a concept selector.
+ * The Form class decides which fields to be displayed in the current form.
  *
  * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
  * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
  */
 
-FlancheJs.defineClass("kat.form.view.FormContainer", {
+FlancheJs.defineClass("kat.form.Form", {
 
   /**
    * Constructor for the class
-   * @param {String[]} fields
+   * @param {kat.annotation.ConceptRegistry} conceptsRegistry a registry containing the available concepts
+   * @param {kat.annotation.AnnotationRegistry} annotationRegistry an annotation registry where the submitted annotation will be added
    */
-  init: function (fields) {
-    this._fields = fields;
+  init: function (conceptsRegistry, annotationRegistry) {
+    this.$conceptsRegistry = conceptsRegistry;
+    this.$annotationRegistry = annotationRegistry;
+    this._conceptName = this.getConceptsRegistry().getAllConcepts()[0].getName();
   },
 
   methods: {
-    /**
-     * Renders the container with both the concept selector and annotation form
-     */
-    render: function () {
-      this._createContainer();
-      this._createSelector();
-      this._createForm();
+    run: function () {
+
     }
   },
 
+  properties: {
+    conceptsRegistry  : {value: null, writable: false},
+    annotationRegistry: {value: null, writable: false}
+  },
+
   internals: {
-    fields: null,
+    concept: null,
 
-    /**
-     * Creates the concept selector
-     */
-    createSelector: function () {
-      var selector = new kat.form.view.ConceptSelector($("#" + this.KSelectorContainerId), this._form);
-      selector.render();
+    setConceptName: function (conceptName) {
+      this._conceptName = conceptName;
+    },
+
+    parseForm : function(){
+      var parser = new kat.form.FormParser();
+      return parser.getFields();
     },
 
     /**
-     * Creates the container in which the selector and annotation form will be rendered
+     * Handler for the change event on the select box component of the selector
      */
-    createContainer: function () {
-      var template = this.KContainerTemplate.replace("id", this.KContainerId)
-        .replace("{title}", kat.util.ConfigManager.getNewAnnotationFormTitle())
-        .replace("{conceptSelectorId}", this.KSelectorContainerId)
-        .replace("{annotationFormId}", this.KAnnotationFormId);
-      $("body").append(template);
+    registerSelectorChangeHandler: function () {
+      var self = this;
+      jQuery("#" + kat.form.Concept.KSelectorId).on("change", function () {
+        var conceptName = $(this).val();
+        self._setConceptName(conceptName);
+      });
+    }
+
+  }
+
+})
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
+/**
+ * Field processor for text fields. For more details see @link{kat.input.form.fieldparser.FieldParser}
+ *
+ * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
+ * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
+ */
+
+FlancheJs.defineClass("kat.input.form.fieldparser.TextAreaParser", {
+  //implements: [kat.input.form.fieldparser],
+
+  init: function () {
+
+  },
+
+  methods: {
+    canParse: function (xmlField) {
+      if (xmlField.getAttribute("type") == "textarea") {
+        return true;
+      }
+      return false;
     },
 
-    /**
-     * Creates the annotation form
-     */
-    createForm: function () {
-      var form = new kat.form.view.Form($("#" + this.KAnnotationFormId), fields);
-      form.render();
+    parse: function (xmlField) {
+      var ret = "";
+      //check if there is a number of instances of the field required
+      var atLeast = 0;
+      var atMost = 0;
+      var number = xmlField.getXmlDoc().getElementsByTagName("number");
+      if(number.length){
+        atLeast = parseInt(number[0].getAttribute("atleast"));
+        atMost = parseInt(number[0].getAttribute("atmost"));
+      }
+      //if no requirements, append the template
+      if(!atLeast){
+        var name="name='"+xmlField.getAttribute("name")+"'";
+        ret = this.template
+        .replace(/{name}/g, name)
+        .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-0")
+        .replace(/{label}/g, xmlField.getXmlDoc().getElementsByTagName("label").length ? xmlField.getXmlDoc().getElementsByTagName("label")[0].textContent : xmlField.getAttribute("name"))
+        .replace(/{value}/g, xmlField.getXmlDoc().getElementsByTagName("default").length ? xmlField.getXmlDoc().getElementsByTagName("default")[0].textContent : "")
+        .replace(/{required}/g, "false")
+        .replace(/{validation}/g, xmlField.getXmlDoc().getElementsByTagName("validation").length ? xmlField.getXmlDoc().getElementsByTagName("validation")[0].textContent : "")
+        .replace(/{documentation}/g, xmlField.getXmlDoc().getElementsByTagName("documentation").length ? xmlField.getXmlDoc().getElementsByTagName("documentation")[0].textContent : "")
+      }
+      //if any requirements, append the minimum required numbers of instances
+      for(var i = 0; i < atLeast; i++){
+        var name="name='"+xmlField.getAttribute("name")+"'";
+        ret += this.template
+        .replace(/{name}/g, name)
+        .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-" + i)
+        .replace(/{label}/g, xmlField.getXmlDoc().getElementsByTagName("label").length != null ? xmlField.getXmlDoc().getElementsByTagName("label")[0].textContent : xmlField.getAttribute("name"))
+        .replace(/{value}/g, xmlField.getXmlDoc().getElementsByTagName("default").length ? xmlField.getXmlDoc().getElementsByTagName("default")[0].textContent : "")
+        .replace(/{required}/g, "true")
+        .replace(/{validation}/g, xmlField.getXmlDoc().getElementsByTagName("validation").length ? xmlField.getXmlDoc().getElementsByTagName("validation")[0].textContent : "")
+        .replace(/{documentation}/g, xmlField.getXmlDoc().getElementsByTagName("documentation").length ? xmlField.getXmlDoc().getElementsByTagName("documentation")[0].textContent : "")
+      }
+      
+      //adding a wrap over the added fields
+      var dataAtMost = "";
+      if(atMost){
+        dataAtMost = "data-atmost='"+ atMost +"'";
+      }
+      var label = xmlField.getXmlDoc().getElementsByTagName("label").length ? xmlField.getXmlDoc().getElementsByTagName("label")[0].textContent : xmlField.getAttribute("name");
+      var wrapperClass = "class='" + kat.Constants.Form.FieldWrapClass + "'";
+      ret = "<div " + wrapperClass + dataAtMost + " id='" + kat.Constants.Form.FieldWrapPrefix + xmlField.getAttribute("name") + "'>"+ "<label class='control-label'>" + label + "</label>" + ret + "</div>";
+      return ret;
     }
   },
 
   statics: {
-    KContainerId        : 'kat-form-container',
-    KSelectorContainerId: 'kat-form-concept-selector',
-    KAnnotationFormId   : 'kat-form-annotation-form',
-    KContainerTemplate  : '<div id="{id}" class="modal hide fade">' +
-      '<div class="modal-header">' +
-      '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-      '<h3>{title}</h3>' +
-      '</div>' +
-      '<div class="modal-body">' +
-      '<div id="{conceptSelectorId}"></div> ' +
-      '<div id="{annotationFormId}"></div> ' +
-      '</div>' +
-      '<div class="modal-footer"><a href="#" class="btn">Close</a><a href="#" id="kat-form-save" class="btn btn-primary">Save</a></div>' +
-      '</div>'
+    template: "<div class='control-group'><div class='controls'><textarea class='" + kat.Constants.Form.FieldClass + "' name='{name}' data-documentation='{documentation}' data-validation='{validation}' id='{id}' required='{required}'>{value}</textarea></div></div>"
+  }
+
+});
+
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
+/**
+ * Describes an annotation that was collected from a user and can be saved and transported over
+ * network
+ *
+ * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
+ * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
+ */
+
+FlancheJs.defineClass("kat.input.form.fieldparser.SelectParser", {
+
+  implements: ["kat.input.form.fieldparser"],
+
+  init: function () {
+
+  },
+
+  methods: {
+    canParse: function (xmlField) {
+      if (xmlField.getAttribute("type") == "select") {
+        return true;
+      }
+      return false;
+    },
+
+    parse: function (xmlField) {
+      var ret = "";
+      //check if there is a number of instances of the field required
+      var atLeast = 0;
+      var atMost = 0;
+      var number = xmlField.getXmlDoc().getElementsByTagName("number");
+      if(number.length){
+        atLeast = parseInt(number[0].getAttribute("atleast"));
+        atMost = parseInt(number[0].getAttribute("atmost"));
+      }
+      var options = xmlField.getXmlDoc().getElementsByTagName("option");
+      if (!options) {
+        throw Error("Error in the Annotation Ontology. No list of options provided for the select field!");
+      }
+      var optionsHtml = _.map(options,function (value) {
+        //check if the option is default
+        var isDefault = value.getAttribute("default") ? "default='true'" : "";
+        //option value is mandatory
+        var val = value.getElementsByTagName("value");
+        if(!val.length){
+          throw Error("Error in the Annotation Ontology. All options must have a value!");
+        }
+        val = val[0].textContent
+        //check if a label exists, if not, use the value
+        var label = value.getElementsByTagName("label").length ? value.getElementsByTagName("label")[0].textContent : val;
+        //add documentation if present
+        var documentation = value.getElementsByTagName("documentation").length ? "data-documentation='" + value.getElementsByTagName("documentation")[0].textContent + "'" : "";
+        return "<option value='" + val + "' " + isDefault + documentation + ">" + label + "</option>"
+      }).join("\n");     
+      //if no requirements, append to template
+      if(!atLeast){
+        var documentation = xmlField.getXmlDoc().getElementsByTagName("documentation").length ? xmlField.getXmlDoc().getElementsByTagName("documentation")[0].textContent : "";
+        if(documentation != ""){
+          documentation = "data-documentation='" + documentation + "'";
+        }
+        var name="name='"+xmlField.getAttribute("name")+"'";
+         ret = this.template
+        .replace(/{name}/g, name)
+        .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-0")
+        .replace(/{label}/g, xmlField.getAttribute("label") != null ? xmlField.getAttribute("label") : xmlField.getAttribute("name"))
+        .replace(/{options}/g, optionsHtml)
+        .replace(/{documentation}/g, documentation)
+        .replace(/{required}/g, "");
+      }
+      //if requirements, append as many as needed
+      for(var i = 0; i < atLeast; i++){
+        var documentation = xmlField.getXmlDoc().getElementsByTagName("documentation").length ? xmlField.getXmlDoc().getElementsByTagName("documentation")[0].textContent : "";
+        if(documentation != ""){
+          documentation = "data-documentation='" + documentation + "'";
+        }
+         var name="name='"+xmlField.getAttribute("name")+"'";
+         ret += this.template
+        .replace(/{name}/g, name)
+        .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-" + i)
+        .replace(/{label}/g, xmlField.getAttribute("label") != null ? xmlField.getAttribute("label") : xmlField.getAttribute("name"))
+        .replace(/{options}/g, optionsHtml)
+        .replace(/{documentation}/g, documentation)
+        .replace(/{required}/g, "required");
+      }
+      //adding a wrap over the added fields
+      var dataAtMost = "";
+      if(atMost){
+        dataAtMost = "data-atmost='"+ atMost +"'";
+      }
+      var wrapperClass = "class='" + kat.Constants.Form.FieldWrapClass + "'";
+      var label = xmlField.getXmlDoc().getElementsByTagName("label").length ? xmlField.getXmlDoc().getElementsByTagName("label")[0].textContent : xmlField.getAttribute("name");
+      ret = "<div " + wrapperClass + dataAtMost + " id='" + kat.Constants.Form.FieldWrapPrefix + xmlField.getAttribute("name") + "'>"+ "<label class='control-label'>" + label + "</label>"  + ret + "</div>";
+      return ret;
+    }
+  },
+
+  statics: {
+    template: "<div class='control-group'> <div class='controls'><select {name} {documentation} {required} id='{id}'>{options}</select></div></div>"
   }
 
 })
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
+/**
+ * A field parser parses an annotation:field into an html string. This trait serves only as
+ * an interface that the extending classes follow
+ *
+ * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
+ * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
+ */
+
+FlancheJs.defineTrait("kat.input.form.fieldparser.FieldParser", {
+  needs: {
+    canParse: Function,
+    parse   : Function
+  }
+})
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
+/**
+ * Parses the fields of type reference
+ *
+ * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
+ * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
+ */
+
+FlancheJs.defineClass("kat.input.form.fieldparser.ReferenceParser", {
+
+  implements: ["kat.input.form.fieldparser"],
+
+  init: function (annotationRegistry) {
+    this._annotationRegistry = annotationRegistry;
+  },
+
+  methods: {
+    canParse: function (xmlField) {
+      if (xmlField.getAttribute("type") == "reference") {
+        return true;
+      }
+      return false;
+    },
+
+    parse: function (xmlField) {
+      var documentation = xmlField.getXmlDoc().getElementsByTagName("documentation").length ? xmlField.getXmlDoc().getElementsByTagName("documentation")[0].textContent : "";
+      if (documentation != "") {
+        documentation = "data-documentation='" + documentation + "'";
+      }
+      var referencedType = xmlField.getXmlDoc().getElementsByTagName("referencedType").length ? xmlField.getXmlDoc().getElementsByTagName("referencedType")[0].textContent : "";
+      if (referencedType == "") {
+        throw Error("Error in the Annotation Ontology. No referencedType provided for the reference field!");
+      }
+      var name = "name='" + xmlField.getAttribute("name") + "'";
+      var annotations = this._annotationRegistry.getAnnotationsForConcept(referencedType);
+      var options = "";
+      for (var i = 0; i < annotations.length; i++) {
+        var annotationText = annotations[i].getText();
+        options += '<option data-annotation-id="' + annotations[i].getId() + '" value="' + annotationText["text"] + '">' + annotationText["trimmedText"] + '</option>\n';
+      }
+      if (options == "") {
+        options = '<option value="undefined">No annotation found</option>';
+      }
+      var ret = this.template
+        .replace(/{name}/g, name)
+        .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-0")
+        .replace(/{label}/g, xmlField.getAttribute("label") != null ? xmlField.getAttribute("label") : xmlField.getAttribute("name"))
+        .replace(/{documentation}/g, documentation)
+        .replace(/{options}/g, options);
+
+      var wrapperClass = "class='" + kat.Constants.Form.FieldWrapClass + "'";
+      var label = xmlField.getXmlDoc().getElementsByTagName("label").length ? xmlField.getXmlDoc().getElementsByTagName("label")[0].textContent : xmlField.getAttribute("name");
+      ret = "<div " + wrapperClass + " id='" + kat.Constants.Form.FieldWrapPrefix + xmlField.getAttribute("name") + "'>" + "<label class='control-label'>" + label + "</label>" + ret + "</div>";
+      return ret;
+    }
+  },
+
+  internals: {
+    annotationRegistry: null
+  },
+
+  statics: {
+    template: "<div class='control-group'> <div class='controls'><select class='reference-field' {name} {documentation} required='true' id='{id}'>{options}</select></div></div>"
+  }
+
+})
+
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
+/**
+ * Parses a field of type checkboxes outputing html.
+ *
+ * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
+ * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
+ */
+
+FlancheJs.defineClass("kat.input.form.fieldparser.CheckboxesParser", {
+
+  implements: ["kat.input.form.fieldparser"],
+
+  init: function () {
+
+  },
+
+  methods: {
+    canParse: function (xmlField) {
+      if (xmlField.getAttribute("type") == "checkboxes") {
+        return true;
+      }
+      return false;
+    },
+
+    parse: function (xmlField) {
+      var ret = "";
+      //check if there is a number of instances of the field required
+      var atLeast = 0;
+      var atMost = 0;
+      var number = xmlField.getXmlDoc().getElementsByTagName("number");
+      if(number.length){
+        atLeast = parseInt(number[0].getAttribute("atleast"));
+        atMost = parseInt(number[0].getAttribute("atmost"));
+      }
+      var options = xmlField.getXmlDoc().getElementsByTagName("option");
+      if (!options) {
+        throw Error("Error in the Annotation Ontology. No list of options provided for the checkboxes field!");
+      }
+      var optionsHtml = _.map(options,function (value) {
+        //check if the option is default
+        var isDefault = value.getAttribute("default") ? "checked " : "";
+        //option value is mandatory
+        var val = value.getElementsByTagName("value");
+        if(!val){
+          throw Error("Error in the Annotation Ontology. All options must have a value!");
+        }
+        val = val[0].textContent
+        //check if a label exists, if not, use the value
+        var label = value.getElementsByTagName("label").length ? value.getElementsByTagName("label")[0].textContent : val;
+        //add documentation if present
+        var documentation = value.getElementsByTagName("documentation").length ? "data-documentation='" + value.getElementsByTagName("documentation")[0].textContent + "'" : "";
+        var checkBox = "<label class='checkbox'>" + "<input name='" + xmlField.getAttribute("name") + "' type='checkbox' value='" + val + "' " + isDefault + documentation + ">" + label + "</input>";
+        return checkBox + "</label>"
+      }).join("\n");     
+      //if no requirements, append to template
+      if(!atLeast){
+        var documentation = xmlField.getXmlDoc().getElementsByTagName("documentation").length ? xmlField.getXmlDoc().getElementsByTagName("documentation")[0].textContent : "";
+        if(documentation != ""){
+          documentation = "data-documentation='" + documentation + "'";
+        }
+         ret = this.template
+        .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-0")
+        .replace(/{label}/g, xmlField.getAttribute("label") != null ? xmlField.getAttribute("label") : xmlField.getAttribute("name"))
+        .replace(/{options}/g, optionsHtml)
+        .replace(/{documentation}/g, documentation)
+      }
+      //if requirements, append as many as needed
+      for(var i = 0; i < atLeast; i++){
+        var documentation = xmlField.getXmlDoc().getElementsByTagName("documentation").length ? xmlField.getXmlDoc().getElementsByTagName("documentation")[0].textContent : "";
+        if(documentation != ""){
+          documentation = "data-documentation='" + documentation + "'";
+        }
+         ret += this.template
+        .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-" + i)
+        .replace(/{label}/g, xmlField.getAttribute("label") != null ? xmlField.getAttribute("label") : xmlField.getAttribute("name"))
+        .replace(/{options}/g, optionsHtml)
+        .replace(/{documentation}/g, documentation)
+      }
+      //adding a wrap over the added fields
+      var dataAtMost = "";
+      if(atMost){
+        dataAtMost = "data-atmost='"+ atMost +"'";
+      }
+      var wrapperClass = "class='" + kat.Constants.Form.FieldWrapClass + "'";
+      var label = xmlField.getXmlDoc().getElementsByTagName("label").length ? xmlField.getXmlDoc().getElementsByTagName("label")[0].textContent : xmlField.getAttribute("name");
+      ret = "<div " + wrapperClass + dataAtMost + " id='" + kat.Constants.Form.FieldWrapPrefix + xmlField.getAttribute("name") + "'>"+ "<label class='control-label'>" + label + "</label>"  + ret + "</div>";
+      return ret;
+    }
+  },
+
+  statics: {
+    template: "<div class='control-group'><div class='controls'><div {documentation} id='{id}'>{options}</div></div></div>"
+  }
+
+})
+
+
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
+/**
+ * Field processor for text fields. For more details see @link{kat.input.form.fieldparser.FieldParser}
+ *
+ * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
+ * @author <a href="mailto:v.merticariu@jacobs-university.de">Vlad Merticariu</a>
+ */
+
+FlancheJs.defineClass("kat.input.form.fieldparser.TextFieldParser", {
+  //implements: [kat.input.form.fieldparser],
+
+  init: function () {
+
+  },
+
+  methods: {
+    canParse: function (xmlField) {
+      if (xmlField.getAttribute("type") == "text") {
+        return true;
+      }
+      return false;
+    },
+
+    parse: function (xmlField) {
+      var ret = "";
+      //check if there is a number of instances of the field required
+      var atLeast = 0;
+      var atMost = 0;
+      var number = xmlField.getXmlDoc().getElementsByTagName("number");
+      if(number.length){
+        atLeast = parseInt(number[0].getAttribute("atleast"));
+        atMost = parseInt(number[0].getAttribute("atmost"));
+      }
+      //if no requirements, append the template
+      if(!atLeast){
+        var name="name='"+xmlField.getAttribute("name")+"'";
+        ret = this.template
+        .replace(/{name}/g, name)
+        .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-0")
+        .replace(/{label}/g, xmlField.getXmlDoc().getElementsByTagName("label").length ? xmlField.getXmlDoc().getElementsByTagName("label")[0].textContent : xmlField.getAttribute("name"))
+        .replace(/{value}/g, xmlField.getXmlDoc().getElementsByTagName("default").length ? xmlField.getXmlDoc().getElementsByTagName("default")[0].textContent : "")
+        .replace(/{required}/g, "false")
+        .replace(/{validation}/g, xmlField.getXmlDoc().getElementsByTagName("validation").length ? xmlField.getXmlDoc().getElementsByTagName("validation")[0].textContent : "")
+        .replace(/{documentation}/g, xmlField.getXmlDoc().getElementsByTagName("documentation").length ? xmlField.getXmlDoc().getElementsByTagName("documentation")[0].textContent : "")
+      }
+      //if any requirements, append the minimum required numbers of instances
+      for(var i = 0; i < atLeast; i++){
+        var name="name='"+xmlField.getAttribute("name")+"'";
+        ret += this.template
+        .replace(/{name}/g, name)
+        .replace(/{id}/g, kat.Constants.Form.FieldPrefix + xmlField.getAttribute("name") + "-" + i)
+        .replace(/{label}/g, xmlField.getXmlDoc().getElementsByTagName("label").length ? xmlField.getXmlDoc().getElementsByTagName("label")[0].textContent : xmlField.getAttribute("name"))
+        .replace(/{value}/g, xmlField.getXmlDoc().getElementsByTagName("default").length ? xmlField.getXmlDoc().getElementsByTagName("default")[0].textContent : "")
+        .replace(/{required}/g, "true")
+        .replace(/{validation}/g, xmlField.getXmlDoc().getElementsByTagName("validation").length ? xmlField.getXmlDoc().getElementsByTagName("validation")[0].textContent : "")
+        .replace(/{documentation}/g, xmlField.getXmlDoc().getElementsByTagName("documentation").length ? xmlField.getXmlDoc().getElementsByTagName("documentation")[0].textContent : "")
+      }
+      var label = xmlField.getXmlDoc().getElementsByTagName("label").length ? xmlField.getXmlDoc().getElementsByTagName("label")[0].textContent : xmlField.getAttribute("name");
+      //adding a wrap over the added fields
+      var dataAtMost = "";
+      if(atMost){
+        dataAtMost = "data-atmost='"+ atMost +"'";
+      }
+      var wrapperClass = "class='" + kat.Constants.Form.FieldWrapClass + "'";
+      ret = "<div " + wrapperClass + dataAtMost + " id='" + kat.Constants.Form.FieldWrapPrefix + xmlField.getAttribute("name") + "'>" + "<label class='control-label'>" + label + "</label>" + ret + "</div>";
+      return ret;
+    }
+  },
+
+  statics: {
+    template: "<div class='control-group'> \n\
+<div class='controls'><input class='" + kat.Constants.Form.FieldClass + "' {name} data-documentation='{documentation}' data-validation='{validation}' type='text' id='{id}' value='{value}' required='{required}' /></div></div>"
+  }
+
+});
+
 
 
 
@@ -4054,6 +3482,204 @@ FlancheJs.defineClass("kat.display.AnnotationRenderer", {
  * along with KAT.  If not, see <http://www.gnu.org/licenses/>
  */
 
+/*
+ * Creates and controls the annotation displays.
+ *
+ * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
+ * @author <a href="mailto:v.merticariu@jacobs-university,de">Vlad Merticariu</a>
+ */
+
+FlancheJs.defineClass("kat.Display", {
+  /**
+   * Class constructor
+   * @param {Array[Object{idBase, idExtent, content}]} annotations The array of
+   * annotations to be displayed.
+   * @param {String} specialClass The class to be added to the words having
+   * annotations bound.
+   */
+  init      : function (annotations, annotationRegsitry, conceptRegsitry, specialClass) {
+    this.setAnnotations(annotations);
+    if (specialClass) {
+      this.setSetSpecialClass(specialClass);
+    }
+    this._annotationRegistry = annotationRegsitry;
+    this._conceptRegistry = conceptRegsitry;
+  },
+  properties: {
+    annotations : {
+      value: []
+    },
+    specialClass: {
+      value: kat.Constants.Display.SpecialClass
+    }
+  },
+  methods   : {
+    /**
+     * Adds an annotation to the display
+     */
+    addAnnotation         : function (annotation) {
+      this.$annotations.push(annotation);
+    },
+    /**
+     * Removes an annotation from the display
+     */
+    deleteAnnotation      : function (id) {
+      for (var i = 0; i < this.$annotations.length; i++) {
+        if (this.$annotations[i]["id"] == id) {
+          this.$annotations.splice(i, 1);
+        }
+      }
+    },
+    /**
+     * Adds the class to the spans having annotations bound
+     */
+    addSpecialClassToSpans: function () {
+      for (var i = 0; i < this.getAnnotations().length; i++) {
+        var annotation = this.$annotations[i];
+        var id1 = annotation["idBase"];
+        var id2 = annotation["idExtent"];
+
+        //exchange if necessary, to start from the smallest
+        if ($("#" + id1).index() > $("#" + id2).index()) {
+          var aux = id2;
+          id2 = id1;
+          id1 = aux;
+        }
+        console.log("ids ", id1, id2);
+        var annotatedIds = $("#" + id1).nextUntil("#" + id2).andSelf().add($('#' + id2));
+        var ontologyClass = 'ontology-' + annotation.ontology;
+        var conceptClass = 'concept-' + annotation.concept.replace(/\./g, '-');
+        var classes = [this.getSpecialClass(), ontologyClass, conceptClass].join(" ");
+        var currentAnnotationId = annotation["id"];
+        annotatedIds.wrapAll("<span " +
+          "id='" + currentAnnotationId + "' " +
+          "class='" + classes + "' " +
+          "ontology='" + annotation.ontology + "' " +
+          "concept='" + annotation.concept + "'>"
+        );
+        annotation["id"] = currentAnnotationId;
+        if (annotation["style"] != null) {
+          var rules = annotation["style"].split(";");
+          for (var j = 0; j < rules.length; j++) {
+            var rule = rules[j].split(":");
+            if (rule.length == 2) {
+              $("#" + currentAnnotationId).css(rule[0].trim(), rule[1].trim());
+            }
+          }
+        }
+
+      }
+    },
+    createTooltipDisplays : function () {
+      for (var i = 0; i < this.getAnnotations().length; i++) {
+        var editButton = '<i title="Edit" class="icon-edit pull-right edit-annotation" id="edit-annotation-' + this.$annotations[i].id + '"></i>';
+        var closeButton = '<i title="Close" class="icon-remove"></i>';
+        var tooltipsterOptions = {
+          //"trigger": kat.Constants.Display.Triger,
+          //"interactive": true,
+          "title"    : 'Annotation <button type="button" class="close" id="close-' + this.$annotations[i].id + '" aria-hidden="true">' + closeButton + '</button>' + editButton,
+          "html"     : true,
+          "placement": "bottom",
+          "content"  : this.$annotations[i].content
+        }
+        var currentAnnotation = this._annotationRegistry.getAnnotation(this.$annotations[i].id);
+        if (currentAnnotation.getExtraData().referenceId) {
+          this.createReferenceArrow(currentAnnotation, this.$annotations[i].id);
+        }
+        $("#" + this.$annotations[i].id).popover(tooltipsterOptions);
+        var annotationId = "#" + this.$annotations[i].id;
+        var annotationCloseId = "#" + 'close-' + this.$annotations[i].id;
+        (function (annotationId, annotationCloseId) {
+          $("body").delegate(annotationCloseId, "click", function () {
+            $(annotationId).popover('hide');
+          })
+        })(annotationId, annotationCloseId)
+      }
+      this._registerEditAnnotationCallback();
+    },
+
+    createReferenceArrow: function (currentAnnotation, annotationId) {
+      var self = this;
+      var baseAnnotationSpan = jQuery("#" + currentAnnotation.getIdBase());
+      var pointingAnnotationSpan = jQuery("#" + self._annotationRegistry.getAnnotation(currentAnnotation.getExtraData().referenceId).getIdBase());
+      var arrow = new kat.display.ArrowConnector(baseAnnotationSpan, pointingAnnotationSpan);
+      $("#" + annotationId).on('shown', function () {
+        arrow.render();
+      })
+      $("#" + annotationId).on('hide', function () {
+        arrow.destroy();
+      });
+    },
+
+    /**
+     * Encapsulates the behavior of the Display by adding classes to
+     * annotated spans and creating display handlers.
+     */
+    run   : function () {
+      this.addSpecialClassToSpans();
+      this.createTooltipDisplays();
+    },
+    /**
+     * Resets the display object
+     */
+    reset : function () {
+      //remove the popovers
+      for (var i = 0; i < this.$annotations.length; i++) {
+        $("#" + this.$annotations[i].id).popover('destroy');
+      }
+      //remove the special class span
+      $("." + this.getSpecialClass()).each(function () {
+        $(this).children().unwrap();
+      })
+    },
+    /**
+     * Updates the display
+     */
+    update: function () {
+      this.reset();
+      this.run();
+    }
+  },
+
+  internals: {
+    registerEditAnnotationCallback: function () {
+      var self = this;
+      $("body").off("click.kat", ".edit-annotation");
+      $("body").on("click.kat", ".edit-annotation", function () {
+        var id = $(this).attr('id').split('edit-annotation-');
+        id = id[1];
+        $("#" + id).popover('hide');
+        var annotation = self._annotationRegistry.getAnnotation(id);
+        var concept = self._conceptRegistry.lookupConcept(annotation["$concept"]);
+        var annotationEditForm = new kat.display.AnnotationEditForm(annotation, concept, self._annotationRegistry, self._conceptRegistry, self);
+        annotationEditForm.run();
+      });
+    },
+
+    annotationRegistry: null,
+    conceptRegistry   : null
+  }
+});
+/*
+ * This file is part of KAT, the KWARC Annotation Tool, 
+ * see https://github.com/KWARC/KAT
+ * 
+ * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
+ * 
+ * KAT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * KAT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with KAT.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 /**
  * Creates an svg arrow that can be used to connect two dom elements, for example a
  * reference field annotation to the referenced item.
@@ -4380,6 +4006,10 @@ FlancheJs.defineClass("kat.display.AnnotationOntologyViewer", {
   }
 
 })
+
+
+
+
 /*
  * This file is part of KAT, the KWARC Annotation Tool, 
  * see https://github.com/KWARC/KAT
@@ -4400,188 +4030,77 @@ FlancheJs.defineClass("kat.display.AnnotationOntologyViewer", {
  * along with KAT.  If not, see <http://www.gnu.org/licenses/>
  */
 
-/*
- * Creates and controls the annotation displays.
+/**
+ * Retrieves the document and the annotations from the CoreTeX service and populates
+ * the internal registry
  *
  * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
  * @author <a href="mailto:v.merticariu@jacobs-university,de">Vlad Merticariu</a>
  */
 
-FlancheJs.defineClass("kat.Display", {
-  /**
-   * Class constructor
-   * @param {Array[Object{idBase, idExtent, content}]} annotations The array of
-   * annotations to be displayed.
-   * @param {String} specialClass The class to be added to the words having
-   * annotations bound.
-   */
-  init      : function (annotations, annotationRegsitry, conceptRegsitry, specialClass) {
-    this.setAnnotations(annotations);
-    if (specialClass) {
-      this.setSetSpecialClass(specialClass);
-    }
-    this._annotationRegistry = annotationRegsitry;
-    this._conceptRegistry = conceptRegsitry;
+FlancheJs.defineClass("kat.remote.CoreTeXAnnotationRetriever", {
+  init: function (serviceUrl, conceptRegistry, documentId, container) {
+    this._serviceUrl = serviceUrl;
+    this._conceptRegistry = conceptRegistry;
+    this._documentId = documentId;
+    this._container = container;
   },
-  properties: {
-    annotations : {
-      value: []
-    },
-    specialClass: {
-      value: kat.Constants.Display.SpecialClass
-    }
-  },
-  methods   : {
-    /**
-     * Adds an annotation to the display
-     */
-    addAnnotation         : function (annotation) {
-      this.$annotations.push(annotation);
-    },
-    /**
-     * Removes an annotation from the display
-     */
-    deleteAnnotation      : function (id) {
-      for (var i = 0; i < this.$annotations.length; i++) {
-        if (this.$annotations[i]["id"] == id) {
-          this.$annotations.splice(i, 1);
-        }
-      }
-    },
-    /**
-     * Adds the class to the spans having annotations bound
-     */
-    addSpecialClassToSpans: function () {
-      for (var i = 0; i < this.getAnnotations().length; i++) {
-        var annotation = this.$annotations[i];
-        var id1 = annotation["idBase"];
-        var id2 = annotation["idExtent"];
 
-        //exchange if necessary, to start from the smallest
-        if ($("#" + id1).index() > $("#" + id2).index()) {
-          var aux = id2;
-          id2 = id1;
-          id1 = aux;
-        }
-        console.log("ids ", id1, id2);
-        var annotatedIds = $("#" + id1).nextUntil("#" + id2).andSelf().add($('#' + id2));
-        var ontologyClass = 'ontology-' + annotation.ontology;
-        var conceptClass = 'concept-' + annotation.concept.replace(/\./g, '-');
-        var classes = [this.getSpecialClass(), ontologyClass, conceptClass].join(" ");
-        var currentAnnotationId = annotation["id"];
-        annotatedIds.wrapAll("<span " +
-          "id='" + currentAnnotationId + "' " +
-          "class='" + classes + "' " +
-          "ontology='" + annotation.ontology + "' " +
-          "concept='" + annotation.concept + "'>"
-        );
-        annotation["id"] = currentAnnotationId;
-        if (annotation["style"] != null) {
-          var rules = annotation["style"].split(";");
-          for (var j = 0; j < rules.length; j++) {
-            var rule = rules[j].split(":");
-            if (rule.length == 2) {
-              $("#" + currentAnnotationId).css(rule[0].trim(), rule[1].trim());
-            }
-          }
-        }
-
-      }
-    },
-    createTooltipDisplays : function () {
-      for (var i = 0; i < this.getAnnotations().length; i++) {
-        var editButton = '<i title="Edit" class="icon-edit pull-right edit-annotation" id="edit-annotation-' + this.$annotations[i].id + '"></i>';
-        var closeButton = '<i title="Close" class="icon-remove"></i>';
-        var tooltipsterOptions = {
-          //"trigger": kat.Constants.Display.Triger,
-          //"interactive": true,
-          "title"    : 'Annotation <button type="button" class="close" id="close-' + this.$annotations[i].id + '" aria-hidden="true">' + closeButton + '</button>' + editButton,
-          "html"     : true,
-          "placement": "bottom",
-          "content"  : this.$annotations[i].content
-        }
-        var currentAnnotation = this._annotationRegistry.getAnnotation(this.$annotations[i].id);
-        if (currentAnnotation.getExtraData().referenceId) {
-          this.createReferenceArrow(currentAnnotation, this.$annotations[i].id);
-        }
-        $("#" + this.$annotations[i].id).popover(tooltipsterOptions);
-        var annotationId = "#" + this.$annotations[i].id;
-        var annotationCloseId = "#" + 'close-' + this.$annotations[i].id;
-        (function (annotationId, annotationCloseId) {
-          $("body").delegate(annotationCloseId, "click", function () {
-            $(annotationId).popover('hide');
-          })
-        })(annotationId, annotationCloseId)
-      }
-      this._registerEditAnnotationCallback();
-    },
-
-    createReferenceArrow: function (currentAnnotation, annotationId) {
-      var self = this;
-      var baseAnnotationSpan = jQuery("#" + currentAnnotation.getIdBase());
-      var pointingAnnotationSpan = jQuery("#" + self._annotationRegistry.getAnnotation(currentAnnotation.getExtraData().referenceId).getIdBase());
-      var arrow = new kat.display.ArrowConnector(baseAnnotationSpan, pointingAnnotationSpan);
-      $("#" + annotationId).on('shown', function () {
-        arrow.render();
-      })
-      $("#" + annotationId).on('hide', function () {
-        arrow.destroy();
-      });
-    },
-
-    /**
-     * Encapsulates the behavior of the Display by adding classes to
-     * annotated spans and creating display handlers.
-     */
-    run   : function () {
-      this.addSpecialClassToSpans();
-      this.createTooltipDisplays();
-    },
-    /**
-     * Resets the display object
-     */
-    reset : function () {
-      //remove the popovers
-      for (var i = 0; i < this.$annotations.length; i++) {
-        $("#" + this.$annotations[i].id).popover('destroy');
-      }
-      //remove the special class span
-      $("." + this.getSpecialClass()).each(function () {
-        $(this).children().unwrap();
-      })
-    },
-    /**
-     * Updates the display
-     */
-    update: function () {
-      this.reset();
-      this.run();
+  methods: {
+    loadRegistry: function (annotationRegistry) {
+      this._annotationRegistry = annotationRegistry;
+      this._retrieveDocumentAndAnnotations();
     }
   },
 
   internals: {
-    registerEditAnnotationCallback: function () {
-      var self = this;
-      $("body").off("click.kat", ".edit-annotation");
-      $("body").on("click.kat", ".edit-annotation", function () {
-        var id = $(this).attr('id').split('edit-annotation-');
-        id = id[1];
-        $("#" + id).popover('hide');
-        var annotation = self._annotationRegistry.getAnnotation(id);
-        var concept = self._conceptRegistry.lookupConcept(annotation["$concept"]);
-        var annotationEditForm = new kat.display.AnnotationEditForm(annotation, concept, self._annotationRegistry, self._conceptRegistry, self);
-        annotationEditForm.run();
-      });
+    serviceUrl        : null,
+    conceptRegistry   : null,
+    annotationRegistry: null,
+    documentId        : null,
+
+
+    retrieveDocumentAndAnnotations: function () {
+      var retrievalUrl = this._serviceUrl + "?" + this.KServiceParameters + "&" + this.KDocumentIdParameter + "=" + this._documentId;
+      jQuery.get(retrievalUrl,function (data) {
+        var decodedData = JSON.parse(data);
+        var document = decodedData.document;
+        var annotations = decodedData.annotations;
+        if (document == null || annotations == null) {
+          throw Error("Error while loading the document from the CoreTeX service.");
+        }
+        this._setupDocument(document);
+        this._registerAnnotations(annotations);
+      }).fail(function () {
+          throw Error("Could not load the document and annotations from the specified url: " + retrievalUrl)
+        })
     },
 
-    annotationRegistry: null,
-    conceptRegistry   : null
+    setupDocument: function (documentString) {
+      this._container.html(documentString);
+    },
+
+    registerAnnotations: function (annotations) {
+      for (var annotationId in annotations) {
+        var annotation = new kat.annotation.Annotation(annotations[annotationId].baseId,
+          annotations[annotationId].idExtent,
+          this._conceptRegistry.lookupConcept(annotations[annotationId].concept),
+          annotations[annotationId].values,
+          annotationId,
+          annotations[annotationId].extraData
+        )
+        this._annotationRegistry.addAnnotation(annotation);
+      }
+    }
+  },
+
+  statics: {
+    KServiceParameters  : "service=KAT",
+    KDocumentIdParameter: "documentId"
   }
-});
 
 
-
-
+})
 /*
  * This file is part of KAT, the KWARC Annotation Tool, 
  * see https://github.com/KWARC/KAT
@@ -4679,97 +4198,6 @@ FlancheJs.defineClass("kat.remote.CoreTexAnnotationInserter", {
     KAnnotationsParameter    : "annotations",
     KJSONAnnotationsParameter: "jsannotations"
   }
-})
-/*
- * This file is part of KAT, the KWARC Annotation Tool, 
- * see https://github.com/KWARC/KAT
- * 
- * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
- * 
- * KAT is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * KAT is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with KAT.  If not, see <http://www.gnu.org/licenses/>
- */
-
-/**
- * Retrieves the document and the annotations from the CoreTeX service and populates
- * the internal registry
- *
- * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
- * @author <a href="mailto:v.merticariu@jacobs-university,de">Vlad Merticariu</a>
- */
-
-FlancheJs.defineClass("kat.remote.CoreTeXAnnotationRetriever", {
-  init: function (serviceUrl, conceptRegistry, documentId, container) {
-    this._serviceUrl = serviceUrl;
-    this._conceptRegistry = conceptRegistry;
-    this._documentId = documentId;
-    this._container = container;
-  },
-
-  methods: {
-    loadRegistry: function (annotationRegistry) {
-      this._annotationRegistry = annotationRegistry;
-      this._retrieveDocumentAndAnnotations();
-    }
-  },
-
-  internals: {
-    serviceUrl        : null,
-    conceptRegistry   : null,
-    annotationRegistry: null,
-    documentId        : null,
-
-
-    retrieveDocumentAndAnnotations: function () {
-      var retrievalUrl = this._serviceUrl + "?" + this.KServiceParameters + "&" + this.KDocumentIdParameter + "=" + this._documentId;
-      jQuery.get(retrievalUrl,function (data) {
-        var decodedData = JSON.parse(data);
-        var document = decodedData.document;
-        var annotations = decodedData.annotations;
-        if (document == null || annotations == null) {
-          throw Error("Error while loading the document from the CoreTeX service.");
-        }
-        this._setupDocument(document);
-        this._registerAnnotations(annotations);
-      }).fail(function () {
-          throw Error("Could not load the document and annotations from the specified url: " + retrievalUrl)
-        })
-    },
-
-    setupDocument: function (documentString) {
-      this._container.html(documentString);
-    },
-
-    registerAnnotations: function (annotations) {
-      for (var annotationId in annotations) {
-        var annotation = new kat.annotation.Annotation(annotations[annotationId].baseId,
-          annotations[annotationId].idExtent,
-          this._conceptRegistry.lookupConcept(annotations[annotationId].concept),
-          annotations[annotationId].values,
-          annotationId,
-          annotations[annotationId].extraData
-        )
-        this._annotationRegistry.addAnnotation(annotation);
-      }
-    }
-  },
-
-  statics: {
-    KServiceParameters  : "service=KAT",
-    KDocumentIdParameter: "documentId"
-  }
-
-
 })
 
 
@@ -5491,305 +4919,6 @@ FlancheJs.defineClass("kat.annotation.OntologyRegistry", {
 
 });
 
-
-
-
-/*
- * This file is part of KAT, the KWARC Annotation Tool,
- * see https://github.com/KWARC/KAT
- *
- * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
- *
- * KAT is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * KAT is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with KAT.  If not, see <http://www.gnu.org/licenses/>
- */
-
-/**
- * Provides a split-pane viewer of the document for review.
- *
- * @author <a href="mailto:steven.mirea@gmail.com">Stefan Mirea</a>
- */
-
-(function ($) {
-
-  FlancheJs.defineClass("kat.review.ReviewViewer", {
-    /**
-     * Instantiates the review viewer.
-     * @param  {kat.main.KATService} service An instance of the service.
-     */
-    init: function (service) {
-      this._service = service;
-      this._target = service._coretexRetriever._container;
-      this._ontologies = service._ontologyRegistry.getAllOntologies();
-    },
-
-    methods: {
-      /**
-       * Enable the Viewer on the DOM.
-       */
-      apply: function () {
-        var structure = {
-          container: jqElem('div').addClass('reviewViewer'),
-          panels: {
-            source: this._makePanel('source'),
-            mirror: this._makePanel('mirror'),
-          },
-        };
-
-        // source is panel containing this._target
-        var source = structure.panels.source;
-
-        // mirror will be our cloned object.
-        var mirror = structure.panels.mirror;
-
-        // Add to the DOM.
-        structure.container.insertBefore(this._target);
-
-        source.content.append(this._target);
-        mirror.content.append(this._target.clone());
-
-        structure.container.append(structure.panels.source.container);
-        structure.container.append(structure.panels.mirror.container);
-
-        // Add events.
-        source.content.on('scroll', function (event) {
-          mirror.content.scrollTop(source.content.scrollTop());
-        });
-
-        // Save the objects.
-        this._structure = structure;
-
-        // Trigger events.
-        source.actions.find('.reviewViewer-action').eq(0).click();
-        mirror.actions.find('.reviewViewer-action').eq(0).click();
-
-        // Monkey-patch the annotation creation function
-        var _addAnnotation = this._service._annotationRegistry.addAnnotation;
-        this._service._annotationRegistry.addAnnotation = function (annotation) {
-          // Add a mirror annotation
-          this._mirrorAnnotate(
-            annotation.getIdBase(),
-            annotation.getIdExtent(),
-            annotation.getId(),
-            annotation.getOntology(),
-            annotation.getConcept()
-          );
-
-          // play nice...
-          return _addAnnotation.apply(this._service._annotationRegistry, arguments);
-        }.bind(this);
-
-        // Rename IDs so you don't have conflicts
-        var idSuffix = this._idSuffix;
-        mirror.content.find('.kat-counter').each(function () {
-          $(this).attr('id', $(this).attr('id') + idSuffix);
-        });
-
-        // Remove any previous annotations cloned from the source.
-        mirror.content.find('.kat-annotated').each(function () {
-          $(this).replaceWith($(this).html());
-        });
-
-        // Migrate all current annotations over to the mirror panel.
-        source.content.find('.kat-annotated').each(function (index, elem) {
-          var $elem = $(elem);
-          this._mirrorAnnotate(
-            $elem.children().first().attr('id'),
-            $elem.children().last().attr('id'),
-            $elem.attr('id'),
-            $elem.attr('ontology'),
-            $elem.attr('concept')
-          );
-        }.bind(this));
-      },
-
-      /**
-       * Cleanup function.
-       */
-      destroy: function () {
-        if (!this._structure) return;
-
-        this._target.insertBeofre(this._structure.container);
-        for (var name in this._structure) {
-          this._structure[name].remove();
-        }
-      },
-    },
-
-    internals: {
-      idSuffix: '-mirror',
-      service: null,
-      target: null,
-      structure: null,
-      ontologies: [],
-
-      mirrorAnnotate: function (startId, endId, id, ontology, concept) {
-        var ontologyClass = 'ontology-' + ontology;
-        var conceptClass = 'concept-' + concept.replace(/\./g, '-');
-        var classes = ['kat-annotated-mirror', ontologyClass, conceptClass].join(" ");
-        var mirror = this._structure.panels.mirror;
-
-        var annotatedIds = mirror.content.
-          find("#" + startId + this._idSuffix).
-          nextUntil("#" + endId + this._idSuffix).
-          andSelf().
-          add(mirror.content.find('#' + endId + this._idSuffix));
-
-        var $elem = jqElem('span');
-        $elem.attr({
-          id: id + this._idSuffix,
-          class: classes,
-          ontology: ontology,
-          concept: concept,
-          conceptName: concept.slice(concept.indexOf('.') + 1),
-        });
-
-        // HACK: for some reason this doesn't work otherwise.
-        // Deferred to a later time when I have more time ...
-        setTimeout(function () {
-          $elem.insertBefore(annotatedIds.eq(0));
-          $elem.append(annotatedIds);
-          this._update_annotation_counters();
-          this._structure.panels.source.content.find('.kat-annotated').each(function () {
-            var cpt = $(this).attr('concept');
-            $(this).attr('conceptName', cpt.slice(cpt.indexOf('.') + 1));
-          });
-        }.bind(this), 200);
-      },
-
-      /**
-       * Sets the ontology for the given panel.
-       * @param {String} panelName
-       * @param {String} ontologyName
-       */
-      setOntology: function (panelName, ontologyName) {
-        var panel = this._structure.panels[panelName];
-        panel.stylesheet.reset();
-        // Source rules
-        panel.stylesheet.addRule(
-          '.kat-annotated:not(.ontology-' + ontologyName + ')',
-          'background:transparent; cursor:auto;'
-        );
-        panel.stylesheet.addRule(
-          '.kat-annotated:not(.ontology-' + ontologyName + '):before',
-          'display:none;'
-        );
-        // Mirror rules
-        panel.stylesheet.addRule(
-          '.kat-annotated-mirror:not(.ontology-' + ontologyName + ')',
-          'background:transparent; cursor:auto;'
-        );
-        panel.stylesheet.addRule(
-          '.kat-annotated-mirror:not(.ontology-' + ontologyName + '):before',
-          'display:none;'
-        );
-      },
-
-      /**
-       * Returns an object containing the components of a panel.
-       * @param  {String} name
-       * @return {Object}
-       */
-      makePanel: function (name) {
-        var $actions = jqElem('div').addClass('reviewViewer-panel-actions');
-        var $content = jqElem('div').addClass('reviewViewer-panel-content');
-        var $container = jqElem('div').addClass('reviewViewer-panel');
-
-        var self = this;
-
-        // Build the actions menu.
-        $actions.html('Profile:');
-        if (self._ontologies.length == 0) {
-          $actions.html(
-            '<div class="alert">' +
-              ' Add some ontologies from the KAT Control Panel and refresh the page.' +
-            '</div>'
-          );
-        } else {
-          self._ontologies.forEach(function (ontology) {
-            var ontologyName = ontology.getName();
-            var $elem = jqElem('a');
-            $elem.
-              attr('href', 'javascript:void(0)').
-              addClass('reviewViewer-action').
-              data('ontology-name', ontologyName).
-              html(ontologyName + '<span class="reviewViewer-counter">0</span>').
-              on('click.setOntology', function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-                self._setOntology(name, ontologyName);
-                $actions.find('.reviewViewer-action').removeClass('reviewViewer-selected');
-                $elem.addClass('reviewViewer-selected');
-              });
-
-            $actions.append($elem);
-          });
-        }
-
-        var stylesheet = {
-          element: null,
-
-          reset: function () {
-            this.element && this.element.remove();
-            this.element = jqElem('style').addClass('reviewViewer-style');
-            this.element.appendTo($container);
-          },
-
-          addRule: function (selector, rules) {
-            selector = '#' + $container.attr('id') + ' ' + selector;
-            this.element.append(selector + '{ ' + rules + '} ');
-          },
-        };
-
-        stylesheet.reset();
-
-        $container.
-          data('panel-name', name).
-          attr('id', 'panel-' + Math.floor(Math.random() * 100000000)).
-          append($actions, $content);
-
-        return {
-          container: $container,
-          actions: $actions,
-          content: $content,
-          stylesheet: stylesheet,
-        };
-      },
-
-      update_annotation_counters: function () {
-        var structure = this._structure;
-        structure.container.find('.reviewViewer-counter').each(function () {
-          var ontology = $(this).parent().data('ontology-name');
-          $(this).html(
-            structure.panels.source.content.
-              find('.kat-annotated.ontology-' + ontology).
-              length
-          );
-        });
-      },
-    },
-  });
-
-  /**
-   * Returns a new jQuery DOM Node
-   * @param  {String} type
-   * @return {jQuery}
-   */
-  function jqElem (type) {
-    return $(document.createElement(type));
-  }
-
-})(jQuery);
 
 
 
