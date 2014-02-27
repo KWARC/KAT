@@ -1,0 +1,81 @@
+\documentclass{llncs}
+\usepackage[show]{ed}
+\usepackage{calbf}
+\usepackage{amstext,amssymb}
+\usepackage{xspace}
+
+\usepackage{mdframed}
+\newenvironment{boxedquote}{\begin{mdframed}[leftmargin=1cm,rightmargin=1cm]}{\end{mdframed}}
+
+\usepackage{wrapfig,paralist}
+\usepackage[hyperref,style=alphabetic]{biblatex}
+\addbibresource{kwarcpubs.bib}
+\addbibresource{extpubs.bib}
+\addbibresource{kwarccrossrefs.bib}
+\addbibresource{extcrossrefs.bib}
+
+\pagestyle{plain}
+\usepackage{tikz}
+\usetikzlibrary{mmt,fit}
+
+\def\defemph#1{\textbf{#1}}
+\def\defeq{:=}
+\def\omdoc{\textsf{OMDoc}\xspace}
+\def\mmt{\textsf{MMT}\xspace}
+\def\sys{\textsf{MathHub.info}\xspace}
+\usepackage{hyperref}
+
+\title{System Description: KAT an Annotation Tool for STEM Documents}
+\author{Mircea Alex Dumitru, Deyan Ginev, Michael  Kohlhase, Vlad Merticariu, Stefan
+  Mirea, and Tom Wiesing}
+\institute{
+  Computer Science\\ Jacobs University Bremen\\
+  \url{http://kwarc.info}
+}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+  Current natural language understanding systems do not work particularly well on
+  mathematical and technical documents as they cannot deal with formulae, diagrams, and
+  the special, technical vocabularies and discourse conventions of such documents. To
+  retrain existing tools and evaluate new ones specifically developed for STEM documents,
+  we need to establish manually annotated document corpora. Unfortunately, even the
+  annotation tools used in computational linguistics do not work well with mathematical
+  documents, as they assume plain texts.
+
+  This report presents the \KAT system, browser-based annotation tool for
+  linguistic/semantic annotations in structured (XHTML5) documents. As it is parametric in
+  the annotation ontology and represents annotations as RDF, it can easily be integrated
+  into RDF-based corpus management systems; we present an integration into the CorTeX
+  system.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+
+
+\section{System Architecture and Realization}\label{sec:arch}
+
+\section{Conclusion}\label{sec:concl}
+\ednote{MK@MK: say something} 
+\ednote{Acknowledgements}
+
+
+\printbibliography
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
+
+% LocalWords:  maketitle KohDavGin pswads11 planetmath tntbase concl emph mkm05 lt92 ge
+% LocalWords:  printbibliography newpart ednote hlt08 btc07 Lawvere thy-grph tn biform tp
+% LocalWords:  seq ldots vdots noindent subtheory tikzpicture tdots thygraph cn funsat le
+% LocalWords:  cdots ts1 ts2 tsdots tsn realm-mk realmref textbf realmref circ funsattac
+% LocalWords:  compactenum highlevel wrapfigure vspace yscale textsf KohIan redge rcedge
+% LocalWords:  ssmk12 defemph subseteq tpc12 RabKoh hookrightarrow xscale leadsto atp ci2
+%  LocalWords:  KarMer ftg79 ttg59 slcirc circsl scriptscriptstyle invsl defeq mmtthy rm
+%  LocalWords:  flatthy boxedquote varphi varphi bigraph mmtar medskip includeleft nmmtar
+%  LocalWords:  pviewleft Kleisli mpd11 inparaenum overline lsl esl mapsto mapsto mapsto
+%  LocalWords:  StaKoh tlcspx10 ppte12 Rabe omdoc orga CorTeX
