@@ -4,41 +4,38 @@
 
 The following steps must be followed for adding a \KAT annotation:
 \begin{figure}[ht]\centering
-  \includegraphics[width=2.5in]{../PIC/annotate}
-  \caption{Selecting the word ``suscipit'' for annotation}\label{fig:kat-annotate}
+  \includegraphics[width=.57\textwidth]{../PIC/annotate}\quad
+  \includegraphics[width=.37\textwidth]{../PIC/add-symbol}
+  \caption{Annotating in \KAT: Selection and Form-Filling}\label{fig:kat-annotate}
 \end{figure}
 
-\begin{figure}[ht]\centering
- \includegraphics[width=2.5in]{../PIC/add-symbol}
- \caption{Annotating ``suscipit'' as an OMDoc.Symbol with the name
-   ``Conjunction''}\label{fig:kat-symbol}
-\end{figure}
-
-\begin{enumerate}
-\item The target text of the annotation is highlighted (by simple selection), see Figure~\ref{fig:kat-annotate}
+\begin{compactenum}
+\item The target text of the annotation is highlighted (by simple selection), see
+  Figure~\ref{fig:kat-annotate} on the left.
 \item The first step triggers an annotation-menu.
 \item The annotation-menu is populated with the available annotation types, given by the
   available ontology.
 \item The user clicks on the desired annotation concept.
 \item A modal box containing the annotation form opens.
-\item The annotation form is populated with the fields indicated in the ontology, see Figure~\ref{fig:kat-symbol}
+\item The annotation form is populated with the fields indicated in the ontology as shown
+  on the right of Figure~\ref{fig:kat-annotate}
 \item After completing the form fields, the user saves the annotation.
-\end{enumerate}
+\end{compactenum}
 This approach ensures 2 things:
-\begin{itemize}
+\begin{compactitem}
 \item The navigation flow is never interrupted: adding an annotation is done via pop-up
   and modal boxes and windows, so after completing the steps, the user finds himself in
   the same place in the document.
 \item Annotation type checking is implicit: the annotation form is populated with the
   fields indicated in the ontology so the user doesn’t have to check the required types
-  himself, see Figure~\ref{fig:kat-definition}
-\end{itemize}
+  himself, see Figure~\ref{fig:kat-definition}.  In the \KAT binding, the OMDoc.Definition
+  concept is defined to be for annotations of type Symbol. The ``for'' field is
+  automatically populated with all the annotations of this type.
+\end{compactitem}
 
 \begin{figure}[ht]\centering
  \includegraphics[width=2.5in]{../PIC/add-definition}
- \caption{Annotating a definition for ``suscipit''. In the ontology, the OMDoc.Definition
-   concept is defined to be for annotations of type Symbol. The ``for'' field is
-   automatically populated with all the annotations of this type.}\label{fig:kat-definition}
+ \caption{Annotating a definition for ``suscipit''.}\label{fig:kat-definition}
 \end{figure}
 
 \subsection{Displaying an annotation}
@@ -50,19 +47,22 @@ clear overview of the whole document.
 At click, a pop-up window containing the annotation display opens.
 
 The annotation display consists of the following elements:
-\begin{enumerate}
+\begin{compactenum}
 \item The type of the annotation.
 \item The formatted annotation input according to the rules described in the ontology.
 \item For the annotations of type reference, an arrow indicated the referenced element.
-\end{enumerate}
+\end{compactenum}
 
 \begin{figure}[ht]\centering
-\includegraphics[width=2in]{../PIC/suscipit}
-\includegraphics[width=3in]{../PIC/definition}
+\includegraphics[width=.4\textwidth]{../PIC/suscipit}\quad
+\includegraphics[width=.5\textwidth]{../PIC/definition}
 \caption{Display for simple text and reference annotations}\label{fig:suscipit-definition}
 \end{figure}
 
 \subsection{Reviewing annotation versions}
+\ednote{MK: need intro here, inter-annotator agreement, riew, ... Probably move into a
+  section of its own.}
+
 Reviewing is done in a side-by-side view which allows the user to see two versions of the
 same document in order to see discrepancies and correct them; see
 Figure~\ref{fig:kat-review}. The viewer allows to toggle view one ontology at a time which
@@ -82,40 +82,49 @@ the mirror panel to automatically follow suite.
 \end{figure}
 
 \subsection{Annotating external documents using the browser extension}
+
 A different way of annotating a document which is not part of the corpus is by
 using the KAT browser extension. It provides a point-and-click interface which
-allows users to easily select the tags they wish to annotate. \\
-The following steps must be followed to add an annotation with the KAT browser extension:
-\begin{enumerate}
-\item Make sure you have the extension installed. You should see the KAT icon near your URL bar.
-  Under the icon the extension always displays if the page currently viewed has any annotations or not.
-  \begin{figure}[ht]\centering
-  \includegraphics{../PIC/extension-browser-icon-none}
-  \caption{KAT browser icon when viewing a page with no annotations on it}\label{fig:extension-browser-icon-none}
-  \end{figure}
-\item After loading the page you want to annotate, click the extension icon which will insert a menu in the page. From the menu, choose "Select new tag".
-  \begin{figure}[ht]\centering
-  \includegraphics{../PIC/extension-menu}
-  \caption{KAT browser extension menu}\label{fig:extension-menu}
-  \end{figure}
-\item When moving your mouse around the page, the current tag is always highlighted and its respective DOM and XPATH selectors are displayed in the menu.
-  \begin{figure}[ht]\centering
-  \includegraphics[width=5in]{../PIC/extension-menu-select}
-  \caption{The current tag is always highlighted}\label{fig:extension-menu-select}
-  \end{figure}
-\item After right clicking on the desired element, the "Annotate" pop-up will appear and the current element will remain selected. Afterwards the work-flow follows the one of adding a normal annotation.
-  \begin{figure}[ht]\centering
+allows users to easily select the tags they wish to annotate.
+
+
+\begin{wrapfigure}l{1.5cm}\vspace*{-1em}
+  \includegraphics[width=1.5cm]{../PIC/extension-browser-icon-none}
+\end{wrapfigure}
+The following steps must be followed to add an annotation with the KAT browser extension.
+Make sure you have the extension installed. You should see the KAT icon near your URL bar.
+Under the icon the extension always displays if the page currently viewed has any
+annotations or not. The figure on the right shows the \KAT browser icon when viewing a
+page with no annotations on it.
+
+\begin{wrapfigure}r{2.5cm}\vspace*{-1em}
+  \includegraphics[width=2.4cm]{../PIC/extension-menu}
+\end{wrapfigure}
+After loading the page you want to annotate, click the extension icon which will insert a
+menu in the page. From the menu, choose "Select new tag" as shown on the left.  When
+moving your mouse around the page, the current tag is always highlighted and its
+respective DOM and XPATH selectors are displayed in the menu.
+After right clicking on the desired element, the "Annotate" pop-up will appear and the
+current element will remain selected (see Figure~\ref{fig:extension-annotate})
+
+\begin{wrapfigure}l{1.5cm}\vspace*{-1em}
+  \includegraphics[width=1.5cm]{../PIC/extension-browser-icon-meta}
+\end{wrapfigure}
+Afterwards the work-flow follows the one of adding a normal annotation. Upon adding an
+annotation the icon of the extension also changes to reflect the existence of annotations
+on the current page.
+
+\begin{figure}[ht]\centering
   \includegraphics[width=5in]{../PIC/extension-annotate}
-  \caption{Right-clicking on an element causes the "Annotation" pop-up to show}\label{fig:extension-annotate}
-  \end{figure}
-\item Upon adding an annotation the icon of the extension also changes to reflect the existence of annotations on the current page.
-  \begin{figure}[ht]\centering
-  \includegraphics{../PIC/extension-browser-icon-meta}
-  \caption{The icon always changes to reflect the state of the current page}\label{fig:extension-browser-icon-meta}
-  \end{figure}
-\end{enumerate}
+  \caption{Right-clicking on an element causes the "Annotation" pop-up to
+    show}\label{fig:extension-annotate}
+\end{figure}
+
 
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "katmanual"
 %%% End:
+
+%  LocalWords:  includegraphics textwidth kat-annotate compactenum compactitem suscipit
+%  LocalWords:  kat-definition ednote riew kat-review wrapfigure vspace katmanual
