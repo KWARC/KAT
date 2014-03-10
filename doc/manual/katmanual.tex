@@ -31,8 +31,19 @@ Computer Science,  Jacobs University Bremen}
 \begin{document}
 \maketitle
 \begin{abstract}
-  This report presents the \KAT system, a generic annotation tool for linguistic/semantic
-  annotations in structured (XHTML5) documents. \ednote{MK: continue}
+  Current natural language understanding systems do not work particularly well on
+  mathematical and technical documents as they cannot deal with formulae, diagrams, and
+  the special, technical vocabularies and discourse conventions of such documents. To
+  retrain existing tools and evaluate new ones specifically developed for STEM documents,
+  we need to establish manually annotated document corpora. Unfortunately, even the
+  annotation tools used in computational linguistics do not work well with mathematical
+  documents, as they assume plain texts.
+
+  This report presents the \sys system, browser-based annotation tool for
+  linguistic/semantic annotations in structured (XHTML5) documents. As it is parametric in
+  the annotation ontology and represents annotations as RDF, it can easily be integrated
+  into RDF-based corpus management systems; we present an integration into the CorTeX
+  system.
 \end{abstract}
 
 \thispagestyle{empty} \newpage
