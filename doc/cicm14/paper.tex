@@ -15,7 +15,7 @@
 \addbibresource{extcrossrefs.bib}
 
 \pagestyle{plain}
-\usepackage{tikz}
+\usepackage{tikzinput}
 \usetikzlibrary{shapes.geometric,docicon}
 
 \def\defemph#1{\textbf{#1}}
@@ -39,28 +39,28 @@ plainpages=false,pdfpagelabels]{hyperref}
 \begin{document}
 \maketitle
 \begin{abstract}
-  Current natural language understanding systems do not work particularly well on
-  mathematical and technical documents as they cannot deal with formulae, diagrams, and
-  the special, technical vocabularies and discourse conventions of such documents. To
-  retrain existing tools and evaluate new ones specifically developed for STEM documents,
-  we need to establish manually annotated document corpora. Unfortunately, even the
-  annotation tools used in computational linguistics do not work well with mathematical
-  documents, as they assume plain texts.
-
-  This report presents the \sys system, browser-based annotation tool for
-  linguistic/semantic annotations in structured (XHTML5) documents. As it is parametric in
-  the annotation ontology and represents annotations as RDF, it can easily be integrated
-  into RDF-based corpus management systems; we present an integration into the CorTeX
-  system.
+  We presents the \sys system, browser-based annotation tool for linguistic/semantic
+  annotations in structured (XHTML5) documents. As it is parametric in the annotation
+  ontology and represents annotations as RDF, it can easily be integrated into RDF-based
+  corpus management systems; we present an integration into the CorTeX system.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
 
+Current natural language understanding systems do not work particularly well on
+mathematical and technical documents as they cannot deal with formulae, diagrams, and the
+special, technical vocabularies and discourse conventions of such documents. To retrain
+existing tools and evaluate new ones specifically developed for STEM documents, we need to
+establish manually annotated document corpora. Unfortunately, even the annotation tools
+used in computational linguistics do not work well with mathematical documents, as they
+assume plain texts.
+
+
 
 \section{System Architecture and Realization}\label{sec:arch}
 \begin{figure}[ht]\centering
-\def\localxscale{.8}\def\localyscale{1.1}
-\input{../tikz/kat-architecture}
+\def\localxscale{.85}\def\localyscale{1.35}
+\tikzinput{../tikz/kat-architecture}
 \caption{The \KAT System Architecture}\label{fig:kat-arch}
 \end{figure}
 
