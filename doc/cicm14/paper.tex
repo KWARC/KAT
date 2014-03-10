@@ -16,7 +16,7 @@
 
 \pagestyle{plain}
 \usepackage{tikz}
-\usetikzlibrary{mmt,fit}
+\usetikzlibrary{shapes.geometric,docicon}
 
 \def\defemph#1{\textbf{#1}}
 \def\defeq{:=}
@@ -25,7 +25,8 @@
 \def\mathhub{\textsf{MathHub.info}\xspace}
 \def\sys{\textsf{KAT}\xspace}
 \def\KAT{\textsf{KAT}\xspace}
-\usepackage{hyperref}
+\usepackage[linkcolor=black,citecolor=black,urlcolor=black,colorlinks=true,breaklinks=true,
+plainpages=false,pdfpagelabels]{hyperref}
 
 \title{System Description: KAT an Annotation Tool for STEM Documents}
 \author{Mircea Alex Dumitru, Deyan Ginev, Michael  Kohlhase, Vlad Merticariu, Stefan
@@ -57,6 +58,11 @@
 
 
 \section{System Architecture and Realization}\label{sec:arch}
+\begin{figure}[ht]\centering
+\def\localxscale{.8}\def\localyscale{1.1}
+\input{../tikz/kat-architecture}
+\caption{The \KAT System Architecture}\label{fig:kat-arch}
+\end{figure}
 
 \section{Conclusion}\label{sec:concl}
 
