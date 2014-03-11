@@ -95,7 +95,7 @@
 
         // Rename IDs so you don't have conflicts
         var idSuffix = this._idSuffix;
-        mirror.content.find('.kat-counter').each(function () {
+        mirror.content.find(this._wordSelector).each(function () {
           $(this).attr('id', $(this).attr('id') + idSuffix);
         });
 
@@ -108,8 +108,8 @@
         source.content.find('.kat-annotated').each(function (index, elem) {
           var $elem = $(elem);
           this._mirrorAnnotate(
-            $elem.children().first().attr('id'),
-            $elem.children().last().attr('id'),
+            $elem.children().first().attr('id').replace(/\./g, '\\.'),
+            $elem.children().last().attr('id').replace(/\./g, '\\.'),
             $elem.attr('id'),
             $elem.attr('ontology'),
             $elem.attr('concept')
@@ -131,7 +131,12 @@
     },
 
     internals: {
+      // All tokens in the mirror content should be matched by this selector.
+      wordSelector: '.ltx_word',
+
+      // This will be appended to every ID token in the mirror content so no duplicate IDs exist.
       idSuffix: '-mirror',
+
       service: null,
       target: null,
       structure: null,

@@ -102,7 +102,7 @@ FlancheJs.defineClass("kat.preprocessor.TextPreprocessor", {
                         interactive: true,
                         content: "<a id='" + self._currentLinkId + "' href='#'>" + kat.Constants.TextPreprocessor.AnnotationLinkText + "</a>"
                     };
-                    var $target = $("#" + selectedIds["extentNodeId"]);
+                    var $target = $("#" + selectedIds["extentNodeId"]).eq(0);
                     $target.tooltipster(tooltipOptions);
                     $target.tooltipster('show');
                     //timeout necessary to allow the link to exist before registering an event to it
