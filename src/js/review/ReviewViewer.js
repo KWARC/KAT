@@ -108,8 +108,8 @@
         source.content.find('.kat-annotated').each(function (index, elem) {
           var $elem = $(elem);
           this._mirrorAnnotate(
-            $elem.children().first().attr('id').replace(/\./g, '\\.'),
-            $elem.children().last().attr('id').replace(/\./g, '\\.'),
+            ($elem.children().first().attr('id') || '').replace(/\./g, '\\.'),
+            ($elem.children().last().attr('id') || '').replace(/\./g, '\\.'),
             $elem.attr('id'),
             $elem.attr('ontology'),
             $elem.attr('concept')
