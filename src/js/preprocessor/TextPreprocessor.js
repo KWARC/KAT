@@ -1,19 +1,19 @@
 /*
- * This file is part of KAT, the KWARC Annotation Tool, 
+ * This file is part of KAT, the KWARC Annotation Tool,
  * see https://github.com/KWARC/KAT
- * 
+ *
  * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
- * 
+ *
  * KAT is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * KAT is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with KAT.  If not, see <http://www.gnu.org/licenses/>
  */
@@ -71,10 +71,16 @@ FlancheJs.defineClass("kat.preprocessor.TextPreprocessor", {
             var baseNodeId = $(baseNode.parentNode).attr('id');
             var extentNodeId = $(extentNode.parentNode).attr('id');
             if (t.toString()) {
-                return {
+                var result = {
                     "baseNodeId": baseNodeId,
                     "extentNodeId": extentNodeId
-                }
+                };
+
+                Object.keys(result).forEach(function (key) {
+                   result[key] = result[key].replace(/\./g, '\\.');
+                });
+
+                return result;
             }
             else {
                 return null;
@@ -96,8 +102,9 @@ FlancheJs.defineClass("kat.preprocessor.TextPreprocessor", {
                         interactive: true,
                         content: "<a id='" + self._currentLinkId + "' href='#'>" + kat.Constants.TextPreprocessor.AnnotationLinkText + "</a>"
                     };
-                    $("#" + selectedIds["extentNodeId"]).tooltipster(tooltipOptions);
-                    $("#" + selectedIds["extentNodeId"]).tooltipster('show');
+                    var $target = $("#" + selectedIds["extentNodeId"]);
+                    $target.tooltipster(tooltipOptions);
+                    $target.tooltipster('show');
                     //timeout necessary to allow the link to exist before registering an event to it
                     //to be removed when replaced by jobad callback
                     setTimeout(function () {
