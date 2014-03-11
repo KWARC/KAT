@@ -154,6 +154,10 @@
           andSelf().
           add(mirror.content.find('#' + endId + this._idSuffix));
 
+        if (startId === endId) {
+          annotatedIds = mirror.content.find('#' + startId + this._idSuffix);
+        }
+
         var $elem = jqElem('span');
         $elem.attr({
           id: id + this._idSuffix,
