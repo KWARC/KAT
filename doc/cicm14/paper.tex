@@ -56,10 +56,9 @@ existing tools and evaluate new ones specifically developed for STEM documents, 
 establish manually annotated document corpora. Unfortunately, even the annotation tools
 used in computational linguistics do not work well with mathematical documents. The main
 problem is that they assume that the underlying documents are essentially sequences of
-characters -- older systems do not even support unicode strings. But STEM documents, we
-need to be able to cope with mathematical/chemical formulae, tables, and diagrams, which
-form constitutive -- and non-atomic -- parts of the discourses. In a way the whole point
-of the exercise of extending linguistic methods to STEM documents is to cope with these. 
+characters -- older systems do not even support Unicode strings. But with STEM documents, we need to be able to cope with mathematical/chemical formulae, tables, and 
+diagrams, which form constitutive -- and non-atomic -- parts of the discourses. In a way the whole point of the exercise of extending linguistic methods to STEM documents
+is to cope with these new symbolic actors. 
 
 STEM documents are usually authored in
 \begin{inparaenum}[\em i\rm)]
@@ -70,15 +69,17 @@ STEM documents are usually authored in
 \end{inparaenum}
 In all cases, the distribution formats DOCX, ODF, PDF, and HTML5 are not mere character
 strings, in fact the markup portions outweigh the text part by far. Therefore, simply
-annotating the serialization of the (unicode) serializations of the documents forbids
+annotating the serialization of the (Unicode) authoring syntax of the documents forbids
 itself, since the annotator would have to read and annotate the -- essentially illegible
--- marked up text. But the existing systems, e.g. \textsf{brat} ~\cite {brat:on},
-\textsf{Yawas}~\cite{yawas:on}, and \textsf{Annotatie}~\cite{annotatie:on} have been used
-to annotate STEM texts. Usually by stripping out the document markup and replacing
-formulae by placeholder words like ``some-math317''.  While this allows some linguistic
-annotations, the placeholder words are structurally opaque and can therefore only
-participate in the linguistic relations to a very limited way. In particular, we cannot
-annotate examples like \nlex{Let $x\in\mathbb{R}$ be \ldots}, where we would like to
+-- marked up text. Nevertheless, some existing systems,
+ e.g. \textsf{brat} ~\cite {brat:on}, \textsf{Yawas}~\cite{yawas:on}, and
+  \textsf{Annotatie}~\cite{annotatie:on} have been used
+to annotate STEM texts. The usual approach is to strip out the document markup and
+ replace formulae by placeholder words such as ``some-math317''.
+While such approach allows some linguistic annotations, the placeholder words are
+ structurally opaque and can therefore only participate in the linguistic relations
+ to a very limited extent. In particular, we cannot
+annotate examples such as \nlex{Let $x\in\mathbb{R}$ be \ldots}, where we would like to
 annotate the sub-formula \nlex{$x$} as the grammatical subject of the sentence and the
 subformula \nlex{$\in\mathbb{R}$} as an appositional elaboration to that
 (see~\cite{Wolska:PHD}). A way out of this would be to gloss -- i.e. to ``read out'' --
@@ -99,18 +100,18 @@ refer the reader to the \KAT manual~\cite{DumGinKoh:katsdm14} for details.
 \tikzinput{../tikz/kat-architecture}
 \caption{The \KAT System Architecture}\label{fig:kat-arch}\vspace*{-1em}
 \end{wrapfigure}
-As \KAT is based on HTML5, we can employ the XML tool chain and rely on standard libraries
+As \KAT is based on XHTML5, we can employ the XML tool chain and rely on standard libraries
 for the implementation. In particular, we can use URI references to identify text
 fragments and represent annotations in RDF -- subject/predicate/object triples where the
 components are URI references to web resources. The subjects are usually text fragments,
-the objects too (for relational annotations) or concepts from an annotation ontology (for
-classificational annotations), and the predicates are from the annotation ontology.
+the objects are as well (for relational annotations) or alternatively are concepts from an annotation ontology (for
+classificational annotations). The predicates are always properties and relations defined in the annotation ontology.
 
-The \KAT system itself is realized as a JavaScript library which instruments an HTML5
+The \KAT system itself is realized as a JavaScript library which instruments an XHTML5
 document in a browser. To simplify the URI-based referencing of text ranges (node-sets in
-the DOM) \KAT assumes that the XHTML document has been word- and sentence-tokenized via
+the DOM) \KAT assumes that the document has been word- and sentence-tokenized via
 HTML \textsf{span} elements that carry unique \textsf{id} attributes corresponding to the
-TEI guidelines\ednote{MK@DG: do we need to say more?}. The annotation workflow itself is
+TEI guidelines. The annotation workflow itself is
 form-based as shown in Figure~\ref{fig:kat-annotate}: the annotator selects a text range,
 and is then given a modal form to fill classifications and relations as required by the
 annotation ontology. The annotations are stored as RDF triples in the browser's local
@@ -138,7 +139,7 @@ the fragment of a \KAT binding in Listing~\ref{lst:frame}. It specifies
 \item the RDF subgraph for the frame via a templating mechanism.
 \end{inparaenum}
 Note that this frame classifies the annotated word as an OMDoc symbol (via the \lstinline
-[basicstyle=\sf\normalsize]|rdf:type|) predicate and relates it to its name via the
+[basicstyle=\sf\normalsize]|rdf:type| predicate) and relates it to its name via the
 \lstinline[basicstyle=\sf\normalsize]|o:symbolname| relation from the OMDoc ontology.
 
 \begin{lstlisting}[language=XML,label=lst:frame,
@@ -178,11 +179,12 @@ via a side-by-side view of the various annotations.
 We have presented the \KAT system, an open, parametric, and browser-based annotation
 system for STEM documents encoded in HTML5.  The code released under the Gnu Public
 License and is available at~\cite{KAT:github:on}. The system is in an early state of
-development, but can already be used for practical annotation and annotation review work,
-but the user interface needs serious usability testing and polish to improve productivity.
+development, but can already be used for practical annotation and annotation review work.
+The user interface both needs and is yet to undergo serious usability testing and polish,
+to both improve productivity and also to fully stabilize it for production use.
 The next steps will be to refine our annotation ontologies and integrate more linguistic
-ontologies to get more coverage. Also we want to start work on a small annotated corpus of
-mathematical documents. 
+ontologies to get more coverage. Also we want to start work on preparing a 
+small annotated corpus of mathematical documents. 
 
 \paragraph{Acknowledgements} Work on the concepts presented here has been partially
 supported by the Leibniz association under grant SAW-2012-FIZ\_KA-2. We are grateful to
