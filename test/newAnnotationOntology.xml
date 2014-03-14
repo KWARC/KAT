@@ -13,14 +13,11 @@
                     <value>Name</value>
                     <default>Symbol</default>
                     <validation>[A-Z][a-z]*</validation>
-                    <number atleast="1" atmost="2"></number>
                 </field>
             </fields>
             <display>
                 <template>
-                    <b>Symbol:</b>
-                    <br/>
-                    {name}
+                    <b>Symbol:</b> {name}
                 </template>
             </display>
             <rdf:RDF>
@@ -36,12 +33,11 @@
                 <field name="for" type="reference">
                     <value>For</value>
                     <referencedType>OMDoc.Symbol</referencedType>
-                    <number atleast="1"></number>
+                    <number atleast="1"/>
                 </field>
                 <field name="type" type="select">
                     <options>
                         <option default="true">
-                            <value>simple</value>
                             <value>simple</value>
                             <documentation>definiens is does not contain the definiendum</documentation>
                         </option>
@@ -62,19 +58,16 @@
             </fields>
             <display>
                 <template>
-                    <b>Definition</b>
-                    <br/>
-                    {for}
-                    <br/>
-                    {type}
+                    <b>Definition</b> {for} {type}
                 </template>
             </display>
             <rdf:RDF>
                 <rdf:Description>
-                    <rdf:type rdf:resource="http://omdoc.org/ontology#GeneralDefinition"></rdf:type>
-                    <o:defines rdf:resource="{for}"></o:defines>
+		  <!-- extend the OMDoc ontology suitably, be careful of the caps --> 
+                  <rdf:type rdf:resource="http://omdoc.org/ontology#{type}Definition"/>
+                  <o:defines rdf:resource="{for}"/>
                 </rdf:Description>
-            </rdf:RDF>
+		</rdf:RDF>
         </concept>
 
         <concept name="Assertion">
