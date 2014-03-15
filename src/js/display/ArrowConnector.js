@@ -41,6 +41,7 @@ FlancheJs.defineClass("kat.display.ArrowConnector", {
         },
 
         destroy: function () {
+            console.log("calldestroy"); 
             if (this._connection) {
                 jsPlumb.detach(this._connection, {
                     forceDetatch: true
@@ -57,8 +58,8 @@ FlancheJs.defineClass("kat.display.ArrowConnector", {
 
         createSVGArrow: function () {
             this._connection = jsPlumb.connect({
-                source: this._arrowBaseElement.attr('id'),
-                target: this._arrowHeadElement.attr('id'),
+                source: this._arrowBaseElement,
+                target: this._arrowHeadElement,
                 container: this._arrowBaseElement.parent(),
                 overlays: [
                     "Arrow"
