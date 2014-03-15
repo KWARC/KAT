@@ -1504,7 +1504,7 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
 
 
 
-(function init_jquery_spaceSwitcher ($) {
+(function init_jquery_searchSelect ($) {
 
   var pluginName = 'searchSelect';
   var infoName = pluginName;
@@ -1588,9 +1588,9 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
    * Creates a new searchSelect on the matched elements.
    *
    * @param  {Object} options Optional. Overwrite the default options provided
-   *                            in $.spaceSwitcher.options;
+   *                            in $.searchSelect.options;
    * @param  {Object} classes Optional. Overwrite the default classes provided
-   *                            in $.spaceSwitcher.classes;
+   *                            in $.searchSelect.classes;
    * @return {jQuery}
    */
   $.fn[pluginName] = function init_jquery_plugin (options, classes) {
@@ -1794,8 +1794,8 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
       top: info.searchField.outerHeight(),
       left: 0,
     });
-
     select($elem, $elem[0].selectedIndex);
+    info.hidden = false;
 
     $elem.trigger('show-after', [instant]);
 
@@ -1820,6 +1820,7 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
     instant ? info.listWrapper.hide() : info.listWrapper.fadeOut('fast');
     $elem.removeClass(info.options.openClass);
     setValue($elem, $elem[0].selectedIndex, true);
+    info.hidden = true;
 
     $elem.trigger('hide-after', [instant]);
 
@@ -1907,6 +1908,8 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
     // Clicking outside of the menu, closes the menu.
     attach_event($elem, 'global-close', $(document), 'click.closeMenu',
       function on_close_menu (event) {
+        if (info.hidden) return;
+
         var $target = $(event.target);
         while ($target && $target.length > 0) {
           if ($target.is(info.wrapper) || $target.is($elem)) {
@@ -3718,21 +3721,21 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
     }
 
 })/*
- * This file is part of KAT, the KWARC Annotation Tool, 
+ * This file is part of KAT, the KWARC Annotation Tool,
  * see https://github.com/KWARC/KAT
- * 
+ *
  * Copyright (c) 2014 by the KWARC Group (http://kwarc.info)
- * 
+ *
  * KAT is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * KAT is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with KAT.  If not, see <http://www.gnu.org/licenses/>
  */
@@ -3771,11 +3774,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
         annotationRegistry: null,
 
         renderContainer: function () {
-            jQuery("#" + this.KContainerId).remove();
+            $("#" + this.KContainerId).remove();
             var containerHtml = this.KModalTemplate.replace("{id}", this.KContainerId)
                 .replace("{title}", kat.Constants.Display.AnnotationFormTitle)
-            jQuery("body").append(containerHtml);
-            jQuery("#" + this.KContainerId).modal();
+            $("body").append(containerHtml);
+            $("#" + this.KContainerId).modal();
             this._renderOntologySelector();
         },
 
@@ -3830,12 +3833,12 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             }
 
             // Remove any previous installation of searchSelect
-            jQuery("#annotation-concept-selector").searchSelect('destroy');
+            $("#annotation-concept-selector").searchSelect('destroy');
             $(".kat-concept-selector").html(selectHtml.replace("{options}", options));
 
             var self = this;
 
-            jQuery("#annotation-concept-selector").on("change", function () {
+            $("#annotation-concept-selector").on("change", function () {
                 self._registerFormForConcept();
             }).searchSelect();
 
@@ -3927,7 +3930,7 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             var formSaveButton = $("#kat-form-save");
             formSaveButton.off("click.kat");
             formSaveButton.on("click.kat", function () {
-                var form = jQuery(".kat-form-display");
+                var form = $(".kat-form-display");
                 var extraData = {};
                 if (form.find(".reference-field")) {
                     extraData.referenceId = form.find(".reference-field :selected").attr("data-annotation-id");
@@ -3955,9 +3958,9 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
         },
 
         destroy: function () {
-            jQuery("#annotation-concept-selector").searchSelect('destroy');
-            jQuery("#" + this.KContainerId).modal("hide");
-            jQuery("#" + this.KContainerId).remove();
+            $("#annotation-concept-selector").searchSelect('destroy');
+            $("#" + this.KContainerId).modal("hide");
+            $("#" + this.KContainerId).remove();
         }
     },
     statics: {

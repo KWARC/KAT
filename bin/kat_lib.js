@@ -1504,7 +1504,7 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
 
 
 
-(function init_jquery_spaceSwitcher ($) {
+(function init_jquery_searchSelect ($) {
 
   var pluginName = 'searchSelect';
   var infoName = pluginName;
@@ -1588,9 +1588,9 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
    * Creates a new searchSelect on the matched elements.
    *
    * @param  {Object} options Optional. Overwrite the default options provided
-   *                            in $.spaceSwitcher.options;
+   *                            in $.searchSelect.options;
    * @param  {Object} classes Optional. Overwrite the default classes provided
-   *                            in $.spaceSwitcher.classes;
+   *                            in $.searchSelect.classes;
    * @return {jQuery}
    */
   $.fn[pluginName] = function init_jquery_plugin (options, classes) {
@@ -1794,8 +1794,8 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
       top: info.searchField.outerHeight(),
       left: 0,
     });
-
     select($elem, $elem[0].selectedIndex);
+    info.hidden = false;
 
     $elem.trigger('show-after', [instant]);
 
@@ -1820,6 +1820,7 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
     instant ? info.listWrapper.hide() : info.listWrapper.fadeOut('fast');
     $elem.removeClass(info.options.openClass);
     setValue($elem, $elem[0].selectedIndex, true);
+    info.hidden = true;
 
     $elem.trigger('hide-after', [instant]);
 
@@ -1907,6 +1908,8 @@ function UUID(){}UUID.generate=function(){var a=UUID._gri,b=UUID._ha;return b(a(
     // Clicking outside of the menu, closes the menu.
     attach_event($elem, 'global-close', $(document), 'click.closeMenu',
       function on_close_menu (event) {
+        if (info.hidden) return;
+
         var $target = $(event.target);
         while ($target && $target.length > 0) {
           if ($target.is(info.wrapper) || $target.is($elem)) {
