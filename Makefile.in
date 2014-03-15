@@ -10,8 +10,9 @@ $(shell find $(SRCDIR)/js/output -name '*.js')       fileseparator\
 $(shell find $(SRCDIR)/js/display -name '*.js')      fileseparator\
 $(shell find $(SRCDIR)/js/remote -name '*.js')       fileseparator\
 $(shell find $(SRCDIR)/js/annotation -name '*.js' | sort )   fileseparator\
+$(shell find $(SRCDIR)/js/review -name '*.js')       fileseparator\
 $(shell find $(SRCDIR)/js/main -name '*.js')
-INSTALLDIR=/srv/http/kat
+INSTALLDIR=./
 
 init:
 	mkdir -p $(BINDIR)
@@ -40,10 +41,11 @@ srcjs: init 	$(SRCDIR)/js/util/Util.js
 	cat $(SOURCES)                                                     > $(BINDIR)/kat_src.js
 
 srccss: init $(SRCDIR)/css/kat.css
-	cat $(SRCDIR)/css/kat.css                                          > $(BINDIR)/kat_src.css
+	cat $(SRCDIR)/css/kat.css								fileseparator \
+	$(SRCDIR)/js/review/ReviewViewer.css									> $(BINDIR)/kat_src.css
 
 js: init libjs srcjs
-	cat	$(BINDIR)/kat_lib.js fileseparator $(BINDIR)/kat_src.js        > $(BINDIR)/kat.js
+	cat $(BINDIR)/kat_lib.js fileseparator $(BINDIR)/kat_src.js        > $(BINDIR)/kat.js
 
 css: init libcss srccss
 	cat $(BINDIR)/kat_lib.css fileseparator $(BINDIR)/kat_src.css      > $(BINDIR)/kat.css
