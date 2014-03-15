@@ -39,7 +39,11 @@ FlancheJs.defineClass("kat.main.KATService", {
   },
 
   methods: {
-    run: function () {
+    run: function (config) {
+
+      var config = (typeof config == "undefined")?config:{}; 
+
+      config.showCPanel = (typeof config.showCPanel =="boolean")?config.showCPanel:true; 
 
       //register error handler
       window.onerror = function (message) {
@@ -62,7 +66,7 @@ FlancheJs.defineClass("kat.main.KATService", {
       preProcessor.setDisplay(displayer);
       this._annotationRegistry.setDisplay(displayer);
       var ontologyViewer = new kat.display.AnnotationOntologyViewer(this._ontologyRegistry, this._conceptRegistry, this._annotationRegistry);
-      ontologyViewer.run();
+      ontologyViewer.run(config["showCPanel"]);
     }
   },
 

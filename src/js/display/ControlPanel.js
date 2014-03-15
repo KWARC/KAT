@@ -32,8 +32,13 @@ FlancheJs.defineClass("kat.display.AnnotationOntologyViewer", {
     this._annotationRegistry = annotationRegistry;
   },
   methods  : {
-    run: function () {
-      this._registerViewerLink();
+    run: function (showCPanelLink) {
+      if(showCPanelLink){
+        this._registerViewerLink();
+      }
+    }, 
+    showPanel: function(){
+      this._viewOntology();
     }
   },
   internals: {
@@ -42,7 +47,7 @@ FlancheJs.defineClass("kat.display.AnnotationOntologyViewer", {
       var self = this;
       $("#annotation-viewer-link a").on('click', function (event) {
         event.preventDefault();
-        self._viewOntology();
+        self.showPanel();
       })
 
     },
