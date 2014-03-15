@@ -109,30 +109,25 @@ classificational annotations). The predicates are always properties and relation
 
 The \KAT system itself is realized as a JavaScript library which instruments an XHTML5
 document in a browser. To simplify the URI-based referencing of text ranges (node-sets in
-the DOM) \KAT assumes that the document has been word- and sentence-tokenized via
-HTML \textsf{span} elements that carry unique \textsf{id} attributes corresponding to the
-TEI guidelines. The annotation workflow itself is
-form-based as shown in Figure~\ref{fig:kat-annotate}: the annotator selects a text range,
-and is then given a modal form to fill classifications and relations as required by the
-annotation ontology. The annotations are stored as RDF triples in the browser's local
-storage and can be visualized by special pop-ups and arrows (see
-Figure~\ref{fig:kat-annotate}).\ednote{MK: we agreed that Tom would make a math document
-  with a visualization of a symbol, a definition for, and an annotation bubble.}
+the DOM) \KAT assumes that the document has been word- and sentence-tokenized via HTML
+\textsf{span} elements that carry unique \textsf{id} attributes corresponding to the TEI
+guidelines. The annotation workflow itself is form-based as shown in
+Figure~\ref{fig:kat-annotate}: the annotator selects a text range, and is then given a
+modal form to fill classifications and relations as required by the annotation
+ontology. The annotations are stored as RDF triples in the browser's local storage and can
+be visualized by special pop-ups and arrows (see Figure~\ref{fig:kat-annotate}).
 
 \begin{figure}[ht]\centering
-  \includegraphics[width=.57\textwidth]{../PIC/annotate}\quad
-  \includegraphics[width=.37\textwidth]{../PIC/add-symbol}
+  \includegraphics[height=3cm]{../PIC/annotate}\quad
+  \includegraphics[height=3cm]{../PIC/add-symbol}
   \caption{Annotating in \KAT: Selection and Form-Filling}\label{fig:kat-annotate}
 \end{figure}
 
 \KAT is not tied to a particular annotation ontology (or ontology format). At startup, the
 system is reads a set of \defemph{\KAT bindings} -- custom XML files that describe the
-annotation interface, the constraints between the components of an annotation
-frame\ednote{MK: I rather like this word for the relations you specify in one form; we
-  should probably use it throughout. We should probably also rename ``concept'' to
-  ``frame'' in the XML; I did that for the paper already.}, and the RDF to be
-produced. The frame of OMDoc symbols used in Figure~\ref{fig:kat-annotate}, is given by
-the fragment of a \KAT binding in Listing~\ref{lst:frame}. It specifies
+annotation interface, the constraints between the components of an annotation frame, and
+the RDF to be produced. The frame of OMDoc symbols used in Figure~\ref{fig:kat-annotate},
+is given by the fragment of a \KAT binding in Listing~\ref{lst:frame}. It specifies
 \begin{inparaenum}[\em i\rm)]
 \item the fields of the annotation form, their values and validation constraints,
 \item their display, and
