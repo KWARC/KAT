@@ -101,7 +101,7 @@ refer the reader to the \KAT manual~\cite{DumGinKoh:katsdm14} for details.
 \caption{The \KAT System Architecture}\label{fig:kat-arch}\vspace*{-1em}
 \end{wrapfigure}
 As \KAT is based on XHTML5, we can employ the XML tool chain and rely on standard libraries
-for the implementation. In particular, we can use URI references to identify text
+for the implementation. In particular, we can use uniform resource identifiers (URI) to identify text
 fragments and represent annotations in RDF -- subject/predicate/object triples where the
 components are URI references to web resources. The subjects are usually text fragments,
 the objects are as well (for relational annotations) or alternatively are concepts from an annotation ontology (for
@@ -109,7 +109,8 @@ classificational annotations). The predicates are always properties and relation
 
 The \KAT system itself is realized as a JavaScript library which instruments an XHTML5
 document in a browser. To simplify the URI-based referencing of text ranges (node-sets in
-the DOM) \KAT assumes that the document has been word- and sentence-tokenized via HTML
+the HTML document object model) \KAT assumes that the document has been word- and sentence-tokenized;
+the tokens are wrapped in HTML
 \textsf{span} elements that carry unique \textsf{id} attributes corresponding to the TEI
 guidelines. The annotation workflow itself is form-based as shown in
 Figure~\ref{fig:kat-annotate}: the annotator selects a text range, and is then given a
@@ -118,8 +119,8 @@ ontology. The annotations are stored as RDF triples in the browser's local stora
 be visualized by special pop-ups and arrows (see Figure~\ref{fig:kat-annotate}).
 
 \begin{figure}[ht]\centering
-  \includegraphics[height=3cm]{../PIC/annotate}\quad
-  \includegraphics[height=3cm]{../PIC/add-symbol}
+  \includegraphics[height=3.2cm]{../PIC/annotate}\quad
+  \includegraphics[height=3.1cm]{../PIC/add-symbol}
   \caption{Annotating in \KAT: Selection and Form-Filling}\label{fig:kat-annotate}
 \end{figure}
 
@@ -159,11 +160,11 @@ caption=A \KAT Frame Specification for OMDoc Symbols]
 </frame>
 \end{lstlisting}
 Even though \KAT can work as a standalone library that can be added to any STEM document
-in HTML5, it is best used as a component of a corpus management system like the {Cor\TeX}
+in HTML5, it is best used as a component of a corpus management system, such as the {Cor\TeX}
 system~\cite{CorTeX:on} developed by the second author. In this situation the annotator
 requests an annotation task from {Cor\TeX}, which serves the TEI-tokenized document with
 \KAT and a set of bindings for the intended annotation ontologies. When the annotation is
-complete, the generated RDF is exported to the semantic blackboard -- a RDF triple store
+complete, the generated RDF is exported to the semantic blackboard -- an RDF triple store
 maintained by {Cor\TeX}. When combined with {Cor\TeX}, \KAT can be used by multiple
 annotators; and can be used to review existing annotations, by importing them from the
 triple store.  \KAT also has experimental support for inter-annotator agreement reviews
@@ -172,7 +173,7 @@ via a side-by-side view of the various annotations.
 \section{Conclusion \& Future Work}\label{sec:concl}
 
 We have presented the \KAT system, an open, parametric, and browser-based annotation
-system for STEM documents encoded in HTML5.  The code released under the Gnu Public
+system for STEM documents encoded in HTML5.  The code base is released under the Gnu Public
 License and is available at~\cite{KAT:github:on}. The system is in an early state of
 development, but can already be used for practical annotation and annotation review work.
 The user interface both needs and is yet to undergo serious usability testing and polish,
