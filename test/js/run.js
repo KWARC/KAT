@@ -32,7 +32,8 @@ function init () {
   //nice and simple
   var service = new kat.main.KATService(container);
   service.run();
+  window.service = service; //for the demo
 
-  var reviewViewer = new kat.review.ReviewViewer(service);
-  reviewViewer.apply();
+  //var reviewViewer = new kat.review.ReviewViewer(service);
+  //reviewViewer.apply();
 }

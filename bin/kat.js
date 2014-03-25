@@ -15568,12 +15568,12 @@ FlancheJs.defineClass("kat.display.AnnotationOntologyViewer", {
         this._registerViewerLink();
       }
     }, 
-    showPanel: function(){
+    show: function(){
       this._viewOntology();
     }
   },
   internals: {
-    registerViewerLink          : function () {
+    registerViewerLink: function () {
       $("body").append(this.ontologyViewerLink);
       var self = this;
       $("#annotation-viewer-link a").on('click', function (event) {
@@ -15582,7 +15582,7 @@ FlancheJs.defineClass("kat.display.AnnotationOntologyViewer", {
       })
 
     },
-    viewOntology                : function () {
+    viewOntology: function () {
       var ontologies = this._ontologyRegistry.getAllOntologies();
       var ontologyList = [];
       _.each(ontologies, function (ontology) {
@@ -17071,11 +17071,11 @@ FlancheJs.defineClass("kat.main.KATService", {
   methods: {
     run: function (config) {
 
-      var config = (typeof config == "undefined")?config:{}; 
+      //Load the config
+      var config = (typeof config == "undefined")?{}:config; 
+      config.showCPanel = (typeof config.showCPanel =="boolean")?config.showCPanel:false; 
 
-      config.showCPanel = (typeof config.showCPanel =="boolean")?config.showCPanel:true; 
-
-      //register error handler
+      /*
       window.onerror = function (message) {
         $.pnotify({
           title: 'KAT Error',
@@ -17083,20 +17083,35 @@ FlancheJs.defineClass("kat.main.KATService", {
           type : 'error'
         })
       }
-      var preProcessor = new kat.preprocessor.TextPreprocessor(this._selector, "", this._ontologyRegistry, this._conceptRegistry, this._annotationRegistry);
-      preProcessor.run();
+      */
+
+      //preprocess the text
+      this._preProcessor = new kat.preprocessor.TextPreprocessor(this._selector, "", this._ontologyRegistry, this._conceptRegistry, this._annotationRegistry);
+      this._preProcessor.run();
+      
+
+      //load and render the current annotations
       var currentAnnotations = this._annotationRegistry.getAnnotations();
       var renderedAnnotations = [];
       for (var i = 0; i < currentAnnotations.length; i++) {
         var renderer = new kat.display.AnnotationRenderer(currentAnnotations[i], this._conceptRegistry);
         renderedAnnotations.push(renderer.render())
       }
-      var displayer = new kat.Display(renderedAnnotations, this._annotationRegistry, this._conceptRegistry);
-      displayer.run();
-      preProcessor.setDisplay(displayer);
-      this._annotationRegistry.setDisplay(displayer);
-      var ontologyViewer = new kat.display.AnnotationOntologyViewer(this._ontologyRegistry, this._conceptRegistry, this._annotationRegistry);
-      ontologyViewer.run(config["showCPanel"]);
+
+      //Load the displayer
+      this._displayer = new kat.Display(renderedAnnotations, this._annotationRegistry, this._conceptRegistry);
+      this._displayer.run();
+
+      this._preProcessor.setDisplay(this._displayer);
+      this._annotationRegistry.setDisplay(this._displayer);
+      
+      //add the control panel
+      this._ontologyViewer = new kat.display.AnnotationOntologyViewer(this._ontologyRegistry, this._conceptRegistry, this._annotationRegistry);
+      this._ontologyViewer.run(config["showCPanel"]);
+    }, 
+    "showControlPanel": function(){
+      //Shortcut to display the control panel
+      this._ontologyViewer.show(); 
     }
   },
 
@@ -17109,17 +17124,4 @@ FlancheJs.defineClass("kat.main.KATService", {
     coretexRetriever  : null
   }
 
-})
-
-//only used for demo, to retrieve and add an ontology
-//jQuery.get("http://localhost/katGit/test/newAnnotationOntology.xml", function(xmlOntology){
-//  var ontology = new kat.annotation.Ontology("OMDoc", xmlOntology);
-//  var name = "OMDoc";
-//  self._ontologyRegistry.addOntology(ontology);
-//  var newConcepts = ontology.getDefinition().getXmlDoc().getElementsByTagName("concept");
-//  for (var i = 0; i < newConcepts.length; i++) {
-//    var conceptName = newConcepts[i].getAttribute("name");
-//    //conceptsText += '<i class="icon-arrow-right"></i> <b>' + name + "." + conceptName + "</b><br/>";
-//    self._conceptRegistry.addConcept(new kat.annotation.Concept(name + "." + conceptName, newConcepts[i], name));
-//  }
-//})
+}); 

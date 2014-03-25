@@ -37,12 +37,12 @@ FlancheJs.defineClass("kat.display.AnnotationOntologyViewer", {
         this._registerViewerLink();
       }
     }, 
-    showPanel: function(){
+    show: function(){
       this._viewOntology();
     }
   },
   internals: {
-    registerViewerLink          : function () {
+    registerViewerLink: function () {
       $("body").append(this.ontologyViewerLink);
       var self = this;
       $("#annotation-viewer-link a").on('click', function (event) {
@@ -51,7 +51,7 @@ FlancheJs.defineClass("kat.display.AnnotationOntologyViewer", {
       })
 
     },
-    viewOntology                : function () {
+    viewOntology: function () {
       var ontologies = this._ontologyRegistry.getAllOntologies();
       var ontologyList = [];
       _.each(ontologies, function (ontology) {
