@@ -11,30 +11,27 @@ $(shell find $(SRCDIR)/js/display -name '*.js')      fileseparator\
 $(shell find $(SRCDIR)/js/remote -name '*.js')       fileseparator\
 $(shell find $(SRCDIR)/js/annotation -name '*.js' | sort )   fileseparator\
 $(shell find $(SRCDIR)/js/review -name '*.js')       fileseparator\
-$(shell find $(SRCDIR)/js/main -name '*.js')
+$(shell find $(SRCDIR)/js/main -name '*.js')       fileseparator\
+$(shell find $(SRCDIR)/js/jobad -name '*.js')
 INSTALLDIR=./
 
 init:
 	mkdir -p $(BINDIR)
 	printf "\n\n\n\n" > fileseparator
 
-libjs: init $(LIBDIR)/Bootstrap/js/bootstrap.min.js $(LIBDIR)/FlancheJs/flanchejs.js $(LIBDIR)/jQuery/jquery.js	$(LIBDIR)/underscorejs/underscore.js
-	cat $(LIBDIR)/jQuery/jquery.js   fileseparator                     \
-	$(LIBDIR)/FlancheJs/flanchejs.js fileseparator                     \
-	$(LIBDIR)/underscorejs/underscore.js fileseparator                 \
+libjs: init $(LIBDIR)/FlancheJs/flanchejs.js
+	cat $(LIBDIR)/FlancheJs/flanchejs.js fileseparator                     \
 	$(LIBDIR)/pNotify/js/pnotify.js fileseparator                      \
 	$(LIBDIR)/Tooltipster/js/tooltipster.js fileseparator              \
 	$(LIBDIR)/bootbox/bootbox.min.js fileseparator                     \
 	$(LIBDIR)/jsplumb/jsplumb.min.js fileseparator                     \
   $(LIBDIR)/raphael/raphael.min.js fileseparator                     \
 	$(LIBDIR)/UUID/uuid.js fileseparator                               \
-	$(LIBDIR)/Bootstrap/js/bootstrap.min.js fileseparator              \
 	$(LIBDIR)/SearchSelect/search-select.js                            > $(BINDIR)/kat_lib.js
 
-libcss: init $(LIBDIR)/Bootstrap/css/bootstrap.min.css
+libcss: init
 	cat $(LIBDIR)/Tooltipster/css/tooltipster.css                  \
 	$(LIBDIR)/pNotify/css/pnotify.css                              \
-	$(LIBDIR)/Bootstrap/css/bootstrap.min.css                      \
 	$(LIBDIR)/SearchSelect/search-select.css                       > $(BINDIR)/kat_lib.css
 
 srcjs: init 	$(SRCDIR)/js/util/Util.js
@@ -50,10 +47,7 @@ js: init libjs srcjs
 css: init libcss srccss
 	cat $(BINDIR)/kat_lib.css fileseparator $(BINDIR)/kat_src.css      > $(BINDIR)/kat.css
 
-img: $(LIBDIR)/Bootstrap/img
-	cp -R $(LIBDIR)/Bootstrap/img $(BINDIR)/img
-
-all: js css	img
+all: js css
 	@echo -e "\n\n#>The build is complete\n\n"
 
 clean:

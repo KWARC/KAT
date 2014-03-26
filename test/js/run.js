@@ -30,9 +30,12 @@ function initDemo (content) {
 
 function init () {
   //nice and simple
-  var service = new kat.main.KATService(container);
-  service.run();
-  window.service = service; //for the demo
+
+  var myJOBAD = new JOBAD(container); 
+  myJOBAD.modules.load("KAT", function(){
+    myJOBAD.Setup(); 
+  }); 
+
 
   //var reviewViewer = new kat.review.ReviewViewer(service);
   //reviewViewer.apply();

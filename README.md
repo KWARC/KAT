@@ -18,6 +18,10 @@ A pdf manual for KAT can be found in [doc/manual/kat.pdf](doc/manual/kat.pdf)
 
 A demo can be found at [http://kwarc.github.io/KAT/](http://kwarc.github.io/KAT/)
 
+## Dev Branch
+
+This is the dev branch. Everything is experimental and unstable here. 
+
 ## License
 
 KAT is licensed under GPL. 

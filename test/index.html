@@ -1,21 +1,39 @@
-<html><head>
-    <title>KAT Test</title>
-    <link href="../bin/kat.css" type="text/css" rel="stylesheet">
-</head>
-<body style="overflow-x: hidden; max-width:960px; margin:0 auto;">
+<html>
+	<head>
+		<title>KAT Test</title>
 
-<h1>KAT: Proof of Concept Demo</h1>
-
-<h3>Annotate the text below</h3>
-<div id="text">
-  <!-- content will be included via AJAX -->
-</div>
-
-<script src="../bin/kat.js" type="text/javascript"></script>
-
-<script src="js/run.js"></script>
-<!--<script src="js/debug.js"></script>-->
-<!--<script src="js/TextPreprocessor.js"></script>-->
+		<!-- load JOBAD libs -->
+		<script src='./../jobad/libs/js/libs.js'></script>
+		<link rel='stylesheet' type='text/css' href='./../jobad/libs/css/libs.css'>
 
 
-<div id="annotation-viewer-link">      <a href="#">KAT Control Panel</a></div><div class="ui-pnotify-history-container well" style="top: -106px;"><div class="ui-pnotify-history-header">Redisplay</div><button class="ui-pnotify-history-all btn">All</button><button class="ui-pnotify-history-last btn">Last</button><span class="ui-pnotify-history-pulldown icon-chevron-down"></span></div></body></html>
+		<!-- load JOBAD -->
+		<script src='./../jobad/JOBAD.min.js'></script>
+		<link rel='stylesheet' type='text/css' href='./../jobad/JOBAD.min.css'>
+
+		<!-- Load the KAT module -->
+		<script src="./../bin/kat.js"></script>
+
+		<!-- Load runtime scripts -->
+		<script src="js/run.js"></script>
+	</head>
+	<body style="overflow-x: hidden; max-width:960px; margin:0 auto;">
+
+		<h1>KAT: Proof of Concept Demo</h1>
+
+		<h3>Annotate the text below</h3>
+		<div id="text">
+			<!-- content will be included via AJAX -->
+		</div>
+
+		
+		<!--
+		<div class="ui-pnotify-history-container well" style="top: -106px;">
+			<div class="ui-pnotify-history-header">Redisplay</div>
+			<button class="ui-pnotify-history-all btn">All</button>
+			<button class="ui-pnotify-history-last btn">Last</button>
+			<span class="ui-pnotify-history-pulldown icon-chevron-down"></span>
+		</div>
+		-->
+	</body>
+</html>

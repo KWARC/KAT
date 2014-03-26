@@ -46,6 +46,7 @@ FlancheJs.defineClass("kat.main.KATService", {
       config.showCPanel = (typeof config.showCPanel =="boolean")?config.showCPanel:false; 
 
       /*
+      //Error handling disabled
       window.onerror = function (message) {
         $.pnotify({
           title: 'KAT Error',
