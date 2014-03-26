@@ -1,5 +1,4 @@
-#Makefile for kat library
-#Adjust the setting for your environment
+# Makefile for KAT
 BINDIR=bin
 LIBDIR=lib
 SRCDIR=src
@@ -13,7 +12,6 @@ $(shell find $(SRCDIR)/js/annotation -name '*.js' | sort )   fileseparator\
 $(shell find $(SRCDIR)/js/review -name '*.js')       fileseparator\
 $(shell find $(SRCDIR)/js/main -name '*.js')       fileseparator\
 $(shell find $(SRCDIR)/js/jobad -name '*.js')
-INSTALLDIR=./
 
 init:
 	mkdir -p $(BINDIR)
@@ -53,11 +51,3 @@ all: js css
 clean:
 	rm -rf $(BINDIR)
 	rm fileseparator
-
-install: test bin
-	rm -rf $(INSTALLDIR)
-	mkdir -p $(INSTALLDIR)
-	cp -R test $(INSTALLDIR)/test
-	cp -R bin  $(INSTALLDIR)/bin
-	chmod -R 777 $(INSTALLDIR)/test/annotations
-	@echo -e "\n\n#>Installation complete\n\n"
