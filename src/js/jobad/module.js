@@ -52,13 +52,22 @@ JOBAD.modules.register({
 		//Nothing yet
 	}, 
 	contextMenuEntries: function(target, JOBADInstance){
-		
 		var KAT = this.localStore.get("katInstance"); 
-
-		//TODO: Check if we can make a selection
+		
+		//Lets see if we can make a selection
+		var newAnnot = false; 
+		try{
+			var selectedIds = KAT._preProcessor.getSelectedIds(); //get selceted ids
+			if(typeof selectedIds !== "undefined"){
+				//if we have a selection, add a callback function
+				newAnnot = function(){
+					KAT._preProcessor._AddAnnotationHandler(selectedIds); 
+				}
+			}
+		} catch(e){}
 
 		return [
-			["New Annotation", false], 
+			["New Annotation", newAnnot], 
 			["KAT Control Panel", function(){
 				//show the control panel
 				KAT.showControlPanel(); 

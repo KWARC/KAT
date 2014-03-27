@@ -20,4 +20,4 @@
 
  //JOABD / KAT Compatibility
 
- window._ = JOBAD.util; //restore underscore
+window._ = JOBAD.util; //restore underscore

@@ -44,22 +44,14 @@ FlancheJs.defineClass("kat.main.KATService", {
       //Load the config
       var config = (typeof config == "undefined")?{}:config; 
       config.showCPanel = (typeof config.showCPanel =="boolean")?config.showCPanel:false; 
-
-      /*
-      //Error handling disabled
-      window.onerror = function (message) {
-        $.pnotify({
-          title: 'KAT Error',
-          text : message,
-          type : 'error'
-        })
-      }
-      */
+      config.showAnnotBubbles = (typeof config.showAnnotBubbles =="boolean")?config.showAnnotBubbles:false; 
 
       //preprocess the text
       this._preProcessor = new kat.preprocessor.TextPreprocessor(this._selector, "", this._ontologyRegistry, this._conceptRegistry, this._annotationRegistry);
-      this._preProcessor.run();
       
+      if(config.showAnnotBubbles){
+        this._preProcessor.run();
+      }     
 
       //load and render the current annotations
       var currentAnnotations = this._annotationRegistry.getAnnotations();

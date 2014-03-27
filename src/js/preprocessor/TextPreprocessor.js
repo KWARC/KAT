@@ -83,7 +83,7 @@ FlancheJs.defineClass("kat.preprocessor.TextPreprocessor", {
                 return result;
             }
             else {
-                return null;
+                return undefined;
             }
 
         },
@@ -108,7 +108,12 @@ FlancheJs.defineClass("kat.preprocessor.TextPreprocessor", {
                     //timeout necessary to allow the link to exist before registering an event to it
                     //to be removed when replaced by jobad callback
                     setTimeout(function () {
-                            self._registerAddAnnotationHandler(selectedIds["baseNodeId"], selectedIds["extentNodeId"])
+                        $("#" + this._currentLinkId).off("click.kat");
+                        $("#" + this._currentLinkId).on("click", function (e) {
+                            e.preventDefault();
+                            self._AddAnnotationHandler(selectedIds); 
+                        }); 
+                            
                         },
                         500);
                 }
@@ -130,21 +135,21 @@ FlancheJs.defineClass("kat.preprocessor.TextPreprocessor", {
 
         currentLinkId: "",
 
-        registerAddAnnotationHandler: function (baseId, extentId) {
+        AddAnnotationHandler: function (selectedIds) {
             var self = this;
-            $("#" + this._currentLinkId).off("click.kat");
-            $("#" + this._currentLinkId).on("click", function (e) {
-                e.preventDefault();
-                //check that at least 1 annotation ontology and at least 1 concept are defined
-                if (!self._ontologyRegistry.getAllOntologies().length) {
-                    throw Error("Please define at least 1 annotation ontology before adding annotations!");
-                }
-                if (!self._conceptRegistry.getAllConcepts().length) {
-                    throw Error("Please make sure that the annotation ontologies define at least 1 concept!");
-                }
-                var typeForm = new kat.display.AnnotationTypeForm(baseId, extentId, self._ontologyRegistry, self._conceptRegistry, self._anotationRegistry, self.getDisplay());
-                typeForm.run();
-            })
+
+            var baseId = selectedIds["baseNodeId"]; 
+            var extentId = selectedIds["extentNodeId"]; 
+
+            //check that at least 1 annotation ontology and at least 1 concept are defined
+            if (!self._ontologyRegistry.getAllOntologies().length) {
+                throw Error("Please define at least 1 annotation ontology before adding annotations!");
+            }
+            if (!self._conceptRegistry.getAllConcepts().length) {
+                throw Error("Please make sure that the annotation ontologies define at least 1 concept!");
+            }
+            var typeForm = new kat.display.AnnotationTypeForm(baseId, extentId, self._ontologyRegistry, self._conceptRegistry, self._anotationRegistry, self.getDisplay());
+            typeForm.run();
         }
     }
 });
