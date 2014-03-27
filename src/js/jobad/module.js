@@ -70,7 +70,7 @@ JOBAD.modules.register({
 			["New Annotation", newAnnot], 
 			["KAT Control Panel", function(){
 				//show the control panel
-				KAT.showControlPanel(); 
+				KAT._ControlPanel.show(); 
 			}]
 		]; 
 	}

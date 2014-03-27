@@ -19,10 +19,7 @@
  */
 
 /**
- * Class for text preprocessing. It adds text selection listeners.
- *
- * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
- * @author <a href="mailto:v.merticariu@jacobs-university,de">Vlad Merticariu</a>
+ * Class for text preprocessing. It provides selectors
  */
 
 FlancheJs.defineClass("kat.preprocessor.TextPreprocessor", {
@@ -86,45 +83,6 @@ FlancheJs.defineClass("kat.preprocessor.TextPreprocessor", {
                 return undefined;
             }
 
-        },
-        /**
-         * When text is selected, the container ids are sent for further
-         * processing.
-         */
-        addSelectionListener: function () {
-            var self = this;
-            $(this.getSelector()).mouseup(function () {
-                var selectedIds = self.getSelectedIds();
-                if (selectedIds) {
-                    self._currentLinkId = "kat-add-annotation-" + parseInt(Math.random() * 1000);
-                    var tooltipOptions = {
-                        trigger: "custom",
-                        interactive: true,
-                        content: "<a id='" + self._currentLinkId + "' href='#'>" + kat.Constants.TextPreprocessor.AnnotationLinkText + "</a>"
-                    };
-                    var $target = $("#" + selectedIds["extentNodeId"]).eq(0);
-                    $target.tooltipster(tooltipOptions);
-                    $target.tooltipster('show');
-                    //timeout necessary to allow the link to exist before registering an event to it
-                    //to be removed when replaced by jobad callback
-                    setTimeout(function () {
-                        $("#" + this._currentLinkId).off("click.kat");
-                        $("#" + this._currentLinkId).on("click", function (e) {
-                            e.preventDefault();
-                            self._AddAnnotationHandler(selectedIds); 
-                        }); 
-                            
-                        },
-                        500);
-                }
-            })
-        },
-        /**
-         * Encapsulates the behavior of the text preprocessor.
-         * It adds selection listeners.
-         */
-        run: function () {
-            this.addSelectionListener();
         }
     },
 

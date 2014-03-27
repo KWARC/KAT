@@ -39,19 +39,10 @@ FlancheJs.defineClass("kat.main.KATService", {
   },
 
   methods: {
-    run: function (config) {
+    run: function () {
 
-      //Load the config
-      var config = (typeof config == "undefined")?{}:config; 
-      config.showCPanel = (typeof config.showCPanel =="boolean")?config.showCPanel:false; 
-      config.showAnnotBubbles = (typeof config.showAnnotBubbles =="boolean")?config.showAnnotBubbles:false; 
-
-      //preprocess the text
+      //this one will contain all the selectors
       this._preProcessor = new kat.preprocessor.TextPreprocessor(this._selector, "", this._ontologyRegistry, this._conceptRegistry, this._annotationRegistry);
-      
-      if(config.showAnnotBubbles){
-        this._preProcessor.run();
-      }     
 
       //load and render the current annotations
       var currentAnnotations = this._annotationRegistry.getAnnotations();
@@ -69,12 +60,7 @@ FlancheJs.defineClass("kat.main.KATService", {
       this._annotationRegistry.setDisplay(this._displayer);
       
       //add the control panel
-      this._ontologyViewer = new kat.display.AnnotationOntologyViewer(this._ontologyRegistry, this._conceptRegistry, this._annotationRegistry);
-      this._ontologyViewer.run(config["showCPanel"]);
-    }, 
-    "showControlPanel": function(){
-      //Shortcut to display the control panel
-      this._ontologyViewer.show(); 
+      this._ControlPanel = new kat.display.ControlPanel(this._ontologyRegistry, this._conceptRegistry, this._annotationRegistry);
     }
   },
 

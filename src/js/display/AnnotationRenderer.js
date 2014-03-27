@@ -65,10 +65,6 @@ FlancheJs.defineClass("kat.display.AnnotationRenderer", {
         template = template.replace(new RegExp("{" + name + "}", "g"), replacements[name]);
       }
       return template;
-    },
-
-    displayReference: function(){
-
     }
   }
 
