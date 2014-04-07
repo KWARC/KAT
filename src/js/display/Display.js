@@ -164,6 +164,8 @@ kat.Display.prototype.addSpecialClassToSpans = function () {
 */
 kat.Display.prototype.createTooltipDisplays = function () {
 
+  var self = this; 
+
   //iterate over all the annotations
   for (var i = 0; i < this.getAnnotations().length; i++) {
 
@@ -188,21 +190,23 @@ kat.Display.prototype.createTooltipDisplays = function () {
       this.createReferenceArrow(currentAnnotation, this.$annotations[i].id);
     }
 
-    $("#" + this.$annotations[i].id).popover(tooltipsterOptions);
-    
+    $("#" + this.$annotations[i].id).popover(tooltipsterOptions).on("shown", function(){
+        var tooltipElement = $(this).data('popover'); 
+        self._registerEditAnnotationCallback(tooltipElement); 
+        self._registerCloseAnnotationCallback(tooltipElement); 
+    });
+
+    /*
     var annotationId = "#" + this.$annotations[i].id;
     var annotationCloseId = "#" + 'close-' + this.$annotations[i].id;
     
-    //scope and 
     (function (annotationId, annotationCloseId) {
-      $("body").delegate(annotationCloseId, "click", function () {
-        $(annotationId).popover('hide');
+      $("body").delegate(, "click", function () {
+        $(annotationId)
       })
-    })(annotationId, annotationCloseId)
+    })(annotationId, annotationCloseId)*/
   }
 
-  //register the edit annotation callback
-  this._registerEditAnnotationCallback();
 }; 
 
 /*
@@ -267,12 +271,12 @@ kat.Display.prototype.update = function () {
 /*
   register Edit Annotation Callback
 */
-kat.Display.prototype._registerEditAnnotationCallback =  function () {
+kat.Display.prototype._registerEditAnnotationCallback =  function (bubble) {
   var self = this;
 
-  $("body")
-  .off("click.kat", ".edit-annotation")
-  .on("click.kat", ".edit-annotation", function () {
+  $(bubble.$tip).find(".edit-annotation")
+  .off("click.kat")
+  .on("click.kat", function () {
     //get the id
     var id = $(this).attr('id').split('edit-annotation-');
     id = id[1];
@@ -287,3 +291,14 @@ kat.Display.prototype._registerEditAnnotationCallback =  function () {
     annotationEditForm.run();
   });
 }; 
+
+kat.Display.prototype._registerCloseAnnotationCallback = function(bubble) {
+  var self = this;
+
+  $(bubble.$tip).find(".close")
+  .off("click.kat")
+  .on("click.kat", function () {
+    //close the popover
+    bubble.$element.popover('hide');
+  });
+}
