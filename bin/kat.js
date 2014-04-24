@@ -14686,16 +14686,12 @@ FlancheJs.defineClass("kat.input.form.fieldparser.TextFieldParser", {
  */
 
 /**
- * Creates an svg arrow that can be used to connect two dom elements, for example a
- * reference field annotation to the referenced item.
- *
- * @author <a href="mailto:m.dumitru@jacobs-university.de">Alex Dumitru</a>
- * @author <a href="mailto:v.merticariu@jacobs-university,de">Vlad Merticariu</a>
+ * Creates an svg arrow that can be used to connect two dom elements, for example a reference field annotation to the referenced item.
+ * @method ArrowConnector
+ * @param {} arrowBaseElement Base element to start arrow at. 
+ * @param {} arrowHeadElement The element the head of the arrow should point to. 
+ * @return 
  */
-
-/*
-    Represents an arrow connection between two bubbles
-*/
 kat.display.ArrowConnector = function(arrowBaseElement, arrowHeadElement){
 
     //store parameters
@@ -14705,20 +14701,23 @@ kat.display.ArrowConnector = function(arrowBaseElement, arrowHeadElement){
 
 }
 
-/*
-    Renders the arrow represented by this class instance. 
-*/
+/**
+ * Renders the arrow represented by this class instance. 
+ * @method render
+ * @return 
+ */
 kat.display.ArrowConnector.prototype.render = function () {
     if (!this._connection) {
         this._createSVGArrow();
     }
 }
 
-/*
-    Removes the rendered arrow represented by this class instance. 
-*/
+/**
+ * Removes the rendered arrow represented by this class instance. 
+ * @method destroy
+ * @return 
+ */
 kat.display.ArrowConnector.prototype.destroy = function () {
-    // console.log("calldestroy"); 
     if (this._connection) {
         jsPlumb.detach(this._connection, {
             forceDetatch: true
@@ -14727,9 +14726,11 @@ kat.display.ArrowConnector.prototype.destroy = function () {
     }
 }
 
-/*
-    Renders the SVG object belonging to the arrow. 
-*/
+/**
+ * Creates the SVG object belonging to the arrow. 
+ * @method _createSVGArrow
+ * @return 
+ */
 kat.display.ArrowConnector.prototype._createSVGArrow = function () {
     this._connection = jsPlumb.connect({
         source: this._arrowBaseElement,
@@ -14773,6 +14774,17 @@ kat.display.ArrowConnector.prototype._createSVGArrow = function () {
  */
 
 FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
+    /**
+     * Description
+     * @method init
+     * @param {} idBase
+     * @param {} idExtent
+     * @param {} ontologyRegistry
+     * @param {} conceptRegistry
+     * @param {} annotationRegistry
+     * @param {} display
+     * @return 
+     */
     init: function (idBase, idExtent, ontologyRegistry, conceptRegistry, annotationRegistry, display) {
         this._idBase = idBase;
         this._idExtent = idExtent;
@@ -14782,6 +14794,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
         this.$display = display;
     },
     methods: {
+        /**
+         * Description
+         * @method run
+         * @return 
+         */
         run: function () {
             this._renderContainer();
         }
@@ -14798,6 +14815,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
         conceptRegistry: null,
         annotationRegistry: null,
 
+        /**
+         * Description
+         * @method renderContainer
+         * @return 
+         */
         renderContainer: function () {
             $("#" + this.KContainerId).remove();
             var containerHtml = this.KModalTemplate.replace("{id}", this.KContainerId)
@@ -14807,6 +14829,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             this._renderOntologySelector();
         },
 
+        /**
+         * Description
+         * @method renderOntologySelector
+         * @return 
+         */
         renderOntologySelector: function () {
             var ontologies = _.map(this._ontologyRegistry.getAllOntologies(), function (val) {
                 return {name: val.getName()};
@@ -14828,6 +14855,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             this._registerConceptForOntology();
         },
 
+        /**
+         * Description
+         * @method registerConceptForOntology
+         * @return 
+         */
         registerConceptForOntology: function () {
             var ontology = $("#annotation-ontology-selector").val();
             if (ontology != "") {
@@ -14846,6 +14878,12 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             }
         },
 
+        /**
+         * Description
+         * @method renderConceptSelector
+         * @param {} ontology
+         * @return 
+         */
         renderConceptSelector: function (ontology) {
             var selectHtml = "<h5>" + kat.Constants.Display.SelectConceptText + "</h5>";
             var documentationI = "<a data-documentation='Please select a concept.' id='annotation-concept-documentation' href='#'><i class='icon-question-sign'></i></a>";
@@ -14872,6 +14910,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             self._registerFormForConcept();
         },
 
+        /**
+         * Description
+         * @method registerFormForConcept
+         * @return 
+         */
         registerFormForConcept: function () {
             var concept = $("#annotation-concept-selector").val();
             if (concept != "") {
@@ -14894,6 +14937,12 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             }
         },
 
+        /**
+         * Description
+         * @method renderForm
+         * @param {} concept
+         * @return 
+         */
         renderForm: function (concept) {
             this._selectedConceptName = concept;
             var conceptObject = this._conceptRegistry.lookupConcept(concept);
@@ -14908,6 +14957,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             this._addFormExpandableInputs();
         },
 
+        /**
+         * Description
+         * @method addFormDocumentation
+         * @return 
+         */
         addFormDocumentation: function () {
             var documentedItems = $("#annotation-form-input").find("[data-documentation]");
             for (var i = 0; i < documentedItems.length; i++) {
@@ -14925,6 +14979,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             }
         },
 
+        /**
+         * Description
+         * @method addFormExpandableInputs
+         * @return 
+         */
         addFormExpandableInputs: function () {
             var expandableItems = $("#annotation-form-input").find("[data-atmost]");
             for (var i = 0; i < expandableItems.length; i++) {
@@ -14950,6 +15009,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             }
         },
 
+        /**
+         * Description
+         * @method registerFormSaveHandler
+         * @return 
+         */
         registerFormSaveHandler: function () {
             var self = this;
             var formSaveButton = $("#kat-form-save");
@@ -14966,6 +15030,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             })
         },
 
+        /**
+         * Description
+         * @method displaySuccessMessage
+         * @return 
+         */
         displaySuccessMessage: function () {
             $.pnotify({
                 title: 'KAT Message',
@@ -14974,6 +15043,12 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             });
         },
 
+        /**
+         * Description
+         * @method registerNewAnnotation
+         * @param {} annotation
+         * @return 
+         */
         registerNewAnnotation: function (annotation) {
             this._annotationRegistry.addAnnotation(annotation);
             var renderedAnnotation = (new kat.display.AnnotationRenderer(annotation, this._conceptRegistry)).render();
@@ -14982,6 +15057,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             this._displaySuccessMessage();
         },
 
+        /**
+         * Description
+         * @method destroy
+         * @return 
+         */
         destroy: function () {
             $("#annotation-concept-selector").searchSelect('destroy');
             $("#" + this.KContainerId).modal("hide");
@@ -15095,6 +15175,16 @@ FlancheJs.defineClass("kat.display.AnnotationRenderer", {
 
 FlancheJs.defineClass("kat.display.AnnotationEditForm", {
 
+    /**
+     * Description
+     * @method init
+     * @param {} annotation
+     * @param {} concept
+     * @param {} annotationRegistry
+     * @param {} conceptRegistry
+     * @param {} display
+     * @return 
+     */
     init: function (annotation, concept, annotationRegistry, conceptRegistry, display) {
         this.$annotation = annotation;
         this.$concept = concept;
@@ -15110,6 +15200,11 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
     },
 
     methods: {
+        /**
+         * Description
+         * @method run
+         * @return 
+         */
         run: function () {
             this._renderContainer();
             jQuery("#" + this.KContainerId).on("hidden", function () {
@@ -15119,6 +15214,11 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
     },
 
     internals: {
+        /**
+         * Description
+         * @method getAnnotationText
+         * @return BinaryExpression
+         */
         getAnnotationText: function () {
             var annotation = this.$annotation;
             var text = $("#" + annotation["$idBase"]).html();
@@ -15127,6 +15227,11 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
             }
             return "<span class='kat-annotation-text'>" + text + "</span>";
         },
+        /**
+         * Description
+         * @method renderContainer
+         * @return 
+         */
         renderContainer: function () {
             jQuery("#" + this.KContainerId).remove();
             var containerHtml = this.KModalTemplate.replace("{id}", this.KContainerId)
@@ -15145,6 +15250,11 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
             this._populateForm();
             this._registerSaveHandler(formParser);
         },
+        /**
+         * Description
+         * @method addFormDocumentation
+         * @return 
+         */
         addFormDocumentation: function () {
             var documentedItems = $(".annotation-form-edit-input").find("[data-documentation]");
             for (var i = 0; i < documentedItems.length; i++) {
@@ -15161,6 +15271,11 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
                 }
             }
         },
+        /**
+         * Description
+         * @method addFormExpandableInputs
+         * @return 
+         */
         addFormExpandableInputs: function () {
             var expandableItems = $(".annotation-form-edit-input").find("[data-atmost]");
             for (var i = 0; i < expandableItems.length; i++) {
@@ -15185,6 +15300,11 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
                 }
             }
         },
+        /**
+         * Description
+         * @method populateForm
+         * @return 
+         */
         populateForm: function () {
             for (var key in this.$annotation["$annotationValues"]) {
                 var values = this.$annotation["$annotationValues"][key].split(kat.Constants.Form.ValuesSeparator);
@@ -15205,6 +15325,11 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
                 }
             }
         },
+        /**
+         * Description
+         * @method registerDeleteHandler
+         * @return 
+         */
         registerDeleteHandler: function () {
             var self = this;
             $(".delete-kat-annotation").off("click.kat");
@@ -15226,6 +15351,12 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
                 })
             })
         },
+        /**
+         * Description
+         * @method registerSaveHandler
+         * @param {} formParser
+         * @return 
+         */
         registerSaveHandler: function (formParser) {
             var self = this;
             var form = $("#kat-form-save");
@@ -15249,6 +15380,11 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
                 })
             })
         },
+        /**
+         * Description
+         * @method destroy
+         * @return 
+         */
         destroy: function () {
             jQuery("#" + this.KContainerId).modal("hide");
             jQuery("#" + this.KContainerId).remove();
@@ -15287,12 +15423,16 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
  */
 
 /**
-* Class constructor
-* @param {Array[Object{idBase, idExtent, content}]} annotations The array of
-* annotations to be displayed.
-* @param {String} specialClass The class to be added to the words having
-* annotations bound.
-*/
+ * Class constructor
+ * annotations to be displayed.
+ * annotations bound.
+ * @method Display
+ * @param {Array} annotations The array of annotations to use. 
+ * @param {} annotationRegistry annotationRegistry to use. 
+ * @param {} conceptRegistry conceptRegistry to use. 
+ * @param {String} specialClass The class to be added to the words having
+ * @return 
+ */
 kat.Display = function (annotations, annotationRegistry, conceptRegistry, specialClass) {
   
   //init properties
@@ -15310,45 +15450,61 @@ kat.Display = function (annotations, annotationRegistry, conceptRegistry, specia
   this._conceptRegistry = conceptRegistry;
 }; 
 
-/*
-  Sets the annotations property
-*/
+/**
+ * Sets the annotations property
+ * @method setAnnotations
+ * @param {} annotations Value to set the property to. 
+ * @return 
+ */
 kat.Display.prototype.setAnnotations = function(annotations){
   this.$annotations = annotations; 
 }
 
-/*
-  Gets the annotation property
-*/
+/**
+ * Gets the annotation property
+ * @method getAnnotations
+ * @return MemberExpression
+ */
 kat.Display.prototype.getAnnotations = function(){
   return this.$annotations; 
 }
 
 
-/*
-  Sets the specialClass property
-*/
+/**
+ * Sets the specialClass property
+ * @method setSpecialClass
+ * @param {} specialClass Value to set the specialclass property to. 
+ * @return 
+ */
 kat.Display.prototype.setSpecialClass = function(specialClass){
   this.$specialClass = specialClass; 
 }
 
-/*
-  Gets the specialClass property
-*/
+/**
+ * Gets the specialClass property
+ * @method getSpecialClass
+ * @return MemberExpression
+ */
 kat.Display.prototype.getSpecialClass = function(){
   return this.$specialClass; 
 }
 
-/*
-  Adds an annotation to the display
-*/
+/**
+ * Adds an annotation to the display
+ * @method addAnnotation
+ * @param {} annotation Annotation to add. 
+ * @return 
+ */
 kat.Display.prototype.addAnnotation = function (annotation) {
   this.$annotations.push(annotation);
 }; 
 
-/*
-  Removes an annotation from the display
-*/
+/**
+ * Removes an annotation from the display
+ * @method deleteAnnotation
+ * @param {} id Id of annotation to delete
+ * @return 
+ */
 kat.Display.prototype.deleteAnnotation = function (id) {
 
   //find all annotations with the given id
@@ -15360,9 +15516,11 @@ kat.Display.prototype.deleteAnnotation = function (id) {
 
 };
 
-/*
-  Adds the class to the spans having annotations bound
-*/
+/**
+ * Adds the class to the spans having annotations bound
+ * @method addSpecialClassToSpans
+ * @return 
+ */
 kat.Display.prototype.addSpecialClassToSpans = function () {
 
   //iterate over the annotations
@@ -15423,9 +15581,11 @@ kat.Display.prototype.addSpecialClassToSpans = function () {
   }
 }; 
 
-/*
-  Creates Tooltip Displays. 
-*/
+/**
+ * Creates Tooltip Displays. 
+ * @method createTooltipDisplays
+ * @return 
+ */
 kat.Display.prototype.createTooltipDisplays = function () {
 
   var self = this; 
@@ -15473,9 +15633,13 @@ kat.Display.prototype.createTooltipDisplays = function () {
 
 }; 
 
-/*
-  Creates reference arrows between annotations
-*/
+/**
+ * Creates reference arrows between annotations
+ * @method createReferenceArrow
+ * @param {} currentAnnotation The current annotation to create a reference from. 
+ * @param {} annotationId The id of the annoation to use. 
+ * @return 
+ */
 kat.Display.prototype.createReferenceArrow = function (currentAnnotation, annotationId) {
   var self = this;
 
@@ -15496,17 +15660,21 @@ kat.Display.prototype.createReferenceArrow = function (currentAnnotation, annota
   });
 };
 
-/*
-  Encapsulates the behavior of the Display by adding classes to annotated spans and creating display handlers.
-*/
+/**
+ * Encapsulates the behavior of the Display by adding classes to annotated spans and creating display handlers.
+ * @method run
+ * @return 
+ */
 kat.Display.prototype.run = function () {
   this.addSpecialClassToSpans();
   this.createTooltipDisplays();
 }; 
 
-/*
-  Resets the display object. 
-*/
+/**
+ * Resets the display object. 
+ * @method reset
+ * @return 
+ */
 kat.Display.prototype.reset = function () {
 
   //remove the popovers
@@ -15521,9 +15689,11 @@ kat.Display.prototype.reset = function () {
 
 }; 
 
-/*
-  Updates the display
-*/
+/**
+ * Updates the display
+ * @method update
+ * @return 
+ */
 kat.Display.prototype.update = function () {
 
   //reset and rerun
@@ -15532,9 +15702,12 @@ kat.Display.prototype.update = function () {
 
 }; 
 
-/*
-  register Edit Annotation Callback
-*/
+/**
+ * register Edit Annotation Callback
+ * @method _registerEditAnnotationCallback
+ * @param {} bubble A jQuery reference for the bubble to use. 
+ * @return 
+ */
 kat.Display.prototype._registerEditAnnotationCallback =  function (bubble) {
   var self = this;
 
@@ -15556,6 +15729,12 @@ kat.Display.prototype._registerEditAnnotationCallback =  function (bubble) {
   });
 }; 
 
+/**
+ * Description
+ * @method _registerCloseAnnotationCallback
+ * @param {} bubble A jQuery reference for the bubble to use. 
+ * @return 
+ */
 kat.Display.prototype._registerCloseAnnotationCallback = function(bubble) {
   var self = this;
 
@@ -15587,8 +15766,12 @@ kat.Display.prototype._registerCloseAnnotationCallback = function(bubble) {
 
 /**
  * Creates a KAT Control Panel. 
+ * @method ControlPanel
+ * @param {} ontologyRegistry ontologyRegistry to use
+ * @param {} conceptRegistry conceptRegistry to use
+ * @param {} annotationRegistry annotationRegistry to use. 
+ * @return 
  */
-
 kat.display.ControlPanel = function(ontologyRegistry, conceptRegistry, annotationRegistry) {
     //Setup parameters  
     this._ontologyRegistry = ontologyRegistry;
@@ -15602,9 +15785,11 @@ kat.display.ControlPanel = function(ontologyRegistry, conceptRegistry, annotatio
 
 }; 
 
-/*
-  Shows the Control Panel. 
-*/
+/**
+ * Shows the Control Panel. 
+ * @method show
+ * @return 
+ */
 kat.display.ControlPanel.prototype.show =  function () {
   //self reference
   var self = this;

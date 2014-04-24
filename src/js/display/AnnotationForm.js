@@ -26,6 +26,17 @@
  */
 
 FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
+    /**
+     * Description
+     * @method init
+     * @param {} idBase
+     * @param {} idExtent
+     * @param {} ontologyRegistry
+     * @param {} conceptRegistry
+     * @param {} annotationRegistry
+     * @param {} display
+     * @return 
+     */
     init: function (idBase, idExtent, ontologyRegistry, conceptRegistry, annotationRegistry, display) {
         this._idBase = idBase;
         this._idExtent = idExtent;
@@ -35,6 +46,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
         this.$display = display;
     },
     methods: {
+        /**
+         * Description
+         * @method run
+         * @return 
+         */
         run: function () {
             this._renderContainer();
         }
@@ -51,6 +67,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
         conceptRegistry: null,
         annotationRegistry: null,
 
+        /**
+         * Description
+         * @method renderContainer
+         * @return 
+         */
         renderContainer: function () {
             $("#" + this.KContainerId).remove();
             var containerHtml = this.KModalTemplate.replace("{id}", this.KContainerId)
@@ -60,6 +81,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             this._renderOntologySelector();
         },
 
+        /**
+         * Description
+         * @method renderOntologySelector
+         * @return 
+         */
         renderOntologySelector: function () {
             var ontologies = _.map(this._ontologyRegistry.getAllOntologies(), function (val) {
                 return {name: val.getName()};
@@ -81,6 +107,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             this._registerConceptForOntology();
         },
 
+        /**
+         * Description
+         * @method registerConceptForOntology
+         * @return 
+         */
         registerConceptForOntology: function () {
             var ontology = $("#annotation-ontology-selector").val();
             if (ontology != "") {
@@ -99,6 +130,12 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             }
         },
 
+        /**
+         * Description
+         * @method renderConceptSelector
+         * @param {} ontology
+         * @return 
+         */
         renderConceptSelector: function (ontology) {
             var selectHtml = "<h5>" + kat.Constants.Display.SelectConceptText + "</h5>";
             var documentationI = "<a data-documentation='Please select a concept.' id='annotation-concept-documentation' href='#'><i class='icon-question-sign'></i></a>";
@@ -125,6 +162,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             self._registerFormForConcept();
         },
 
+        /**
+         * Description
+         * @method registerFormForConcept
+         * @return 
+         */
         registerFormForConcept: function () {
             var concept = $("#annotation-concept-selector").val();
             if (concept != "") {
@@ -147,6 +189,12 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             }
         },
 
+        /**
+         * Description
+         * @method renderForm
+         * @param {} concept
+         * @return 
+         */
         renderForm: function (concept) {
             this._selectedConceptName = concept;
             var conceptObject = this._conceptRegistry.lookupConcept(concept);
@@ -161,6 +209,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             this._addFormExpandableInputs();
         },
 
+        /**
+         * Description
+         * @method addFormDocumentation
+         * @return 
+         */
         addFormDocumentation: function () {
             var documentedItems = $("#annotation-form-input").find("[data-documentation]");
             for (var i = 0; i < documentedItems.length; i++) {
@@ -178,6 +231,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             }
         },
 
+        /**
+         * Description
+         * @method addFormExpandableInputs
+         * @return 
+         */
         addFormExpandableInputs: function () {
             var expandableItems = $("#annotation-form-input").find("[data-atmost]");
             for (var i = 0; i < expandableItems.length; i++) {
@@ -203,6 +261,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             }
         },
 
+        /**
+         * Description
+         * @method registerFormSaveHandler
+         * @return 
+         */
         registerFormSaveHandler: function () {
             var self = this;
             var formSaveButton = $("#kat-form-save");
@@ -219,6 +282,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             })
         },
 
+        /**
+         * Description
+         * @method displaySuccessMessage
+         * @return 
+         */
         displaySuccessMessage: function () {
             $.pnotify({
                 title: 'KAT Message',
@@ -227,6 +295,12 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             });
         },
 
+        /**
+         * Description
+         * @method registerNewAnnotation
+         * @param {} annotation
+         * @return 
+         */
         registerNewAnnotation: function (annotation) {
             this._annotationRegistry.addAnnotation(annotation);
             var renderedAnnotation = (new kat.display.AnnotationRenderer(annotation, this._conceptRegistry)).render();
@@ -235,6 +309,11 @@ FlancheJs.defineClass("kat.display.AnnotationTypeForm", {
             this._displaySuccessMessage();
         },
 
+        /**
+         * Description
+         * @method destroy
+         * @return 
+         */
         destroy: function () {
             $("#annotation-concept-selector").searchSelect('destroy');
             $("#" + this.KContainerId).modal("hide");
