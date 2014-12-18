@@ -1,0 +1,17 @@
+{
+    "tags": {
+        "allowUnknownTags": true
+    },
+    "source": {
+        "include": ["src", "README.md"],
+        "exclude": ["node_modules"],
+        "includePattern": ".+\\.js(doc)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "opts": {
+        "destination": "doc",
+        "recurse": true,
+        "template": "libs/jaguarjs-jsdoc",
+        "private": true
+    }
+}

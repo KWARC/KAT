@@ -1,0 +1,2536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<annotation xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:o="http://omdoc.org/ontology#" name="stanford">
+  <documentation>
+    OLiA Annotation Model of Stanford Parser dependency labels (de Marneffe and Manning 2011)
+
+Unless specified otherwise, all comments are taken from de Marneffe and Manning (2011)
+
+References:
+Marie-Catherine de Marneffe and Christopher D. Manning (2011), Stanford typed dependencies manual, September 2008, revised for Stanford Parser v. 1.6.9 in September 2011, http://nlp.stanford.edu/software/dependencies_manual.pdf
+  </documentation>
+  <concepts>
+
+    <concept name="AbbreviationModifier">
+      <documentation>An abbreviation modifier of an NP is a parenthesized NP that serves to abbreviate the NP (or to define an abbreviation).
+
+"The Australian Broadcasting Corporation (ABC)"
+abbrev(Corporation, ABC)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#AbbreviationModifier</documentation>
+            <value>Name</value>
+            <default>AbbreviationModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>AbbreviationModifier:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AbbreviationModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="AdjectivalComplement">
+      <documentation>An adjectival complement of a verb is an adjectival phrase which functions as the complement (like an object of the verb).
+
+"She looks very beautiful"
+acomp(looks, beautiful)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#AdjectivalComplement</documentation>
+            <value>Name</value>
+            <default>AdjectivalComplement</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>AdjectivalComplement:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AdjectivalComplement"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="AdjectivalModifier">
+      <documentation>An adjectival modifier of an NP is any adjectival phrase that serves to modify the meaning of the NP.
+
+"Sam eats red meat"
+amod(meat, red)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#AdjectivalModifier</documentation>
+            <value>Name</value>
+            <default>AdjectivalModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>AdjectivalModifier:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AdjectivalModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="AdverbialClauseModifier">
+      <documentation>An adverbial clause modifier of a VP or S is a clause modifying the verb (temporal clause, consequence, conditional clause, etc.).
+
+"The accident happened as the night was falling"
+advcl(happened, falling)
+
+"If you know who did it, you should tell the teacher"
+advcl(tell, know)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#AdverbialClauseModifier</documentation>
+            <value>Name</value>
+            <default>AdverbialClauseModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>AdverbialClauseModifier:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AdverbialClauseModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="AdverbialModifier">
+      <documentation>An adverbial modifier of a word is a (non-clausal) adverb or adverbial phrase (ADVP) that serves to modify the meaning of the word.
+
+"Genetically modified food"
+advmod(modified, genetically)
+
+"less often"
+advmod(often, less)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#AdverbialModifier</documentation>
+            <value>Name</value>
+            <default>AdverbialModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>AdverbialModifier:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AdverbialModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Agent">
+      <documentation>An agent is the complement of a passive verb which is introduced by the preposition "by" and does the action.
+
+"The man has been killed by the police"
+agent(killed, police)
+
+"Effects caused by the protein are important"
+agent(caused, protein)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Agent</documentation>
+            <value>Name</value>
+            <default>Agent</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>Agent:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Agent"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="AppositionalModifier">
+      <documentation>An appositional modifier of an NP is an NP immediately to the right of the first NP that serves to define or modify that NP. It includes parenthesized examples.
+
+"Sam, my brother"
+appos(Sam, brother)
+
+"Bill (John's cousin)"
+appos(Bill, cousin)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#AppositionalModifier</documentation>
+            <value>Name</value>
+            <default>AppositionalModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>AppositionalModifier:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AppositionalModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Argument">
+      <documentation></documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Argument</documentation>
+            <value>Name</value>
+            <default>Argument</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+      </fields>
+      <display>
+          <template>
+              <b>Argument:</b>
+              <br/>
+              {name}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Argument"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Attributive">
+      <documentation>An attributive is a WHNP complement of a copular verb such as "to be", "to seem", "to appear".
+
+"What is that?"
+attr (is, What)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Attributive</documentation>
+            <value>Name</value>
+            <default>Attributive</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>Attributive:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Attributive"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Auxiliary">
+      <documentation>An auxiliary of a clause is a non-main verb of the clause, e.g. modal auxiliary, "be" and "have" in a composed tense.
+
+"Reagan has died"
+aux(died, has)
+
+"He should leave"
+aux(leave, should)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Auxiliary</documentation>
+            <value>Name</value>
+            <default>Auxiliary</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>Auxiliary:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Auxiliary"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="ClausalComplementWithExternalSubject">
+      <documentation>An open clausal complement (xcomp) of a VP or an ADJP is a clausal complement without its own subject, whose reference is determined by an external subject. These complements are always non-finite. The name xcomp is borrowed from Lexical-Functional Grammar.
+
+"He says that you like to swim"
+xcomp(like, swim)
+
+"I am ready to leave"
+xcomp(ready, leave)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#ClausalComplementWithExternalSubject</documentation>
+            <value>Name</value>
+            <default>ClausalComplementWithExternalSubject</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>ClausalComplementWithExternalSubject:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ClausalComplementWithExternalSubject"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="ClausalComplementWithInternalSubject">
+      <documentation>A clausal complement of a verb or adjective is a dependent clause with an internal subject which functions like an object of the verb, or adjective. Clausal complements for nouns are limited to complement clauses with a subset of nouns like "fact" or "report". We analyze them the same (parallel to the analysis of this class as "content clauses" in Huddleston and Pullum 2002). Such clausal complements are usually finite (though there are occasional remnant English subjunctives).
+
+"He says that you like to swim"
+ccomp(says, like)
+
+"I am certain that he did it"
+ccomp(certain, did)
+
+"I admire the fact that you are honest"
+ccomp(fact, honest)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#ClausalComplementWithInternalSubject</documentation>
+            <value>Name</value>
+            <default>ClausalComplementWithInternalSubject</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>ClausalComplementWithInternalSubject:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ClausalComplementWithInternalSubject"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="ClausalSubject">
+      <documentation>A clausal subject is a clausal syntactic subject of a clause, i.e., the subject is itself a clause. The governor of this relation might not always be a verb: when the verb is a copular verb, the root of the clause is the complement of the copular verb. In the two following examples, "what she said" is the subject.
+
+"What she said makes sense"
+csubj (makes, said)
+
+"What she said is not true"
+csubj (true, said)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#ClausalSubject</documentation>
+            <value>Name</value>
+            <default>ClausalSubject</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>ClausalSubject:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ClausalSubject"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Complement">
+      <documentation></documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Complement</documentation>
+            <value>Name</value>
+            <default>Complement</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+      </fields>
+      <display>
+          <template>
+              <b>Complement:</b>
+              <br/>
+              {name}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Complement"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Complementizer">
+      <documentation>A complementizer of a clausal complement (ccomp) is the word introducing it. It will be the subordinating conjunction "that" or "whether".
+
+"He says that you like to swim"
+complm(like, that)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Complementizer</documentation>
+            <value>Name</value>
+            <default>Complementizer</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+      </fields>
+      <display>
+          <template>
+              <b>Complementizer:</b>
+              <br/>
+              {name}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Complementizer"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="CompountNumberElement">
+      <documentation>An element of compound number is a part of a number phrase or currency amount.
+
+"I lost $ 3.2 billion"
+number($, billion)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#CompountNumberElement</documentation>
+            <value>Name</value>
+            <default>CompountNumberElement</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>CompountNumberElement:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#CompountNumberElement"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Conjunct">
+      <documentation>A conjunct is the relation between two elements connected by a coordinating conjunction, such as "and", "or", etc. We treat conjunctions asymmetrically: The head of the relation is the first
+conjunct and other conjunctions depend on it via the conj relation.
+
+"Bill is big and honest"
+conj (big, honest)
+
+"They either ski or snowboard"
+conj (ski, snowboard)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Conjunct</documentation>
+            <value>Name</value>
+            <default>Conjunct</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>Conjunct:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Conjunct"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="ControllingSubject">
+      <documentation>A controlling subject is the relation between the head of a open clausal complement (xcomp) and the external subject of that clause.
+
+"Tom likes to eat fish"
+xsubj (eat, Tom)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#ControllingSubject</documentation>
+            <value>Name</value>
+            <default>ControllingSubject</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>ControllingSubject:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ControllingSubject"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Coordination">
+      <documentation>A coordination is the relation between an element of a conjunct and the coordinating conjunction word of the conjunct. (Note: different dependency grammars have different treatments of coordination. We take one conjunct of a conjunction (normally the first) as the head of the conjunction.)
+
+"Bill is big and honest"
+cc(big, and)
+
+"They either ski or snowboard"
+cc(ski, or)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Coordination</documentation>
+            <value>Name</value>
+            <default>Coordination</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>Coordination:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Coordination"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Copula">
+      <documentation>A copula is the relation between the complement of a copular verb and the copular verb. (We normally take a copula as a dependent of its complement.)
+
+"Bill is big"
+cop(big, is)
+
+"Bill is an honest man"
+cop(man, is)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Copula</documentation>
+            <value>Name</value>
+            <default>Copula</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>Copula:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Copula"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="DependencyLabel">
+      <documentation></documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#DependencyLabel</documentation>
+            <value>Name</value>
+            <default>DependencyLabel</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+      </fields>
+      <display>
+          <template>
+              <b>DependencyLabel:</b>
+              <br/>
+              {name}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#DependencyLabel"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="DependencyRelation">
+      <documentation></documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#DependencyRelation</documentation>
+            <value>Name</value>
+            <default>DependencyRelation</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+      </fields>
+      <display>
+          <template>
+              <b>DependencyRelation:</b>
+              <br/>
+              {name}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#DependencyRelation"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Dependent">
+      <documentation>Dependencies are established between tokens, i.e., exactly those entities that are subject to part of speech annotation.
+
+A dependency is labeled as dep when the system is unable to determine a more precise dependency relation between two words. This may be because of a weird grammatical construction, a limitation in the Stanford Dependency conversion software, a parser error, or because of an unresolved long distance dependency.
+
+"Then, as if to show that he could, . . . "
+dep(show, if)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Dependent</documentation>
+            <value>Name</value>
+            <default>Dependent</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>Dependent:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Dependent"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Determiner">
+      <documentation>A determiner is the relation between the head of an NP and its determiner.
+
+"The man is here"
+det(man, the)
+
+"Which book do you prefer?"
+det(book, which)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Determiner</documentation>
+            <value>Name</value>
+            <default>Determiner</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>Determiner:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Determiner"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="DirectObject">
+      <documentation>The direct object of a VP is the noun phrase which is the (accusative) object of the verb.
+
+"She gave me a raise"
+dobj (gave, raise)
+
+"They win the lottery"
+dobj (win, lottery)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#DirectObject</documentation>
+            <value>Name</value>
+            <default>DirectObject</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>DirectObject:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#DirectObject"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Expletive">
+      <documentation>This relation captures an existential "there". The main verb of the clause is the governor.
+
+"There is a ghost in the room"
+expl(is, There)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Expletive</documentation>
+            <value>Name</value>
+            <default>Expletive</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>Expletive:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Expletive"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="IndirectObject">
+      <documentation>The indirect object of a VP is the noun phrase which is the (dative) object of the verb.
+
+"She gave me a raise"
+iobj (gave, me)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#IndirectObject</documentation>
+            <value>Name</value>
+            <default>IndirectObject</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>IndirectObject:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#IndirectObject"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="InfinitivalModifier">
+      <documentation>An infinitival modifier of an NP is an infinitive that serves to modify the meaning of the NP.
+
+"Points to establish are . . . "
+infmod(points, establish)
+
+"I don't have anything to say"
+infmod(anything, say)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#InfinitivalModifier</documentation>
+            <value>Name</value>
+            <default>InfinitivalModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>InfinitivalModifier:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#InfinitivalModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Marker">
+      <documentation>A marker of an adverbial clausal complement (advcl) is the word introducing it. It will be a subordinating conjunction different from "that" or "whether": e.g. "because", "when", "although", etc.
+
+"Forces engaged in fighting after insurgents attacked"
+mark(attacked, after)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Marker</documentation>
+            <value>Name</value>
+            <default>Marker</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>Marker:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Marker"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="MeasurePhraseModifier">
+      <documentation></documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#MeasurePhraseModifier</documentation>
+            <value>Name</value>
+            <default>MeasurePhraseModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+      </fields>
+      <display>
+          <template>
+              <b>MeasurePhraseModifier:</b>
+              <br/>
+              {name}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#MeasurePhraseModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Modifier">
+      <documentation></documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Modifier</documentation>
+            <value>Name</value>
+            <default>Modifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+      </fields>
+      <display>
+          <template>
+              <b>Modifier:</b>
+              <br/>
+              {name}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Modifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="MultiWordExpression">
+      <documentation>The multi-word expression (modifier) relation is used for certain multi-word idioms that behave like a single function word. It is used for a closed set of dependencies between words in common multi-word expressions for which it seems difficult or unclear to assign any other relationships.
+At present, this relation is used inside the following expressions: rather than, as well as, instead of, such as, because of, instead of, in addition to, all but, such as, because of, instead of, due to.
+The boundaries of this class are unclear; it could grow or shrink a little over time.
+
+"I like dogs as well as cats"
+mwe(well, as)
+mwe(well, as)
+
+"He cried because of you"
+mwe(of, because)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#MultiWordExpression</documentation>
+            <value>Name</value>
+            <default>MultiWordExpression</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>MultiWordExpression:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#MultiWordExpression"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="NegationModifier">
+      <documentation>The negation modifier is the relation between a negation word and the word it modifies.
+
+"Bill is not a scientist"
+neg(scientist, not)
+
+"Bill doesn't drive"
+neg(drive, n't)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#NegationModifier</documentation>
+            <value>Name</value>
+            <default>NegationModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>NegationModifier:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NegationModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="NominalSubject">
+      <documentation>A nominal subject is a noun phrase which is the syntactic subject of a clause. The governor of this relation might not always be a verb: when the verb is a copular verb, the root of the clause is the complement of the copular verb, which can be an adjective or noun.
+
+"Clinton defeated Dole"
+nsubj (defeated, Clinton)
+
+"The baby is cute"
+nsubj (cute, baby)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#NominalSubject</documentation>
+            <value>Name</value>
+            <default>NominalSubject</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>NominalSubject:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NominalSubject"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="NounCompoundModifier">
+      <documentation>A noun compound modifier of an NP is any noun that serves to modify the head noun. (Note that in the current system for dependency extraction, all nouns modify the rightmost noun of the NP -- there is no intelligent noun compound analysis. This is likely to be fixed once the
+Penn Treebank represents the branching structure of NPs.)
+
+"Oil price futures"
+nn(futures, oil)
+nn(futures, price)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#NounCompoundModifier</documentation>
+            <value>Name</value>
+            <default>NounCompoundModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>NounCompoundModifier:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NounCompoundModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="NounPhraseAsAdverbialModifier">
+      <documentation>This relation captures various places where something syntactically a noun phrase (NP) is used as an adverbial modifier in a sentence. These usages include: (i) a measure phrase, which is the relation between the head of an ADJP/ADVP/PP and the head of a measure phrase modifying the ADJP/ADVP; (ii) noun phrases giving an extent inside a VP which are not objects; (iii) financial constructions involving an adverbial or PP-like NP, notably the following construction $5 a share, where the second NP means "per share"; (iv) floating reflexives; and (v) certain other absolutive NP constructions. A temporal modifier (tmod) is a subclass of npadvmod which is distinguished as a separate relation.
+
+"The director is 65 years old"
+npadvmod(old, years)
+
+"6 feet long"
+npadvmod(long, feet)
+
+"Shares eased a fraction"
+npadvmod(eased, fraction)
+
+"IBM earned $ 5 a share"
+npadvmod($, share)
+
+"The silence is itself significant"
+npadvmod(significant, itself)
+
+"90% of Australians like him, the most of any country"
+npadvmod(like, most)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#NounPhraseAsAdverbialModifier</documentation>
+            <value>Name</value>
+            <default>NounPhraseAsAdverbialModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>NounPhraseAsAdverbialModifier:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NounPhraseAsAdverbialModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="NumericModifier">
+      <documentation>A numeric modifier of a noun is any number phrase that serves to modify the meaning of the noun.
+
+"Sam eats 3 sheep"
+num(sheep, 3)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#NumericModifier</documentation>
+            <value>Name</value>
+            <default>NumericModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>NumericModifier:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NumericModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Object">
+      <documentation></documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Object</documentation>
+            <value>Name</value>
+            <default>Object</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+      </fields>
+      <display>
+          <template>
+              <b>Object:</b>
+              <br/>
+              {name}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Object"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="ObjectOfPreposition">
+      <documentation>The object of a preposition is the head of a noun phrase following the preposition, or the adverbs "here" and "there". (The preposition in turn may be modifying a noun, verb, etc.) Unlike the Penn Treebank, we here define cases of VBG quasi-prepositions like "including", "concerning", etc. as instances of pobj. (The preposition can be called a FW for "pace", "versus", etc. It can also be called a CC -- but we don't currently handle that and would need to distinguish from conjoined prepositions.) In the case of preposition stranding, the object can precede the preposition (e.g., "What does CPR stand for?").
+
+"I sat on the chair"
+pobj (on, chair)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#ObjectOfPreposition</documentation>
+            <value>Name</value>
+            <default>ObjectOfPreposition</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>ObjectOfPreposition:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ObjectOfPreposition"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Parataxis">
+      <documentation>The parataxis relation (from Greek for "place side by side") is a relation between the main verb of a clause and other sentential elements, such as a sentential parenthetical, or a clause after a ":" or a ";".
+
+"The guy, John said, left early in the morning"
+parataxis(left, said)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Parataxis</documentation>
+            <value>Name</value>
+            <default>Parataxis</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>Parataxis:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Parataxis"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="ParticipalModifier">
+      <documentation>A participial modifier of an NP or VP or sentence is a participial verb form that serves to modify the meaning of a noun phrase or sentence.
+
+"Truffles picked during the spring are tasty"
+partmod(truffles, picked)
+
+"Bill tried to shoot demonstrating his incompetence"
+partmod(shoot, demonstrating)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#ParticipalModifier</documentation>
+            <value>Name</value>
+            <default>ParticipalModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>ParticipalModifier:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ParticipalModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="PassiveAuxiliary">
+      <documentation>A passive auxiliary of a clause is a non-main verb of the clause which contains the passive information.
+
+"Kennedy has been killed"
+auxpass(killed, been)
+aux(killed,has)
+
+"Kennedy was/got killed"
+auxpass(killed, was/got)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#PassiveAuxiliary</documentation>
+            <value>Name</value>
+            <default>PassiveAuxiliary</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>PassiveAuxiliary:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PassiveAuxiliary"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="PassiveClausalSubject">
+      <documentation>A clausal passive subject is a clausal syntactic subject of a passive clause. In the example below, "that she lied" is the subject.
+
+"That she lied was suspected by everyone"
+csubjpass(suspected, lied)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#PassiveClausalSubject</documentation>
+            <value>Name</value>
+            <default>PassiveClausalSubject</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>PassiveClausalSubject:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PassiveClausalSubject"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="PassiveNominalSubject">
+      <documentation>A passive nominal subject is a noun phrase which is the syntactic subject of a passive clause.
+
+"Dole was defeated by Clinton"
+nsubjpass(defeated, Dole)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#PassiveNominalSubject</documentation>
+            <value>Name</value>
+            <default>PassiveNominalSubject</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>PassiveNominalSubject:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PassiveNominalSubject"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="PhrasalVerbParticle">
+      <documentation>The phrasal verb particle relation identifies a phrasal verb, and holds between the verb and its particle.
+
+"They shut down the station"
+prt(shut, down)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#PhrasalVerbParticle</documentation>
+            <value>Name</value>
+            <default>PhrasalVerbParticle</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>PhrasalVerbParticle:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PhrasalVerbParticle"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="PossessionModifier">
+      <documentation>The possession modifier relation holds between the head of an NP and its possessive determiner, or a genitive 's complement.
+
+"their offices"
+poss(offices, their)
+
+"Bill's clothes"
+poss(clothes, Bill)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#PossessionModifier</documentation>
+            <value>Name</value>
+            <default>PossessionModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>PossessionModifier:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PossessionModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="PossessiveModifier">
+      <documentation>The possessive modifier relation appears between the head of an NP and the genitive 's.
+
+"Bill's clothes"
+possessive(John, 's)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#PossessiveModifier</documentation>
+            <value>Name</value>
+            <default>PossessiveModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>PossessiveModifier:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PossessiveModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Preconjunct">
+      <documentation>A preconjunct is the relation between the head of an NP and a word that appears at the beginning bracketing a conjunction (and puts emphasis on it), such as "either", "both", "neither").
+
+"Both the boys and the girls are here"
+preconj (boys, both)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Preconjunct</documentation>
+            <value>Name</value>
+            <default>Preconjunct</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>Preconjunct:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Preconjunct"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Predeterminer">
+      <documentation>A predeterminer is the relation between the head of an NP and a word that precedes and modifies the meaning of the NP determiner.
+
+"All the boys are here"
+predet(boys, all)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Predeterminer</documentation>
+            <value>Name</value>
+            <default>Predeterminer</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>Predeterminer:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Predeterminer"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="PrepositionalClausalModifier">
+      <documentation>In the collapsed representation, a prepositional clausal modifier of a verb, adjective, or noun is a clause introduced by a preposition which serves to modify the meaning of the verb, adjective, or noun.
+
+"He purchased it without paying a premium"
+prepc_without(purchased, paying)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#PrepositionalClausalModifier</documentation>
+            <value>Name</value>
+            <default>PrepositionalClausalModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+      </fields>
+      <display>
+          <template>
+              <b>PrepositionalClausalModifier:</b>
+              <br/>
+              {name}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PrepositionalClausalModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="PrepositionalComplement">
+      <documentation>This is used when the complement of a preposition is a clause or prepositional phrase (or occasionally, an adverbial phrase). The prepositional complement of a preposition is the head of a clause following the preposition, or the preposition head of the following PP.
+
+"We have no information on whether users are at risk"
+pcomp(on, are)
+
+"They heard about you missing classes"
+pcomp(about, missing)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#PrepositionalComplement</documentation>
+            <value>Name</value>
+            <default>PrepositionalComplement</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>PrepositionalComplement:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PrepositionalComplement"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="PrepositionalModifier">
+      <documentation>A prepositional modifier of a verb, adjective, or noun is any prepositional phrase that serves to modify the meaning of the verb, adjective, noun, or even another prepositon. In the collapsed representation, this is used only for prepositions with NP complements.
+
+"I saw a cat in a hat"
+prep(cat, in)
+
+"I saw a cat with a telescope"
+prep(saw, with)
+
+"He is responsible for meals"
+prep(responsible, for)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#PrepositionalModifier</documentation>
+            <value>Name</value>
+            <default>PrepositionalModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>PrepositionalModifier:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PrepositionalModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Punctuation">
+      <documentation>This is used for any piece of punctuation in a clause, if punctuation is being retained in the typed dependencies. By default, punctuation is not retained in the output.
+
+"Go home!"
+punct(Go, !)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Punctuation</documentation>
+            <value>Name</value>
+            <default>Punctuation</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>Punctuation:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Punctuation"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="PurposeClauseModifier">
+      <documentation>A purpose clause modifier of a VP is a clause headed by "(in order) to" specifying a purpose. At present the system only recognizes ones that have "in order to" as otherwise the system is unable to distinguish from the surface representations between these and open clausal complements (xcomp). It can also recognize fronted "to" purpose clauses in sentences.
+
+"He talked to him in order to secure the account"
+purpcl(talked, secure)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#PurposeClauseModifier</documentation>
+            <value>Name</value>
+            <default>PurposeClauseModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>PurposeClauseModifier:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PurposeClauseModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="QuantifierModifier">
+      <documentation>A quantifier modifier is an element modifying the head of a QP constituent. (These are modifiers in complex numeric quantifiers, not other types of "quantification". Quantifiers like "all" become det.)
+
+"About 200 people came to the party"
+quantmod(200, About)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#QuantifierModifier</documentation>
+            <value>Name</value>
+            <default>QuantifierModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>QuantifierModifier:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#QuantifierModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Referent">
+      <documentation>A referent of the head of an NP is the relative word introducing the relative clause modifying the NP.
+
+"I saw the book which you bought"
+ref (book, which)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Referent</documentation>
+            <value>Name</value>
+            <default>Referent</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>Referent:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Referent"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Relative">
+      <documentation>A relative of a relative clause is the head word of the WH-phrase introducing it. This analysis is used only for relative words which are not the subject of the relative clause. Relative words which act as the subject of a relative clause are analyzed as a nsubj.
+
+"I saw the man whose wife you love"
+rel (love, wife)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Relative</documentation>
+            <value>Name</value>
+            <default>Relative</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>Relative:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Relative"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="RelativeClauseModifier">
+      <documentation>A relative clause modifier of an NP is a relative clause modifying the NP. The relation points from the head noun of the NP to the head of the relative clause, normally a verb.
+
+"I saw the man you love"
+rcmod(man, love)
+
+"I saw the book which you bought"
+rcmod(book,bought)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#RelativeClauseModifier</documentation>
+            <value>Name</value>
+            <default>RelativeClauseModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>RelativeClauseModifier:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#RelativeClauseModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Root">
+      <documentation>The root grammatical relation points to the root of the sentence. A fake node "ROOT" is used as the governor. The ROOT node is indexed with "0", since the indexation of real words in the sentence starts at 1.
+
+"I love French fries."
+root(ROOT, love)
+
+"Bill is an honest man"
+root(ROOT, man)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Root</documentation>
+            <value>Name</value>
+            <default>Root</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>Root:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Root"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="SemanticDependent">
+      <documentation></documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#SemanticDependent</documentation>
+            <value>Name</value>
+            <default>SemanticDependent</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+      </fields>
+      <display>
+          <template>
+              <b>SemanticDependent:</b>
+              <br/>
+              {name}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#SemanticDependent"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Subject">
+      <documentation></documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Subject</documentation>
+            <value>Name</value>
+            <default>Subject</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+      </fields>
+      <display>
+          <template>
+              <b>Subject:</b>
+              <br/>
+              {name}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Subject"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="TemporalModifier">
+      <documentation>A temporal modifier (of a VP, NP, or an ADJP is a bare noun phrase constituent that serves to modify the meaning of the constituent by specifying a time. (Other temporal modifiers are prepositional phrases and are introduced as prep.)
+
+"Last night, I swam in the pool"
+tmod(swam, night)</documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#TemporalModifier</documentation>
+            <value>Name</value>
+            <default>TemporalModifier</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+          <field name="from" type="text">
+              <value>From</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+          <field name="to" type="text">
+              <value>To</value>
+              <number atleast="1" atmost="1"></number>
+              <!-- <textdType>Theory</textdType> -->
+          </field>
+
+      </fields>
+      <display>
+          <template>
+              <b>TemporalModifier:</b>
+              <br/>
+              {name} from {from} to {to}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#TemporalModifier"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+
+    <concept name="Token">
+      <documentation></documentation>
+      <fields>
+          <field name="name" type="text">
+            <documentation>http://purl.org/olia/stanford.owl#Token</documentation>
+            <value>Name</value>
+            <default>Token</default>
+            <validation>[A-Z][a-z]*</validation>
+            <number atleast="1" atmost="1"></number>
+          </field>
+      </fields>
+      <display>
+          <template>
+              <b>Token:</b>
+              <br/>
+              {name}
+          </template>
+      </display>
+      <rdf:RDF>
+          <rdf:Description>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Token"></rdf:type>
+              <o:symbolname>{name}</o:symbolname>
+          </rdf:Description>
+      </rdf:RDF>
+    </concept>
+
+  </concepts>
+</annotation>

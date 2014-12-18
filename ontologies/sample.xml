@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- A KAT annotations specification for OMDoc annotations
+     copyright 2013 Michael Kohlhase released under the GPL -->
+<annotation xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:o="http://omdoc.org/ontology#" name="OMDoc">
+    <documentation>
+        The OMDoc ontology is a flexiformal data model for matheamtical (and general STEM) documents
+    </documentation>
+    <concepts>
+        <concept name="Symbol">
+            <documentation>An OpenMath/OMDoc Symbol</documentation>
+            <fields>
+                <field name="name" type="text">
+                    <documentation>The name of the symbol defines it in a theory</documentation>
+                    <value>Name</value>
+                    <default>Symbol</default>
+                    <validation>[A-Z][a-z]*</validation>
+                </field>
+            </fields>
+            <display>
+                <template>
+                    <b>Symbol:</b> {name}
+                </template>
+            </display>
+            <rdf:RDF>
+                <rdf:Description>
+                    <rdf:type rdf:resource="http://omdoc.org/ontology#Symbol"></rdf:type>
+                    <o:symbolname>{name}</o:symbolname>
+                </rdf:Description>
+            </rdf:RDF>
+        </concept>
+
+        <concept name="Definition">
+            <fields>
+                <field name="for" type="reference">
+                    <value>For</value>
+                    <referencedType>OMDoc.Symbol</referencedType>
+                    <number atleast="1"/>
+                </field>
+                <field name="type" type="select">
+                    <options>
+                        <option default="true">
+                            <value>simple</value>
+                            <documentation>definiens is does not contain the definiendum</documentation>
+                        </option>
+                        <option>
+                            <documentation>definiendum applied to formal variables</documentation>
+                            <value>pattern</value>
+                        </option>
+                        <option>
+                            <documentation>definiens may contain definiendum</documentation>
+                            <value>recursive</value>
+                        </option>
+                        <option>
+                            <value>implicit</value>
+                            <documentation>definiendum is described unambiguously by a formula</documentation>
+                        </option>
+                    </options>
+                </field>
+            </fields>
+            <display>
+                <template>
+                    <b>Definition</b> {for} {type}
+                </template>
+            </display>
+            <rdf:RDF>
+                <rdf:Description>
+		  <!-- extend the OMDoc ontology suitably, be careful of the caps --> 
+                  <rdf:type rdf:resource="http://omdoc.org/ontology#{type}Definition"/>
+                  <o:defines rdf:resource="{for}"/>
+                </rdf:Description>
+		</rdf:RDF>
+        </concept>
+
+        <concept name="Assertion">
+            <fields>
+                <field name="type" type="select">
+                    <options>
+                        <option>
+                            <value>theorem</value>
+                            <documentation>An important assertion with a proof</documentation>
+                        </option>
+                        <option>
+                            <value>lemma</value>
+                            <documentation>A less important assertion with a proof</documentation>
+                        </option>
+                        <option>
+                            <value>corollary</value>
+                            <documentation>An assertion that is directly entailed by another.</documentation>
+                        </option>
+                        <option>
+                            <value>conjecture</value>
+                            <documentation>An assertion whose validity (provability) has not been decided.
+                            </documentation>
+                        </option>
+                        <option>
+                            <value>false-conjecture</value>
+                            <documentation>A conjecture that has been refuted since it was postulated.</documentation>
+                        </option>
+                        <option>
+                            <value>obligation</value>
+                            <documentation>An assertion on which the validity or well-formedness of another statement
+                                depends.
+                            </documentation>
+                        </option>
+                        <option>
+                            <value>assumption</value>
+                            <documentation>A statement that we assume to be true (without being able/willing) to prove
+                                it.
+                            </documentation>
+                        </option>
+                        <option default="true">
+                            <value>formula</value>
+                            <documentation>If all else fails.</documentation>
+                        </option>
+                    </options>
+                </field>
+            </fields>
+            <display>
+                <template>
+                    <b>Assertion</b>
+                    <br/>
+                    {type}
+                </template>
+            </display>
+        </concept>
+
+        <concept name="declaration">
+            <documentation>A declaration of an identifier</documentation>
+            <fields>
+                <field name="type" type="select">
+                    <options>
+                        <option>
+                            <value>constant</value>
+                            <documentation>A constant declaration</documentation>
+                        </option>
+                        <option>
+                            <value>universal variable</value>
+                            <documentation>A universal variable that can be instantiated.</documentation>
+                        </option>
+                        <option>
+                            <value>existential variable</value>
+                            <documentation>An existential variable, which introduces a name for an object that is
+                                claimed to exist.
+                            </documentation>
+                        </option>
+                    </options>
+                </field>
+                <field name="identifier" type="text">
+                    <documentation>The identifiers introduced by this declaration</documentation>
+                    <value>Identifiers</value>
+                    <number atleast="1"></number>
+                </field>
+                <field name="restriction" type="text">
+                    <documentation>The property assumed for the identifiers declared</documentation>
+                    <value>Restriction</value>
+                    <number atleast="1" atmost="1"></number>
+                </field>
+            </fields>
+            <display>
+                <template>
+                    <bf>Declaration</bf>
+                    of {identifier} with restriction {restriction}
+                </template>
+            </display>
+        </concept>
+
+        <concept name="text">
+            <fields>
+                <field name="declaration" type="text">
+                    <value>Declaration</value>
+                    <textdType>declaration</textdType>
+                    <number atleast="1" atmost="1"></number>
+                </field>
+            </fields>
+            <display>
+                <template>
+                    <b>Reference</b>
+                    to {declaration}
+                </template>
+            </display>
+        </concept>
+
+
+        <concept name="inline-statement">
+            <documentation>A phrase-level statement</documentation>
+            <fields>
+                <field name="type" type="select">
+                    <options>
+                        <option>
+                            <value>Example</value>
+                            <documentation>An inline example</documentation>
+                        </option>
+                        <option>
+                            <value>Definition</value>
+                            <documentation>An inline definition</documentation>
+                        </option>
+                        <option>
+                            <value>Statement</value>
+                            <documentation>An inline Statement</documentation>
+                        </option>
+                    </options>
+                    <number atleast="1" atmost="1"></number>
+                </field>
+            </fields>
+            <display>
+                <template>
+                    <b>Inline-{type}</b>
+                </template>
+            </display>
+        </concept>
+
+        <concept name="Proof">
+            <fields>
+                <field name="name" type="text">
+                    <value>Name</value>
+                    <default>Proof</default>
+                    <validation>[A-Z][a-z]*</validation>
+                    <number atleast="1" atmost="1"></number>
+                </field>
+                <field name="for" type="text">
+                    <value>For</value>
+                    <number atleast="1" atmost="1"></number>
+                </field>
+            </fields>
+            <display>
+                <template>
+                    <b>Proof</b>
+                    <br/>
+                    {name}
+                    <br/>
+                    {for}
+                </template>
+            </display>
+        </concept>
+
+        <concept name="theory">
+            <fields>
+                <field name="name" type="text">
+                    <value>Name</value>
+                    <default>Proof</default>
+                    <validation>[A-Z][a-z]*</validation>
+                    <number atleast="1" atmost="1"></number>
+                </field>
+                <field name="imports" type="text">
+                    <value>imports</value>
+                    <number></number>
+                </field>
+            </fields>
+            <display>
+                <template>
+                    <b>theory</b>
+                    {name}
+                    <br/>
+                    {imports}
+                </template>
+            </display>
+        </concept>
+
+        <concept name="view">
+            <fields>
+                <field name="name" type="text">
+                    <value>Name</value>
+                    <validation>[A-Z][a-z]*</validation>
+                    <number atleast="1" atmost="1"></number>
+                </field>
+                <field name="from" type="text">
+                    <value>From</value>
+                    <number atleast="1" atmost="1"></number>
+                    <textdType>Theory</textdType>
+                </field>
+                <field name="to" type="text">
+                    <value>To</value>
+                    <number atleast="1" atmost="1"></number>
+                    <textdType>Theory</textdType>
+                </field>
+            </fields>
+            <display>
+                <template>
+                    <b>view</b>
+                    {name} from {from} to {to}
+                </template>
+            </display>
+        </concept>
+    </concepts>
+</annotation>
