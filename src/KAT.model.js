@@ -57,7 +57,7 @@ KAT.model = {};
     var annotRoot = this.xml.children().eq(0);
 
     if(annotRoot.children().length != 2 || !annotRoot.children().eq(0).is("documentation") || !annotRoot.children().eq(1).is("concepts")){
-      throw new KAT.model.ParsingError("KAT.model.Ontology: Invalid XML (Expected exactly one <documentation> and <concepts>). ", this.xml);
+      throw new KAT.model.ParsingError("KAT.model.Ontology: Invalid XML (Expected exactly one <documentation> and <concepts>). ", annotRoot);
     }
 
     /**
@@ -80,7 +80,7 @@ KAT.model = {};
     annotRoot.children().eq(1).children().each(function(i, e){
       var e = $(e);
       if(!e.is("concept")){
-        throw new KAT.model.ParsingError("KAT.model.Ontology: Invalid XML (Unknown tag when parsing <concepts>). ", this.xml);
+        throw new KAT.model.ParsingError("KAT.model.Ontology: Invalid XML (Unknown child tag of <concepts>). ", e);
       }
 
       //and add them to the right thing.
@@ -142,19 +142,116 @@ KAT.model = {};
     */
     this.name = this.xml.attr("name");
 
+    /**
+    * Documentation of this concept
+    *
+    * @type {string}
+    * @name KAT.model.Concept#documentation
+    */
+    this.documentation = "";
+
+    /**
+    * Fields declared in this concept.
+    *
+    * @type {KAT.model.Field[]}
+    * @name KAT.model.Concept#fields
+    */
+    this.fields = [];
+
+    /**
+    * Display to generate for this element.
+    *
+    * @type {string}
+    * @name KAT.model.Concept#display
+    */
+    this.display = "";
+
+    /**
+    * RDF to generate for this concept.
+    *
+    * @type {string}
+    * @name KAT.model.Concept#rdf
+    */
+    this.rdf = "";
+
     //validate the children
     var children = this.xml.children();
 
-    if(children.length != 3 && children.length != 4){
-      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Expected between 3 and 4 children for <concept>). ", this.xml);
-    } else if(children.length == 3) {
-        throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Expected excatly one <documentation>, <fields> and <display>). ", this.xml);
-    } else if(children.length == 4) {
-      if(!children.eq(0).is("documentation") || !children.eq(1).is("fields") || !children.eq(2).is("display") || !children.eq(3).prop("tagName") == "rdf:RDF"){
-        throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Expected excatly one <documentation>, <fields>, <display> and <rdf:RDF>). ", this.xml);
+    //We want to check indexing, so we need this.
+    var index = 0;
+
+    //right length
+    if(children.length < 2 || children.length > 4) {
+      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Expected at least 2 of <documentation>, <fields>, <display> and <rdf:rdf>). ", children);
+    }
+
+    //documentation
+    if(children.eq(index).is("documentation")){
+      this.documentation = children.eq(index).text().trim();
+      index++;
+    } else {
+      new KAT.model.ParsingWarning("KAT.model.Concept: Missing <documentation>, ignoring. ", children);
+    }
+
+    //fields
+    if(children.eq(index).is("fields")){
+
+      children.eq(index).children().each(function(i, e){
+        var e = $(e);
+        me.fields.push(new KAT.model.Field(e, me));
+      });
+
+      index++;
+    } else {
+      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Missing required <fields>). ", children);
+    }
+
+    //display
+    if(children.eq(index).is("display")){
+      var display = children.eq(index);
+
+      //Set the display
+      if(display.children().length != 1 || !display.children().eq(0).is("template")){
+        throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Missing <template>). ", display);
+      } else {
+        this.display = display.children().html().trim();
+      }
+
+      index++;
+    } else {
+      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Missing required <display>). ", children);
+    }
+
+    //rdf:RDF
+    if(index < children.length){
+      if(children.eq(index).prop("tagName") == "rdf:RDF"){
+        this.rdf = children.eq(index).html().trim();
+        index++;
+      } else {
+        throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Expected <rdf:rdf> in final position. ). ", children);
       }
     }
 
+    //whats happened? We're too long!
+    if(index != children.length){
+      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Expected at least 2 of <documentation>, <fields>, <display> and <rdf:RDF>). ", children);
+    }
+
+
+    //TODO: Check for referenced concepts which don*'t exist
+  }
+
+  /** Creates a new Field instance.
+  *
+  * @param {document} xml - XML document representing the field.
+  * @param {KAT.model.Ontology} concept - concept this field was declared in.
+  * @name KAT.model.Field
+  * @this {KAT.model.Field}
+  * @Alias KAT.model.Field
+  * @class
+  */
+  KAT.model.Field = function(xml, concept){
+    //TODO: Parse <field>
   }
 
   /** Represents a parsing error.
@@ -185,9 +282,9 @@ KAT.model = {};
     */
     tmp.node = this.node = xml_element;
 
-    //We want an actual document. 
+    //We want an actual document.
     if(xml_element instanceof jQuery){
-      tmp.node = this.node = xml_element.get(0);
+      tmp.node = this.node = xml_element.toArray();
     }
 
     /**
@@ -212,3 +309,23 @@ KAT.model = {};
     IntermediateInheritor.prototype = Error.prototype;
     KAT.model.ParsingError.prototype = new IntermediateInheritor();
   })();
+
+  /** Represents a parsing warning.
+  *
+  * @param {string} message - Message of the warning.
+  * @param {document} xml_element - The XML node where the parsing warning occured.
+  * @name KAT.model.ParsingWarning
+  * @this {KAT.model.ParsingWarning}
+  * @Alias KAT.model.ParsingWarning
+  * @class
+  */
+  KAT.model.ParsingWarning = function (message, xml_element) {
+
+    if(xml_element instanceof jQuery){
+      var xml_element = xml_element.toArray();
+    }
+
+    if(console && console.warn){
+      console.warn(message, xml_element);
+    }
+  }
