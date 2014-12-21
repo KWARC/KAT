@@ -10,4 +10,8 @@ $(function(){
         .annotator('addPlugin', 'KATOntology')
         .annotator('addPlugin', 'KATStore');
     });
+
+    $.get("ontologies/sample.xml", function(xml){
+      window.ontology = new KAT.model.Ontology(xml);
+    });
 });

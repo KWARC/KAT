@@ -18,8 +18,6 @@ along with KAT.  If not, see <http://www.gnu.org/licenses/>
 Annotator.Plugin.KATOntology = function (element, ontology) {
     var plugin = {};
 
-    var theOntology = new OntologyParser(ontology);
-
     plugin.pluginInit = function () {
 
         var me = this;

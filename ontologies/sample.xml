@@ -63,7 +63,7 @@
             </display>
             <rdf:RDF>
                 <rdf:Description>
-		  <!-- extend the OMDoc ontology suitably, be careful of the caps --> 
+		  <!-- extend the OMDoc ontology suitably, be careful of the caps -->
                   <rdf:type rdf:resource="http://omdoc.org/ontology#{type}Definition"/>
                   <o:defines rdf:resource="{for}"/>
                 </rdf:Description>

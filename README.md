@@ -1,7 +1,10 @@
 # KWARC Annotation Tool
 
 KWARC Annotation Tool: An Annotation Tool for STEM Documents.
-New version, not yet finished. More documentation to follow. 
+
+Version 2.0, not yet finished. Documentation is currently being created.
+
+## Changelog
 
 ## License
 
