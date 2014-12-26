@@ -4,7 +4,14 @@ KWARC Annotation Tool: An Annotation Tool for STEM Documents.
 
 Version 2.0, not yet finished. Documentation is currently being created.
 
-## Changelog
+## OntologyModel
+
+The concepts are stored in the following hierachical architecture:
+
+* KAT.model.OntologyStore: A collection of ontologies. All references must remain within the OntologyStore.
+* KAT.model.Ontology: A single ontology, containing several collections.
+* KAT.model.Concept: A single concept within an ontology
+* KAT.mode.Field: A filed within a concept.
 
 ## License
 
