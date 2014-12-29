@@ -34,63 +34,107 @@ KAT.model = {};
     /**
     * Ontologies stored in this ontologyStore
     *
-    * @type {KAT.model.OntologyStore[]}
+    * @type {KAT.model.Ontology[]}
     * @name KAT.model.OntologyStore#ontologies
     */
     this.ontologies = [];
   }
 
-  //regular expression for names
+  /** Adds an onology to this OntologyStore.
+  *
+  * @param {KAT.model.Ontology} ontology - Ontology to add
+  *
+  * @function
+  * @instance
+  * @name addOntology
+  * @memberof KAT.model.OntologyStore
+  * @static
+  * @return {KAT.model.Ontology|boolean} - newly added ontology or false in case of errors
+  */
+  KAT.model.OntologyStore.prototype.addOntology = function(ontology){
+
+    //check if we already have it.
+    if(this.getOntology(ontology.name)){
+      return false;
+    }
+
+    //push the ontology
+    this.ontologies.push(ontology);
+
+    //and return it.
+    return ontology;
+  }
+
+  /** Creates a new Ontology instance and adds it to this OntologyStore.
+  *
+  * @param {document} xml - XML document representing ontology.
+  * @param {string} name - Name of ontology to be created.
+  *
+  * @function
+  * @instance
+  * @name addNewOntology
+  * @memberof KAT.model.OntologyStore
+  * @static
+  * @return {KAT.model.Ontology|boolean} - newly created ontology or false in case of errors
+  */
+  KAT.model.OntologyStore.prototype.addNewOntology = function(xml, name){
+    //TODO: Remove name parameter
+    return this.addOntology(new KAT.model.Ontology(xml, this, name));
+  }
+
+  /** Initialises this OntologyStore. Should be called once all Ontologies have been added.
+  *
+  * @function
+  * @instance
+  * @name init
+  * @memberof KAT.model.OntologyStore
+  * @static
+  * @return {KAT.model.Ontology} - this ontology store
+  */
+  KAT.model.OntologyStore.prototype.init = function(){
+    //iterate over the fields
+    //this may take a while
+    for(var i=0;i<this.ontologies.length;i++){
+      (function(){
+        for(var j=0;j<this.concepts.length;j++){
+          (function(){
+            for(var k=0;k<this.fields.length;k++){
+              (function(k){
+                if(this.type == KAT.model.Field.types.reference){
+                  var name = this.validation;
+
+                  //it is already referenced, get the name out of it
+                  if(name instanceof KAT.model.Concept){
+                    name = name.getFullName();
+                  }
+
+                  //find the concept
+                  var concept = this.concept.ontology.store.getConcept(name);
+                  if(!concept){
+                    throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Concept not found: '"+name+"'). ", this.xml);
+                  }
+
+                  //store the concept in the validation.
+                  this.validation = concept;
+                }
+              }).call(this.fields[k]);
+            }
+          }).call(this.concepts[j]);
+        }
+      }).call(this.ontologies[i]);
+    }
+
+    return this;
+  }
+
+  //regular expression for names string, may not have a capturing group
   //TODO: Adapt this and mention it in the documentation.
-  var nameRegEx = /^(\w|\d|\-\_\+)+$/;
+  var nameRegExS = "(?:\\w|\\d|\\-|\\_|\\+)+";
 
-  /**
-  * Checks if something is a valid ontology name.
-  *
-  * @param {string} name - Name to check
-  *
-  * @function
-  * @instance
-  * @name isOntologyName
-  * @memberof KAT.model.OntologyStore
-  * @static
-  * @return {boolean} - if it is a valid ontology name or not
-  */
-  KAT.model.OntologyStore.isOntologyName = function(name){
-    return nameRegEx.test(name);
-  }
-
-  /**
-  * Checks if something is a valid concept name.
-  *
-  * @param {string} name - Name to check
-  *
-  * @function
-  * @instance
-  * @name isConceptName
-  * @memberof KAT.model.OntologyStore
-  * @static
-  * @return {boolean} - if it is a valid ontology name or not
-  */
-  KAT.model.OntologyStore.isConceptName = function(name){
-    return nameRegEx.test(name);
-  }
-
-  /**
-  * Checks if something is a valid field name.
-  *
-  * @param {string} name - Name to check
-  *
-  * @function
-  * @instance
-  * @name isFieldName
-  * @memberof KAT.model.OntologyStore
-  * @static
-  * @return {boolean} - if it is a valid ontology name or not
-  */
-  KAT.model.OntologyStore.isFieldName = function(name){
-    return nameRegEx.test(name);
-  }
+  //regexes for strings
+  var nameRegEx = new RegExp("^"+nameRegExS+"$");
+  var nameRegEx2 = new RegExp("^("+nameRegExS+")\\.("+nameRegExS+")$");
+  var nameRegEx3 = new RegExp("^("+nameRegExS+")\\.("+nameRegExS+")\\.("+nameRegExS+")$");
 
   /**
   * Finds an ontology by name.
@@ -101,12 +145,10 @@ KAT.model = {};
   * @instance
   * @name getOntology
   * @memberof KAT.model.OntologyStore
-  * @return {Ontology|boolean} - the ontology searched for or false.
+  * @return {KAT.model.Ontology|boolean} - the ontology searched for or false.
   */
   KAT.model.OntologyStore.prototype.getOntology = function(name){
-    if(!/^(\w|\d|\-\_\+)+$/.test(name)){
-      //we do not match the name
-      //TODO: Add a warning here.
+    if(!nameRegEx.test(name)){
       return false;
     }
 
@@ -119,6 +161,74 @@ KAT.model = {};
 
     //return false if not found.
     return false;
+  }
+
+  /**
+  * Finds a concept by name.
+  *
+  * @param {string} name - Name of concept to search for. Should be of the form OntologyName.ConceptName
+  *
+  * @function
+  * @instance
+  * @name getConcept
+  * @memberof KAT.model.OntologyStore
+  * @return {KAT.model.Concept|boolean} - the concept searched for or false.
+  */
+  KAT.model.OntologyStore.prototype.getConcept = function(name){
+
+    if(!nameRegEx2.test(name)){
+      return false;
+    }
+
+    //match the name regex
+    var name = name.match(nameRegEx2);
+
+    //get the ontology
+    var ontology = this.getOntology(name[1]);
+
+    if(!ontology){
+      return false;
+    }
+
+    //get the concept
+    return ontology.getConcept(name[2]);
+  }
+
+  /**
+  * Finds a field by name.
+  *
+  * @param {string} name - Name of field to search for. Should be of the form OntologyName.ConceptName.FieldName
+  *
+  * @function
+  * @instance
+  * @name getField
+  * @memberof KAT.model.OntologyStore
+  * @return {KAT.model.Field|boolean} - the field searched for or false.
+  */
+  KAT.model.OntologyStore.prototype.getField = function(name){
+    if(!nameRegEx3.test(name)){
+      return false;
+    }
+
+    //match the name regex
+    var name = name.match(nameRegEx3);
+
+    //get the ontology
+    var ontology = this.getOntology(name[1]);
+
+    if(!ontology){
+      return false;
+    }
+
+    //get the concept
+    var concept = ontology.getConcept(name[2]);
+
+    if(!concept){
+      return false;
+    }
+
+    //get the field
+    return concept.getField(name[3]);
   }
 
 
@@ -171,10 +281,10 @@ KAT.model = {};
     */
     this.name = name;
 
-    //check it it is a valid name.
+    //Check if the name is valid.
     //TODO: Change error when using XML Node
-    if(!KAT.model.OntologyStore.isOntologyName(name)){
-      throw new KAT.model.ParsingError("KAT.model.Ontology: Unable to create ontology ('"+name+"' is not a valid name for an ontology). ", this.xml);
+    if(!nameRegEx.test(this.name)){
+      throw new KAT.model.ParsingError("KAT.model.Ontology: Unable to create ontology ('"+this.name+"' is not a valid name). ", this.xml);
     }
 
     /**
@@ -212,6 +322,76 @@ KAT.model = {};
       me.concepts.push(new KAT.model.Concept(e, me));
     })
 
+  }
+
+  /**
+  * Gets the full name of this ontology.
+  *
+  * @function
+  * @instance
+  * @name getFullName
+  * @memberof KAT.model.Ontology
+  * @return {string} - full Name of this ontology
+  */
+  KAT.model.Ontology.prototype.getFullName = function(){
+    return this.name;
+  }
+
+  /**
+  * Finds a concept by name.
+  *
+  * @param {string} name - Name of concept to search for.
+  *
+  * @function
+  * @instance
+  * @name getConcept
+  * @memberof KAT.model.Ontology
+  * @return {KAT.model.Concept|boolean} - the concept searched for or false.
+  */
+  KAT.model.Ontology.prototype.getConcept = function(name){
+    if(!nameRegEx.test(name)){
+      return false;
+    }
+
+    //Search for the name
+    for(var i=0;i<this.concepts.length;i++){
+      if(this.concepts[i].name == name){
+        return this.concepts[i];
+      }
+    }
+
+    //return false if not found.
+    return false;
+  }
+
+  /**
+  * Finds a field by name.
+  *
+  * @param {string} name - Name of field to search for. Should be of the form ConceptName.FieldName
+  *
+  * @function
+  * @instance
+  * @name getField
+  * @memberof KAT.model.Ontology
+  * @return {KAT.model.Field|boolean} - the field searched for or false.
+  */
+  KAT.model.Ontology.prototype.getField = function(name){
+    if(!nameRegEx2.test(name)){
+      return false;
+    }
+
+    //match the name regex
+    var name = name.match(nameRegEx2);
+
+    //get the concept
+    var concept = this.getConcept(name[1]);
+
+    if(!concept){
+      return false;
+    }
+
+    //get the field
+    return concept.getField(name[2]);
   }
 
 
@@ -267,13 +447,19 @@ KAT.model = {};
     */
     this.name = this.xml.attr("name");
 
-    //TODO: Check if this concept already exists
-    //TODO: Check for a valid concept name
+    //Check if the name is valid.
+    if(!nameRegEx.test(this.name)){
+      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML ('"+this.name+"' is not a valid name). ", this.xml);
+    }
+
+    //Check if this concept already exists
+    if(this.ontology.getConcept(this.name)){
+      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Concept '"+this.name+"' already exists). ", this.xml);
+    }
 
     /**
     * Documentation of this concept
     *
-
     * @type {string}
     * @name KAT.model.Concept#documentation
     */
@@ -319,7 +505,8 @@ KAT.model = {};
       this.documentation = children.eq(index).text().trim();
       index++;
     } else {
-      new KAT.model.ParsingWarning("KAT.model.Concept: Missing <documentation>, ignoring. ", children);
+      //TODO: Do we really want this warning?
+      //new KAT.model.ParsingWarning("KAT.model.Concept: Missing <documentation>, ignoring. ", children);
     }
 
     //fields
@@ -365,8 +552,46 @@ KAT.model = {};
     if(index != children.length){
       throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Expected at least 2 of <documentation>, <fields>, <display> and <rdf:RDF>). ", children);
     }
+  }
 
-    //TODO: Check for unreference concepts
+  /**
+  * Gets the full name of this concept.
+  *
+  * @function
+  * @instance
+  * @name getFullName
+  * @memberof KAT.model.Concept
+  * @return {string} - full Name of this concept
+  */
+  KAT.model.Concept.prototype.getFullName = function(){
+    return this.ontology.getFullName()+"."+this.name;
+  }
+
+  /**
+  * Finds a field by name.
+  *
+  * @param {string} name - Name of field to search for.
+  *
+  * @function
+  * @instance
+  * @name getField
+  * @memberof KAT.model.Concept
+  * @return {KAT.model.Field|boolean} - the field searched for or false.
+  */
+  KAT.model.Concept.prototype.getField = function(name){
+    if(!nameRegEx.test(name)){
+      return false;
+    }
+
+    //Search for the name
+    for(var i=0;i<this.fields.length;i++){
+      if(this.fields[i].name == name){
+        return this.fields[i];
+      }
+    }
+
+    //return false if not found.
+    return false;
   }
 
   /** Creates a new Field instance.
@@ -409,15 +634,22 @@ KAT.model = {};
     }
 
     /**
-    * Name of this concept
+    * Name of this field
     *
     * @type {string}
     * @name KAT.model.Field#name
     */
     this.name = this.xml.attr("name");
 
-    //TODO: Check if this field already exists
-    //TODO: Check for valid field name
+    //Check for a valid name
+    if(!nameRegEx.test(this.name)){
+      throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML ('"+this.name+"' is not a valid name). ", this.xml);
+    }
+
+    //Check if this field already exists
+    if(this.concept.getField(this.name)){
+      throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Field '"+this.name+"' already exists). ", this.xml);
+    }
 
     //do we have the type attribute.
     if(typeof this.xml.attr("type") != "string"){
@@ -430,7 +662,7 @@ KAT.model = {};
     }
 
     /**
-    * Name of this concept
+    * Type of this field
     *
     * @type {KAT.model.Field.types}
     * @name KAT.model.Field#type
@@ -470,6 +702,15 @@ KAT.model = {};
     this.default = "";
 
     /**
+    * textdType for this field.
+    *
+    * @type {string}
+    * @name KAT.model.Field#textdType
+    */
+    this.textdType = "";
+    //TODO: What is this?
+
+    /**
     * Documentation for this field.
     *
     * @type {string}
@@ -479,11 +720,12 @@ KAT.model = {};
 
     /**
     * Validation for this field, stores
-    * - a RegEx for KAT.model.Field.types.text,
-    * - KAT.model.Option[] for KAT.model.Field.types.select
-    * - KAT.model.Concept for KAT.model.Field.types.reference
+    * regex for KAT.model.Field.types.text,
+    * KAT.model.Option[] for KAT.model.Field.types.select,
+    * KAT.model.Concept for KAT.model.Field.types.reference and
+    * string for KAT.model.Field.types.reference while the reference is undefined.
     *
-    * @type {Regex|KAT.model.Option[]|KAT.model.Concept}
+    * @type {string|regex|KAT.model.Option[]|KAT.model.Concept}
     * @name KAT.model.Field#validation
     */
     this.validation = undefined;
@@ -494,6 +736,7 @@ KAT.model = {};
     var hasValidation = false;
     var hasNumber = false;
     var hasDocumentation = false;
+    var hasTextD = false;
 
     if(this.type == KAT.model.Field.types.text){
       //validate everything
@@ -573,7 +816,85 @@ KAT.model = {};
           hasDocumentation = true;
           this.documentation = e.text().trim();
         } else if(e.is("textdType")){
-          //TODO: textdType
+          //did we have this already?
+          if(hasTextD){
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Double <textdType> tag). ", e);
+          }
+
+          //we had it now
+          hasTextD = true
+          this.textdType = e.text();
+        } else {
+          throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Unexpected tag). ", e);
+        }
+      });
+
+      //did we have the <value>
+      if(!hasValue){
+        throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Missing required <value> tag). ", this.xml.children());
+      }
+    } else if(this.type == KAT.model.Field.types.reference){
+      this.xml.children().each(function(i, e){
+        var e = $(e);
+
+        if(e.is("value")){
+
+          //did we have this already
+          if(hasValue){
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Double <value> tag). ", e);
+          }
+
+          //no, so now store it.
+          hasValue = true;
+          me.value = e.text();
+        } else if(e.is("referencedType")){
+          //did we have this already?
+          if(hasValidation){
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Double <referencedType> tag). ", e);
+          }
+
+          //no, so we can store it
+          hasValidation = true;
+          me.validation = e.text();
+
+        } else if(e.is("number")){
+          //did we have this already?
+          if(hasNumber){
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Double <number> tag). ", e);
+          }
+
+          //ok, now store it
+          hasNumber = true;
+
+          //minimum
+          if(typeof e.attr("atleast")){
+            try{
+              me.minimum = parseInt(e.attr("atleast"));
+            } catch(f){
+              throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (atleast property must be a number). ", e);
+            }
+          }
+
+          //maximum
+          if(typeof e.attr("atmost")){
+            try{
+              me.maximum = parseInt(e.attr("atmost"));
+            } catch(f){
+              throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (atmost property must be a number). ", e);
+            }
+          }
+        } else if(e.is("documentation")){
+
+          //did we have this already?
+          if(hasDocumentation){
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Double <documentation> tag). ", e);
+          }
+
+          //we had it now
+          hasDocumentation = true;
+          this.documentation = e.text().trim();
+        } else if(e.is("textdType")){
+          //TODO: textdType? What is this?
           KAT.model.ParsingWarning("KAT.model.Field: Tag not implemented: <textdType>. ", e);
         } else {
           throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Unexpected tag). ", e);
@@ -584,10 +905,28 @@ KAT.model = {};
       if(!hasValue){
         throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Missing required <value> tag). ", this.xml.children());
       }
-    } else {
-      //TODO: Other types
-      KAT.model.ParsingWarning("KAT.model.Field: Only KAT.model.Field.types.text currently implemented. ", this.xml);
+
+      //did we have <referencedType>
+      if(!hasValidation){
+        throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Missing required <referencedType> tag). ", this.xml.children());
+      }
+    } else if(this.type == KAT.model.Field.types.select){
+      //TODO: Implement select type
+      KAT.model.ParsingWarning("KAT.model.Field: KAT.model.Field.types.select currently unimplemented. ", this.xml);
     }
+  }
+
+  /**
+  * Gets the full name of this field.
+  *
+  * @function
+  * @instance
+  * @name getFullName
+  * @memberof KAT.model.Field
+  * @return {string} - full Name of this field
+  */
+  KAT.model.Field.prototype.getFullName = function(){
+    return this.concept.getFullName()+"."+this.name;
   }
 
   /**

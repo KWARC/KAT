@@ -105,6 +105,12 @@
             </ul>
             <ul class="methods itemMembers">
             
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="KAT.model.Concept#getField"><a href="KAT.model.Concept.html#getField">getField</a></li>
+            
+                <li data-name="KAT.model.Concept#getFullName"><a href="KAT.model.Concept.html#getFullName">getFullName</a></li>
+            
             </ul>
             <ul class="events itemMembers">
             
@@ -134,6 +140,8 @@
             
                 <li data-name="KAT.model.Field#name"><a href="KAT.model.Field.html#name">name</a></li>
             
+                <li data-name="KAT.model.Field#textdType"><a href="KAT.model.Field.html#textdType">textdType</a></li>
+            
                 <li data-name="KAT.model.Field#type"><a href="KAT.model.Field.html#type">type</a></li>
             
                 <li data-name="KAT.model.Field#validation"><a href="KAT.model.Field.html#validation">validation</a></li>
@@ -147,6 +155,10 @@
             
             </ul>
             <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="KAT.model.Field#getFullName"><a href="KAT.model.Field.html#getFullName">getFullName</a></li>
             
             </ul>
             <ul class="events itemMembers">
@@ -179,6 +191,14 @@
             </ul>
             <ul class="methods itemMembers">
             
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="KAT.model.Ontology#getConcept"><a href="KAT.model.Ontology.html#getConcept">getConcept</a></li>
+            
+                <li data-name="KAT.model.Ontology#getField"><a href="KAT.model.Ontology.html#getField">getField</a></li>
+            
+                <li data-name="KAT.model.Ontology#getFullName"><a href="KAT.model.Ontology.html#getFullName">getFullName</a></li>
+            
             </ul>
             <ul class="events itemMembers">
             
@@ -204,11 +224,15 @@
             
             <span class="subtitle">Methods</span>
             
-                <li data-name="KAT.model.OntologyStore.isConceptName"><a href="KAT.model.OntologyStore.html#isConceptName">isConceptName</a></li>
+                <li data-name="KAT.model.OntologyStore.addNewOntology"><a href="KAT.model.OntologyStore.html#addNewOntology">addNewOntology</a></li>
             
-                <li data-name="KAT.model.OntologyStore.isFieldName"><a href="KAT.model.OntologyStore.html#isFieldName">isFieldName</a></li>
+                <li data-name="KAT.model.OntologyStore.addOntology"><a href="KAT.model.OntologyStore.html#addOntology">addOntology</a></li>
             
-                <li data-name="KAT.model.OntologyStore.isOntologyName"><a href="KAT.model.OntologyStore.html#isOntologyName">isOntologyName</a></li>
+                <li data-name="KAT.model.OntologyStore.init"><a href="KAT.model.OntologyStore.html#init">init</a></li>
+            
+                <li data-name="KAT.model.OntologyStore#getConcept"><a href="KAT.model.OntologyStore.html#getConcept">getConcept</a></li>
+            
+                <li data-name="KAT.model.OntologyStore#getField"><a href="KAT.model.OntologyStore.html#getField">getField</a></li>
             
                 <li data-name="KAT.model.OntologyStore#getOntology"><a href="KAT.model.OntologyStore.html#getOntology">getOntology</a></li>
             
@@ -298,7 +322,7 @@
     
         
         <div class="tag-source">
-            KAT.model.js, line 125
+            KAT.model.js, line 235
         </div>
         
     </div>
@@ -697,6 +721,340 @@
     
     
     
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl>
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="getConcept">
+            
+            getConcept<span class="signature">(name)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{<a href="KAT.model.Concept.html">KAT.model.Concept</a>|boolean}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            KAT.model.js, line 340
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Finds a concept by name.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                Name of concept to search for.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+
+
+<h5>Returns:</h5>
+the concept searched for or false.
+<br />
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="getField">
+            
+            getField<span class="signature">(name)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{<a href="KAT.model.Field.html">KAT.model.Field</a>|boolean}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            KAT.model.js, line 367
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Finds a field by name.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                Name of field to search for. Should be of the form ConceptName.FieldName</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+
+
+<h5>Returns:</h5>
+the field searched for or false.
+<br />
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="getFullName">
+            
+            getFullName<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{string}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            KAT.model.js, line 327
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Gets the full name of this ontology.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+
+
+<h5>Returns:</h5>
+full Name of this ontology
+<br />
+
+    
+    
+    
+</dd>
+
+        </dl>
+    
     
     
     
@@ -712,7 +1070,7 @@
         
 
         <footer>
-            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha11</a> on Fri Dec 26 2014 22:46:22 GMT+0100 (CET)
+            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha11</a> on Mon Dec 29 2014 22:53:10 GMT+0100 (CET)
         </footer>
     </div>
 </div>
