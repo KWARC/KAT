@@ -1,8 +1,8 @@
-# A RelaxNG for KAT annotations
-# $Id: omdoc+ltxml.rnc 2282 2013-04-08 14:20:43Z kohlhase $
-# $HeadURL: https://svn.kwarc.info/repos/stex/trunk/schema/rnc/omdoc+ltxml.rnc $
-#   (c) 2013 Michael Kohlhase, released under the GNU Public License (GPL)
+# A RelaxNG Schema for KAT annotation ontologies
+# (c) 2013 Michael Kohlhase, released under the GNU Public License (GPL)
 
+default namespace kat = "https://github.com/KWARC/KAT/" 
+ 
 start = annotation
 
 name.att = attribute name {text}
