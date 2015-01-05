@@ -9,38 +9,62 @@ name.att = attribute name {text}
 type.att = attribute type {text}
 src.att = attribute src {xsd:anyURI}
 
-annotation = element annotation {name.att & concepts & documentation?}
+## an annotation ontology for mathematical documents.
+annotation = element annotation {name.att & concept* & documentation?}
 
+## it can be documented (e.g. in HTML)
 documentation = element documentation {richtext}
 
-concepts = element concepts {concept*}
+## a concept classifies a text fragment and specifies what metadata can be
+## attached to it. concepts are used to generate annotation dialogs in KAT.
+concept = element concept {name.att & field* &  display & rdf & documentation?}
 
-concept = element concept {name.att & fields &  display & rdf & documentation?}
+## a field specifies an slot in the annotation dialog for a text fragment.
+## there are various types of fields, which we specify next.
+field = field.text | field.ref | field.select
 
-fields = element fields {field*}
+## a text field with a default value and a regexp for validation
+field.text = element field {attribute type {"text"} & field.all & katdefault? & validation?}
 
-field.mod = value? & number? & textdType* & (options? | (katdefault? & validation?))
-field = element field {name.att & type.att & field.mod & documentation?}
+## a reference field, referencedType restricts the annotation of the target.
+field.ref = element field {attribute type {"reference"} & field.all & referencedType*}
 
+## a selector field, the option elements specify a list of options to select from
+field.select = element field {attribute type {"select"} & field.all & option*}
+
+## the parts that all incarnations share
+field.all = name.att & value? & number? & documentation?
+
+## the text that describes the field in the annotation interface (should be html5 inline)
 value = element value {text}
-katdefault = element default {text}
-validation = element validation {text}
-textdType = element textdType {text}
-options = element options {option*}
 
+## the default value of the field.
+katdefault = element default {text}
+
+## a regular expression that can be used for validating the input.
+validation = element validation {text}
+
+## the categorization of the text fragment this reference points to (i.e. the
+## @name attribute of the concept it is annotated with.
+referencedType = element referencedType {text}
+
+## an option in a selection field, it is characterized by a value and its documentation
+## (which can be shown to the annotator in the dialogue)
 default.att = attribute default {"true"}
 option = element option {default.att? & value & documentation?}
 
-## the number elements specifies how many of this field are required: 
-## if astleast is not given the field is optionsal
-## if atmost is not given there is no restriction on the number, 
-number = element number {attribute atleast {xsd:nonNegativeInteger}? & attribute atmost {xsd:positiveInteger}?}
+## the number elements specifies how many of this field are required:
+## if atleast is not given the field is optional
+## if atmost is not given there is no restriction on the number,
+atl.att = attribute atleast {xsd:nonNegativeInteger}
+atm.att = attribute atmost {xsd:nonNegativeInteger}
+number = element number {atl.att?&atm.att?}
 
 display = element display {template & css? & javascript?}
 
 template = element template {richtext}
-css = element css {src.att | text} 
-javascript = element javascript {src.att | text} 
+css = element css {src.att | text}
+javascript = element javascript {src.att | text}
 
 rdf = external "rdfxml.rnc"
 

@@ -167,7 +167,7 @@
             <fields>
                 <field name="declaration" type="text">
                     <value>Declaration</value>
-                    <textdType>declaration</textdType>
+                    <referencedType>declaration</referencedType>
                     <number atleast="1" atmost="1"></number>
                 </field>
             </fields>
@@ -265,12 +265,12 @@
                 <field name="from" type="text">
                     <value>From</value>
                     <number atleast="1" atmost="1"></number>
-                    <textdType>Theory</textdType>
+                    <referencedType>Theory</referencedType>
                 </field>
                 <field name="to" type="text">
                     <value>To</value>
                     <number atleast="1" atmost="1"></number>
-                    <textdType>Theory</textdType>
+                    <referencedType>Theory</referencedType>
                 </field>
             </fields>
             <display>
