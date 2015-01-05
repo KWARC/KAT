@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!--     Penn Tree Bank Annotation Ontology for KAT, generated from
+   http://acoli.cs.uni-frankfurt.de/resources/olia/penn.owl --> 
+
 <annotation  name="OLiA"
     xmlns="https://github.com/KWARC/KAT/"  
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -26,7 +30,7 @@
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Adjective"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Adjective"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -46,7 +50,7 @@
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Adverb"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Adverb"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -61,7 +65,7 @@
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#BackwardDoubleQuote"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#BackwardDoubleQuote"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -82,7 +86,7 @@ Subjunctive: We suggested that he do/VB it.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#BaseForm"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#BaseForm"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -100,7 +104,7 @@ If I were/VBD to win the lottery...</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#BePastTense"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#BePastTense"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -115,7 +119,7 @@ If I were/VBD to win the lottery...</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#BePresentTense"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#BePresentTense"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -130,7 +134,7 @@ If I were/VBD to win the lottery...</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#CardinalNumber"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#CardinalNumber"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -145,7 +149,7 @@ If I were/VBD to win the lottery...</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Colon"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Colon"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -160,7 +164,7 @@ If I were/VBD to win the lottery...</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Comma"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Comma"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -175,7 +179,7 @@ If I were/VBD to win the lottery...</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#CommonNoun"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#CommonNoun"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -191,7 +195,7 @@ corresponds to the object of a verb or preposition.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ComparativeAdjective"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ComparativeAdjective"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -206,7 +210,7 @@ corresponds to the object of a verb or preposition.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ComparativeAdverb"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ComparativeAdverb"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -221,7 +225,7 @@ corresponds to the object of a verb or preposition.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Conjunction"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Conjunction"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -237,7 +241,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#CoordinatingConjunction"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#CoordinatingConjunction"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -252,7 +256,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Determiner"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Determiner"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -267,7 +271,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Dollar"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Dollar"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -282,7 +286,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#DoubleQuote"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#DoubleQuote"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -297,7 +301,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ExistentialThere"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ExistentialThere"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -312,7 +316,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ForeignWord"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ForeignWord"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -327,7 +331,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ForwardDoubleQuote"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ForwardDoubleQuote"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -342,7 +346,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#FullStop"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#FullStop"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -357,7 +361,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#GerundOrPresentParticiple"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#GerundOrPresentParticiple"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -372,7 +376,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Interjection"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Interjection"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -387,7 +391,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#LeftBracket"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#LeftBracket"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -402,7 +406,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#LeftCurlyBracket"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#LeftCurlyBracket"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -417,7 +421,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#LeftRoundBracket"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#LeftRoundBracket"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -432,7 +436,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#LeftSquareBracket"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#LeftSquareBracket"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -447,7 +451,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ListItemMarker"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ListItemMarker"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -463,7 +467,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ModalVerb"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ModalVerb"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -478,7 +482,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Noun"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Noun"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -493,7 +497,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Particle"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Particle"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -508,7 +512,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#PastParticiple"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#PastParticiple"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -523,7 +527,7 @@ For in the sense of "because" is a coordinating conjunction.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#PersonalPronoun"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#PersonalPronoun"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -539,7 +543,7 @@ were a separate word. e.g. "John/ NP 's/POS idea", "the parents/NNS'/POS distres
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#PossessiveEnding"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#PossessiveEnding"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -554,7 +558,7 @@ were a separate word. e.g. "John/ NP 's/POS idea", "the parents/NNS'/POS distres
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#PossessivePronoun"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#PossessivePronoun"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -569,7 +573,7 @@ were a separate word. e.g. "John/ NP 's/POS idea", "the parents/NNS'/POS distres
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#PossessiveWhPronoun"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#PossessiveWhPronoun"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -593,7 +597,7 @@ such/PDT a good time</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Predeterminer"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Predeterminer"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -609,7 +613,7 @@ The preposition "to" has its own special tag TO.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#PrepositionOrSubordinatingConjunction"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#PrepositionOrSubordinatingConjunction"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -624,7 +628,7 @@ The preposition "to" has its own special tag TO.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Pronoun"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Pronoun"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -639,7 +643,7 @@ The preposition "to" has its own special tag TO.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ProperNoun"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#ProperNoun"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -654,7 +658,7 @@ The preposition "to" has its own special tag TO.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Punctuation"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Punctuation"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -669,7 +673,7 @@ The preposition "to" has its own special tag TO.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#RightBracket"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#RightBracket"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -684,7 +688,7 @@ The preposition "to" has its own special tag TO.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#RightCurlyBracket"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#RightCurlyBracket"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -699,7 +703,7 @@ The preposition "to" has its own special tag TO.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#RightRoundBracket"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#RightRoundBracket"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -714,7 +718,7 @@ The preposition "to" has its own special tag TO.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#RightSquareBracket"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#RightSquareBracket"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -729,7 +733,7 @@ The preposition "to" has its own special tag TO.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#SuperlativeAdjective"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#SuperlativeAdjective"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -744,7 +748,7 @@ The preposition "to" has its own special tag TO.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#SuperlativeAdverb"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#SuperlativeAdverb"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -759,7 +763,7 @@ The preposition "to" has its own special tag TO.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Symbol"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Symbol"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -774,7 +778,7 @@ The preposition "to" has its own special tag TO.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Tag"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Tag"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -789,7 +793,7 @@ The preposition "to" has its own special tag TO.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#To"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#To"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -804,7 +808,7 @@ The preposition "to" has its own special tag TO.</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Verb"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#Verb"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -821,7 +825,7 @@ EXAMPLES:
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#WhAdverb"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#WhAdverb"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -836,7 +840,7 @@ EXAMPLES:
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#WhDeterminer"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#WhDeterminer"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -851,7 +855,7 @@ EXAMPLES:
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#WhPronoun"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/penn.owl#WhPronoun"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
@@ -866,7 +870,7 @@ EXAMPLES:
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/system.owl#LinguisticAnnotation"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/system.owl#LinguisticAnnotation"/>
           </rdf:Description>
       </rdf:RDF>
     </concept>
