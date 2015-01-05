@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0">
+  <namespace ns="https://github.com/KWARC/KAT/" uri="../schema/kat-annotations.rnc"/>
+</locatingRules>
