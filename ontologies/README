@@ -1,0 +1,9 @@
+Annotation ontologies for the KAT system.
+
+Annotation Ontologies: 
+omdoc-annotations.xml: the OMDoc annotation ontology (see http://omdoc.org)
+olia.xml:                           OLiA Annotation Model for Penn Treebank part-of-speech annotation. 
+stanford.xml:                    OLiA Annotation Model for Stanford Parser Dependency Labels
+
+Auxiliary files:
+schemas.xml:                   allows RelaxNG schema validation with nxml-mode
