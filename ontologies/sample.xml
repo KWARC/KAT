@@ -1,20 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?><!-- A KAT annotations specification for OMDoc annotations
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A KAT annotations specification for OMDoc annotations
      copyright 2013 Michael Kohlhase released under the GPL -->
-<annotation xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:o="http://omdoc.org/ontology#" name="OMDoc">
+<annotation name="OMDoc"
+    xmlns="https://github.com/KWARC/KAT/"  
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:o="http://omdoc.org/ontology#">
     <documentation>
         The OMDoc ontology is a flexiformal data model for matheamtical (and general STEM) documents
     </documentation>
-    <concepts>
         <concept name="Symbol">
             <documentation>An OpenMath/OMDoc Symbol</documentation>
-            <fields>
                 <field name="name" type="text">
                     <documentation>The name of the symbol defines it in a theory</documentation>
                     <value>Name</value>
                     <default>Symbol</default>
                     <validation>[A-Z][a-z]*</validation>
                 </field>
-            </fields>
             <display>
                 <template>
                     <b>Symbol:</b> {name}
@@ -29,14 +30,12 @@
         </concept>
 
         <concept name="Definition">
-            <fields>
                 <field name="for" type="reference">
                     <value>For</value>
                     <referencedType>OMDoc.Symbol</referencedType>
                     <number atleast="1"/>
                 </field>
                 <field name="type" type="select">
-                    <options>
                         <option default="true">
                             <value>simple</value>
                             <documentation>definiens is does not contain the definiendum</documentation>
@@ -53,9 +52,7 @@
                             <value>implicit</value>
                             <documentation>definiendum is described unambiguously by a formula</documentation>
                         </option>
-                    </options>
                 </field>
-            </fields>
             <display>
                 <template>
                     <b>Definition</b> {for} {type}
@@ -71,9 +68,7 @@
         </concept>
 
         <concept name="Assertion">
-            <fields>
                 <field name="type" type="select">
-                    <options>
                         <option>
                             <value>theorem</value>
                             <documentation>An important assertion with a proof</documentation>
@@ -111,9 +106,7 @@
                             <value>formula</value>
                             <documentation>If all else fails.</documentation>
                         </option>
-                    </options>
                 </field>
-            </fields>
             <display>
                 <template>
                     <b>Assertion</b>
@@ -125,9 +118,7 @@
 
         <concept name="declaration">
             <documentation>A declaration of an identifier</documentation>
-            <fields>
                 <field name="type" type="select">
-                    <options>
                         <option>
                             <value>constant</value>
                             <documentation>A constant declaration</documentation>
@@ -142,7 +133,6 @@
                                 claimed to exist.
                             </documentation>
                         </option>
-                    </options>
                 </field>
                 <field name="identifier" type="text">
                     <documentation>The identifiers introduced by this declaration</documentation>
@@ -154,7 +144,6 @@
                     <value>Restriction</value>
                     <number atleast="1" atmost="1"></number>
                 </field>
-            </fields>
             <display>
                 <template>
                     <bf>Declaration</bf>
@@ -164,13 +153,11 @@
         </concept>
 
         <concept name="text">
-            <fields>
                 <field name="declaration" type="text">
                     <value>Declaration</value>
                     <referencedType>declaration</referencedType>
                     <number atleast="1" atmost="1"></number>
                 </field>
-            </fields>
             <display>
                 <template>
                     <b>Reference</b>
@@ -179,12 +166,9 @@
             </display>
         </concept>
 
-
         <concept name="inline-statement">
             <documentation>A phrase-level statement</documentation>
-            <fields>
                 <field name="type" type="select">
-                    <options>
                         <option>
                             <value>Example</value>
                             <documentation>An inline example</documentation>
@@ -197,10 +181,8 @@
                             <value>Statement</value>
                             <documentation>An inline Statement</documentation>
                         </option>
-                    </options>
                     <number atleast="1" atmost="1"></number>
                 </field>
-            </fields>
             <display>
                 <template>
                     <b>Inline-{type}</b>
@@ -209,7 +191,6 @@
         </concept>
 
         <concept name="Proof">
-            <fields>
                 <field name="name" type="text">
                     <value>Name</value>
                     <default>Proof</default>
@@ -220,7 +201,6 @@
                     <value>For</value>
                     <number atleast="1" atmost="1"></number>
                 </field>
-            </fields>
             <display>
                 <template>
                     <b>Proof</b>
@@ -233,7 +213,6 @@
         </concept>
 
         <concept name="theory">
-            <fields>
                 <field name="name" type="text">
                     <value>Name</value>
                     <default>Proof</default>
@@ -244,7 +223,6 @@
                     <value>imports</value>
                     <number></number>
                 </field>
-            </fields>
             <display>
                 <template>
                     <b>theory</b>
@@ -256,7 +234,6 @@
         </concept>
 
         <concept name="view">
-            <fields>
                 <field name="name" type="text">
                     <value>Name</value>
                     <validation>[A-Z][a-z]*</validation>
@@ -272,7 +249,6 @@
                     <number atleast="1" atmost="1"></number>
                     <referencedType>Theory</referencedType>
                 </field>
-            </fields>
             <display>
                 <template>
                     <b>view</b>
@@ -280,5 +256,4 @@
                 </template>
             </display>
         </concept>
-    </concepts>
 </annotation>
