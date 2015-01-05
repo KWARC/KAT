@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<annotation xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:o="http://omdoc.org/ontology#" name="stanford">
+<annotation name="stanford"
+        xmlns="https://github.com/KWARC/KAT/"  
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:o="http://omdoc.org/ontology#">
   <documentation>
     OLiA Annotation Model of Stanford Parser dependency labels (de Marneffe and Manning 2011)
 
-Unless specified otherwise, all comments are taken from de Marneffe and Manning (2011)
+    Unless specified otherwise, all comments are taken from de Marneffe and Manning (2011)
 
-References:
-Marie-Catherine de Marneffe and Christopher D. Manning (2011), Stanford typed dependencies manual, September 2008, revised for Stanford Parser v. 1.6.9 in September 2011, http://nlp.stanford.edu/software/dependencies_manual.pdf
+    References:
+    Marie-Catherine de Marneffe and Christopher D. Manning (2011), Stanford typed dependencies manual, September 2008, revised for Stanford Parser v. 1.6.9 in September 2011, http://nlp.stanford.edu/software/dependencies_manual.pdf
   </documentation>
-  <concepts>
 
     <concept name="AbbreviationModifier">
       <documentation>An abbreviation modifier of an NP is a parenthesized NP that serves to abbreviate the NP (or to define an abbreviation).
-
-"The Australian Broadcasting Corporation (ABC)"
-abbrev(Corporation, ABC)</documentation>
-      <fields>
+      
+      "The Australian Broadcasting Corporation (ABC)"
+      abbrev(Corporation, ABC)
+      </documentation>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#AbbreviationModifier</documentation>
             <value>Name</value>
@@ -33,8 +35,6 @@ abbrev(Corporation, ABC)</documentation>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-
-      </fields>
       <display>
           <template>
               <b>AbbreviationModifier:</b>
@@ -56,7 +56,6 @@ abbrev(Corporation, ABC)</documentation>
 
 "She looks very beautiful"
 acomp(looks, beautiful)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#AdjectivalComplement</documentation>
             <value>Name</value>
@@ -74,8 +73,6 @@ acomp(looks, beautiful)</documentation>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-
-      </fields>
       <display>
           <template>
               <b>AdjectivalComplement:</b>
@@ -97,7 +94,6 @@ acomp(looks, beautiful)</documentation>
 
 "Sam eats red meat"
 amod(meat, red)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#AdjectivalModifier</documentation>
             <value>Name</value>
@@ -115,8 +111,6 @@ amod(meat, red)</documentation>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-
-      </fields>
       <display>
           <template>
               <b>AdjectivalModifier:</b>
@@ -141,7 +135,6 @@ advcl(happened, falling)
 
 "If you know who did it, you should tell the teacher"
 advcl(tell, know)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#AdverbialClauseModifier</documentation>
             <value>Name</value>
@@ -159,8 +152,6 @@ advcl(tell, know)</documentation>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-
-      </fields>
       <display>
           <template>
               <b>AdverbialClauseModifier:</b>
@@ -185,7 +176,6 @@ advmod(modified, genetically)
 
 "less often"
 advmod(often, less)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#AdverbialModifier</documentation>
             <value>Name</value>
@@ -203,8 +193,6 @@ advmod(often, less)</documentation>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-
-      </fields>
       <display>
           <template>
               <b>AdverbialModifier:</b>
@@ -229,7 +217,6 @@ agent(killed, police)
 
 "Effects caused by the protein are important"
 agent(caused, protein)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Agent</documentation>
             <value>Name</value>
@@ -247,8 +234,6 @@ agent(caused, protein)</documentation>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-
-      </fields>
       <display>
           <template>
               <b>Agent:</b>
@@ -273,7 +258,6 @@ appos(Sam, brother)
 
 "Bill (John's cousin)"
 appos(Bill, cousin)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#AppositionalModifier</documentation>
             <value>Name</value>
@@ -291,8 +275,6 @@ appos(Bill, cousin)</documentation>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-
-      </fields>
       <display>
           <template>
               <b>AppositionalModifier:</b>
@@ -311,7 +293,6 @@ appos(Bill, cousin)</documentation>
 
     <concept name="Argument">
       <documentation></documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Argument</documentation>
             <value>Name</value>
@@ -319,7 +300,6 @@ appos(Bill, cousin)</documentation>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-      </fields>
       <display>
           <template>
               <b>Argument:</b>
@@ -341,7 +321,6 @@ appos(Bill, cousin)</documentation>
 
 "What is that?"
 attr (is, What)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Attributive</documentation>
             <value>Name</value>
@@ -359,8 +338,6 @@ attr (is, What)</documentation>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-
-      </fields>
       <display>
           <template>
               <b>Attributive:</b>
@@ -385,7 +362,6 @@ aux(died, has)
 
 "He should leave"
 aux(leave, should)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Auxiliary</documentation>
             <value>Name</value>
@@ -403,8 +379,6 @@ aux(leave, should)</documentation>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-
-      </fields>
       <display>
           <template>
               <b>Auxiliary:</b>
@@ -429,7 +403,6 @@ xcomp(like, swim)
 
 "I am ready to leave"
 xcomp(ready, leave)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#ClausalComplementWithExternalSubject</documentation>
             <value>Name</value>
@@ -447,8 +420,6 @@ xcomp(ready, leave)</documentation>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-
-      </fields>
       <display>
           <template>
               <b>ClausalComplementWithExternalSubject:</b>
@@ -476,7 +447,6 @@ ccomp(certain, did)
 
 "I admire the fact that you are honest"
 ccomp(fact, honest)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#ClausalComplementWithInternalSubject</documentation>
             <value>Name</value>
@@ -494,8 +464,6 @@ ccomp(fact, honest)</documentation>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-
-      </fields>
       <display>
           <template>
               <b>ClausalComplementWithInternalSubject:</b>
@@ -520,7 +488,6 @@ csubj (makes, said)
 
 "What she said is not true"
 csubj (true, said)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#ClausalSubject</documentation>
             <value>Name</value>
@@ -539,7 +506,6 @@ csubj (true, said)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>ClausalSubject:</b>
@@ -558,7 +524,6 @@ csubj (true, said)</documentation>
 
     <concept name="Complement">
       <documentation></documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Complement</documentation>
             <value>Name</value>
@@ -566,7 +531,6 @@ csubj (true, said)</documentation>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-      </fields>
       <display>
           <template>
               <b>Complement:</b>
@@ -588,7 +552,6 @@ csubj (true, said)</documentation>
 
 "He says that you like to swim"
 complm(like, that)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Complementizer</documentation>
             <value>Name</value>
@@ -596,7 +559,6 @@ complm(like, that)</documentation>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-      </fields>
       <display>
           <template>
               <b>Complementizer:</b>
@@ -618,7 +580,6 @@ complm(like, that)</documentation>
 
 "I lost $ 3.2 billion"
 number($, billion)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#CompountNumberElement</documentation>
             <value>Name</value>
@@ -637,7 +598,6 @@ number($, billion)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>CompountNumberElement:</b>
@@ -663,7 +623,6 @@ conj (big, honest)
 
 "They either ski or snowboard"
 conj (ski, snowboard)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Conjunct</documentation>
             <value>Name</value>
@@ -682,7 +641,6 @@ conj (ski, snowboard)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>Conjunct:</b>
@@ -704,7 +662,6 @@ conj (ski, snowboard)</documentation>
 
 "Tom likes to eat fish"
 xsubj (eat, Tom)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#ControllingSubject</documentation>
             <value>Name</value>
@@ -723,7 +680,6 @@ xsubj (eat, Tom)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>ControllingSubject:</b>
@@ -748,7 +704,6 @@ cc(big, and)
 
 "They either ski or snowboard"
 cc(ski, or)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Coordination</documentation>
             <value>Name</value>
@@ -767,7 +722,6 @@ cc(ski, or)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>Coordination:</b>
@@ -792,7 +746,6 @@ cop(big, is)
 
 "Bill is an honest man"
 cop(man, is)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Copula</documentation>
             <value>Name</value>
@@ -811,7 +764,6 @@ cop(man, is)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>Copula:</b>
@@ -830,7 +782,6 @@ cop(man, is)</documentation>
 
     <concept name="DependencyLabel">
       <documentation></documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#DependencyLabel</documentation>
             <value>Name</value>
@@ -838,7 +789,6 @@ cop(man, is)</documentation>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-      </fields>
       <display>
           <template>
               <b>DependencyLabel:</b>
@@ -857,7 +807,6 @@ cop(man, is)</documentation>
 
     <concept name="DependencyRelation">
       <documentation></documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#DependencyRelation</documentation>
             <value>Name</value>
@@ -865,7 +814,6 @@ cop(man, is)</documentation>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-      </fields>
       <display>
           <template>
               <b>DependencyRelation:</b>
@@ -889,7 +837,6 @@ A dependency is labeled as dep when the system is unable to determine a more pre
 
 "Then, as if to show that he could, . . . "
 dep(show, if)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Dependent</documentation>
             <value>Name</value>
@@ -908,7 +855,6 @@ dep(show, if)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>Dependent:</b>
@@ -933,7 +879,6 @@ det(man, the)
 
 "Which book do you prefer?"
 det(book, which)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Determiner</documentation>
             <value>Name</value>
@@ -952,7 +897,6 @@ det(book, which)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>Determiner:</b>
@@ -977,7 +921,6 @@ dobj (gave, raise)
 
 "They win the lottery"
 dobj (win, lottery)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#DirectObject</documentation>
             <value>Name</value>
@@ -996,7 +939,6 @@ dobj (win, lottery)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>DirectObject:</b>
@@ -1018,7 +960,6 @@ dobj (win, lottery)</documentation>
 
 "There is a ghost in the room"
 expl(is, There)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Expletive</documentation>
             <value>Name</value>
@@ -1037,7 +978,6 @@ expl(is, There)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>Expletive:</b>
@@ -1059,7 +999,6 @@ expl(is, There)</documentation>
 
 "She gave me a raise"
 iobj (gave, me)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#IndirectObject</documentation>
             <value>Name</value>
@@ -1078,7 +1017,6 @@ iobj (gave, me)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>IndirectObject:</b>
@@ -1103,7 +1041,6 @@ infmod(points, establish)
 
 "I don't have anything to say"
 infmod(anything, say)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#InfinitivalModifier</documentation>
             <value>Name</value>
@@ -1122,7 +1059,6 @@ infmod(anything, say)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>InfinitivalModifier:</b>
@@ -1144,7 +1080,6 @@ infmod(anything, say)</documentation>
 
 "Forces engaged in fighting after insurgents attacked"
 mark(attacked, after)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Marker</documentation>
             <value>Name</value>
@@ -1163,7 +1098,6 @@ mark(attacked, after)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>Marker:</b>
@@ -1182,7 +1116,6 @@ mark(attacked, after)</documentation>
 
     <concept name="MeasurePhraseModifier">
       <documentation></documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#MeasurePhraseModifier</documentation>
             <value>Name</value>
@@ -1190,7 +1123,6 @@ mark(attacked, after)</documentation>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-      </fields>
       <display>
           <template>
               <b>MeasurePhraseModifier:</b>
@@ -1209,7 +1141,6 @@ mark(attacked, after)</documentation>
 
     <concept name="Modifier">
       <documentation></documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Modifier</documentation>
             <value>Name</value>
@@ -1217,7 +1148,6 @@ mark(attacked, after)</documentation>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-      </fields>
       <display>
           <template>
               <b>Modifier:</b>
@@ -1245,7 +1175,6 @@ mwe(well, as)
 
 "He cried because of you"
 mwe(of, because)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#MultiWordExpression</documentation>
             <value>Name</value>
@@ -1264,7 +1193,6 @@ mwe(of, because)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>MultiWordExpression:</b>
@@ -1289,7 +1217,6 @@ neg(scientist, not)
 
 "Bill doesn't drive"
 neg(drive, n't)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#NegationModifier</documentation>
             <value>Name</value>
@@ -1308,7 +1235,6 @@ neg(drive, n't)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>NegationModifier:</b>
@@ -1333,7 +1259,6 @@ nsubj (defeated, Clinton)
 
 "The baby is cute"
 nsubj (cute, baby)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#NominalSubject</documentation>
             <value>Name</value>
@@ -1352,7 +1277,6 @@ nsubj (cute, baby)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>NominalSubject:</b>
@@ -1376,7 +1300,6 @@ Penn Treebank represents the branching structure of NPs.)
 "Oil price futures"
 nn(futures, oil)
 nn(futures, price)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#NounCompoundModifier</documentation>
             <value>Name</value>
@@ -1395,7 +1318,6 @@ nn(futures, price)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>NounCompoundModifier:</b>
@@ -1432,7 +1354,6 @@ npadvmod(significant, itself)
 
 "90% of Australians like him, the most of any country"
 npadvmod(like, most)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#NounPhraseAsAdverbialModifier</documentation>
             <value>Name</value>
@@ -1451,7 +1372,6 @@ npadvmod(like, most)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>NounPhraseAsAdverbialModifier:</b>
@@ -1473,7 +1393,6 @@ npadvmod(like, most)</documentation>
 
 "Sam eats 3 sheep"
 num(sheep, 3)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#NumericModifier</documentation>
             <value>Name</value>
@@ -1492,7 +1411,6 @@ num(sheep, 3)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>NumericModifier:</b>
@@ -1511,7 +1429,6 @@ num(sheep, 3)</documentation>
 
     <concept name="Object">
       <documentation></documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Object</documentation>
             <value>Name</value>
@@ -1519,7 +1436,6 @@ num(sheep, 3)</documentation>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-      </fields>
       <display>
           <template>
               <b>Object:</b>
@@ -1541,7 +1457,6 @@ num(sheep, 3)</documentation>
 
 "I sat on the chair"
 pobj (on, chair)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#ObjectOfPreposition</documentation>
             <value>Name</value>
@@ -1560,7 +1475,6 @@ pobj (on, chair)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>ObjectOfPreposition:</b>
@@ -1582,7 +1496,6 @@ pobj (on, chair)</documentation>
 
 "The guy, John said, left early in the morning"
 parataxis(left, said)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Parataxis</documentation>
             <value>Name</value>
@@ -1601,7 +1514,6 @@ parataxis(left, said)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>Parataxis:</b>
@@ -1626,7 +1538,6 @@ partmod(truffles, picked)
 
 "Bill tried to shoot demonstrating his incompetence"
 partmod(shoot, demonstrating)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#ParticipalModifier</documentation>
             <value>Name</value>
@@ -1645,7 +1556,6 @@ partmod(shoot, demonstrating)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>ParticipalModifier:</b>
@@ -1671,7 +1581,6 @@ aux(killed,has)
 
 "Kennedy was/got killed"
 auxpass(killed, was/got)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#PassiveAuxiliary</documentation>
             <value>Name</value>
@@ -1690,7 +1599,6 @@ auxpass(killed, was/got)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>PassiveAuxiliary:</b>
@@ -1712,7 +1620,6 @@ auxpass(killed, was/got)</documentation>
 
 "That she lied was suspected by everyone"
 csubjpass(suspected, lied)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#PassiveClausalSubject</documentation>
             <value>Name</value>
@@ -1731,7 +1638,6 @@ csubjpass(suspected, lied)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>PassiveClausalSubject:</b>
@@ -1753,7 +1659,6 @@ csubjpass(suspected, lied)</documentation>
 
 "Dole was defeated by Clinton"
 nsubjpass(defeated, Dole)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#PassiveNominalSubject</documentation>
             <value>Name</value>
@@ -1772,7 +1677,6 @@ nsubjpass(defeated, Dole)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>PassiveNominalSubject:</b>
@@ -1794,7 +1698,6 @@ nsubjpass(defeated, Dole)</documentation>
 
 "They shut down the station"
 prt(shut, down)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#PhrasalVerbParticle</documentation>
             <value>Name</value>
@@ -1813,7 +1716,6 @@ prt(shut, down)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>PhrasalVerbParticle:</b>
@@ -1838,7 +1740,6 @@ poss(offices, their)
 
 "Bill's clothes"
 poss(clothes, Bill)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#PossessionModifier</documentation>
             <value>Name</value>
@@ -1857,7 +1758,6 @@ poss(clothes, Bill)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>PossessionModifier:</b>
@@ -1879,7 +1779,6 @@ poss(clothes, Bill)</documentation>
 
 "Bill's clothes"
 possessive(John, 's)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#PossessiveModifier</documentation>
             <value>Name</value>
@@ -1898,7 +1797,6 @@ possessive(John, 's)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>PossessiveModifier:</b>
@@ -1920,7 +1818,6 @@ possessive(John, 's)</documentation>
 
 "Both the boys and the girls are here"
 preconj (boys, both)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Preconjunct</documentation>
             <value>Name</value>
@@ -1939,7 +1836,6 @@ preconj (boys, both)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>Preconjunct:</b>
@@ -1961,7 +1857,6 @@ preconj (boys, both)</documentation>
 
 "All the boys are here"
 predet(boys, all)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Predeterminer</documentation>
             <value>Name</value>
@@ -1980,7 +1875,6 @@ predet(boys, all)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>Predeterminer:</b>
@@ -2002,7 +1896,6 @@ predet(boys, all)</documentation>
 
 "He purchased it without paying a premium"
 prepc_without(purchased, paying)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#PrepositionalClausalModifier</documentation>
             <value>Name</value>
@@ -2010,7 +1903,6 @@ prepc_without(purchased, paying)</documentation>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-      </fields>
       <display>
           <template>
               <b>PrepositionalClausalModifier:</b>
@@ -2035,7 +1927,6 @@ pcomp(on, are)
 
 "They heard about you missing classes"
 pcomp(about, missing)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#PrepositionalComplement</documentation>
             <value>Name</value>
@@ -2054,7 +1945,6 @@ pcomp(about, missing)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>PrepositionalComplement:</b>
@@ -2082,7 +1972,6 @@ prep(saw, with)
 
 "He is responsible for meals"
 prep(responsible, for)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#PrepositionalModifier</documentation>
             <value>Name</value>
@@ -2101,7 +1990,6 @@ prep(responsible, for)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>PrepositionalModifier:</b>
@@ -2123,7 +2011,6 @@ prep(responsible, for)</documentation>
 
 "Go home!"
 punct(Go, !)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Punctuation</documentation>
             <value>Name</value>
@@ -2142,7 +2029,6 @@ punct(Go, !)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>Punctuation:</b>
@@ -2164,7 +2050,6 @@ punct(Go, !)</documentation>
 
 "He talked to him in order to secure the account"
 purpcl(talked, secure)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#PurposeClauseModifier</documentation>
             <value>Name</value>
@@ -2183,7 +2068,6 @@ purpcl(talked, secure)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>PurposeClauseModifier:</b>
@@ -2205,7 +2089,6 @@ purpcl(talked, secure)</documentation>
 
 "About 200 people came to the party"
 quantmod(200, About)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#QuantifierModifier</documentation>
             <value>Name</value>
@@ -2224,7 +2107,6 @@ quantmod(200, About)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>QuantifierModifier:</b>
@@ -2246,7 +2128,6 @@ quantmod(200, About)</documentation>
 
 "I saw the book which you bought"
 ref (book, which)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Referent</documentation>
             <value>Name</value>
@@ -2265,7 +2146,6 @@ ref (book, which)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>Referent:</b>
@@ -2287,7 +2167,6 @@ ref (book, which)</documentation>
 
 "I saw the man whose wife you love"
 rel (love, wife)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Relative</documentation>
             <value>Name</value>
@@ -2306,7 +2185,6 @@ rel (love, wife)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>Relative:</b>
@@ -2331,7 +2209,6 @@ rcmod(man, love)
 
 "I saw the book which you bought"
 rcmod(book,bought)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#RelativeClauseModifier</documentation>
             <value>Name</value>
@@ -2350,7 +2227,6 @@ rcmod(book,bought)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>RelativeClauseModifier:</b>
@@ -2375,7 +2251,6 @@ root(ROOT, love)
 
 "Bill is an honest man"
 root(ROOT, man)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Root</documentation>
             <value>Name</value>
@@ -2394,7 +2269,6 @@ root(ROOT, man)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>Root:</b>
@@ -2413,7 +2287,6 @@ root(ROOT, man)</documentation>
 
     <concept name="SemanticDependent">
       <documentation></documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#SemanticDependent</documentation>
             <value>Name</value>
@@ -2421,7 +2294,6 @@ root(ROOT, man)</documentation>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-      </fields>
       <display>
           <template>
               <b>SemanticDependent:</b>
@@ -2440,7 +2312,6 @@ root(ROOT, man)</documentation>
 
     <concept name="Subject">
       <documentation></documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Subject</documentation>
             <value>Name</value>
@@ -2448,7 +2319,6 @@ root(ROOT, man)</documentation>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-      </fields>
       <display>
           <template>
               <b>Subject:</b>
@@ -2470,7 +2340,6 @@ root(ROOT, man)</documentation>
 
 "Last night, I swam in the pool"
 tmod(swam, night)</documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#TemporalModifier</documentation>
             <value>Name</value>
@@ -2489,7 +2358,6 @@ tmod(swam, night)</documentation>
               <!-- <textdType>Theory</textdType> -->
           </field>
 
-      </fields>
       <display>
           <template>
               <b>TemporalModifier:</b>
@@ -2508,7 +2376,6 @@ tmod(swam, night)</documentation>
 
     <concept name="Token">
       <documentation></documentation>
-      <fields>
           <field name="name" type="text">
             <documentation>http://purl.org/olia/stanford.owl#Token</documentation>
             <value>Name</value>
@@ -2516,7 +2383,6 @@ tmod(swam, night)</documentation>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-      </fields>
       <display>
           <template>
               <b>Token:</b>
@@ -2531,6 +2397,4 @@ tmod(swam, night)</documentation>
           </rdf:Description>
       </rdf:RDF>
     </concept>
-
-  </concepts>
 </annotation>
