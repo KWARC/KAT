@@ -116,26 +116,6 @@ KAT.model = {};
 
                   //store the concept in the validation.
                   this.validation = concept;
-
-                  //this may or may not be defined.
-                  if(typeof this.textDType == "undefined"){
-                    return;
-                  }
-
-                  var fname = this.textDType;
-
-                  //it is already referenced, get the name out of it
-                  if(fname instanceof KAT.model.Field){
-                    fname = fname.name;
-                  }
-
-                  var field = concept.getField(fname);
-                  if(!field){
-                    throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+" '(Field not found: '"+concept.getFullName()+"."+fname+"'). ", this.xml);
-                  }
-
-                  this.textDType = field;
-
                 }
               }).call(this.fields[k]);
             }
@@ -723,15 +703,6 @@ KAT.model = {};
     this.default = "";
 
     /**
-    * Referenced field type for this concept.
-    * Will be populated only after this.validation is populated. Only valid for some type of KAT.model.Field.types.reference.
-    *
-    * @type {undefined|string|KAT.model.Field}
-    * @name KAT.model.Field#textdType
-    */
-    this.textdType = undefined;
-
-    /**
     * Documentation for this field.
     *
     * @type {string}
@@ -757,7 +728,6 @@ KAT.model = {};
     var hasValidation = false;
     var hasNumber = false;
     var hasDocumentation = false;
-    var hasTextD = false;
 
     if(this.type == KAT.model.Field.types.text){
       //validate everything
@@ -836,8 +806,6 @@ KAT.model = {};
           //we had it now
           hasDocumentation = true;
           this.documentation = e.text().trim();
-        } else if(e.is("textdType")){
-          //TODO: remove ignoring textdType
         } else {
           throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Unexpected tag '"+e.prop("tagName")+"'). ", e);
         }
@@ -907,13 +875,6 @@ KAT.model = {};
           //we had it now
           hasDocumentation = true;
           this.documentation = e.text().trim();
-        } else if(e.is("textdType")){
-          if(hasTextD){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <textdType> tag). ", e);
-          }
-
-          hasTextD = true;
-          this.textdType = e.text();
         } else {
           throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Unexpected tag '"+e.prop("tagName")+"'). ", e);
         }
@@ -926,9 +887,7 @@ KAT.model = {};
 
       //did we have <referencedType>
       if(!hasValidation){
-        //TODO: Have an error here?
-        KAT.model.ParsingWarning("KAT.model.Field: Field '"+this.getFullName()+"' does not have a <referencedType>, assuming the referenced type is the associated concept. ", this.xml);
-        this.validation = this.concept;
+        throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Missing required <referencedType> tag). ", this.xml.children());
       }
     } else if(this.type == KAT.model.Field.types.select){
       //TODO: Implement select type
