@@ -12,8 +12,8 @@ src.att = attribute src {xsd:anyURI}
 ## an annotation ontology for mathematical documents.
 annotation = element annotation {name.att & concept* & documentation?}
 
-## it can be documented (e.g. in HTML)
-documentation = element documentation {richtext}
+## it can be documented (e.g. in HTML) or by a reference to a documetation page
+documentation = element documentation {richtext | attribute xref {xsd:anyURI}}
 
 ## a concept classifies a text fragment and specifies what metadata can be
 ## attached to it. concepts are used to generate annotation dialogs in KAT.
