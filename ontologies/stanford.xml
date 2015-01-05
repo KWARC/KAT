@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!--   Stanford Annotation Ontology for KAT, generated from
+   http://acoli.cs.uni-frankfurt.de/resources/olia/stanford.owl --> 
+
 <annotation name="stanford"
         xmlns="https://github.com/KWARC/KAT/"  
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -19,7 +23,7 @@
       abbrev(Corporation, ABC)
       </documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#AbbreviationModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#AbbreviationModifier"/>
             <value>Name</value>
             <default>AbbreviationModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -44,7 +48,7 @@
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AbbreviationModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AbbreviationModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -57,7 +61,7 @@
 "She looks very beautiful"
 acomp(looks, beautiful)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#AdjectivalComplement</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#AdjectivalComplement"/>
             <value>Name</value>
             <default>AdjectivalComplement</default>
             <validation>[A-Z][a-z]*</validation>
@@ -82,7 +86,7 @@ acomp(looks, beautiful)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AdjectivalComplement"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AdjectivalComplement"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -95,7 +99,7 @@ acomp(looks, beautiful)</documentation>
 "Sam eats red meat"
 amod(meat, red)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#AdjectivalModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#AdjectivalModifier"/>
             <value>Name</value>
             <default>AdjectivalModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -120,7 +124,7 @@ amod(meat, red)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AdjectivalModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AdjectivalModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -136,7 +140,7 @@ advcl(happened, falling)
 "If you know who did it, you should tell the teacher"
 advcl(tell, know)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#AdverbialClauseModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#AdverbialClauseModifier"/>
             <value>Name</value>
             <default>AdverbialClauseModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -161,7 +165,7 @@ advcl(tell, know)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AdverbialClauseModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AdverbialClauseModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -177,7 +181,7 @@ advmod(modified, genetically)
 "less often"
 advmod(often, less)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#AdverbialModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#AdverbialModifier"/>
             <value>Name</value>
             <default>AdverbialModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -202,7 +206,7 @@ advmod(often, less)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AdverbialModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AdverbialModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -218,7 +222,7 @@ agent(killed, police)
 "Effects caused by the protein are important"
 agent(caused, protein)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Agent</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Agent"/>
             <value>Name</value>
             <default>Agent</default>
             <validation>[A-Z][a-z]*</validation>
@@ -243,7 +247,7 @@ agent(caused, protein)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Agent"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Agent"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -259,7 +263,7 @@ appos(Sam, brother)
 "Bill (John's cousin)"
 appos(Bill, cousin)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#AppositionalModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#AppositionalModifier"/>
             <value>Name</value>
             <default>AppositionalModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -284,7 +288,7 @@ appos(Bill, cousin)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AppositionalModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AppositionalModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -294,7 +298,7 @@ appos(Bill, cousin)</documentation>
     <concept name="Argument">
       <documentation></documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Argument</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Argument"/>
             <value>Name</value>
             <default>Argument</default>
             <validation>[A-Z][a-z]*</validation>
@@ -309,7 +313,7 @@ appos(Bill, cousin)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Argument"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Argument"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -322,7 +326,7 @@ appos(Bill, cousin)</documentation>
 "What is that?"
 attr (is, What)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Attributive</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Attributive"/>
             <value>Name</value>
             <default>Attributive</default>
             <validation>[A-Z][a-z]*</validation>
@@ -347,7 +351,7 @@ attr (is, What)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Attributive"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Attributive"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -363,7 +367,7 @@ aux(died, has)
 "He should leave"
 aux(leave, should)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Auxiliary</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Auxiliary"/>
             <value>Name</value>
             <default>Auxiliary</default>
             <validation>[A-Z][a-z]*</validation>
@@ -388,7 +392,7 @@ aux(leave, should)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Auxiliary"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Auxiliary"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -404,7 +408,7 @@ xcomp(like, swim)
 "I am ready to leave"
 xcomp(ready, leave)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#ClausalComplementWithExternalSubject</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#ClausalComplementWithExternalSubject"/>
             <value>Name</value>
             <default>ClausalComplementWithExternalSubject</default>
             <validation>[A-Z][a-z]*</validation>
@@ -429,7 +433,7 @@ xcomp(ready, leave)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ClausalComplementWithExternalSubject"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ClausalComplementWithExternalSubject"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -448,7 +452,7 @@ ccomp(certain, did)
 "I admire the fact that you are honest"
 ccomp(fact, honest)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#ClausalComplementWithInternalSubject</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#ClausalComplementWithInternalSubject"/>
             <value>Name</value>
             <default>ClausalComplementWithInternalSubject</default>
             <validation>[A-Z][a-z]*</validation>
@@ -473,7 +477,7 @@ ccomp(fact, honest)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ClausalComplementWithInternalSubject"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ClausalComplementWithInternalSubject"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -489,7 +493,7 @@ csubj (makes, said)
 "What she said is not true"
 csubj (true, said)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#ClausalSubject</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#ClausalSubject"/>
             <value>Name</value>
             <default>ClausalSubject</default>
             <validation>[A-Z][a-z]*</validation>
@@ -515,7 +519,7 @@ csubj (true, said)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ClausalSubject"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ClausalSubject"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -525,7 +529,7 @@ csubj (true, said)</documentation>
     <concept name="Complement">
       <documentation></documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Complement</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Complement"/>
             <value>Name</value>
             <default>Complement</default>
             <validation>[A-Z][a-z]*</validation>
@@ -540,7 +544,7 @@ csubj (true, said)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Complement"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Complement"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -553,7 +557,7 @@ csubj (true, said)</documentation>
 "He says that you like to swim"
 complm(like, that)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Complementizer</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Complementizer"/>
             <value>Name</value>
             <default>Complementizer</default>
             <validation>[A-Z][a-z]*</validation>
@@ -568,7 +572,7 @@ complm(like, that)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Complementizer"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Complementizer"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -581,7 +585,7 @@ complm(like, that)</documentation>
 "I lost $ 3.2 billion"
 number($, billion)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#CompountNumberElement</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#CompountNumberElement"/>
             <value>Name</value>
             <default>CompountNumberElement</default>
             <validation>[A-Z][a-z]*</validation>
@@ -607,7 +611,7 @@ number($, billion)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#CompountNumberElement"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#CompountNumberElement"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -624,7 +628,7 @@ conj (big, honest)
 "They either ski or snowboard"
 conj (ski, snowboard)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Conjunct</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Conjunct"/>
             <value>Name</value>
             <default>Conjunct</default>
             <validation>[A-Z][a-z]*</validation>
@@ -650,7 +654,7 @@ conj (ski, snowboard)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Conjunct"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Conjunct"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -663,7 +667,7 @@ conj (ski, snowboard)</documentation>
 "Tom likes to eat fish"
 xsubj (eat, Tom)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#ControllingSubject</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#ControllingSubject"/>
             <value>Name</value>
             <default>ControllingSubject</default>
             <validation>[A-Z][a-z]*</validation>
@@ -689,7 +693,7 @@ xsubj (eat, Tom)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ControllingSubject"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ControllingSubject"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -705,7 +709,7 @@ cc(big, and)
 "They either ski or snowboard"
 cc(ski, or)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Coordination</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Coordination"/>
             <value>Name</value>
             <default>Coordination</default>
             <validation>[A-Z][a-z]*</validation>
@@ -731,7 +735,7 @@ cc(ski, or)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Coordination"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Coordination"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -747,7 +751,7 @@ cop(big, is)
 "Bill is an honest man"
 cop(man, is)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Copula</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Copula"/>
             <value>Name</value>
             <default>Copula</default>
             <validation>[A-Z][a-z]*</validation>
@@ -773,7 +777,7 @@ cop(man, is)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Copula"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Copula"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -783,7 +787,7 @@ cop(man, is)</documentation>
     <concept name="DependencyLabel">
       <documentation></documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#DependencyLabel</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#DependencyLabel"/>
             <value>Name</value>
             <default>DependencyLabel</default>
             <validation>[A-Z][a-z]*</validation>
@@ -798,7 +802,7 @@ cop(man, is)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#DependencyLabel"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#DependencyLabel"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -808,7 +812,7 @@ cop(man, is)</documentation>
     <concept name="DependencyRelation">
       <documentation></documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#DependencyRelation</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#DependencyRelation"/>
             <value>Name</value>
             <default>DependencyRelation</default>
             <validation>[A-Z][a-z]*</validation>
@@ -823,7 +827,7 @@ cop(man, is)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#DependencyRelation"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#DependencyRelation"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -838,7 +842,7 @@ A dependency is labeled as dep when the system is unable to determine a more pre
 "Then, as if to show that he could, . . . "
 dep(show, if)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Dependent</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Dependent"/>
             <value>Name</value>
             <default>Dependent</default>
             <validation>[A-Z][a-z]*</validation>
@@ -864,7 +868,7 @@ dep(show, if)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Dependent"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Dependent"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -880,7 +884,7 @@ det(man, the)
 "Which book do you prefer?"
 det(book, which)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Determiner</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Determiner"/>
             <value>Name</value>
             <default>Determiner</default>
             <validation>[A-Z][a-z]*</validation>
@@ -906,7 +910,7 @@ det(book, which)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Determiner"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Determiner"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -922,7 +926,7 @@ dobj (gave, raise)
 "They win the lottery"
 dobj (win, lottery)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#DirectObject</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#DirectObject"/>
             <value>Name</value>
             <default>DirectObject</default>
             <validation>[A-Z][a-z]*</validation>
@@ -948,7 +952,7 @@ dobj (win, lottery)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#DirectObject"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#DirectObject"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -961,7 +965,7 @@ dobj (win, lottery)</documentation>
 "There is a ghost in the room"
 expl(is, There)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Expletive</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Expletive"/>
             <value>Name</value>
             <default>Expletive</default>
             <validation>[A-Z][a-z]*</validation>
@@ -987,7 +991,7 @@ expl(is, There)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Expletive"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Expletive"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1000,7 +1004,7 @@ expl(is, There)</documentation>
 "She gave me a raise"
 iobj (gave, me)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#IndirectObject</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#IndirectObject"/>
             <value>Name</value>
             <default>IndirectObject</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1026,7 +1030,7 @@ iobj (gave, me)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#IndirectObject"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#IndirectObject"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1042,7 +1046,7 @@ infmod(points, establish)
 "I don't have anything to say"
 infmod(anything, say)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#InfinitivalModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#InfinitivalModifier"/>
             <value>Name</value>
             <default>InfinitivalModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1068,7 +1072,7 @@ infmod(anything, say)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#InfinitivalModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#InfinitivalModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1081,7 +1085,7 @@ infmod(anything, say)</documentation>
 "Forces engaged in fighting after insurgents attacked"
 mark(attacked, after)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Marker</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Marker"/>
             <value>Name</value>
             <default>Marker</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1107,7 +1111,7 @@ mark(attacked, after)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Marker"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Marker"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1117,7 +1121,7 @@ mark(attacked, after)</documentation>
     <concept name="MeasurePhraseModifier">
       <documentation></documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#MeasurePhraseModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#MeasurePhraseModifier"/>
             <value>Name</value>
             <default>MeasurePhraseModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1132,7 +1136,7 @@ mark(attacked, after)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#MeasurePhraseModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#MeasurePhraseModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1142,7 +1146,7 @@ mark(attacked, after)</documentation>
     <concept name="Modifier">
       <documentation></documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Modifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Modifier"/>
             <value>Name</value>
             <default>Modifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1157,7 +1161,7 @@ mark(attacked, after)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Modifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Modifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1176,7 +1180,7 @@ mwe(well, as)
 "He cried because of you"
 mwe(of, because)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#MultiWordExpression</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#MultiWordExpression"/>
             <value>Name</value>
             <default>MultiWordExpression</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1202,7 +1206,7 @@ mwe(of, because)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#MultiWordExpression"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#MultiWordExpression"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1218,7 +1222,7 @@ neg(scientist, not)
 "Bill doesn't drive"
 neg(drive, n't)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#NegationModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#NegationModifier"/>
             <value>Name</value>
             <default>NegationModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1244,7 +1248,7 @@ neg(drive, n't)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NegationModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NegationModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1260,7 +1264,7 @@ nsubj (defeated, Clinton)
 "The baby is cute"
 nsubj (cute, baby)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#NominalSubject</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#NominalSubject"/>
             <value>Name</value>
             <default>NominalSubject</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1286,7 +1290,7 @@ nsubj (cute, baby)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NominalSubject"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NominalSubject"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1301,7 +1305,7 @@ Penn Treebank represents the branching structure of NPs.)
 nn(futures, oil)
 nn(futures, price)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#NounCompoundModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#NounCompoundModifier"/>
             <value>Name</value>
             <default>NounCompoundModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1327,7 +1331,7 @@ nn(futures, price)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NounCompoundModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NounCompoundModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1355,7 +1359,7 @@ npadvmod(significant, itself)
 "90% of Australians like him, the most of any country"
 npadvmod(like, most)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#NounPhraseAsAdverbialModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#NounPhraseAsAdverbialModifier"/>
             <value>Name</value>
             <default>NounPhraseAsAdverbialModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1381,7 +1385,7 @@ npadvmod(like, most)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NounPhraseAsAdverbialModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NounPhraseAsAdverbialModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1394,7 +1398,7 @@ npadvmod(like, most)</documentation>
 "Sam eats 3 sheep"
 num(sheep, 3)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#NumericModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#NumericModifier"/>
             <value>Name</value>
             <default>NumericModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1420,7 +1424,7 @@ num(sheep, 3)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NumericModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NumericModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1430,7 +1434,7 @@ num(sheep, 3)</documentation>
     <concept name="Object">
       <documentation></documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Object</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Object"/>
             <value>Name</value>
             <default>Object</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1445,7 +1449,7 @@ num(sheep, 3)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Object"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Object"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1458,7 +1462,7 @@ num(sheep, 3)</documentation>
 "I sat on the chair"
 pobj (on, chair)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#ObjectOfPreposition</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#ObjectOfPreposition"/>
             <value>Name</value>
             <default>ObjectOfPreposition</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1484,7 +1488,7 @@ pobj (on, chair)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ObjectOfPreposition"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ObjectOfPreposition"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1497,7 +1501,7 @@ pobj (on, chair)</documentation>
 "The guy, John said, left early in the morning"
 parataxis(left, said)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Parataxis</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Parataxis"/>
             <value>Name</value>
             <default>Parataxis</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1523,7 +1527,7 @@ parataxis(left, said)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Parataxis"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Parataxis"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1539,7 +1543,7 @@ partmod(truffles, picked)
 "Bill tried to shoot demonstrating his incompetence"
 partmod(shoot, demonstrating)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#ParticipalModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#ParticipalModifier"/>
             <value>Name</value>
             <default>ParticipalModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1565,7 +1569,7 @@ partmod(shoot, demonstrating)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ParticipalModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ParticipalModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1582,7 +1586,7 @@ aux(killed,has)
 "Kennedy was/got killed"
 auxpass(killed, was/got)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#PassiveAuxiliary</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#PassiveAuxiliary"/>
             <value>Name</value>
             <default>PassiveAuxiliary</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1608,7 +1612,7 @@ auxpass(killed, was/got)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PassiveAuxiliary"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PassiveAuxiliary"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1621,7 +1625,7 @@ auxpass(killed, was/got)</documentation>
 "That she lied was suspected by everyone"
 csubjpass(suspected, lied)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#PassiveClausalSubject</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#PassiveClausalSubject"/>
             <value>Name</value>
             <default>PassiveClausalSubject</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1647,7 +1651,7 @@ csubjpass(suspected, lied)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PassiveClausalSubject"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PassiveClausalSubject"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1660,7 +1664,7 @@ csubjpass(suspected, lied)</documentation>
 "Dole was defeated by Clinton"
 nsubjpass(defeated, Dole)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#PassiveNominalSubject</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#PassiveNominalSubject"/>
             <value>Name</value>
             <default>PassiveNominalSubject</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1686,7 +1690,7 @@ nsubjpass(defeated, Dole)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PassiveNominalSubject"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PassiveNominalSubject"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1699,7 +1703,7 @@ nsubjpass(defeated, Dole)</documentation>
 "They shut down the station"
 prt(shut, down)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#PhrasalVerbParticle</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#PhrasalVerbParticle"/>
             <value>Name</value>
             <default>PhrasalVerbParticle</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1725,7 +1729,7 @@ prt(shut, down)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PhrasalVerbParticle"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PhrasalVerbParticle"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1741,7 +1745,7 @@ poss(offices, their)
 "Bill's clothes"
 poss(clothes, Bill)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#PossessionModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#PossessionModifier"/>
             <value>Name</value>
             <default>PossessionModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1767,7 +1771,7 @@ poss(clothes, Bill)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PossessionModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PossessionModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1780,7 +1784,7 @@ poss(clothes, Bill)</documentation>
 "Bill's clothes"
 possessive(John, 's)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#PossessiveModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#PossessiveModifier"/>
             <value>Name</value>
             <default>PossessiveModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1806,7 +1810,7 @@ possessive(John, 's)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PossessiveModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PossessiveModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1819,7 +1823,7 @@ possessive(John, 's)</documentation>
 "Both the boys and the girls are here"
 preconj (boys, both)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Preconjunct</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Preconjunct"/>
             <value>Name</value>
             <default>Preconjunct</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1845,7 +1849,7 @@ preconj (boys, both)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Preconjunct"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Preconjunct"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1858,7 +1862,7 @@ preconj (boys, both)</documentation>
 "All the boys are here"
 predet(boys, all)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Predeterminer</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Predeterminer"/>
             <value>Name</value>
             <default>Predeterminer</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1884,7 +1888,7 @@ predet(boys, all)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Predeterminer"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Predeterminer"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1897,7 +1901,7 @@ predet(boys, all)</documentation>
 "He purchased it without paying a premium"
 prepc_without(purchased, paying)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#PrepositionalClausalModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#PrepositionalClausalModifier"/>
             <value>Name</value>
             <default>PrepositionalClausalModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1912,7 +1916,7 @@ prepc_without(purchased, paying)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PrepositionalClausalModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PrepositionalClausalModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1928,7 +1932,7 @@ pcomp(on, are)
 "They heard about you missing classes"
 pcomp(about, missing)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#PrepositionalComplement</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#PrepositionalComplement"/>
             <value>Name</value>
             <default>PrepositionalComplement</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1954,7 +1958,7 @@ pcomp(about, missing)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PrepositionalComplement"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PrepositionalComplement"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -1973,7 +1977,7 @@ prep(saw, with)
 "He is responsible for meals"
 prep(responsible, for)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#PrepositionalModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#PrepositionalModifier"/>
             <value>Name</value>
             <default>PrepositionalModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -1999,7 +2003,7 @@ prep(responsible, for)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PrepositionalModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PrepositionalModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -2012,7 +2016,7 @@ prep(responsible, for)</documentation>
 "Go home!"
 punct(Go, !)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Punctuation</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Punctuation"/>
             <value>Name</value>
             <default>Punctuation</default>
             <validation>[A-Z][a-z]*</validation>
@@ -2038,7 +2042,7 @@ punct(Go, !)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Punctuation"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Punctuation"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -2051,7 +2055,7 @@ punct(Go, !)</documentation>
 "He talked to him in order to secure the account"
 purpcl(talked, secure)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#PurposeClauseModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#PurposeClauseModifier"/>
             <value>Name</value>
             <default>PurposeClauseModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -2077,7 +2081,7 @@ purpcl(talked, secure)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PurposeClauseModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PurposeClauseModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -2090,7 +2094,7 @@ purpcl(talked, secure)</documentation>
 "About 200 people came to the party"
 quantmod(200, About)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#QuantifierModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#QuantifierModifier"/>
             <value>Name</value>
             <default>QuantifierModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -2116,7 +2120,7 @@ quantmod(200, About)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#QuantifierModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#QuantifierModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -2129,7 +2133,7 @@ quantmod(200, About)</documentation>
 "I saw the book which you bought"
 ref (book, which)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Referent</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Referent"/>
             <value>Name</value>
             <default>Referent</default>
             <validation>[A-Z][a-z]*</validation>
@@ -2155,7 +2159,7 @@ ref (book, which)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Referent"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Referent"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -2168,7 +2172,7 @@ ref (book, which)</documentation>
 "I saw the man whose wife you love"
 rel (love, wife)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Relative</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Relative"/>
             <value>Name</value>
             <default>Relative</default>
             <validation>[A-Z][a-z]*</validation>
@@ -2194,7 +2198,7 @@ rel (love, wife)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Relative"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Relative"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -2210,7 +2214,7 @@ rcmod(man, love)
 "I saw the book which you bought"
 rcmod(book,bought)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#RelativeClauseModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#RelativeClauseModifier"/>
             <value>Name</value>
             <default>RelativeClauseModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -2236,7 +2240,7 @@ rcmod(book,bought)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#RelativeClauseModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#RelativeClauseModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -2252,7 +2256,7 @@ root(ROOT, love)
 "Bill is an honest man"
 root(ROOT, man)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Root</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Root"/>
             <value>Name</value>
             <default>Root</default>
             <validation>[A-Z][a-z]*</validation>
@@ -2278,7 +2282,7 @@ root(ROOT, man)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Root"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Root"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -2288,7 +2292,7 @@ root(ROOT, man)</documentation>
     <concept name="SemanticDependent">
       <documentation></documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#SemanticDependent</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#SemanticDependent"/>
             <value>Name</value>
             <default>SemanticDependent</default>
             <validation>[A-Z][a-z]*</validation>
@@ -2303,7 +2307,7 @@ root(ROOT, man)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#SemanticDependent"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#SemanticDependent"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -2313,7 +2317,7 @@ root(ROOT, man)</documentation>
     <concept name="Subject">
       <documentation></documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Subject</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Subject"/>
             <value>Name</value>
             <default>Subject</default>
             <validation>[A-Z][a-z]*</validation>
@@ -2328,7 +2332,7 @@ root(ROOT, man)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Subject"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Subject"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -2341,7 +2345,7 @@ root(ROOT, man)</documentation>
 "Last night, I swam in the pool"
 tmod(swam, night)</documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#TemporalModifier</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#TemporalModifier"/>
             <value>Name</value>
             <default>TemporalModifier</default>
             <validation>[A-Z][a-z]*</validation>
@@ -2367,7 +2371,7 @@ tmod(swam, night)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#TemporalModifier"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#TemporalModifier"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
@@ -2377,7 +2381,7 @@ tmod(swam, night)</documentation>
     <concept name="Token">
       <documentation></documentation>
           <field name="name" type="text">
-            <documentation>http://purl.org/olia/stanford.owl#Token</documentation>
+            <documentation xref="http://purl.org/olia/stanford.owl#Token"/>
             <value>Name</value>
             <default>Token</default>
             <validation>[A-Z][a-z]*</validation>
@@ -2392,7 +2396,7 @@ tmod(swam, night)</documentation>
       </display>
       <rdf:RDF>
           <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Token"></rdf:type>
+              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Token"/>
               <o:symbolname>{name}</o:symbolname>
           </rdf:Description>
       </rdf:RDF>
