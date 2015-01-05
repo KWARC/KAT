@@ -15,9 +15,10 @@ $(function(){
         window.store = new KAT.model.OntologyStore();
         window.ontology = window.store.addNewOntology(xml, "OMDoc");
         window.store.init(); //intialise this store.
-        window.store.init(); //do it again => this is an error until this is implemented. 
+        window.store.init(); //do it again => this is an error until this is implemented.
       } catch(e){
         console.log("Error", e.message, "Node", e.node);
+        console.log(e.stack); 
       }
     }, "xml").fail(function(e){
       console.log("Unable to load xml!");

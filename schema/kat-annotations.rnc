@@ -1,0 +1,52 @@
+# A RelaxNG for KAT annotations
+# $Id: omdoc+ltxml.rnc 2282 2013-04-08 14:20:43Z kohlhase $
+# $HeadURL: https://svn.kwarc.info/repos/stex/trunk/schema/rnc/omdoc+ltxml.rnc $
+#   (c) 2013 Michael Kohlhase, released under the GNU Public License (GPL)
+
+start = annotation
+
+name.att = attribute name {text}
+type.att = attribute type {text}
+src.att = attribute src {xsd:anyURI}
+
+annotation = element annotation {name.att & concepts & documentation?}
+
+documentation = element documentation {richtext}
+
+concepts = element concepts {concept*}
+
+concept = element concept {name.att & fields &  display & rdf & documentation?}
+
+fields = element fields {field*}
+
+field.mod = value? & number? & textdType* & (options? | (katdefault? & validation?))
+field = element field {name.att & type.att & field.mod & documentation?}
+
+value = element value {text}
+katdefault = element default {text}
+validation = element validation {text}
+textdType = element textdType {text}
+options = element options {option*}
+
+default.att = attribute default {"true"}
+option = element option {default.att? & value & documentation?}
+
+## the number elements specifies how many of this field are required: 
+## if astleast is not given the field is optionsal
+## if atmost is not given there is no restriction on the number, 
+number = element number {attribute atleast {xsd:nonNegativeInteger}? & attribute atmost {xsd:positiveInteger}?}
+
+display = element display {template & css? & javascript?}
+
+template = element template {richtext}
+css = element css {src.att | text} 
+javascript = element javascript {src.att | text} 
+
+rdf = external "rdfxml.rnc"
+
+# for richtext are are very lax, we allow anything. There is not much more we can do
+# without namespaces.
+
+richtext = text & anyelement*
+anyattribute = attribute * {text}
+anyelement = element * {anyattribute* & richtext}

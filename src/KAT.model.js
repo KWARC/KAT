@@ -111,11 +111,31 @@ KAT.model = {};
                   //find the concept
                   var concept = this.concept.ontology.store.getConcept(name);
                   if(!concept){
-                    throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Concept not found: '"+name+"'). ", this.xml);
+                    throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+" '(Concept not found: '"+name+"'). ", this.xml);
                   }
 
                   //store the concept in the validation.
                   this.validation = concept;
+
+                  //this may or may not be defined.
+                  if(typeof this.textDType == "undefined"){
+                    return;
+                  }
+
+                  var fname = this.textDType;
+
+                  //it is already referenced, get the name out of it
+                  if(fname instanceof KAT.model.Field){
+                    fname = fname.name;
+                  }
+
+                  var field = concept.getField(fname);
+                  if(!field){
+                    throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+" '(Field not found: '"+concept.getFullName()+"."+fname+"'). ", this.xml);
+                  }
+
+                  this.textDType = field;
+
                 }
               }).call(this.fields[k]);
             }
@@ -429,14 +449,9 @@ KAT.model = {};
     */
     this.ontology = ontology;
 
-    //validation
-    if(this.xml.length != 1 || !this.xml.is("concept")){
-      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Expected exactly one <concept> tag). ", this.xml);
-    }
-
     //and name
     if(typeof this.xml.attr("name") != "string"){
-      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Missing name attribute for <concept>). ", this.xml);
+      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid Invalid XML (Missing name attribute for <concept>). ", this.xml);
     }
 
     /**
@@ -449,12 +464,18 @@ KAT.model = {};
 
     //Check if the name is valid.
     if(!nameRegEx.test(this.name)){
-      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML ('"+this.name+"' is not a valid name). ", this.xml);
+      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML ('"+this.getFullName()+"' is not a valid name). ", this.xml);
     }
 
     //Check if this concept already exists
     if(this.ontology.getConcept(this.name)){
-      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Concept '"+this.name+"' already exists). ", this.xml);
+      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Concept '"+this.getFullName()+"' already exists). ", this.xml);
+    }
+
+
+    //validation
+    if(this.xml.length != 1 || !this.xml.is("concept")){
+      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML for concept '"+this.getFullName()+"' (Expected exactly one <concept> tag). ", this.xml);
     }
 
     /**
@@ -469,7 +490,7 @@ KAT.model = {};
     * Fields declared in this concept.
     *
     * @type {KAT.model.Field[]}
-    * @name KAT.model.Concept#fields
+    * @name KAT.model.Concept#fieldsname
     */
     this.fields = [];
 
@@ -497,7 +518,7 @@ KAT.model = {};
 
     //right length
     if(children.length < 2 || children.length > 4) {
-      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Expected at least 2 of <documentation>, <fields>, <display> and <rdf:rdf>). ", children);
+      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML for concept '"+this.getFullName()+"' (Expected at least 2 of <documentation>, <fields>, <display> and <rdf:rdf>). ", children);
     }
 
     //documentation
@@ -519,7 +540,7 @@ KAT.model = {};
 
       index++;
     } else {
-      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Missing required <fields>). ", children);
+      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML for concept '"+this.getFullName()+"' (Missing required <fields>). ", children);
     }
 
     //display
@@ -528,14 +549,14 @@ KAT.model = {};
 
       //Set the display
       if(display.children().length != 1 || !display.children().eq(0).is("template")){
-        throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Missing <template>). ", display);
+        throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML for concept '"+this.getFullName()+"' (Missing <template>). ", display);
       } else {
         this.display = display.children().html().trim();
       }
 
       index++;
     } else {
-      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Missing required <display>). ", children);
+      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML for concept '"+this.getFullName()+"' (Missing required <display>). ", children);
     }
 
     //rdf:RDF
@@ -544,13 +565,13 @@ KAT.model = {};
         this.rdf = children.eq(index).html().trim();
         index++;
       } else {
-        throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Expected <rdf:rdf> in final position. ). ", children);
+        throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML for concept '"+this.getFullName()+"' (Expected <rdf:rdf> in final position. ). ", children);
       }
     }
 
     //whats happened? We're too long!
     if(index != children.length){
-      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Expected at least 2 of <documentation>, <fields>, <display> and <rdf:RDF>). ", children);
+      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML for concept '"+this.getFullName()+"' (Expected at least 2 of <documentation>, <fields>, <display> and <rdf:RDF>). ", children);
     }
   }
 
@@ -643,22 +664,22 @@ KAT.model = {};
 
     //Check for a valid name
     if(!nameRegEx.test(this.name)){
-      throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML ('"+this.name+"' is not a valid name). ", this.xml);
+      throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML ('"+this.getFullName()+"' is not a valid name). ", this.xml);
     }
 
     //Check if this field already exists
     if(this.concept.getField(this.name)){
-      throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Field '"+this.name+"' already exists). ", this.xml);
+      throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Field '"+this.getFullName()+"' already exists). ", this.xml);
     }
 
     //do we have the type attribute.
     if(typeof this.xml.attr("type") != "string"){
-      throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Missing type attribute for <field>). ", this.xml);
+      throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Missing type attribute for <field>). ", this.xml);
     }
 
     //do we know the type
     if(!KAT.model.Field.types.hasOwnProperty(this.xml.attr("type"))){
-      throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Unknown <field> type). ", this.xml);
+      throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Unknown <field> type). ", this.xml);
     }
 
     /**
@@ -702,13 +723,13 @@ KAT.model = {};
     this.default = "";
 
     /**
-    * textdType for this field.
+    * Referenced field type for this concept.
+    * Will be populated only after this.validation is populated. Only valid for some type of KAT.model.Field.types.reference.
     *
-    * @type {string}
+    * @type {undefined|string|KAT.model.Field}
     * @name KAT.model.Field#textdType
     */
-    this.textdType = "";
-    //TODO: What is this?
+    this.textdType = undefined;
 
     /**
     * Documentation for this field.
@@ -742,14 +763,14 @@ KAT.model = {};
       //validate everything
       this.validation = new RegExp(".*");
 
-      this.xml.children().each(function(i, e){
+      this.xml.children().each((function(i, e){
         var e = $(e);
 
         if(e.is("value")){
 
           //did we have this already
           if(hasValue){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Double <value> tag). ", e);
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <value> tag). ", e);
           }
 
           //no, so now store it.
@@ -759,7 +780,7 @@ KAT.model = {};
 
           //did we have this already?
           if(hasDefault){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Double <default> tag). ", e);
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <default> tag). ", e);
           }
 
           //no, so we can store it
@@ -768,7 +789,7 @@ KAT.model = {};
         } else if(e.is("validation")){
           //did we have this already?
           if(hasValidation){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Double <validation> tag). ", e);
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <validation> tag). ", e);
           }
 
           //no, so we can store it
@@ -776,13 +797,13 @@ KAT.model = {};
           try{
             me.validation = new RegExp(e.text());
           } catch(f){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Unregonised regular expression). ", e);
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Unregonised regular expression). ", e);
           }
 
         } else if(e.is("number")){
           //did we have this already?
           if(hasNumber){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Double <number> tag). ", e);
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <number> tag). ", e);
           }
 
           //ok, now store it
@@ -793,7 +814,7 @@ KAT.model = {};
             try{
               me.minimum = parseInt(e.attr("atleast"));
             } catch(f){
-              throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (atleast property must be a number). ", e);
+              throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"'(atleast property must be a number). ", e);
             }
           }
 
@@ -802,46 +823,39 @@ KAT.model = {};
             try{
               me.maximum = parseInt(e.attr("atmost"));
             } catch(f){
-              throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (atmost property must be a number). ", e);
+              throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (atmost property must be a number). ", e);
             }
           }
         } else if(e.is("documentation")){
 
           //did we have this already?
           if(hasDocumentation){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Double <documentation> tag). ", e);
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <documentation> tag). ", e);
           }
 
           //we had it now
           hasDocumentation = true;
           this.documentation = e.text().trim();
         } else if(e.is("textdType")){
-          //did we have this already?
-          if(hasTextD){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Double <textdType> tag). ", e);
-          }
-
-          //we had it now
-          hasTextD = true
-          this.textdType = e.text();
+          //TODO: remove ignoring textdType
         } else {
-          throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Unexpected tag). ", e);
+          throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Unexpected tag '"+e.prop("tagName")+"'). ", e);
         }
-      });
+      }).bind(this));
 
       //did we have the <value>
       if(!hasValue){
-        throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Missing required <value> tag). ", this.xml.children());
+        throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Missing required <value> tag). ", this.xml.children());
       }
     } else if(this.type == KAT.model.Field.types.reference){
-      this.xml.children().each(function(i, e){
+      this.xml.children().each((function(i, e){
         var e = $(e);
 
         if(e.is("value")){
 
           //did we have this already
           if(hasValue){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Double <value> tag). ", e);
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <value> tag). ", e);
           }
 
           //no, so now store it.
@@ -850,7 +864,7 @@ KAT.model = {};
         } else if(e.is("referencedType")){
           //did we have this already?
           if(hasValidation){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Double <referencedType> tag). ", e);
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <referencedType> tag). ", e);
           }
 
           //no, so we can store it
@@ -860,7 +874,7 @@ KAT.model = {};
         } else if(e.is("number")){
           //did we have this already?
           if(hasNumber){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Double <number> tag). ", e);
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <number> tag). ", e);
           }
 
           //ok, now store it
@@ -871,7 +885,7 @@ KAT.model = {};
             try{
               me.minimum = parseInt(e.attr("atleast"));
             } catch(f){
-              throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (atleast property must be a number). ", e);
+              throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (atleast property must be a number). ", e);
             }
           }
 
@@ -880,35 +894,41 @@ KAT.model = {};
             try{
               me.maximum = parseInt(e.attr("atmost"));
             } catch(f){
-              throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (atmost property must be a number). ", e);
+              throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (atmost property must be a number). ", e);
             }
           }
         } else if(e.is("documentation")){
 
           //did we have this already?
           if(hasDocumentation){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Double <documentation> tag). ", e);
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <documentation> tag). ", e);
           }
 
           //we had it now
           hasDocumentation = true;
           this.documentation = e.text().trim();
         } else if(e.is("textdType")){
-          //TODO: textdType? What is this?
-          KAT.model.ParsingWarning("KAT.model.Field: Tag not implemented: <textdType>. ", e);
+          if(hasTextD){
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <textdType> tag). ", e);
+          }
+
+          hasTextD = true;
+          this.textdType = e.text();
         } else {
-          throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Unexpected tag). ", e);
+          throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Unexpected tag '"+e.prop("tagName")+"'). ", e);
         }
-      });
+      }).bind(this));
 
       //did we have the <value>
       if(!hasValue){
-        throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Missing required <value> tag). ", this.xml.children());
+        throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Missing required <value> tag). ", this.xml.children());
       }
 
       //did we have <referencedType>
       if(!hasValidation){
-        throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML (Missing required <referencedType> tag). ", this.xml.children());
+        //TODO: Have an error here?
+        KAT.model.ParsingWarning("KAT.model.Field: Field '"+this.getFullName()+"' does not have a <referencedType>, assuming the referenced type is the associated concept. ", this.xml);
+        this.validation = this.concept;
       }
     } else if(this.type == KAT.model.Field.types.select){
       //TODO: Implement select type
