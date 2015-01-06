@@ -10,7 +10,7 @@ $(function(){
         .annotator('addPlugin', 'KATOntology')
         .annotator('addPlugin', 'KATStore');
     }, "html");
-    $.get("/ontologies/sample.xml", function(xml){
+    $.get("/ontologies/omdoc-annotations.xml", function(xml){
       try{
         window.store = new KAT.model.OntologyStore();
         window.ontology = window.store.addNewOntology(xml, "OMDoc");
@@ -18,7 +18,7 @@ $(function(){
         window.store.init(); //do it again => this is an error until this is implemented.
       } catch(e){
         console.log("Error", e.message, "Node", e.node);
-        console.log(e.stack); 
+        console.log(e.stack);
       }
     }, "xml").fail(function(e){
       console.log("Unable to load xml!");

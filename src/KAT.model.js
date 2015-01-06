@@ -259,19 +259,6 @@ KAT.model = {};
       return;
     }
 
-    //check the top level element
-    if(this.xml.children().length != 1 || !this.xml.children().eq(0).is("annotation")){
-      throw new KAT.model.ParsingError("KAT.model.Ontology: Invalid XML (Expected exactly one top-level <annotation>). ", this.xml);
-      return;
-    }
-
-    //validate the sub tags
-    var annotRoot = this.xml.children().eq(0);
-
-    if(annotRoot.children().length != 2 || !annotRoot.children().eq(0).is("documentation") || !annotRoot.children().eq(1).is("concepts")){
-      throw new KAT.model.ParsingError("KAT.model.Ontology: Invalid XML (Expected exactly one <documentation> and <concepts>). ", annotRoot);
-    }
-
     //TODO: Parse name automatically from xml
     /**
     * Name of this ontology.
@@ -285,6 +272,19 @@ KAT.model = {};
     //TODO: Change error when using XML Node
     if(!nameRegEx.test(this.name)){
       throw new KAT.model.ParsingError("KAT.model.Ontology: Unable to create ontology ('"+this.name+"' is not a valid name). ", this.xml);
+    }
+
+    //check the top level element
+    if(this.xml.children().length != 1 || !this.xml.children().eq(0).is("annotation")){
+      throw new KAT.model.ParsingError("KAT.model.Ontology: Invalid XML (Expected exactly one top-level <annotation>). ", this.xml);
+      return;
+    }
+
+    //validate the sub tags
+    var annotRoot = this.xml.children().eq(0);
+
+    if(annotRoot.children().length <= 1 || !annotRoot.children().eq(0).is("documentation")){
+      throw new KAT.model.ParsingError("KAT.model.Ontology: Invalid XML for ontology '"+this.getFullName()+"' (Expected exactly one <documentation> and <concepts>). ", annotRoot);
     }
 
     /**
@@ -312,15 +312,15 @@ KAT.model = {};
     this.concepts = [];
 
     //find the concepts
-    annotRoot.children().eq(1).children().each(function(i, e){
+    annotRoot.children().slice(1).each((function(i, e){
       var e = $(e);
       if(!e.is("concept")){
-        throw new KAT.model.ParsingError("KAT.model.Ontology: Invalid XML (Unknown child tag of <concepts>). ", e);
+        throw new KAT.model.ParsingError("KAT.model.Ontology: Invalid XML for ontology '"+this.getFullName()+"' (Expected child tag <concept>). ", e);
       }
 
       //and add them to the right thing.
-      me.concepts.push(new KAT.model.Concept(e, me));
-    })
+      this.concepts.push(new KAT.model.Concept(e, this));
+    }).bind(this))
 
   }
 
@@ -497,8 +497,8 @@ KAT.model = {};
     var index = 0;
 
     //right length
-    if(children.length < 2 || children.length > 4) {
-      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML for concept '"+this.getFullName()+"' (Expected at least 2 of <documentation>, <fields>, <display> and <rdf:rdf>). ", children);
+    if(children.length < 2) {
+      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML for concept '"+this.getFullName()+"' (Expected at least 2 of <documentation>, <field>, <display> and <rdf:rdf>). ", children);
     }
 
     //documentation
@@ -507,20 +507,21 @@ KAT.model = {};
       index++;
     } else {
       //TODO: Do we really want this warning?
-      //new KAT.model.ParsingWarning("KAT.model.Concept: Missing <documentation>, ignoring. ", children);
+      new KAT.model.ParsingWarning("KAT.model.Concept: Missing <documentation>, ignoring. ", children);
     }
 
+    //do we have a field
+    var hasField = false;
+
     //fields
-    if(children.eq(index).is("fields")){
-
-      children.eq(index).children().each(function(i, e){
-        var e = $(e);
-        me.fields.push(new KAT.model.Field(e, me));
-      });
-
+    while(children.eq(index).is("field") && index < children.length){
+      hasField = true;
+      this.fields.push(new KAT.model.Field(children.eq(index), this));
       index++;
-    } else {
-      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML for concept '"+this.getFullName()+"' (Missing required <fields>). ", children);
+    }
+
+    if(!hasField){
+      throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML for concept '"+this.getFullName()+"' (Missing at least one declared <field>). ", children);
     }
 
     //display
