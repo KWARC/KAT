@@ -10,7 +10,7 @@ $(function(){
         .annotator('addPlugin', 'KATOntology')
         .annotator('addPlugin', 'KATStore');
     }, "html");
-    $.get("/ontologies/omdoc-annotations.xml", function(xml){
+    $.get("ontologies/omdoc-annotations.xml", function(xml){
       try{
         window.store = new KAT.model.OntologyStore();
         window.ontology = window.store.addNewOntology(xml, "OMDoc");
