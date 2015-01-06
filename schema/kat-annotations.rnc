@@ -12,7 +12,7 @@ src.att = attribute src {xsd:anyURI}
 ## an annotation ontology for mathematical documents.
 annotation = element annotation {name.att & concept* & documentation?}
 
-## it can be documented (e.g. in HTML) or by a reference to a documetation page
+## it can be documented (e.g. in HTML) or by a reference to a documentation page
 documentation = element documentation {richtext | attribute xref {xsd:anyURI}}
 
 ## a concept classifies a text fragment and specifies what metadata can be
@@ -60,17 +60,26 @@ atl.att = attribute atleast {xsd:nonNegativeInteger}
 atm.att = attribute atmost {xsd:nonNegativeInteger}
 number = element number {atl.att?&atm.att?}
 
+## the display specifies the how to show annotations.
 display = element display {template & css? & javascript?}
 
+## a HTML5 template for displaying the field in a display. {foo} is instantiated 
+## with the object with @name='foo'. 
 template = element template {richtext}
+## we can add CSS to that the template
 css = element css {src.att | text}
+## and Javascript as well. 
 javascript = element javascript {src.att | text}
 
+## the rdf:RDF field contains a RDF (in XML serialization) template (using {} again)
+## that is used to generate the annotations in RDF form. 
 rdf = external "rdfxml.rnc"
 
-# for richtext are are very lax, we allow anything. There is not much more we can do
-# without namespaces.
-
+## richtext is a placeholder for a well-behaved fragment of HTML5. After all, we want
+## use KAT in a browser. 
 richtext = text & anyelement*
+
+## We do not want to specify the exact HTML fragment currently, so we are are very lax
+## for richtext: we allow anything. There is not much more we can do without namespaces.
 anyattribute = attribute * {text}
 anyelement = element * {anyattribute* & richtext}
