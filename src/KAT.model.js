@@ -108,8 +108,14 @@ KAT.model = {};
                     name = name.getFullName();
                   }
 
-                  //find the concept
-                  var concept = this.concept.ontology.store.getConcept(name);
+                  //find the concept, try it within this ontology first
+                  var concept = this.concept.ontology.getConcept(name);
+
+                  //and then do it in the ontologyStore
+                  if(!concept){
+                    concept = this.concept.ontology.store.getConcept(name);
+                  }
+
                   if(!concept){
                     throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+" '(Concept not found: '"+name+"'). ", this.xml);
                   }
