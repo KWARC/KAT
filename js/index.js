@@ -12,9 +12,9 @@ $(function(){
     }, "html");
     $.get("ontologies/omdoc-annotations.xml", function(xml){
       try{
-        window.store = new KAT.model.OntologyStore();
-        window.ontology = window.store.addNewOntology(xml, "OMDoc");
-        window.store.init(); //intialise this store.
+        window.collection = new KAT.model.OntologyCollection();
+        window.ontology = window.collection.addNewOntology(xml, "OMDoc");
+        window.collection.init(); //intialise this store.
       } catch(e){
         console.log("Error", e.message, "Node", e.node);
         console.log(e.stack);

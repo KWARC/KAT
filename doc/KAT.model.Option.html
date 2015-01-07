@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: OntologyStore</title>
+    <title>Class: Option</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -173,13 +173,13 @@
             
             <span class="subtitle">Members</span>
             
+                <li data-name="KAT.model.Ontology#collection"><a href="KAT.model.Ontology.html#collection">collection</a></li>
+            
                 <li data-name="KAT.model.Ontology#concepts"><a href="KAT.model.Ontology.html#concepts">concepts</a></li>
             
                 <li data-name="KAT.model.Ontology#documentation"><a href="KAT.model.Ontology.html#documentation">documentation</a></li>
             
                 <li data-name="KAT.model.Ontology#name"><a href="KAT.model.Ontology.html#name">name</a></li>
-            
-                <li data-name="KAT.model.Ontology#store"><a href="KAT.model.Ontology.html#store">store</a></li>
             
                 <li data-name="KAT.model.Ontology#xml"><a href="KAT.model.Ontology.html#xml">xml</a></li>
             
@@ -203,16 +203,16 @@
             </ul>
         </li>
     
-        <li class="item" data-name="KAT.model.OntologyStore">
+        <li class="item" data-name="KAT.model.OntologyCollection">
             <span class="title">
-                <a href="KAT.model.OntologyStore.html">KAT.model.OntologyStore</a>
+                <a href="KAT.model.OntologyCollection.html">KAT.model.OntologyCollection</a>
                 
             </span>
             <ul class="members itemMembers">
             
             <span class="subtitle">Members</span>
             
-                <li data-name="KAT.model.OntologyStore#ontologies"><a href="KAT.model.OntologyStore.html#ontologies">ontologies</a></li>
+                <li data-name="KAT.model.OntologyCollection#ontologies"><a href="KAT.model.OntologyCollection.html#ontologies">ontologies</a></li>
             
             </ul>
             <ul class="typedefs itemMembers">
@@ -222,17 +222,36 @@
             
             <span class="subtitle">Methods</span>
             
-                <li data-name="KAT.model.OntologyStore.addNewOntology"><a href="KAT.model.OntologyStore.html#addNewOntology">addNewOntology</a></li>
+                <li data-name="KAT.model.OntologyCollection.addNewOntology"><a href="KAT.model.OntologyCollection.html#addNewOntology">addNewOntology</a></li>
             
-                <li data-name="KAT.model.OntologyStore.addOntology"><a href="KAT.model.OntologyStore.html#addOntology">addOntology</a></li>
+                <li data-name="KAT.model.OntologyCollection.addOntology"><a href="KAT.model.OntologyCollection.html#addOntology">addOntology</a></li>
             
-                <li data-name="KAT.model.OntologyStore.init"><a href="KAT.model.OntologyStore.html#init">init</a></li>
+                <li data-name="KAT.model.OntologyCollection.init"><a href="KAT.model.OntologyCollection.html#init">init</a></li>
             
-                <li data-name="KAT.model.OntologyStore#getConcept"><a href="KAT.model.OntologyStore.html#getConcept">getConcept</a></li>
+                <li data-name="KAT.model.OntologyCollection#getConcept"><a href="KAT.model.OntologyCollection.html#getConcept">getConcept</a></li>
             
-                <li data-name="KAT.model.OntologyStore#getField"><a href="KAT.model.OntologyStore.html#getField">getField</a></li>
+                <li data-name="KAT.model.OntologyCollection#getField"><a href="KAT.model.OntologyCollection.html#getField">getField</a></li>
             
-                <li data-name="KAT.model.OntologyStore#getOntology"><a href="KAT.model.OntologyStore.html#getOntology">getOntology</a></li>
+                <li data-name="KAT.model.OntologyCollection#getOntology"><a href="KAT.model.OntologyCollection.html#getOntology">getOntology</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="KAT.model.Option">
+            <span class="title">
+                <a href="KAT.model.Option.html">KAT.model.Option</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
             
             </ul>
             <ul class="events itemMembers">
@@ -270,7 +289,7 @@
     </ul>
 </div>
     <div class="main">
-        <h1 class="page-title" data-filename="KAT.model.OntologyStore.html">Class: OntologyStore</h1>
+        <h1 class="page-title" data-filename="KAT.model.Option.html">Class: Option</h1>
         
 
 
@@ -281,7 +300,7 @@
     <h2>
         <span class="ancestors"><a href="KAT.html">KAT</a><a href="KAT.model.html">.model</a>.</span>
     
-    OntologyStore
+    Option
     </h2>
     
 </header>  
@@ -294,14 +313,14 @@
         
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="OntologyStore">
+        <h4 class="name" id="Option">
             
-            new KAT.model.OntologyStore<span class="signature">()</span>
+            new KAT.model.Option<span class="signature">(xml, field)</span>
         </h4>
     
         
         <div class="tag-source">
-            KAT.model.js, line 26
+            KAT.model.js, line 979
         </div>
         
     </div>
@@ -312,7 +331,7 @@
     
     
     <div class="description">
-        Creates a new OntologyStore instance.
+        Creates a new Option instance.
     </div>
     
 
@@ -320,145 +339,7 @@
     
     
         <h5>This:</h5>
-        <ul><li>{<a href="KAT.model.OntologyStore.html">KAT.model.OntologyStore</a>}</li></ul>
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-    
-    </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-        <h3 class="subsection-title">Members</h3>
-        
-        <dl>
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="ontologies">ontologies<span class="type-signature type array.<kat.model.ontology>">Array.&lt;<a href="KAT.model.Ontology.html">KAT.model.Ontology</a>></span> </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Ontologies stored in this ontologyStore
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        </dl>
-    
-    
-    
-        <h3 class="subsection-title">Methods</h3>
-        
-        <dl>
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="addNewOntology">
-            
-            <span class="type-signature static">static</span>KAT.model.OntologyStore.addNewOntology<span class="signature">(xml, name)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{<a href="KAT.model.Ontology.html">KAT.model.Ontology</a>|boolean}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            KAT.model.js, line 68
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Creates a new Ontology instance and adds it to this OntologyStore.
-    </div>
-    
-
-    
-    
+        <ul><li>{<a href="KAT.model.Option.html">KAT.model.Option</a>}</li></ul>
     
     
     
@@ -500,20 +381,20 @@
             
             <td class="description last">
                 
-                XML document representing ontology.</td>
+                XML document representing the option.</td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>field</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type"><a href="KAT.model.Field.html">KAT.model.Field</a></span>
 
 
             
@@ -523,7 +404,7 @@
             
             <td class="description last">
                 
-                Name of ontology to be created.</td>
+                field this option was declared in.</td>
         </tr>
 	
 	
@@ -568,598 +449,23 @@
     
     
     
-
-
-<h5>Returns:</h5>
-newly created ontology or false in case of errors
-<br />
-
-    
-    
-    
 </dd>
 
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="addOntology">
-            
-            <span class="type-signature static">static</span>KAT.model.OntologyStore.addOntology<span class="signature">(ontology)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{<a href="KAT.model.Ontology.html">KAT.model.Ontology</a>|boolean}</span>
-        </h4>
     
-        
-        <div class="tag-source">
-            KAT.model.js, line 43
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Adds an onology to this OntologyStore.
     </div>
     
-
     
     
     
     
     
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>ontology</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type"><a href="KAT.model.Ontology.html">KAT.model.Ontology</a></span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                Ontology to add</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
     
     
     
-<dl class="details">
     
-        
     
     
     
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-
-
-<h5>Returns:</h5>
-newly added ontology or false in case of errors
-<br />
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="init">
-            
-            <span class="type-signature static">static</span>KAT.model.OntologyStore.init<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{<a href="KAT.model.Ontology.html">KAT.model.Ontology</a>}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            KAT.model.js, line 85
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Initialises this OntologyStore. Should be called once all Ontologies have been added.
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-
-
-<h5>Returns:</h5>
-this ontology store
-<br />
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="getConcept">
-            
-            getConcept<span class="signature">(name)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{<a href="KAT.model.Concept.html">KAT.model.Concept</a>|boolean}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            KAT.model.js, line 184
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Finds a concept by name.
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                Name of concept to search for. Should be of the form OntologyName.ConceptName</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-
-
-<h5>Returns:</h5>
-the concept searched for or false.
-<br />
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="getField">
-            
-            getField<span class="signature">(name)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{<a href="KAT.model.Field.html">KAT.model.Field</a>|boolean}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            KAT.model.js, line 217
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Finds a field by name.
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                Name of field to search for. Should be of the form OntologyName.ConceptName.FieldName</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-
-
-<h5>Returns:</h5>
-the field searched for or false.
-<br />
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="getOntology">
-            
-            getOntology<span class="signature">(name)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{<a href="KAT.model.Ontology.html">KAT.model.Ontology</a>|boolean}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            KAT.model.js, line 154
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Finds an ontology by name.
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                Name of ontology to search for.</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-
-
-<h5>Returns:</h5>
-the ontology searched for or false.
-<br />
-
-    
-    
-    
-</dd>
-
-        </dl>
     
     
     
@@ -1176,7 +482,7 @@ the ontology searched for or false.
         
 
         <footer>
-            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha11</a> on Wed Jan 07 2015 09:34:41 GMT+0100 (CET)
+            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha11</a> on Wed Jan 07 2015 09:53:53 GMT+0100 (CET)
         </footer>
     </div>
 </div>

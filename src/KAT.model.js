@@ -23,35 +23,35 @@
 KAT.model = {};
 
 (function(){
-  /** Creates a new OntologyStore instance.
+  /** Creates a new OntologyCollection instance.
   *
-  * @name KAT.model.OntologyStore
-  * @this {KAT.model.OntologyStore}
-  * @Alias KAT.model.OntologyStore
+  * @name KAT.model.OntologyCollection
+  * @this {KAT.model.OntologyCollection}
+  * @Alias KAT.model.OntologyCollection
   * @class
   */
-  KAT.model.OntologyStore = function(){
+  KAT.model.OntologyCollection = function(){
     /**
-    * Ontologies stored in this ontologyStore
+    * Ontologies stored in this OntologyCollection
     *
     * @type {KAT.model.Ontology[]}
-    * @name KAT.model.OntologyStore#ontologies
+    * @name KAT.model.OntologyCollection#ontologies
     */
     this.ontologies = [];
   }
 
-  /** Adds an onology to this OntologyStore.
+  /** Adds an onology to this OntologyCollection.
   *
   * @param {KAT.model.Ontology} ontology - Ontology to add
   *
   * @function
   * @instance
   * @name addOntology
-  * @memberof KAT.model.OntologyStore
+  * @memberof KAT.model.OntologyCollection
   * @static
   * @return {KAT.model.Ontology|boolean} - newly added ontology or false in case of errors
   */
-  KAT.model.OntologyStore.prototype.addOntology = function(ontology){
+  KAT.model.OntologyCollection.prototype.addOntology = function(ontology){
 
     //check if we already have it.
     if(this.getOntology(ontology.name)){
@@ -65,7 +65,7 @@ KAT.model = {};
     return ontology;
   }
 
-  /** Creates a new Ontology instance and adds it to this OntologyStore.
+  /** Creates a new Ontology instance and adds it to this OntologyCollection.
   *
   * @param {document} xml - XML document representing ontology.
   * @param {string} name - Name of ontology to be created.
@@ -73,25 +73,25 @@ KAT.model = {};
   * @function
   * @instance
   * @name addNewOntology
-  * @memberof KAT.model.OntologyStore
+  * @memberof KAT.model.OntologyCollection
   * @static
   * @return {KAT.model.Ontology|boolean} - newly created ontology or false in case of errors
   */
-  KAT.model.OntologyStore.prototype.addNewOntology = function(xml, name){
+  KAT.model.OntologyCollection.prototype.addNewOntology = function(xml, name){
     //TODO: Remove name parameter
     return this.addOntology(new KAT.model.Ontology(xml, this, name));
   }
 
-  /** Initialises this OntologyStore. Should be called once all Ontologies have been added.
+  /** Initialises this OntologyCollection. Should be called once all Ontologies have been added.
   *
   * @function
   * @instance
   * @name init
-  * @memberof KAT.model.OntologyStore
+  * @memberof KAT.model.OntologyCollection
   * @static
   * @return {KAT.model.Ontology} - this ontology store
   */
-  KAT.model.OntologyStore.prototype.init = function(){
+  KAT.model.OntologyCollection.prototype.init = function(){
     //iterate over the fields
     //this may take a while
     for(var i=0;i<this.ontologies.length;i++){
@@ -112,9 +112,9 @@ KAT.model = {};
                     //find the concept, try it within this ontology first
                     var concept = this.concept.ontology.getConcept(name);
 
-                    //and then do it in the ontologyStore
+                    //and then do it in the ontologyCollection
                     if(!concept){
-                      concept = this.concept.ontology.store.getConcept(name);
+                      concept = this.concept.ontology.collection.getConcept(name);
                     }
 
                     if(!concept){
@@ -159,10 +159,10 @@ KAT.model = {};
   * @function
   * @instance
   * @name getOntology
-  * @memberof KAT.model.OntologyStore
+  * @memberof KAT.model.OntologyCollection
   * @return {KAT.model.Ontology|boolean} - the ontology searched for or false.
   */
-  KAT.model.OntologyStore.prototype.getOntology = function(name){
+  KAT.model.OntologyCollection.prototype.getOntology = function(name){
     //normalise the name
     var name = nameNormaliser(name);
 
@@ -189,10 +189,10 @@ KAT.model = {};
   * @function
   * @instance
   * @name getConcept
-  * @memberof KAT.model.OntologyStore
+  * @memberof KAT.model.OntologyCollection
   * @return {KAT.model.Concept|boolean} - the concept searched for or false.
   */
-  KAT.model.OntologyStore.prototype.getConcept = function(name){
+  KAT.model.OntologyCollection.prototype.getConcept = function(name){
     //normalise the name
     var name = nameNormaliser(name);
 
@@ -222,10 +222,10 @@ KAT.model = {};
   * @function
   * @instance
   * @name getField
-  * @memberof KAT.model.OntologyStore
+  * @memberof KAT.model.OntologyCollection
   * @return {KAT.model.Field|boolean} - the field searched for or false.
   */
-  KAT.model.OntologyStore.prototype.getField = function(name){
+  KAT.model.OntologyCollection.prototype.getField = function(name){
     //normalise the name
     var name = nameNormaliser(name);
 
@@ -258,14 +258,14 @@ KAT.model = {};
   /** Creates a new Ontology instance.
   *
   * @param {document} xml - XML document representing ontology.
-  * @param {KAT.model.OntologyStore} store - Ontology store this ontology is declared in.
+  * @param {KAT.model.OntologyCollection} collection - Ontology collection this ontology is declared in.
   * @param {string} name - Name of this ontology
   * @name KAT.model.Ontology
   * @this {KAT.model.Ontology}
   * @Alias KAT.model.Ontology
   * @class
   */
-  KAT.model.Ontology = function(xml, store, name){
+  KAT.model.Ontology = function(xml, collection, name){
     var me = this;
 
     //parse the XML
@@ -307,16 +307,16 @@ KAT.model = {};
     var annotRoot = this.xml.children().eq(0);
 
     if(annotRoot.children().length <= 1 || !annotRoot.children().eq(0).is("documentation")){
-      throw new KAT.model.ParsingError("KAT.model.Ontology: Invalid XML for ontology '"+this.getFullName()+"' (Expected exactly one <documentation> and <concepts>). ", annotRoot);
+      throw new KAT.model.ParsingError("KAT.model.Ontology: Invalid XML for ontology '"+this.getFullName()+"' (Expected exactly one <documentation>). ", annotRoot);
     }
 
     /**
-    * OntologyStore this Ontology belongs to.
+    * OntologyCollection this Ontology belongs to.
     *
-    * @type {KAT.model.OntologyStore}
-    * @name KAT.model.Ontology#store
+    * @type {KAT.model.OntologyCollection}
+    * @name KAT.model.Ontology#collection
     */
-    this.store = store;
+    this.collection = collection;
 
     /**
     * Documentation for this ontology.
@@ -843,12 +843,11 @@ KAT.model = {};
 
       //did we have the <value>
       if(!hasValue){
-        throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Missing required <value> tag). ", this.xml.children());
+        this.value = name;
       }
     } else if(this.type == KAT.model.Field.types.reference){
       //set validation as default.
       this.validation = [];
-
 
       this.xml.children().each((function(i, e){
         var e = $(e);
@@ -908,12 +907,86 @@ KAT.model = {};
 
       //did we have the <value>
       if(!hasValue){
-        throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Missing required <value> tag). ", this.xml.children());
+        this.value = this.name;
       }
     } else if(this.type == KAT.model.Field.types.select){
-      //TODO: Implement select type
-      console.warn("KAT.model.Field: KAT.model.Field.types.select currently unimplemented. ", this.xml);
+      //set validation as default.
+      this.validation = [];
+
+      this.xml.children().each((function(i, e){
+        var e = $(e);
+
+        if(e.is("value")){
+
+          //did we have this already
+          if(hasValue){
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <value> tag). ", e);
+          }
+
+          //no, so now store it.
+          hasValue = true;
+          me.value = e.text();
+        } else if(e.is("option")){
+          me.validation.push(new KAT.model.Option(e, this));
+        } else if(e.is("number")){
+          //did we have this already?
+          if(hasNumber){
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <number> tag). ", e);
+          }
+
+          //ok, now store it
+          hasNumber = true;
+
+          //minimum
+          if(typeof e.attr("atleast")){
+            try{
+              me.minimum = parseInt(e.attr("atleast"));
+            } catch(f){
+              throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (atleast property must be a number). ", e);
+            }
+          }
+
+          //maximum
+          if(typeof e.attr("atmost")){
+            try{
+              me.maximum = parseInt(e.attr("atmost"));
+            } catch(f){
+              throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (atmost property must be a number). ", e);
+            }
+          }
+        } else if(e.is("documentation")){
+
+          //did we have this already?
+          if(hasDocumentation){
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <documentation> tag). ", e);
+          }
+
+          //we had it now
+          hasDocumentation = true;
+          this.documentation = e.text().trim();
+        } else {
+          throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Unexpected tag '"+e.prop("tagName")+"'). ", e);
+        }
+      }).bind(this));
+
+      //if we did not have value, figure it out.
+      if(!hasValue){
+        this.value = this.name;
+      }
     }
+  }
+
+  /** Creates a new Option instance.
+  *
+  * @param {document} xml - XML document representing the option.
+  * @param {KAT.model.Field} field - field this option was declared in.
+  * @name KAT.model.Option
+  * @this {KAT.model.Option}
+  * @Alias KAT.model.Option
+  * @class
+  */
+  KAT.model.Option = function(xml, concept){
+
   }
 
   /**
