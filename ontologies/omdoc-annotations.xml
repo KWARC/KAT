@@ -216,6 +216,8 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 		<field name="for" type="reference">
 			<value>For</value>
 			<number atleast="1" atmost="1"/>
+			<referencedType>assertion</referencedType>
+			<referencedType>inline-statement</referencedType>
 		</field>
 		<display>
 			<template>
@@ -237,6 +239,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 			<validation>[A-Z][a-z]*</validation>
 			<number atleast="1" atmost="1"/>
 		</field>
+		<!-- **** this is not clear yet, imports can be outside as well **** --> 
 		<field name="imports" type="reference">
 			<value>imports</value>
 			<number/>
