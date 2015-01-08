@@ -215,6 +215,28 @@ KAT.model = {};
   }
 
   /**
+  * Finds all concepts in this OntologyCollection
+  *
+  *
+  * @function
+  * @instance
+  * @name getOntology
+  * @memberof KAT.model.OntologyCollection
+  * @return {Kat.model.Concept[]} - concepts found
+  */
+  KAT.model.OntologyCollection.prototype.findConcepts = function(){
+    var concepts = [];
+
+    for(var i=0;i<this.ontologies.length;i++){
+      for(var j=0;j<this.ontologies[i].concepts.length;j++){
+        concepts.push(this.ontologies[i].concepts[j]);
+      }
+    }
+
+    return concepts;
+  }
+
+  /**
   * Finds a field by name.
   *
   * @param {string} name - Name of field to search for. Should be of the form OntologyName.ConceptName.FieldName
