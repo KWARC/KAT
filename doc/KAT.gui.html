@@ -76,6 +76,27 @@
             </ul>
         </li>
     
+        <li class="item" data-name="KAT.storage">
+            <span class="title">
+                <a href="KAT.storage.html">KAT.storage</a>
+                
+                <span class="static">static</span>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
         <li class="item" data-name="KAT.gui">
             <span class="title">
                 <a href="KAT.gui.html">KAT.gui</a>
@@ -105,6 +126,8 @@
             
             <span class="subtitle">Methods</span>
             
+                <li data-name="KAT.gui.dialog"><a href="KAT.gui.html#dialog">dialog</a></li>
+            
                 <li data-name="KAT.gui.getXPath"><a href="KAT.gui.html#getXPath">getXPath</a></li>
             
                 <li data-name="KAT.gui.resolveXPath"><a href="KAT.gui.html#resolveXPath">resolveXPath</a></li>
@@ -116,6 +139,8 @@
                 <li data-name="KAT.gui#init"><a href="KAT.gui.html#init">init</a></li>
             
                 <li data-name="KAT.gui#showBubble"><a href="KAT.gui.html#showBubble">showBubble</a></li>
+            
+                <li data-name="KAT.gui#showNewAnnotationDialog"><a href="KAT.gui.html#showNewAnnotationDialog">showNewAnnotationDialog</a></li>
             
             </ul>
             <ul class="events itemMembers">
@@ -153,6 +178,8 @@
             <ul class="methods itemMembers">
             
             <span class="subtitle">Methods</span>
+            
+                <li data-name="KAT.model.Concept#getDefault"><a href="KAT.model.Concept.html#getDefault">getDefault</a></li>
             
                 <li data-name="KAT.model.Concept#getField"><a href="KAT.model.Concept.html#getField">getField</a></li>
             
@@ -269,11 +296,9 @@
             
             <span class="subtitle">Methods</span>
             
-                <li data-name="KAT.model.OntologyCollection.addNewOntology"><a href="KAT.model.OntologyCollection.html#addNewOntology">addNewOntology</a></li>
+                <li data-name="KAT.model.OntologyCollection#addNewOntology"><a href="KAT.model.OntologyCollection.html#addNewOntology">addNewOntology</a></li>
             
-                <li data-name="KAT.model.OntologyCollection.addOntology"><a href="KAT.model.OntologyCollection.html#addOntology">addOntology</a></li>
-            
-                <li data-name="KAT.model.OntologyCollection.init"><a href="KAT.model.OntologyCollection.html#init">init</a></li>
+                <li data-name="KAT.model.OntologyCollection#addOntology"><a href="KAT.model.OntologyCollection.html#addOntology">addOntology</a></li>
             
                 <li data-name="KAT.model.OntologyCollection#getConcept"><a href="KAT.model.OntologyCollection.html#getConcept">getConcept</a></li>
             
@@ -282,6 +307,8 @@
                 <li data-name="KAT.model.OntologyCollection#getOntology"><a href="KAT.model.OntologyCollection.html#getOntology">getOntology</a></li>
             
                 <li data-name="KAT.model.OntologyCollection#getOntology"><a href="KAT.model.OntologyCollection.html#getOntology">getOntology</a></li>
+            
+                <li data-name="KAT.model.OntologyCollection#init"><a href="KAT.model.OntologyCollection.html#init">init</a></li>
             
             </ul>
             <ul class="events itemMembers">
@@ -338,6 +365,37 @@
             
             </ul>
             <ul class="methods itemMembers">
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="KAT.storage.Store">
+            <span class="title">
+                <a href="KAT.storage.Store.html">KAT.storage.Store</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            <span class="subtitle">Members</span>
+            
+                <li data-name="KAT.storage.Store#annotations"><a href="KAT.storage.Store.html#annotations">annotations</a></li>
+            
+                <li data-name="KAT.storage.Store#collection"><a href="KAT.storage.Store.html#collection">collection</a></li>
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="KAT.storage.Store.UUID"><a href="KAT.storage.Store.html#UUID">UUID</a></li>
+            
+                <li data-name="KAT.storage.Store#sanityCheck"><a href="KAT.storage.Store.html#sanityCheck">sanityCheck</a></li>
             
             </ul>
             <ul class="events itemMembers">
@@ -803,6 +861,200 @@
             
 <dt>
     <div class="nameContainer">
+        <h4 class="name" id="dialog">
+            
+            <span class="type-signature static">static</span>KAT.gui.dialog<span class="signature">(title, text, buttons, on_close)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{object}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            KAT.gui.js, line 398
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates a new dialog.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                Title of dialog</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                Content of dialogs</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>buttons</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                Text of buttons</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>on_close</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                callback on close.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+
+
+<h5>Returns:</h5>
+a dialog element
+<br />
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
         <h4 class="name" id="getXPath">
             
             <span class="type-signature static">static</span>KAT.gui.getXPath<span class="signature">(from, to)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{string}</span>
@@ -810,7 +1062,7 @@
     
         
         <div class="tag-source">
-            KAT.gui.js, line 264
+            KAT.gui.js, line 293
         </div>
         
     </div>
@@ -958,7 +1210,7 @@ the xPath
     
         
         <div class="tag-source">
-            KAT.gui.js, line 327
+            KAT.gui.js, line 356
         </div>
         
     </div>
@@ -1106,7 +1358,7 @@ the element.
     
         
         <div class="tag-source">
-            KAT.gui.js, line 241
+            KAT.gui.js, line 248
         </div>
         
     </div>
@@ -1319,7 +1571,7 @@ the element.
     
         
         <div class="tag-source">
-            KAT.gui.js, line 175
+            KAT.gui.js, line 176
         </div>
         
     </div>
@@ -1424,6 +1676,122 @@ the element.
     
 </dd>
 
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="showNewAnnotationDialog">
+            
+            showNewAnnotationDialog<span class="signature">(selection)</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            KAT.gui.js, line 271
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Shows a new annotation dialog.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>selection</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                Current selection</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
         </dl>
     
     
@@ -1441,7 +1809,7 @@ the element.
         
 
         <footer>
-            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha11</a> on Thu Jan 08 2015 18:33:32 GMT+0100 (CET)
+            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha11</a> on Fri Jan 09 2015 18:04:32 GMT+0100 (CET)
         </footer>
     </div>
 </div>

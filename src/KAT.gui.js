@@ -398,31 +398,83 @@ KAT.gui.resolveXPath = function(from, path){
 /**
 * Creates a new dialog.
 *
+* @param {string} title - Title of dialog
+* @param {string} text - Content of dialogs
+* @param {string[]} buttons - Text of buttons
+* @param {function} on_close - callback on close.
+*
 * @returns {object} - a dialog element
 * @function
 * @static
 * @name dialog
 * @memberof KAT.gui
 */
-KAT.gui.dialog = function(){
+KAT.gui.dialog = function(title, content, buttons, on_button){
 
-  //TODO: Build this one.
+  //TODO: Documentation on $self. 
+
+  var $self = {};
+
+  //Crate Buttons
+  var $buttons = $([]);
+
+  for(var i=0;i<buttons.length;i++){
+    (function(i){
+      $buttons = $buttons.add(
+        $("<button class='btn btn-"+(i==0?"primary":"default")+"'>")
+        .text(buttons[i])
+        .click(function(){
+          on_button.call($self, buttons[i], i);
+        })
+      );
+    }).call(this, i)
+  }
+
+  //reverse the array.
+  $buttons = $($buttons.get().reverse())
+
+  //set up other things.
+  var $title = $('<h4 class="modal-title"></h4>').text(title);
+  var $content = $("<p>").text(content);
 
   //Create the element.
-  var $dialog = $("<div>");
+  var $dialog = $('<div class="modal fade">')
+  .append(
+    $('<div class="modal-dialog">').append(
+      $('<div class="modal-content">')
+      .append(
+        $('<div class="modal-header>').append(
+          $('<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>').click(function(){
+            on_button.call($self, "", -1);
+          }),
+          $title
+        ),
+        $('<div class="modal-body">').append($content),
+        $('<div class="modal-footer">').append($buttons)
+      )
+    )
+  )
 
   var $title = $("<div>");
 
   //append the dialog.
-  $dialog.appendTo("body");
+  $dialog.appendTo("body").modal({
+    backdrop: true,
+    keyboard: true
+  });
 
-  return {
+  $self = {
     "$dialog": $dialog, //the dialog element
     "$title": $title, //the title element
     "$content": $content,  //the content element.
     "$buttons": $buttons, // buttons
     "close": function(){ //function to close the dialog.
-      $dialog.remove();
+      $dialog
+      .one("hidden.bs.modal", function(){
+        $dialog.remove();
+      }).modal("hide");
     }
   }
+
+  return $self;
 }
