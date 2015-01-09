@@ -48,7 +48,6 @@ KAT.model = {};
   * @instance
   * @name addOntology
   * @memberof KAT.model.OntologyCollection
-  * @static
   * @return {KAT.model.Ontology|boolean} - newly added ontology or false in case of errors
   */
   KAT.model.OntologyCollection.prototype.addOntology = function(ontology){
@@ -74,7 +73,6 @@ KAT.model = {};
   * @instance
   * @name addNewOntology
   * @memberof KAT.model.OntologyCollection
-  * @static
   * @return {KAT.model.Ontology|boolean} - newly created ontology or false in case of errors
   */
   KAT.model.OntologyCollection.prototype.addNewOntology = function(xml, name){
@@ -88,7 +86,6 @@ KAT.model = {};
   * @instance
   * @name init
   * @memberof KAT.model.OntologyCollection
-  * @static
   * @return {KAT.model.Ontology} - this ontology store
   */
   KAT.model.OntologyCollection.prototype.init = function(){
@@ -605,6 +602,39 @@ KAT.model = {};
   }
 
   /**
+  * Gets default values for this concept.
+  *
+  * @function
+  * @instance
+  * @name getDefault
+  * @memberof KAT.model.Concept
+  * @return {object} - JSOn representing default for this concept.
+  */
+  KAT.model.Concept.prototype.getDefault = function(){
+    var defaultValues = {};
+
+    for(var i=0;i<this.fields.length;i++){
+      (function(field){
+        if(field.type == KAT.model.Field.types.text){
+          //the default is simply a text
+          defaultValues[field.value] = field.default;
+        } else if(field.type == KAT.model.Field.types.select){
+          //the default is an option
+          //either the specefied one
+          //or the first one.
+          defaultValues[field.value] = (field.default == "")?field.validation[0]:field.default;
+        } else if(field.type == KAT.model.Field.types.reference){
+          //we do want a reference, but it may be an empty reference.
+          //we neccessarily want this so we can avoid conflicts.
+          defaultValues[field.value] = "";
+        }
+      }).call(this, this.fields[i]);
+    }
+
+    return defaultValues;
+  }
+
+  /**
   * Gets the full name of this concept.
   *
   * @function
@@ -870,6 +900,10 @@ KAT.model = {};
     //we did not have the value.
     if(!hasValue){
       this.value = this.name;
+    }
+
+    if(this.type == KAT.model.Field.types.select && this.validation.length == 0){
+      throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (KAT.model.Field.types.select must have a non-empty list of options. ). ", e);
     }
 
     //Check that value is unique

@@ -172,6 +172,7 @@ KAT.gui.prototype.deinit._01 = function(){
   this.element.off("mousedown.KAT.selectionChange", "mouseup.KAT.selectionChange");
 }
 
+
 /**
 * Shows a bubble.
 *
@@ -225,7 +226,13 @@ KAT.gui.prototype.showBubble = function(selection){
     "width": 40,
     "height": 40,
     "background-color": "red"
-  }).css(position).appendTo("body");
+  }).css(position).appendTo("body").click(function(){
+    //close the bubble
+    me.closeBubble();
+
+    //show a new annotation dialog.
+    me.showNewAnnotationDialog();
+  });
 
   //We want to close the bubble
   //whenever we have clicked anywhere else.
@@ -254,11 +261,33 @@ KAT.gui.prototype.closeBubble = function(){
   //remove the bubble
   this.bubble.remove();
 
+  //reset the bubble property
+  this.bubble = $([]);
+
   //we do not need to click it anymore
   $("body").off("mousedown.KAT.bubble");
+}
 
-  //simply close the bubble.
-  console.log("BUBBLE CLOSE");
+/**
+* Shows a new annotation dialog.
+*
+* @param {object} selection - Current selection
+*
+* @function
+* @instance
+* @name showNewAnnotationDialog
+* @memberof KAT.gui
+*/
+KAT.gui.prototype.showNewAnnotationDialog = function(selection){
+  if(this.flagDialogOpen){
+    return;
+  }
+
+  //there is a dialog open
+  this.flagDialogOpen = true;
+
+  console.log("NEW DIALOG");
+
 }
 
 /**
@@ -364,4 +393,36 @@ KAT.gui.resolveXPath = function(from, path){
   }
 
   return element;
+}
+
+/**
+* Creates a new dialog.
+*
+* @returns {object} - a dialog element
+* @function
+* @static
+* @name dialog
+* @memberof KAT.gui
+*/
+KAT.gui.dialog = function(){
+
+  //TODO: Build this one.
+
+  //Create the element.
+  var $dialog = $("<div>");
+
+  var $title = $("<div>");
+
+  //append the dialog.
+  $dialog.appendTo("body");
+
+  return {
+    "$dialog": $dialog, //the dialog element
+    "$title": $title, //the title element
+    "$content": $content,  //the content element.
+    "$buttons": $buttons, // buttons
+    "close": function(){ //function to close the dialog.
+      $dialog.remove();
+    }
+  }
 }
