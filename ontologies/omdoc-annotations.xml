@@ -119,7 +119,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 		</rdf:RDF>
 	</concept>
 
-	<concept name="declaration">
+	<concept name="Declaration">
 		<documentation>A declaration of an identifier</documentation>
 		<field name="type" type="select">
 			<option>
@@ -157,10 +157,10 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 		</rdf:RDF>
 	</concept>
 
-	<concept name="reference">
+	<concept name="Reference">
 		<field name="declaration" type="reference">
 			<value>Declaration</value>
-			<referencedType>declaration</referencedType>
+			<referencedType>Declaration</referencedType>
 			<number atleast="1" atmost="1"/>
 		</field>
 		<display>
@@ -232,7 +232,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 		</rdf:RDF>
 	</concept>
 
-	<concept name="theory">
+	<concept name="Theory">
 		<field name="name" type="text">
 			<value>Name</value>
 			<default>Proof</default>

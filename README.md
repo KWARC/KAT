@@ -8,10 +8,10 @@ Version 2.0, not yet finished. Documentation is currently being created.
 
 The concepts are stored in the following hierachical architecture:
 
-* KAT.model.OntologyStore: A collection of ontologies. All references must remain within the OntologyStore.
+* KAT.model.OntologyCollection: A collection of ontologies. All references must remain within the OntologyCollection.
 * KAT.model.Ontology: A single ontology, containing several collections.
 * KAT.model.Concept: A single concept within an ontology
-* KAT.mode.Field: A filed within a concept.
+* KAT.model.Field: A filed within a concept.
 
 ## License
 

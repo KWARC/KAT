@@ -23,35 +23,34 @@
 KAT.model = {};
 
 (function(){
-  /** Creates a new OntologyStore instance.
+  /** Creates a new OntologyCollection instance.
   *
-  * @name KAT.model.OntologyStore
-  * @this {KAT.model.OntologyStore}
-  * @Alias KAT.model.OntologyStore
+  * @name KAT.model.OntologyCollection
+  * @this {KAT.model.OntologyCollection}
+  * @Alias KAT.model.OntologyCollection
   * @class
   */
-  KAT.model.OntologyStore = function(){
+  KAT.model.OntologyCollection = function(){
     /**
-    * Ontologies stored in this ontologyStore
+    * Ontologies stored in this OntologyCollection
     *
     * @type {KAT.model.Ontology[]}
-    * @name KAT.model.OntologyStore#ontologies
+    * @name KAT.model.OntologyCollection#ontologies
     */
     this.ontologies = [];
   }
 
-  /** Adds an onology to this OntologyStore.
+  /** Adds an onology to this OntologyCollection.
   *
   * @param {KAT.model.Ontology} ontology - Ontology to add
   *
   * @function
   * @instance
   * @name addOntology
-  * @memberof KAT.model.OntologyStore
-  * @static
+  * @memberof KAT.model.OntologyCollection
   * @return {KAT.model.Ontology|boolean} - newly added ontology or false in case of errors
   */
-  KAT.model.OntologyStore.prototype.addOntology = function(ontology){
+  KAT.model.OntologyCollection.prototype.addOntology = function(ontology){
 
     //check if we already have it.
     if(this.getOntology(ontology.name)){
@@ -65,7 +64,7 @@ KAT.model = {};
     return ontology;
   }
 
-  /** Creates a new Ontology instance and adds it to this OntologyStore.
+  /** Creates a new Ontology instance and adds it to this OntologyCollection.
   *
   * @param {document} xml - XML document representing ontology.
   * @param {string} name - Name of ontology to be created.
@@ -73,25 +72,23 @@ KAT.model = {};
   * @function
   * @instance
   * @name addNewOntology
-  * @memberof KAT.model.OntologyStore
-  * @static
+  * @memberof KAT.model.OntologyCollection
   * @return {KAT.model.Ontology|boolean} - newly created ontology or false in case of errors
   */
-  KAT.model.OntologyStore.prototype.addNewOntology = function(xml, name){
+  KAT.model.OntologyCollection.prototype.addNewOntology = function(xml, name){
     //TODO: Remove name parameter
     return this.addOntology(new KAT.model.Ontology(xml, this, name));
   }
 
-  /** Initialises this OntologyStore. Should be called once all Ontologies have been added.
+  /** Initialises this OntologyCollection. Should be called once all Ontologies have been added.
   *
   * @function
   * @instance
   * @name init
-  * @memberof KAT.model.OntologyStore
-  * @static
+  * @memberof KAT.model.OntologyCollection
   * @return {KAT.model.Ontology} - this ontology store
   */
-  KAT.model.OntologyStore.prototype.init = function(){
+  KAT.model.OntologyCollection.prototype.init = function(){
     //iterate over the fields
     //this may take a while
     for(var i=0;i<this.ontologies.length;i++){
@@ -101,27 +98,29 @@ KAT.model = {};
             for(var k=0;k<this.fields.length;k++){
               (function(k){
                 if(this.type == KAT.model.Field.types.reference){
-                  var name = this.validation;
+                  for(var l=0;l<this.validation.length;l++){
+                    var name = this.validation[l];
 
-                  //it is already referenced, get the name out of it
-                  if(name instanceof KAT.model.Concept){
-                    name = name.getFullName();
+                    //it is already referenced, get the name out of it
+                    if(name instanceof KAT.model.Concept){
+                      name = name.getFullName();
+                    }
+
+                    //find the concept, try it within this ontology first
+                    var concept = this.concept.ontology.getConcept(name);
+
+                    //and then do it in the ontologyCollection
+                    if(!concept){
+                      concept = this.concept.ontology.collection.getConcept(name);
+                    }
+
+                    if(!concept){
+                      throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Concept not found: '"+name+"'). ", this.xml);
+                    }
+
+                    //store the concept in the validation.
+                    this.validation[l] = concept;
                   }
-
-                  //find the concept, try it within this ontology first
-                  var concept = this.concept.ontology.getConcept(name);
-
-                  //and then do it in the ontologyStore
-                  if(!concept){
-                    concept = this.concept.ontology.store.getConcept(name);
-                  }
-
-                  if(!concept){
-                    throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+" '(Concept not found: '"+name+"'). ", this.xml);
-                  }
-
-                  //store the concept in the validation.
-                  this.validation = concept;
                 }
               }).call(this.fields[k]);
             }
@@ -142,6 +141,13 @@ KAT.model = {};
   var nameRegEx2 = new RegExp("^("+nameRegExS+")\\.("+nameRegExS+")$");
   var nameRegEx3 = new RegExp("^("+nameRegExS+")\\.("+nameRegExS+")\\.("+nameRegExS+")$");
 
+  //can be used to normalise names
+  //if we ever need it
+  var nameNormaliser = function(name){
+    return name;
+  }
+
+
   /**
   * Finds an ontology by name.
   *
@@ -150,10 +156,13 @@ KAT.model = {};
   * @function
   * @instance
   * @name getOntology
-  * @memberof KAT.model.OntologyStore
+  * @memberof KAT.model.OntologyCollection
   * @return {KAT.model.Ontology|boolean} - the ontology searched for or false.
   */
-  KAT.model.OntologyStore.prototype.getOntology = function(name){
+  KAT.model.OntologyCollection.prototype.getOntology = function(name){
+    //normalise the name
+    var name = nameNormaliser(name);
+
     if(!nameRegEx.test(name)){
       return false;
     }
@@ -177,10 +186,12 @@ KAT.model = {};
   * @function
   * @instance
   * @name getConcept
-  * @memberof KAT.model.OntologyStore
+  * @memberof KAT.model.OntologyCollection
   * @return {KAT.model.Concept|boolean} - the concept searched for or false.
   */
-  KAT.model.OntologyStore.prototype.getConcept = function(name){
+  KAT.model.OntologyCollection.prototype.getConcept = function(name){
+    //normalise the name
+    var name = nameNormaliser(name);
 
     if(!nameRegEx2.test(name)){
       return false;
@@ -201,6 +212,28 @@ KAT.model = {};
   }
 
   /**
+  * Finds all concepts in this OntologyCollection
+  *
+  *
+  * @function
+  * @instance
+  * @name getOntology
+  * @memberof KAT.model.OntologyCollection
+  * @return {Kat.model.Concept[]} - concepts found
+  */
+  KAT.model.OntologyCollection.prototype.findConcepts = function(){
+    var concepts = [];
+
+    for(var i=0;i<this.ontologies.length;i++){
+      for(var j=0;j<this.ontologies[i].concepts.length;j++){
+        concepts.push(this.ontologies[i].concepts[j]);
+      }
+    }
+
+    return concepts;
+  }
+
+  /**
   * Finds a field by name.
   *
   * @param {string} name - Name of field to search for. Should be of the form OntologyName.ConceptName.FieldName
@@ -208,10 +241,13 @@ KAT.model = {};
   * @function
   * @instance
   * @name getField
-  * @memberof KAT.model.OntologyStore
+  * @memberof KAT.model.OntologyCollection
   * @return {KAT.model.Field|boolean} - the field searched for or false.
   */
-  KAT.model.OntologyStore.prototype.getField = function(name){
+  KAT.model.OntologyCollection.prototype.getField = function(name){
+    //normalise the name
+    var name = nameNormaliser(name);
+
     if(!nameRegEx3.test(name)){
       return false;
     }
@@ -241,14 +277,14 @@ KAT.model = {};
   /** Creates a new Ontology instance.
   *
   * @param {document} xml - XML document representing ontology.
-  * @param {KAT.model.OntologyStore} store - Ontology store this ontology is declared in.
+  * @param {KAT.model.OntologyCollection} collection - Ontology collection this ontology is declared in.
   * @param {string} name - Name of this ontology
   * @name KAT.model.Ontology
   * @this {KAT.model.Ontology}
   * @Alias KAT.model.Ontology
   * @class
   */
-  KAT.model.Ontology = function(xml, store, name){
+  KAT.model.Ontology = function(xml, collection, name){
     var me = this;
 
     //parse the XML
@@ -272,7 +308,7 @@ KAT.model = {};
     * @type {string}
     * @name KAT.model.Ontology#name
     */
-    this.name = name;
+    this.name = nameNormaliser(name);
 
     //Check if the name is valid.
     //TODO: Change error when using XML Node
@@ -290,16 +326,16 @@ KAT.model = {};
     var annotRoot = this.xml.children().eq(0);
 
     if(annotRoot.children().length <= 1 || !annotRoot.children().eq(0).is("documentation")){
-      throw new KAT.model.ParsingError("KAT.model.Ontology: Invalid XML for ontology '"+this.getFullName()+"' (Expected exactly one <documentation> and <concepts>). ", annotRoot);
+      throw new KAT.model.ParsingError("KAT.model.Ontology: Invalid XML for ontology '"+this.getFullName()+"' (Expected exactly one <documentation>). ", annotRoot);
     }
 
     /**
-    * OntologyStore this Ontology belongs to.
+    * OntologyCollection this Ontology belongs to.
     *
-    * @type {KAT.model.OntologyStore}
-    * @name KAT.model.Ontology#store
+    * @type {KAT.model.OntologyCollection}
+    * @name KAT.model.Ontology#collection
     */
-    this.store = store;
+    this.collection = collection;
 
     /**
     * Documentation for this ontology.
@@ -355,6 +391,9 @@ KAT.model = {};
   * @return {KAT.model.Concept|boolean} - the concept searched for or false.
   */
   KAT.model.Ontology.prototype.getConcept = function(name){
+    //normalise the name
+    var name = nameNormaliser(name);
+
     if(!nameRegEx.test(name)){
       return false;
     }
@@ -382,6 +421,9 @@ KAT.model = {};
   * @return {KAT.model.Field|boolean} - the field searched for or false.
   */
   KAT.model.Ontology.prototype.getField = function(name){
+    //normalise the name
+    var name = nameNormaliser(name);
+
     if(!nameRegEx2.test(name)){
       return false;
     }
@@ -446,7 +488,7 @@ KAT.model = {};
     * @type {string}
     * @name KAT.model.Concept#name
     */
-    this.name = this.xml.attr("name");
+    this.name = nameNormaliser(this.xml.attr("name"));
 
     //Check if the name is valid.
     if(!nameRegEx.test(this.name)){
@@ -511,9 +553,6 @@ KAT.model = {};
     if(children.eq(index).is("documentation")){
       this.documentation = children.eq(index).text().trim();
       index++;
-    } else {
-      //TODO: Do we really want this warning?
-      new KAT.model.ParsingWarning("KAT.model.Concept: Missing <documentation>, ignoring. ", children);
     }
 
     //do we have a field
@@ -563,6 +602,39 @@ KAT.model = {};
   }
 
   /**
+  * Gets default values for this concept.
+  *
+  * @function
+  * @instance
+  * @name getDefault
+  * @memberof KAT.model.Concept
+  * @return {object} - JSOn representing default for this concept.
+  */
+  KAT.model.Concept.prototype.getDefault = function(){
+    var defaultValues = {};
+
+    for(var i=0;i<this.fields.length;i++){
+      (function(field){
+        if(field.type == KAT.model.Field.types.text){
+          //the default is simply a text
+          defaultValues[field.value] = field.default;
+        } else if(field.type == KAT.model.Field.types.select){
+          //the default is an option
+          //either the specefied one
+          //or the first one.
+          defaultValues[field.value] = (field.default == "")?field.validation[0]:field.default;
+        } else if(field.type == KAT.model.Field.types.reference){
+          //we do want a reference, but it may be an empty reference.
+          //we neccessarily want this so we can avoid conflicts.
+          defaultValues[field.value] = "";
+        }
+      }).call(this, this.fields[i]);
+    }
+
+    return defaultValues;
+  }
+
+  /**
   * Gets the full name of this concept.
   *
   * @function
@@ -587,6 +659,9 @@ KAT.model = {};
   * @return {KAT.model.Field|boolean} - the field searched for or false.
   */
   KAT.model.Concept.prototype.getField = function(name){
+    //normalise the name
+    var name = nameNormaliser(name);
+
     if(!nameRegEx.test(name)){
       return false;
     }
@@ -647,7 +722,7 @@ KAT.model = {};
     * @type {string}
     * @name KAT.model.Field#name
     */
-    this.name = this.xml.attr("name");
+    this.name = nameNormaliser(this.xml.attr("name"));
 
     //Check for a valid name
     if(!nameRegEx.test(this.name)){
@@ -721,10 +796,10 @@ KAT.model = {};
     * Validation for this field, stores
     * regex for KAT.model.Field.types.text,
     * KAT.model.Option[] for KAT.model.Field.types.select,
-    * KAT.model.Concept for KAT.model.Field.types.reference and
-    * string for KAT.model.Field.types.reference while the reference is undefined.
+    * KAT.model.Concept[] for KAT.model.Field.types.reference and
+    * string[] for KAT.model.Field.types.reference while the reference is undefined.
     *
-    * @type {string|regex|KAT.model.Option[]|KAT.model.Concept}
+    * @type {string[]|regex|KAT.model.Option[]|KAT.model.Concept[]}
     * @name KAT.model.Field#validation
     */
     this.validation = undefined;
@@ -737,169 +812,181 @@ KAT.model = {};
     var hasDocumentation = false;
 
     if(this.type == KAT.model.Field.types.text){
-      //validate everything
       this.validation = new RegExp(".*");
-
-      this.xml.children().each((function(i, e){
-        var e = $(e);
-
-        if(e.is("value")){
-
-          //did we have this already
-          if(hasValue){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <value> tag). ", e);
-          }
-
-          //no, so now store it.
-          hasValue = true;
-          me.value = e.text();
-        } else if(e.is("default")){
-
-          //did we have this already?
-          if(hasDefault){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <default> tag). ", e);
-          }
-
-          //no, so we can store it
-          hasDefault = true;
-          me.default = e.text();
-        } else if(e.is("validation")){
-          //did we have this already?
-          if(hasValidation){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <validation> tag). ", e);
-          }
-
-          //no, so we can store it
-          hasValidation = true;
-          try{
-            me.validation = new RegExp(e.text());
-          } catch(f){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Unregonised regular expression). ", e);
-          }
-
-        } else if(e.is("number")){
-          //did we have this already?
-          if(hasNumber){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <number> tag). ", e);
-          }
-
-          //ok, now store it
-          hasNumber = true;
-
-          //minimum
-          if(typeof e.attr("atleast")){
-            try{
-              me.minimum = parseInt(e.attr("atleast"));
-            } catch(f){
-              throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"'(atleast property must be a number). ", e);
-            }
-          }
-
-          //maximum
-          if(typeof e.attr("atmost")){
-            try{
-              me.maximum = parseInt(e.attr("atmost"));
-            } catch(f){
-              throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (atmost property must be a number). ", e);
-            }
-          }
-        } else if(e.is("documentation")){
-
-          //did we have this already?
-          if(hasDocumentation){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <documentation> tag). ", e);
-          }
-
-          //we had it now
-          hasDocumentation = true;
-          this.documentation = e.text().trim();
-        } else {
-          throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Unexpected tag '"+e.prop("tagName")+"'). ", e);
-        }
-      }).bind(this));
-
-      //did we have the <value>
-      if(!hasValue){
-        throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Missing required <value> tag). ", this.xml.children());
-      }
-    } else if(this.type == KAT.model.Field.types.reference){
-      this.xml.children().each((function(i, e){
-        var e = $(e);
-
-        if(e.is("value")){
-
-          //did we have this already
-          if(hasValue){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <value> tag). ", e);
-          }
-
-          //no, so now store it.
-          hasValue = true;
-          me.value = e.text();
-        } else if(e.is("referencedType")){
-          //did we have this already?
-          if(hasValidation){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <referencedType> tag). ", e);
-          }
-
-          //no, so we can store it
-          hasValidation = true;
-          me.validation = e.text();
-
-        } else if(e.is("number")){
-          //did we have this already?
-          if(hasNumber){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <number> tag). ", e);
-          }
-
-          //ok, now store it
-          hasNumber = true;
-
-          //minimum
-          if(typeof e.attr("atleast")){
-            try{
-              me.minimum = parseInt(e.attr("atleast"));
-            } catch(f){
-              throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (atleast property must be a number). ", e);
-            }
-          }
-
-          //maximum
-          if(typeof e.attr("atmost")){
-            try{
-              me.maximum = parseInt(e.attr("atmost"));
-            } catch(f){
-              throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (atmost property must be a number). ", e);
-            }
-          }
-        } else if(e.is("documentation")){
-
-          //did we have this already?
-          if(hasDocumentation){
-            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <documentation> tag). ", e);
-          }
-
-          //we had it now
-          hasDocumentation = true;
-          this.documentation = e.text().trim();
-        } else {
-          throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Unexpected tag '"+e.prop("tagName")+"'). ", e);
-        }
-      }).bind(this));
-
-      //did we have the <value>
-      if(!hasValue){
-        throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Missing required <value> tag). ", this.xml.children());
-      }
-
-      //did we have <referencedType>
-      if(!hasValidation){
-        throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Missing required <referencedType> tag). ", this.xml.children());
-      }
-    } else if(this.type == KAT.model.Field.types.select){
-      //TODO: Implement select type
-      KAT.model.ParsingWarning("KAT.model.Field: KAT.model.Field.types.select currently unimplemented. ", this.xml);
+    } else {
+      this.validation = [];
     }
+
+    this.xml.children().each((function(i, e){
+      var e = $(e);
+
+      if(e.is("value")){
+
+        //did we have this already
+        if(hasValue){
+          throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <value> tag). ", e);
+        }
+
+        //no, so now store it.
+        hasValue = true;
+        this.value = e.text();
+      } else if(e.is("number")){
+        //did we have this already?
+        if(hasNumber){
+          throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <number> tag). ", e);
+        }
+
+        //ok, now store it
+        hasNumber = true;
+
+        //minimum
+        if(typeof e.attr("atleast")){
+          try{
+            this.minimum = parseInt(e.attr("atleast"));
+          } catch(f){
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (atleast property must be a number). ", e);
+          }
+        }
+
+        //maximum
+        if(typeof e.attr("atmost")){
+          try{
+            this.maximum = parseInt(e.attr("atmost"));
+          } catch(f){
+            throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (atmost property must be a number). ", e);
+          }
+        }
+      } else if(e.is("documentation")){
+
+        //did we have this already?
+        if(hasDocumentation){
+          throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <documentation> tag). ", e);
+        }
+
+        //we had it now
+        hasDocumentation = true;
+        this.documentation = e.text().trim();
+      } else if(e.is("default") && this.type == KAT.model.Field.types.text){
+        //did we have this already?
+        if(hasDefault){
+          throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <default> tag). ", e);
+        }
+
+        //no, so we can store it
+        hasDefault = true;
+        this.default = e.text();
+      } else if(e.is("validation") && this.type == KAT.model.Field.types.text){
+        //did we have this already?
+        if(hasValidation){
+          throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Double <validation> tag). ", e);
+        }
+
+        //no, so we can store it
+        hasValidation = true;
+        try{
+          this.validation = new RegExp(e.text());
+        } catch(f){
+          throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Unregonised regular expression). ", e);
+        }
+      } else if(e.is("referencedType") && this.type == KAT.model.Field.types.reference){
+        this.validation.push(e.text());
+      } else if(e.is("option") && this.type == KAT.model.Field.types.select){
+        this.validation.push(new KAT.model.Option(e, this));
+      } else {
+        throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Unexpected tag '"+e.prop("tagName")+"'). ", e);
+      }
+    }).bind(this));
+
+    //we did not have the value.
+    if(!hasValue){
+      this.value = this.name;
+    }
+
+    if(this.type == KAT.model.Field.types.select && this.validation.length == 0){
+      throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (KAT.model.Field.types.select must have a non-empty list of options. ). ", e);
+    }
+
+    //Check that value is unique
+    for(var i=0;i<this.concept.fields.length;i++){
+      if(this.concept.fields[i].value == this.value){
+        throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Value '"+this.value+"' already used by field '"+this.concept.fields[i].getFullName()+"'). ", this.xml);
+      }
+    }
+
+  }
+
+  /** Creates a new Option instance.
+  *
+  * @param {document} xml - XML document representing the option.
+  * @param {KAT.model.Field} field - field this option was declared in.
+  * @name KAT.model.Option
+  * @this {KAT.model.Option}
+  * @Alias KAT.model.Option
+  * @class
+  */
+  KAT.model.Option = function(xml, field){
+    //parse the XML
+    try{
+      /**
+      * XML document representing concept.
+      *
+      * @type {document}
+      * @name KAT.model.Option#xml
+      */
+      this.xml = jQuery(xml);
+    } catch(e){
+      throw new KAT.model.ParsingError("KAT.model.Option: Invalid XML (Unable to parse XML). ", this.xml);
+      return;
+    }
+
+    /**
+    * Field this concept was declared in.
+    *
+    * @type {Kat.model.Field}
+    * @name KAT.model.Option#field
+    */
+    this.field = field;
+
+    if(this.xml.find("value").length != 1){
+      throw new KAT.model.ParsingError("KAT.model.Option: Invalid XML (Expected exactly one <value>. )", this.xml);
+    }
+
+    /**
+    * Value for this option.
+    *
+    * @type {string}
+    * @name KAT.model.Option#value
+    */
+    this.value = this.xml.find("value").text();
+
+    //Check that value is unique
+    for(var i=0;i<this.field.validation.length;i++){
+      if(this.field.validation[i].value == this.value){
+        throw new KAT.model.ParsingError("KAT.model.Option: Invalid XML (Value '"+this.value+"' already used). ", this.xml);
+      }
+    }
+
+
+    if(this.xml.attr("default") == "true" || this.xml.attr("default") === true){
+      if(this.field.default !== ""){
+        throw new KAT.model.ParsingError("KAT.model.Option: Invalid XML (Default already exists)", this.xml);
+      }
+      this.field.default = this.value;
+    }
+
+    /**
+    * Documentation for this option.
+    *
+    * @type {string}
+    * @name KAT.model.Option#documentation
+    */
+    this.documentation = this.xml.find("documentation").text();
+
+    //check we do not have anything else.
+    if(this.xml.children().length > 2){
+      throw new KAT.model.ParsingError("KAT.model.Option: Invalid XML (Too many children. )", this.xml);
+    }
+
   }
 
   /**
@@ -931,7 +1018,7 @@ KAT.model = {};
     "text": "text"
   };
 
-  //Errors and warnings
+  //Errors
 
   /** Represents a parsing error.
   *
@@ -988,25 +1075,4 @@ KAT.model = {};
     IntermediateInheritor.prototype = Error.prototype;
     KAT.model.ParsingError.prototype = new IntermediateInheritor();
   })();
-
-  /** Represents a parsing warning.
-  *
-  * @param {string} message - Message of the warning.
-  * @param {document} xml_element - The XML node where the parsing warning occured.
-  * @name KAT.model.ParsingWarning
-  * @this {KAT.model.ParsingWarning}
-  * @Alias KAT.model.ParsingWarning
-  * @class
-  */
-  KAT.model.ParsingWarning = function (message, xml_element) {
-
-    if(xml_element instanceof jQuery){
-      var xml_element = xml_element.toArray();
-    }
-
-    if(console && console.warn){
-      console.warn(message, xml_element);
-    }
-  }
-
 })();
