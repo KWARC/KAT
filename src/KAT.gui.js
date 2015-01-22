@@ -294,7 +294,7 @@ KAT.gui.prototype.showNewAnnotationDialog = function(selection){
   //there is a dialog open
   this.flagDialogOpen = true;
 
-  this.createNewAnnotation()
+  this.createNewAnnotation(); 
 }
 
 /**

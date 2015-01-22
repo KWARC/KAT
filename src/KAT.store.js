@@ -40,6 +40,51 @@ KAT.storage.Store = function(gui){
   this.annotations = [];
 }
 
+/** Adds a new annotation to this Store.
+*
+* @param {object} selection - Selection of new Annotation.
+* @param {KAT.model.concept} concept - Concept of the new Annotation.
+* @returns {KAT.storage.Annotation} - the new annotation
+*
+* @function
+* @instance
+* @name addNew
+* @memberof KAT.storage.Store
+*/
+KAT.storage.Store.prototype.addNew = function(selection, concept){
+  //create new annotation.
+  var newAnnotation = KAT.storage.Annotation(this, KAT.storage.Store.UUID(), selection, concept );
+
+  //store it in this store.
+  this.annotations.push(newAnnotation);
+
+  //and return it.
+  return newAnnotation;
+}
+
+/** Returns an annotation if it exists.
+*
+* @param {string} uuid - UUID of annotation to find.
+* @returns {KAT.storage.Annotation|undefined} - The given annotation if found.
+*
+* @function
+* @instance
+* @name addNew
+* @memberof KAT.storage.Store
+*/
+KAT.storage.Store.prototype.find = function(uuid){
+
+  //look for the annotation by uuid.
+  for(var i=0;i<this.annotations.length;i++){
+    if(this.annotations[i].uuid == uuid){
+      return this.annotations[i];
+    }
+  }
+
+  //nope, we want undefined.
+  return undefined;
+}
+
 
 /** Performs a sanity check.
 *
@@ -61,7 +106,7 @@ KAT.storage.Store.prototype.sanityCheck = function(){
     }
   }
 
-  return false;
+  return true;
 }
 
 /**
@@ -82,71 +127,70 @@ KAT.storage.Store.UUID = function(){
   return code()+"-"+code()+"-"+code()+"-"+code();
 }
 
+/** Creates a new Annotation instance.
+*
+* @param {KAT.storage.Store} store - The store associated with this annotation.
+* @param {string} uuid - The uuid of this annotation.
+* @param {object} selection - The selection this annotation annotates.
+* @param {KAT.model.Concept} concept - concept this annotation represents.
+* @param {object|undefined} values - The values of this annotation. If undefined, sets the default values.
+*
+* @name KAT.storage.Annotation
+* @this {KAT.storage.Annotation}
+* @Alias KAT.storage.Annotation
+* @class
+*/
+KAT.storage.Annotation = function(store, uuid, selection, concept, values){
 
-KAT.storage.Annotation = function(selection, uuid, values){
+  /**
+  * The Store this annotation is stored in.
+  *
+  * @type {KAT.storage.Annotation}
+  * @name KAT.storage.Annotation#store
+  */
+  this.store = store;
 
   //Either use the provided uuid or generate a new one.
   var uuid = (typeof uuid == "string")?uuid:KAT.storage.Store.UUID();
 
+  //Check if we already have the uuid.
+  if(this.store.find(uuid)){
+    throw new Error("Annotation with given uuid already exists. ");
+    return;
+  }
+
+  /**
+  * UUID of this annotation.
+  *
+  * @type {string}
+  * @name KAT.storage.Annotation#uuid
+  */
+  this.uuid = uuid;
+
+  /**
+  * Selection of this annotation.
+  *
+  * @type {object}
+  * @name KAT.storage.Annotation#selection
+  */
+  this.selection = selection;
+
+  /**
+  * The concept this annotation represents.
+  *
+  * @type {KAT.model.Concept}
+  * @name KAT.storage.Annotation#concept
+  */
+  this.concept = concept;
+
   //Either use existing values or use the default.
   var values = (typeof values !== "undefined")?values:concept.getDefault();
 
-  //TODO: Check if uuid already exists.
-  //TODO: Create concept.
-
-  //Force the storing of values
-  //we ignore the validation here because it comes directly from the initalisation
-  //and should not cause any problems.
-  this.store(value. true);
-}
-
-KAT.storage.Annotation.prototype.store = function(values, force){
-
-  //sometimes we do not want to validate.
-  //because we might be loading from somewhere.
-  var force = (typeof force == "boolean")?force:false;
-
-  if(!force){
-  }
-
-  //validate the values to save
-  var validate = this.validate(values);
-
-  //nope it doesnt work like this.
-  if(validate){
-    throw new Error(validate);
-  }
-
-  //TODO: Store ontology
-}
-
-KAT.storage.Annotation.prototype.validate = function(values){
-  //TODO: Validate annotations.
-  //TODO: Load currently saved values if values is not there.
-  //Check if the values are correct
-  //if not return a message.
-
-
-  //This function will have the magic.
-  //and have a lot of code.
-  //well .... not that much really.
-}
-
-KAT.storage.Annotation.prototype.delete = function(){
-  //TODO: Delete this Annotation from the parent
-  //Unset all references.
-  //and re-run the sanity check.
-}
-
-KAT.storage.Annotation.prototype.show = function(){
-  //draw this element in the gui.
-}
-
-
-KAT.storage.Annotation.prototype.hide = function(){
-  //hide this annotation in the GUI
-}
-
-KAT.storage.Annotation.prototype.onHover = function(){
-  //TODO: Shwo hover GUI. 
+  /**
+  * The current values of this annotation, excluding selection.
+  *
+  * @type {object}
+  * @name KAT.storage.Annotation#values
+  */
+  this.values = values;
 }
