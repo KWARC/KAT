@@ -121,16 +121,20 @@
             </ul>
             <ul class="typedefs itemMembers">
             
+            <span class="subtitle">Typedefs</span>
+            
+                <li data-name="KAT.gui.DialogObject"><a href="KAT.gui.html#.DialogObject">DialogObject</a></li>
+            
             </ul>
             <ul class="methods itemMembers">
             
             <span class="subtitle">Methods</span>
             
-                <li data-name="KAT.gui.dialog"><a href="KAT.gui.html#dialog">dialog</a></li>
+                <li data-name="KAT.gui.dialog"><a href="KAT.gui.html#.dialog">dialog</a></li>
             
-                <li data-name="KAT.gui.getXPath"><a href="KAT.gui.html#getXPath">getXPath</a></li>
+                <li data-name="KAT.gui.getXPath"><a href="KAT.gui.html#.getXPath">getXPath</a></li>
             
-                <li data-name="KAT.gui.resolveXPath"><a href="KAT.gui.html#resolveXPath">resolveXPath</a></li>
+                <li data-name="KAT.gui.resolveXPath"><a href="KAT.gui.html#.resolveXPath">resolveXPath</a></li>
             
                 <li data-name="KAT.gui#closeBubble"><a href="KAT.gui.html#closeBubble">closeBubble</a></li>
             
@@ -200,7 +204,7 @@
             
             <span class="subtitle">Members</span>
             
-                <li data-name="KAT.model.Field.types"><a href="KAT.model.Field.html#types">types</a></li>
+                <li data-name="KAT.model.Field.types"><a href="KAT.model.Field.html#.types">types</a></li>
             
                 <li data-name="KAT.model.Field#concept"><a href="KAT.model.Field.html#concept">concept</a></li>
             
@@ -385,6 +389,8 @@
             
                 <li data-name="KAT.storage.Store#collection"><a href="KAT.storage.Store.html#collection">collection</a></li>
             
+                <li data-name="KAT.storage.Store#gui"><a href="KAT.storage.Store.html#gui">gui</a></li>
+            
             </ul>
             <ul class="typedefs itemMembers">
             
@@ -393,7 +399,7 @@
             
             <span class="subtitle">Methods</span>
             
-                <li data-name="KAT.storage.Store.UUID"><a href="KAT.storage.Store.html#UUID">UUID</a></li>
+                <li data-name="KAT.storage.Store.UUID"><a href="KAT.storage.Store.html#.UUID">UUID</a></li>
             
                 <li data-name="KAT.storage.Store#sanityCheck"><a href="KAT.storage.Store.html#sanityCheck">sanityCheck</a></li>
             
@@ -861,14 +867,14 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="dialog">
+        <h4 class="name" id=".dialog">
             
-            <span class="type-signature static">static</span>KAT.gui.dialog<span class="signature">(title, text, buttons, on_close)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{object}</span>
+            <span class="type-signature static">static</span>KAT.gui.dialog<span class="signature">(title, text, buttons, on_button)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{<a href="KAT.gui.html#.DialogObject">KAT.gui.DialogObject</a>}</span>
         </h4>
     
         
         <div class="tag-source">
-            KAT.gui.js, line 398
+            KAT.gui.js, line 405
         </div>
         
     </div>
@@ -979,7 +985,7 @@
 	
         <tr>
             
-                <td class="name"><code>on_close</code></td>
+                <td class="name"><code>on_button</code></td>
             
             
             <td class="type">
@@ -995,7 +1001,7 @@
             
             <td class="description last">
                 
-                callback on close.</td>
+                callback when presisng a button. Gets the text of the button and the index.</td>
         </tr>
 	
 	
@@ -1055,14 +1061,14 @@ a dialog element
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="getXPath">
+        <h4 class="name" id=".getXPath">
             
             <span class="type-signature static">static</span>KAT.gui.getXPath<span class="signature">(from, to)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{string}</span>
         </h4>
     
         
         <div class="tag-source">
-            KAT.gui.js, line 293
+            KAT.gui.js, line 300
         </div>
         
     </div>
@@ -1203,14 +1209,14 @@ the xPath
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="resolveXPath">
+        <h4 class="name" id=".resolveXPath">
             
             <span class="type-signature static">static</span>KAT.gui.resolveXPath<span class="signature">(from, path)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{document}</span>
         </h4>
     
         
         <div class="tag-source">
-            KAT.gui.js, line 356
+            KAT.gui.js, line 363
         </div>
         
     </div>
@@ -1358,7 +1364,7 @@ the element.
     
         
         <div class="tag-source">
-            KAT.gui.js, line 248
+            KAT.gui.js, line 256
         </div>
         
     </div>
@@ -1429,7 +1435,7 @@ the element.
     
         
         <div class="tag-source">
-            KAT.gui.js, line 154
+            KAT.gui.js, line 162
         </div>
         
     </div>
@@ -1500,7 +1506,7 @@ the element.
     
         
         <div class="tag-source">
-            KAT.gui.js, line 81
+            KAT.gui.js, line 89
         </div>
         
     </div>
@@ -1571,7 +1577,7 @@ the element.
     
         
         <div class="tag-source">
-            KAT.gui.js, line 176
+            KAT.gui.js, line 184
         </div>
         
     </div>
@@ -1687,7 +1693,7 @@ the element.
     
         
         <div class="tag-source">
-            KAT.gui.js, line 271
+            KAT.gui.js, line 279
         </div>
         
     </div>
@@ -1796,6 +1802,198 @@ the element.
     
     
     
+        <h3 class="subsection-title">Type Definitions</h3>
+        
+        <dl>
+                
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id=".DialogObject">KAT.gui.DialogObject<span class="type-signature type object">Object</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        A dialog object.
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+        <h5 class="subsection-title">Properties:</h5>
+        
+        <dl>
+
+<table class="props">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>$dialog</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">jQuery</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">The dialog element.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>$title</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">jQuery</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">The title element ( use .text() to change the title)</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>$content</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">jQuery</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">The content element (use .html() or equivalent to change content)</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>$buttons</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">jQuery</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">A list of button elements.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>close</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">When called, closed the dialog.</td>
+        </tr>
+	
+	
+	</tbody>
+</table></dl>
+        
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+            </dl>
+    
     
     
 </article>
@@ -1809,7 +2007,7 @@ the element.
         
 
         <footer>
-            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha11</a> on Fri Jan 09 2015 18:04:32 GMT+0100 (CET)
+            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha13</a> on Thu Jan 22 2015 12:26:45 GMT+0100 (CET)
         </footer>
     </div>
 </div>

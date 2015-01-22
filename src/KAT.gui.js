@@ -37,6 +37,14 @@ KAT.gui = function(element, ontologyCollection){
   this.collection = ontologyCollection;
 
   /**
+  * The ontologyCollection this editor can annotate.
+  *
+  * @type {KAT.model.OntologyCollection}
+  * @name KAT.gui#
+  */
+  this.collection = ontologyCollection;
+
+  /**
   * The element this editor is bound to.
   *
   * @type {jQuery}
@@ -286,8 +294,7 @@ KAT.gui.prototype.showNewAnnotationDialog = function(selection){
   //there is a dialog open
   this.flagDialogOpen = true;
 
-  console.log("NEW DIALOG");
-
+  this.createNewAnnotation()
 }
 
 /**
@@ -401,17 +408,15 @@ KAT.gui.resolveXPath = function(from, path){
 * @param {string} title - Title of dialog
 * @param {string} text - Content of dialogs
 * @param {string[]} buttons - Text of buttons
-* @param {function} on_close - callback on close.
+* @param {function} on_button - callback when presisng a button. Gets the text of the button and the index.
 *
-* @returns {object} - a dialog element
+* @returns {KAT.gui.DialogObject} - a dialog element
 * @function
 * @static
 * @name dialog
 * @memberof KAT.gui
 */
 KAT.gui.dialog = function(title, content, buttons, on_button){
-
-  //TODO: Documentation on $self. 
 
   var $self = {};
 
@@ -446,6 +451,7 @@ KAT.gui.dialog = function(title, content, buttons, on_button){
         $('<div class="modal-header>').append(
           $('<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>').click(function(){
             on_button.call($self, "", -1);
+            return false;
           }),
           $title
         ),
@@ -478,3 +484,13 @@ KAT.gui.dialog = function(title, content, buttons, on_button){
 
   return $self;
 }
+
+/**
+* A dialog object.
+* @typedef {Object} KAT.gui.DialogObject
+* @property {jQuery} $dialog - The dialog element.
+* @property {jQuery} $title - The title element ( use .text() to change the title)
+* @property {jQuery} $content - The content element (use .html() or equivalent to change content)
+* @property {jQuery} $buttons - A list of button elements.
+* @property {function} close - When called, closed the dialog.
+*/

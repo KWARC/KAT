@@ -7,19 +7,29 @@ KAT.storage = {}
 
 /** Creates a new Store instance.
 *
+* @param {KAT.gui} gui - Gui associated to this store.
+*
 * @name KAT.storage.Store
 * @this {KAT.storage.Store}
 * @Alias KAT.storage.Store
 * @class
 */
-KAT.storage.Store = function(ontologyCollection){
+KAT.storage.Store = function(gui){
   /**
   * OntologyCollection this store instance knows.
   *
   * @type {KAT.model.OntologyCollection}
   * @name KAT.storage.Store#collection
   */
-  this.collection = ontologyCollection;
+  this.collection = gui.collection;
+
+  /**
+  * The GUi associated to this Store.
+  *
+  * @type {KAT.gui}
+  * @name KAT.storage.Store#gui
+  */
+  this.gui = gui;
 
   /**
   * Stored annotations in this Store.
@@ -73,7 +83,7 @@ KAT.storage.Store.UUID = function(){
 }
 
 
-KAT.storage.Annotation = function(store, concept, uuid, values){
+KAT.storage.Annotation = function(selection, uuid, values){
 
   //Either use the provided uuid or generate a new one.
   var uuid = (typeof uuid == "string")?uuid:KAT.storage.Store.UUID();
@@ -82,6 +92,7 @@ KAT.storage.Annotation = function(store, concept, uuid, values){
   var values = (typeof values !== "undefined")?values:concept.getDefault();
 
   //TODO: Check if uuid already exists.
+  //TODO: Create concept.
 
   //Force the storing of values
   //we ignore the validation here because it comes directly from the initalisation
@@ -123,6 +134,19 @@ KAT.storage.Annotation.prototype.validate = function(values){
 
 KAT.storage.Annotation.prototype.delete = function(){
   //TODO: Delete this Annotation from the parent
-  //Unset all references. 
+  //Unset all references.
   //and re-run the sanity check.
+}
+
+KAT.storage.Annotation.prototype.show = function(){
+  //draw this element in the gui.
+}
+
+
+KAT.storage.Annotation.prototype.hide = function(){
+  //hide this annotation in the GUI
+}
+
+KAT.storage.Annotation.prototype.onHover = function(){
+  //TODO: Shwo hover GUI. 
 }
