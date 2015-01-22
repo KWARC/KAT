@@ -184,7 +184,7 @@ KAT.gui.prototype.deinit._01 = function(){
 /**
 * Shows a bubble.
 *
-* @param {Object} selection - current selection
+* @param {KAT.gui.selection} selection - current selection
 *
 * @function
 * @instance
@@ -225,7 +225,6 @@ KAT.gui.prototype.showBubble = function(selection){
   position.left = Math.max(0, position.left);
 
   //TODO: Check right, up, down
-
 
   //Create the bubble
   //and append it to the body
@@ -279,7 +278,7 @@ KAT.gui.prototype.closeBubble = function(){
 /**
 * Shows a new annotation dialog.
 *
-* @param {object} selection - Current selection
+* @param {KAT.gui.selection} selection - Current selection
 *
 * @function
 * @instance
@@ -294,7 +293,7 @@ KAT.gui.prototype.showNewAnnotationDialog = function(selection){
   //there is a dialog open
   this.flagDialogOpen = true;
 
-  this.createNewAnnotation(); 
+  this.createNewAnnotation();
 }
 
 /**
@@ -393,7 +392,6 @@ KAT.gui.resolveXPath = function(from, path){
 
     //woops, it's undefined
     if(element === undefined){
-      console.log(_element, part);
       return undefined;
     }
 
@@ -408,7 +406,7 @@ KAT.gui.resolveXPath = function(from, path){
 * @param {string} title - Title of dialog
 * @param {string} text - Content of dialogs
 * @param {string[]} buttons - Text of buttons
-* @param {function} on_button - callback when presisng a button. Gets the text of the button and the index.
+* @param {KAT.gui~buttonCallback} on_button - callback when presisng a button. Gets the text of the button and the index.
 *
 * @returns {KAT.gui.DialogObject} - a dialog element
 * @function
@@ -492,7 +490,7 @@ KAT.gui.dialog = function(title, content, buttons, on_button){
 * @param {string} query - Query the user should answer.
 * @param {string[]} options - Options available to the user.
 * @param {string[]|function} [descriptions] - Descriptions for each option or a callback that delivers a description.
-* @param {function} callback - callback when the dialog is closed.
+* @param {KAT.gui~selectCallback} callback - callback when the dialog is closed.
 *
 * @returns {KAT.gui.DialogObject} - the underlying dialog element.
 * @function
@@ -584,4 +582,31 @@ KAT.gui.selectDialog = function(title, query, options, descriptions, callback){
 * @property {jQuery} $content - The content element (use .html() or equivalent to change content)
 * @property {jQuery} $buttons - A list of button elements.
 * @property {function} close - When called, closed the dialog.
+*/
+
+
+/**
+* Represents a text selection.
+* @typedef {Object} KAT.gui.selection
+* @property {jQuery} within - XPath to smallest element the entire selection is contained in.
+* @property {string} start - XPath to the start element of the selection.
+* @property {number} startOffset - Offset in the start element where the selection begins.
+* @property {string} end - XPath to the end element of the selection.
+* @property {number} endOffset - Offset in the end element where the selection ends.
+*/
+
+
+/**
+* Called when a button is clicked.
+* @callback KAT.gui~buttonCallback
+* @param {string} selectedButton - Text of button selected or an empty string.
+* @param {number} selectedIndex - Index of button clicked or -1.
+*/
+
+
+/**
+* Called when a selection is made.
+* @callback KAT.gui~selectCallback
+* @param {string} selectedButton - Text of option selected or an empty string.
+* @param {number} selectedIndex - Index of option clicked or -1.
 */

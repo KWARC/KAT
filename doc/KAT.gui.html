@@ -125,6 +125,12 @@
             
                 <li data-name="KAT.gui.DialogObject"><a href="KAT.gui.html#.DialogObject">DialogObject</a></li>
             
+                <li data-name="KAT.gui.selection"><a href="KAT.gui.html#.selection">selection</a></li>
+            
+                <li data-name="KAT.gui~buttonCallback"><a href="KAT.gui.html#~buttonCallback">buttonCallback</a></li>
+            
+                <li data-name="KAT.gui~selectCallback"><a href="KAT.gui.html#~selectCallback">selectCallback</a></li>
+            
             </ul>
             <ul class="methods itemMembers">
             
@@ -911,7 +917,7 @@
     
         
         <div class="tag-source">
-            KAT.gui.js, line 405
+            KAT.gui.js, line 403
         </div>
         
     </div>
@@ -1028,7 +1034,7 @@
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type"><a href="KAT.gui.html#~buttonCallback">KAT.gui~buttonCallback</a></span>
 
 
             
@@ -1105,7 +1111,7 @@ a dialog element
     
         
         <div class="tag-source">
-            KAT.gui.js, line 300
+            KAT.gui.js, line 299
         </div>
         
     </div>
@@ -1253,7 +1259,7 @@ the xPath
     
         
         <div class="tag-source">
-            KAT.gui.js, line 363
+            KAT.gui.js, line 362
         </div>
         
     </div>
@@ -1401,7 +1407,7 @@ the element.
     
         
         <div class="tag-source">
-            KAT.gui.js, line 488
+            KAT.gui.js, line 486
         </div>
         
     </div>
@@ -1566,7 +1572,7 @@ the element.
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type"><a href="KAT.gui.html#~selectCallback">KAT.gui~selectCallback</a></span>
 
 
             
@@ -1648,7 +1654,7 @@ the underlying dialog element.
     
         
         <div class="tag-source">
-            KAT.gui.js, line 256
+            KAT.gui.js, line 255
         </div>
         
     </div>
@@ -1909,7 +1915,7 @@ the underlying dialog element.
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type"><a href="KAT.gui.html#.selection">KAT.gui.selection</a></span>
 
 
             
@@ -1977,7 +1983,7 @@ the underlying dialog element.
     
         
         <div class="tag-source">
-            KAT.gui.js, line 279
+            KAT.gui.js, line 278
         </div>
         
     </div>
@@ -2025,7 +2031,7 @@ the underlying dialog element.
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type"><a href="KAT.gui.html#.selection">KAT.gui.selection</a></span>
 
 
             
@@ -2276,6 +2282,472 @@ the underlying dialog element.
     
 </dd>
 
+            
+                
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id=".selection">KAT.gui.selection<span class="type-signature type object">Object</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Represents a text selection.
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+        <h5 class="subsection-title">Properties:</h5>
+        
+        <dl>
+
+<table class="props">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>within</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">jQuery</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">XPath to smallest element the entire selection is contained in.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>start</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">XPath to the start element of the selection.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>startOffset</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Offset in the start element where the selection begins.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>end</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">XPath to the end element of the selection.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>endOffset</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Offset in the end element where the selection ends.</td>
+        </tr>
+	
+	
+	</tbody>
+</table></dl>
+        
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+            
+                
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~buttonCallback">
+            
+            buttonCallback<span class="signature">(selectedButton, selectedIndex)</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            KAT.gui.js, line 599
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Called when a button is clicked.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>selectedButton</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                Text of button selected or an empty string.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>selectedIndex</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                Index of button clicked or -1.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+            
+                
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~selectCallback">
+            
+            selectCallback<span class="signature">(selectedButton, selectedIndex)</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            KAT.gui.js, line 607
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Called when a selection is made.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>selectedButton</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                Text of option selected or an empty string.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>selectedIndex</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                Index of option clicked or -1.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
             </dl>
     
     
@@ -2291,7 +2763,7 @@ the underlying dialog element.
         
 
         <footer>
-            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha13</a> on Thu Jan 22 2015 14:17:11 GMT+0100 (CET)
+            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha13</a> on Thu Jan 22 2015 14:26:14 GMT+0100 (CET)
         </footer>
     </div>
 </div>

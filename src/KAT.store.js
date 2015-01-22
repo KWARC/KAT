@@ -42,7 +42,7 @@ KAT.storage.Store = function(gui){
 
 /** Adds a new annotation to this Store.
 *
-* @param {object} selection - Selection of new Annotation.
+* @param {KAT.gui.selection} selection - Selection of new Annotation.
 * @param {KAT.model.concept} concept - Concept of the new Annotation.
 * @returns {KAT.storage.Annotation} - the new annotation
 *
@@ -131,7 +131,7 @@ KAT.storage.Store.UUID = function(){
 *
 * @param {KAT.storage.Store} store - The store associated with this annotation.
 * @param {string} uuid - The uuid of this annotation.
-* @param {object} selection - The selection this annotation annotates.
+* @param {KAT.gui.selection} selection - The selection this annotation annotates.
 * @param {KAT.model.Concept} concept - concept this annotation represents.
 * @param {object|undefined} values - The values of this annotation. If undefined, sets the default values.
 *
@@ -170,7 +170,7 @@ KAT.storage.Annotation = function(store, uuid, selection, concept, values){
   /**
   * Selection of this annotation.
   *
-  * @type {object}
+  * @type {KAT.gui.selection}
   * @name KAT.storage.Annotation#selection
   */
   this.selection = selection;
