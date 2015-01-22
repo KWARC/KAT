@@ -136,6 +136,8 @@
             
                 <li data-name="KAT.gui.resolveXPath"><a href="KAT.gui.html#.resolveXPath">resolveXPath</a></li>
             
+                <li data-name="KAT.gui.selectDialog"><a href="KAT.gui.html#.selectDialog">selectDialog</a></li>
+            
                 <li data-name="KAT.gui#closeBubble"><a href="KAT.gui.html#closeBubble">closeBubble</a></li>
             
                 <li data-name="KAT.gui#deinit"><a href="KAT.gui.html#deinit">deinit</a></li>
@@ -1357,6 +1359,253 @@ the element.
             
 <dt>
     <div class="nameContainer">
+        <h4 class="name" id=".selectDialog">
+            
+            <span class="type-signature static">static</span>KAT.gui.selectDialog<span class="signature">(title, query, options, <span class="optional">descriptions</span>, callback)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{<a href="KAT.gui.html#.DialogObject">KAT.gui.DialogObject</a>}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            KAT.gui.js, line 488
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates a new select dialog.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                Title of dialog</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>query</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                Query the user should answer.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                Options available to the user.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>descriptions</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+|
+
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                Descriptions for each option or a callback that delivers a description.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                callback when the dialog is closed.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+
+
+<h5>Returns:</h5>
+the underlying dialog element.
+<br />
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
         <h4 class="name" id="closeBubble">
             
             closeBubble<span class="signature">()</span>
@@ -2007,7 +2256,7 @@ the element.
         
 
         <footer>
-            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha13</a> on Thu Jan 22 2015 12:26:45 GMT+0100 (CET)
+            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha13</a> on Thu Jan 22 2015 12:55:27 GMT+0100 (CET)
         </footer>
     </div>
 </div>

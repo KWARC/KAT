@@ -486,6 +486,97 @@ KAT.gui.dialog = function(title, content, buttons, on_button){
 }
 
 /**
+* Creates a new select dialog.
+*
+* @param {string} title - Title of dialog
+* @param {string} query - Query the user should answer.
+* @param {string[]} options - Options available to the user.
+* @param {string[]|function} [descriptions] - Descriptions for each option or a callback that delivers a description.
+* @param {function} callback - callback when the dialog is closed.
+*
+* @returns {KAT.gui.DialogObject} - the underlying dialog element.
+* @function
+* @static
+* @name selectDialog
+* @memberof KAT.gui
+*/
+KAT.gui.selectDialog = function(title, query, options, descriptions, callback){
+  var selectedIndex = 0; //the currently selectedIndex
+  var options = options;
+  var descriptions = descriptions;
+  var callback = callback;
+  var redraw;
+
+  if(typeof descriptions == "function" && typeof callback == "undefined"){
+    callback = descriptions;
+    descriptions = function(){
+      return "";
+    }
+  }
+  if(Array.isArray(descriptions)){
+    var oldDescriptions = descriptions;
+    descriptions = function(text, index){
+      return oldDescriptions[index];
+    }
+  }
+
+  //build the dialog.
+  $self = KAT.gui.dialog(title, query, ["OK", "Cancel"], function(text, id){
+    //close the dialog.
+    $self.close();
+
+    if(id === 0){
+      callback.call($self, options[selectedIndex], selectedIndex)
+    } else {
+      //We canceled or just closed.
+      callback.call($self, "", -1);
+    }
+  });
+
+  var $span = $("<span>");
+  var $textspan = $("<span style='margin-left: 10px; '>");
+  var $ul = $('<ul class="dropdown-menu" role="menu">')
+
+  var $div = $("<div class='dropdown'>").append(
+    $('<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">').append(
+      $span,
+      '<span class="caret"></span>'
+    ),
+    $ul,
+    $textspan
+  );
+
+  $.each(options, function(i, e){
+    $ul.append(
+      $('<li role="presentation">').append(
+        $('<a role="menuitem" tabindex="-1" href="#">')
+        .text(e)
+        .click(function(){
+          selectedIndex = i;
+          redraw();
+        })
+      )
+    );
+  });
+
+  $self.$content.empty().append(
+    $("<h3>").text(query),
+    $div
+  );
+
+  //a drawing method.
+  redraw = function(){
+    $span.text(options[selectedIndex]);
+    $textspan.text(descriptions(options[selectedIndex], selectedIndex));
+  }
+
+  //and draw it again.
+  redraw();
+
+  return $self;
+}
+
+/**
 * A dialog object.
 * @typedef {Object} KAT.gui.DialogObject
 * @property {jQuery} $dialog - The dialog element.
