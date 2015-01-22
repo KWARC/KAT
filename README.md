@@ -4,14 +4,16 @@ KWARC Annotation Tool: An Annotation Tool for STEM Documents.
 
 Version 2.0, not yet finished. Documentation is currently being created.
 
-## OntologyModel
+## Documentation
 
-The concepts are stored in the following hierachical architecture:
+There is auto-generated documentation in the 'doc' subdirectory. You can re-generate it with:
+```
+rm -rf doc && jsdoc -c jsdoc.json
+```
 
-* KAT.model.OntologyCollection: A collection of ontologies. All references must remain within the OntologyCollection.
-* KAT.model.Ontology: A single ontology, containing several collections.
-* KAT.model.Concept: A single concept within an ontology
-* KAT.model.Field: A filed within a concept.
+## Compatibility
+
+The library has been tested on the latest Chrome and Firefox versions.
 
 ## License
 
