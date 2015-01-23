@@ -53,7 +53,7 @@ KAT.storage.Store = function(gui){
 */
 KAT.storage.Store.prototype.addNew = function(selection, concept){
   //create new annotation.
-  var newAnnotation = KAT.storage.Annotation(this, KAT.storage.Store.UUID(), selection, concept );
+  var newAnnotation = new KAT.storage.Annotation(this, KAT.storage.Store.UUID(), selection, concept );
 
   //store it in this store.
   this.annotations.push(newAnnotation);
@@ -202,6 +202,12 @@ KAT.storage.Annotation = function(store, uuid, selection, concept, values){
 * @memberof KAT.storage.Annotation
 */
 KAT.storage.Annotation.prototype.draw = function(){
-  //get the selection.
-  this.selection.start.css("backround-color", "yellow");
+  //find the elements in the selection.
+  var range = this.store.gui.getRange(this.selection);
+
+  //add a class for the selection.
+  range.addClass("KAT-selection");
+
+  //and return it - for now. 
+  return range;
 }

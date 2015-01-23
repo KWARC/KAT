@@ -2,7 +2,7 @@ $(function(){
     $.get("KAnnSpecs/omdoc-annotations.xml", function(xml){
       try{
         var collection = window.collection = new KAT.model.KAnnSpecCollection();
-        var KAnnSpec = collection.addNewKAnnSpec(xml);
+        var KAnnSpec = window.spec = collection.addNewKAnnSpec(xml);
 
         collection.init(); //intialise this store.
 
@@ -11,7 +11,8 @@ $(function(){
           //load the content
           var content = $("#content").html(data);
 
-          var gui = new KAT.gui(content, collection);
+          var gui = window.gui = new KAT.gui(content, collection);
+          var store = window.store = new KAT.storage.Store(gui);
 
         }, "html");
       } catch(e){

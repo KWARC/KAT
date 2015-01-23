@@ -56,13 +56,14 @@ KAT.gui = function(element, KAnnSpecCollection){
 */
 KAT.gui.prototype.getSelection = function(){
   var selection = window.getSelection().getRangeAt(0);
+  var theElement = this.element;
 
-  var within = KAT.gui.getXPath(theElement, selection.commonAncestorContainer);
+  var container = KAT.gui.getXPath(theElement, selection.commonAncestorContainer);
   var start = KAT.gui.getXPath(theElement, selection.startContainer.parentElement);
   var end = KAT.gui.getXPath(theElement, selection.endContainer.parentElement);
 
   return {
-    "within": within || start,
+    "container": container,
     "start": start,
     "startOffset": selection.startOffset,
     "end": end,
@@ -172,6 +173,39 @@ KAT.gui.resolveXPath = function(from, path){
   }
 
   return element;
+}
+
+/**
+* gets the list of contihuous elements in given selection.
+*
+* @param {KAT.gui.selection} selection - The selection to use.
+*
+* @returns {jQuery} list of elements.
+* @function
+* @instance
+* @name getSelection
+* @memberof KAT.gui
+*/
+KAT.gui.prototype.getRange = function(selection){
+
+  //get the container
+  var container = $(KAT.gui.resolveXPath(this.element, selection.container));
+
+  //and the elements inside
+  var containedElements = container.find("*").andSelf();
+
+  //find the start index
+  var startIndex = containedElements.index(
+    KAT.gui.resolveXPath(this.element, selection.start)
+  );
+
+  //find the start index
+  var endIndex = containedElements.index(
+    KAT.gui.resolveXPath(this.element, selection.end)
+  );
+
+  //now slice.
+  return containedElements.slice(startIndex, endIndex);
 }
 
 /**
@@ -362,7 +396,7 @@ KAT.gui.selectDialog = function(title, query, options, descriptions, callback){
 /**
 * Represents a text selection.
 * @typedef {Object} KAT.gui.selection
-* @property {jQuery} within - XPath to smallest element the entire selection is contained in.
+* @property {jQuery} container - XPath to smallest element the entire selection is contained in.
 * @property {string} start - XPath to the start element of the selection.
 * @property {number} startOffset - Offset in the start element where the selection begins.
 * @property {string} end - XPath to the end element of the selection.
