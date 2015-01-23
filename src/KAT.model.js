@@ -67,7 +67,6 @@ KAT.model = {};
   /** Creates a new KAnnSpec instance and adds it to this KAnnSpecCollection.
   *
   * @param {document} xml - XML document representing KAnnSpec.
-  * @param {string} name - Name of KAnnSpec to be created.
   *
   * @function
   * @instance
@@ -75,9 +74,8 @@ KAT.model = {};
   * @memberof KAT.model.KAnnSpecCollection
   * @return {KAT.model.KAnnSpec|boolean} - newly created KAnnSpec or false in case of errors
   */
-  KAT.model.KAnnSpecCollection.prototype.addNewKAnnSpec = function(xml, name){
-    //TODO: Remove name parameter
-    return this.addKAnnSpec(new KAT.model.KAnnSpec(xml, this, name));
+  KAT.model.KAnnSpecCollection.prototype.addNewKAnnSpec = function(xml){
+    return this.addKAnnSpec(new KAT.model.KAnnSpec(xml, this));
   }
 
   /** Initialises this KAnnSpecCollection. Should be called once all KAnnSpecs have been added.
@@ -133,7 +131,6 @@ KAT.model = {};
   }
 
   //regular expression for names string, may not have a capturing group
-  //TODO: Adapt this and mention it in the documentation.
   var nameRegExS = "(?:\\w|\\d|\\-|\\_|\\+)+";
 
   //regexes for strings
@@ -278,13 +275,12 @@ KAT.model = {};
   *
   * @param {document} xml - XML document representing KAnnSpec.
   * @param {KAT.model.KAnnSpecCollection} collection - KAnnSpec collection this KAnnSpec is declared in.
-  * @param {string} name - Name of this KAnnSpec
   * @name KAT.model.KAnnSpec
   * @this {KAT.model.KAnnSpec}
   * @Alias KAT.model.KAnnSpec
   * @class
   */
-  KAT.model.KAnnSpec = function(xml, collection, name){
+  KAT.model.KAnnSpec = function(xml, collection){
     var me = this;
 
     //parse the XML
@@ -301,25 +297,23 @@ KAT.model = {};
       return;
     }
 
-    //TODO: Parse name automatically from xml
+    //check the top level element
+    if(this.xml.children().length != 1 || !this.xml.children().eq(0).is("annotation")){
+      throw new KAT.model.ParsingError("KAT.model.KAnnSpec: Invalid XML (Expected exactly one top-level <annotation>). ", this.xml);
+      return;
+    }
+
     /**
     * Name of this KAnnSpec.
     *
     * @type {string}
     * @name KAT.model.KAnnSpec#name
     */
-    this.name = nameNormaliser(name);
+    this.name = nameNormaliser(this.xml.children().eq(0).attr("name"));
 
     //Check if the name is valid.
-    //TODO: Change error when using XML Node
-    if(!nameRegEx.test(this.name)){
+    if(!this.name || !nameRegEx.test(this.name)){
       throw new KAT.model.ParsingError("KAT.model.KAnnSpec: Unable to create KAnnSpec ('"+this.name+"' is not a valid name). ", this.xml);
-    }
-
-    //check the top level element
-    if(this.xml.children().length != 1 || !this.xml.children().eq(0).is("annotation")){
-      throw new KAT.model.ParsingError("KAT.model.KAnnSpec: Invalid XML (Expected exactly one top-level <annotation>). ", this.xml);
-      return;
     }
 
     //validate the sub tags

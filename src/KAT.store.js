@@ -194,3 +194,14 @@ KAT.storage.Annotation = function(store, uuid, selection, concept, values){
   */
   this.values = values;
 }
+/**
+* Draws an annotation to the text.
+*
+* @function
+* @name draw
+* @memberof KAT.storage.Annotation
+*/
+KAT.storage.Annotation.prototype.draw = function(){
+  //get the selection.
+  this.selection.start.css("backround-color", "yellow");
+}
