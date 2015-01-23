@@ -27,16 +27,6 @@
 
 FlancheJs.defineClass("kat.display.AnnotationEditForm", {
 
-    /**
-     * Description
-     * @method init
-     * @param {} annotation
-     * @param {} concept
-     * @param {} annotationRegistry
-     * @param {} conceptRegistry
-     * @param {} display
-     * @return 
-     */
     init: function (annotation, concept, annotationRegistry, conceptRegistry, display) {
         this.$annotation = annotation;
         this.$concept = concept;
@@ -52,11 +42,6 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
     },
 
     methods: {
-        /**
-         * Description
-         * @method run
-         * @return 
-         */
         run: function () {
             this._renderContainer();
             jQuery("#" + this.KContainerId).on("hidden", function () {
@@ -66,11 +51,6 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
     },
 
     internals: {
-        /**
-         * Description
-         * @method getAnnotationText
-         * @return BinaryExpression
-         */
         getAnnotationText: function () {
             var annotation = this.$annotation;
             var text = $("#" + annotation["$idBase"]).html();
@@ -79,11 +59,6 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
             }
             return "<span class='kat-annotation-text'>" + text + "</span>";
         },
-        /**
-         * Description
-         * @method renderContainer
-         * @return 
-         */
         renderContainer: function () {
             jQuery("#" + this.KContainerId).remove();
             var containerHtml = this.KModalTemplate.replace("{id}", this.KContainerId)
@@ -102,11 +77,6 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
             this._populateForm();
             this._registerSaveHandler(formParser);
         },
-        /**
-         * Description
-         * @method addFormDocumentation
-         * @return 
-         */
         addFormDocumentation: function () {
             var documentedItems = $(".annotation-form-edit-input").find("[data-documentation]");
             for (var i = 0; i < documentedItems.length; i++) {
@@ -123,11 +93,6 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
                 }
             }
         },
-        /**
-         * Description
-         * @method addFormExpandableInputs
-         * @return 
-         */
         addFormExpandableInputs: function () {
             var expandableItems = $(".annotation-form-edit-input").find("[data-atmost]");
             for (var i = 0; i < expandableItems.length; i++) {
@@ -152,11 +117,6 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
                 }
             }
         },
-        /**
-         * Description
-         * @method populateForm
-         * @return 
-         */
         populateForm: function () {
             for (var key in this.$annotation["$annotationValues"]) {
                 var values = this.$annotation["$annotationValues"][key].split(kat.Constants.Form.ValuesSeparator);
@@ -177,11 +137,6 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
                 }
             }
         },
-        /**
-         * Description
-         * @method registerDeleteHandler
-         * @return 
-         */
         registerDeleteHandler: function () {
             var self = this;
             $(".delete-kat-annotation").off("click.kat");
@@ -203,12 +158,6 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
                 })
             })
         },
-        /**
-         * Description
-         * @method registerSaveHandler
-         * @param {} formParser
-         * @return 
-         */
         registerSaveHandler: function (formParser) {
             var self = this;
             var form = $("#kat-form-save");
@@ -232,11 +181,6 @@ FlancheJs.defineClass("kat.display.AnnotationEditForm", {
                 })
             })
         },
-        /**
-         * Description
-         * @method destroy
-         * @return 
-         */
         destroy: function () {
             jQuery("#" + this.KContainerId).modal("hide");
             jQuery("#" + this.KContainerId).remove();

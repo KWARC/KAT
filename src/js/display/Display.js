@@ -23,16 +23,12 @@
  */
 
 /**
- * Class constructor
- * annotations to be displayed.
- * annotations bound.
- * @method Display
- * @param {Array} annotations The array of annotations to use. 
- * @param {} annotationRegistry annotationRegistry to use. 
- * @param {} conceptRegistry conceptRegistry to use. 
- * @param {String} specialClass The class to be added to the words having
- * @return 
- */
+* Class constructor
+* @param {Array[Object{idBase, idExtent, content}]} annotations The array of
+* annotations to be displayed.
+* @param {String} specialClass The class to be added to the words having
+* annotations bound.
+*/
 kat.Display = function (annotations, annotationRegistry, conceptRegistry, specialClass) {
   
   //init properties
@@ -50,61 +46,45 @@ kat.Display = function (annotations, annotationRegistry, conceptRegistry, specia
   this._conceptRegistry = conceptRegistry;
 }; 
 
-/**
- * Sets the annotations property
- * @method setAnnotations
- * @param {} annotations Value to set the property to. 
- * @return 
- */
+/*
+  Sets the annotations property
+*/
 kat.Display.prototype.setAnnotations = function(annotations){
   this.$annotations = annotations; 
 }
 
-/**
- * Gets the annotation property
- * @method getAnnotations
- * @return MemberExpression
- */
+/*
+  Gets the annotation property
+*/
 kat.Display.prototype.getAnnotations = function(){
   return this.$annotations; 
 }
 
 
-/**
- * Sets the specialClass property
- * @method setSpecialClass
- * @param {} specialClass Value to set the specialclass property to. 
- * @return 
- */
+/*
+  Sets the specialClass property
+*/
 kat.Display.prototype.setSpecialClass = function(specialClass){
   this.$specialClass = specialClass; 
 }
 
-/**
- * Gets the specialClass property
- * @method getSpecialClass
- * @return MemberExpression
- */
+/*
+  Gets the specialClass property
+*/
 kat.Display.prototype.getSpecialClass = function(){
   return this.$specialClass; 
 }
 
-/**
- * Adds an annotation to the display
- * @method addAnnotation
- * @param {} annotation Annotation to add. 
- * @return 
- */
+/*
+  Adds an annotation to the display
+*/
 kat.Display.prototype.addAnnotation = function (annotation) {
   this.$annotations.push(annotation);
 }; 
 
-/**
- * Removes an annotation from the display
- * @method deleteAnnotation
- * @param {} id Id of annotation to delete
- * @return 
- */
+/*
+  Removes an annotation from the display
+*/
 kat.Display.prototype.deleteAnnotation = function (id) {
 
   //find all annotations with the given id
@@ -116,11 +96,9 @@ kat.Display.prototype.deleteAnnotation = function (id) {
 
 };
 
-/**
- * Adds the class to the spans having annotations bound
- * @method addSpecialClassToSpans
- * @return 
- */
+/*
+  Adds the class to the spans having annotations bound
+*/
 kat.Display.prototype.addSpecialClassToSpans = function () {
 
   //iterate over the annotations
@@ -181,11 +159,9 @@ kat.Display.prototype.addSpecialClassToSpans = function () {
   }
 }; 
 
-/**
- * Creates Tooltip Displays. 
- * @method createTooltipDisplays
- * @return 
- */
+/*
+  Creates Tooltip Displays. 
+*/
 kat.Display.prototype.createTooltipDisplays = function () {
 
   var self = this; 
@@ -233,13 +209,9 @@ kat.Display.prototype.createTooltipDisplays = function () {
 
 }; 
 
-/**
- * Creates reference arrows between annotations
- * @method createReferenceArrow
- * @param {} currentAnnotation The current annotation to create a reference from. 
- * @param {} annotationId The id of the annoation to use. 
- * @return 
- */
+/*
+  Creates reference arrows between annotations
+*/
 kat.Display.prototype.createReferenceArrow = function (currentAnnotation, annotationId) {
   var self = this;
 
@@ -260,21 +232,17 @@ kat.Display.prototype.createReferenceArrow = function (currentAnnotation, annota
   });
 };
 
-/**
- * Encapsulates the behavior of the Display by adding classes to annotated spans and creating display handlers.
- * @method run
- * @return 
- */
+/*
+  Encapsulates the behavior of the Display by adding classes to annotated spans and creating display handlers.
+*/
 kat.Display.prototype.run = function () {
   this.addSpecialClassToSpans();
   this.createTooltipDisplays();
 }; 
 
-/**
- * Resets the display object. 
- * @method reset
- * @return 
- */
+/*
+  Resets the display object. 
+*/
 kat.Display.prototype.reset = function () {
 
   //remove the popovers
@@ -289,11 +257,9 @@ kat.Display.prototype.reset = function () {
 
 }; 
 
-/**
- * Updates the display
- * @method update
- * @return 
- */
+/*
+  Updates the display
+*/
 kat.Display.prototype.update = function () {
 
   //reset and rerun
@@ -302,12 +268,9 @@ kat.Display.prototype.update = function () {
 
 }; 
 
-/**
- * register Edit Annotation Callback
- * @method _registerEditAnnotationCallback
- * @param {} bubble A jQuery reference for the bubble to use. 
- * @return 
- */
+/*
+  register Edit Annotation Callback
+*/
 kat.Display.prototype._registerEditAnnotationCallback =  function (bubble) {
   var self = this;
 
@@ -329,12 +292,6 @@ kat.Display.prototype._registerEditAnnotationCallback =  function (bubble) {
   });
 }; 
 
-/**
- * Description
- * @method _registerCloseAnnotationCallback
- * @param {} bubble A jQuery reference for the bubble to use. 
- * @return 
- */
 kat.Display.prototype._registerCloseAnnotationCallback = function(bubble) {
   var self = this;
 

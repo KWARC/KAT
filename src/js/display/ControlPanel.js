@@ -20,12 +20,8 @@
 
 /**
  * Creates a KAT Control Panel. 
- * @method ControlPanel
- * @param {} ontologyRegistry ontologyRegistry to use
- * @param {} conceptRegistry conceptRegistry to use
- * @param {} annotationRegistry annotationRegistry to use. 
- * @return 
  */
+
 kat.display.ControlPanel = function(ontologyRegistry, conceptRegistry, annotationRegistry) {
     //Setup parameters  
     this._ontologyRegistry = ontologyRegistry;
@@ -39,11 +35,9 @@ kat.display.ControlPanel = function(ontologyRegistry, conceptRegistry, annotatio
 
 }; 
 
-/**
- * Shows the Control Panel. 
- * @method show
- * @return 
- */
+/*
+  Shows the Control Panel. 
+*/
 kat.display.ControlPanel.prototype.show =  function () {
   //self reference
   var self = this;

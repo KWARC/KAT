@@ -18,12 +18,10 @@
  * along with KAT.  If not, see <http://www.gnu.org/licenses/>
  */
 
+
+
 /**
  * Creates an svg arrow that can be used to connect two dom elements, for example a reference field annotation to the referenced item.
- * @method ArrowConnector
- * @param {} arrowBaseElement Base element to start arrow at. 
- * @param {} arrowHeadElement The element the head of the arrow should point to. 
- * @return 
  */
 kat.display.ArrowConnector = function(arrowBaseElement, arrowHeadElement){
 
@@ -34,23 +32,20 @@ kat.display.ArrowConnector = function(arrowBaseElement, arrowHeadElement){
 
 }
 
-/**
- * Renders the arrow represented by this class instance. 
- * @method render
- * @return 
- */
+/*
+    Renders the arrow represented by this class instance. 
+*/
 kat.display.ArrowConnector.prototype.render = function () {
     if (!this._connection) {
         this._createSVGArrow();
     }
 }
 
-/**
- * Removes the rendered arrow represented by this class instance. 
- * @method destroy
- * @return 
- */
+/*
+    Removes the rendered arrow represented by this class instance. 
+*/
 kat.display.ArrowConnector.prototype.destroy = function () {
+    // console.log("calldestroy"); 
     if (this._connection) {
         jsPlumb.detach(this._connection, {
             forceDetatch: true
@@ -59,11 +54,9 @@ kat.display.ArrowConnector.prototype.destroy = function () {
     }
 }
 
-/**
- * Creates the SVG object belonging to the arrow. 
- * @method _createSVGArrow
- * @return 
- */
+/*
+    Creates the SVG object belonging to the arrow. 
+*/
 kat.display.ArrowConnector.prototype._createSVGArrow = function () {
     this._connection = jsPlumb.connect({
         source: this._arrowBaseElement,
