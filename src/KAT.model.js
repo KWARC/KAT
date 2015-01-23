@@ -23,75 +23,75 @@
 KAT.model = {};
 
 (function(){
-  /** Creates a new OntologyCollection instance.
+  /** Creates a new KAnnSpecCollection instance.
   *
-  * @name KAT.model.OntologyCollection
-  * @this {KAT.model.OntologyCollection}
-  * @Alias KAT.model.OntologyCollection
+  * @name KAT.model.KAnnSpecCollection
+  * @this {KAT.model.KAnnSpecCollection}
+  * @Alias KAT.model.KAnnSpecCollection
   * @class
   */
-  KAT.model.OntologyCollection = function(){
+  KAT.model.KAnnSpecCollection = function(){
     /**
-    * Ontologies stored in this OntologyCollection
+    * KAnnSpecs stored in this KAnnSpecCollection
     *
-    * @type {KAT.model.Ontology[]}
-    * @name KAT.model.OntologyCollection#ontologies
+    * @type {KAT.model.KAnnSpec[]}
+    * @name KAT.model.KAnnSpecCollection#KAnnSpecs
     */
-    this.ontologies = [];
+    this.KAnnSpecs = [];
   }
 
-  /** Adds an onology to this OntologyCollection.
+  /** Adds an onology to this KAnnSpecCollection.
   *
-  * @param {KAT.model.Ontology} ontology - Ontology to add
+  * @param {KAT.model.KAnnSpec} KAnnSpec - KAnnSpec to add
   *
   * @function
   * @instance
-  * @name addOntology
-  * @memberof KAT.model.OntologyCollection
-  * @return {KAT.model.Ontology|boolean} - newly added ontology or false in case of errors
+  * @name addKAnnSpec
+  * @memberof KAT.model.KAnnSpecCollection
+  * @return {KAT.model.KAnnSpec|boolean} - newly added KAnnSpec or false in case of errors
   */
-  KAT.model.OntologyCollection.prototype.addOntology = function(ontology){
+  KAT.model.KAnnSpecCollection.prototype.addKAnnSpec = function(KAnnSpec){
 
     //check if we already have it.
-    if(this.getOntology(ontology.name)){
+    if(this.getKAnnSpec(KAnnSpec.name)){
       return false;
     }
 
-    //push the ontology
-    this.ontologies.push(ontology);
+    //push the KAnnSpec
+    this.KAnnSpecs.push(KAnnSpec);
 
     //and return it.
-    return ontology;
+    return KAnnSpec;
   }
 
-  /** Creates a new Ontology instance and adds it to this OntologyCollection.
+  /** Creates a new KAnnSpec instance and adds it to this KAnnSpecCollection.
   *
-  * @param {document} xml - XML document representing ontology.
-  * @param {string} name - Name of ontology to be created.
+  * @param {document} xml - XML document representing KAnnSpec.
+  * @param {string} name - Name of KAnnSpec to be created.
   *
   * @function
   * @instance
-  * @name addNewOntology
-  * @memberof KAT.model.OntologyCollection
-  * @return {KAT.model.Ontology|boolean} - newly created ontology or false in case of errors
+  * @name addNewKAnnSpec
+  * @memberof KAT.model.KAnnSpecCollection
+  * @return {KAT.model.KAnnSpec|boolean} - newly created KAnnSpec or false in case of errors
   */
-  KAT.model.OntologyCollection.prototype.addNewOntology = function(xml, name){
+  KAT.model.KAnnSpecCollection.prototype.addNewKAnnSpec = function(xml, name){
     //TODO: Remove name parameter
-    return this.addOntology(new KAT.model.Ontology(xml, this, name));
+    return this.addKAnnSpec(new KAT.model.KAnnSpec(xml, this, name));
   }
 
-  /** Initialises this OntologyCollection. Should be called once all Ontologies have been added.
+  /** Initialises this KAnnSpecCollection. Should be called once all KAnnSpecs have been added.
   *
   * @function
   * @instance
   * @name init
-  * @memberof KAT.model.OntologyCollection
-  * @return {KAT.model.Ontology} - this ontology store
+  * @memberof KAT.model.KAnnSpecCollection
+  * @return {KAT.model.KAnnSpec} - this KAnnSpec store
   */
-  KAT.model.OntologyCollection.prototype.init = function(){
+  KAT.model.KAnnSpecCollection.prototype.init = function(){
     //iterate over the fields
     //this may take a while
-    for(var i=0;i<this.ontologies.length;i++){
+    for(var i=0;i<this.KAnnSpecs.length;i++){
       (function(){
         for(var j=0;j<this.concepts.length;j++){
           (function(){
@@ -106,12 +106,12 @@ KAT.model = {};
                       name = name.getFullName();
                     }
 
-                    //find the concept, try it within this ontology first
-                    var concept = this.concept.ontology.getConcept(name);
+                    //find the concept, try it within this KAnnSpec first
+                    var concept = this.concept.KAnnSpec.getConcept(name);
 
-                    //and then do it in the ontologyCollection
+                    //and then do it in the KAnnSpecCollection
                     if(!concept){
-                      concept = this.concept.ontology.collection.getConcept(name);
+                      concept = this.concept.KAnnSpec.collection.getConcept(name);
                     }
 
                     if(!concept){
@@ -126,7 +126,7 @@ KAT.model = {};
             }
           }).call(this.concepts[j]);
         }
-      }).call(this.ontologies[i]);
+      }).call(this.KAnnSpecs[i]);
     }
 
     return this;
@@ -149,17 +149,17 @@ KAT.model = {};
 
 
   /**
-  * Finds an ontology by name.
+  * Finds an KAnnSpec by name.
   *
-  * @param {string} name - Name of ontology to search for.
+  * @param {string} name - Name of KAnnSpec to search for.
   *
   * @function
   * @instance
-  * @name getOntology
-  * @memberof KAT.model.OntologyCollection
-  * @return {KAT.model.Ontology|boolean} - the ontology searched for or false.
+  * @name getKAnnSpec
+  * @memberof KAT.model.KAnnSpecCollection
+  * @return {KAT.model.KAnnSpec|boolean} - the KAnnSpec searched for or false.
   */
-  KAT.model.OntologyCollection.prototype.getOntology = function(name){
+  KAT.model.KAnnSpecCollection.prototype.getKAnnSpec = function(name){
     //normalise the name
     var name = nameNormaliser(name);
 
@@ -168,9 +168,9 @@ KAT.model = {};
     }
 
     //Search for the name
-    for(var i=0;i<this.ontologies.length;i++){
-      if(this.ontologies[i].name == name){
-        return this.ontologies[i];
+    for(var i=0;i<this.KAnnSpecs.length;i++){
+      if(this.KAnnSpecs[i].name == name){
+        return this.KAnnSpecs[i];
       }
     }
 
@@ -181,15 +181,15 @@ KAT.model = {};
   /**
   * Finds a concept by name.
   *
-  * @param {string} name - Name of concept to search for. Should be of the form OntologyName.ConceptName
+  * @param {string} name - Name of concept to search for. Should be of the form KAnnSpecName.ConceptName
   *
   * @function
   * @instance
   * @name getConcept
-  * @memberof KAT.model.OntologyCollection
+  * @memberof KAT.model.KAnnSpecCollection
   * @return {KAT.model.Concept|boolean} - the concept searched for or false.
   */
-  KAT.model.OntologyCollection.prototype.getConcept = function(name){
+  KAT.model.KAnnSpecCollection.prototype.getConcept = function(name){
     //normalise the name
     var name = nameNormaliser(name);
 
@@ -200,33 +200,33 @@ KAT.model = {};
     //match the name regex
     var name = name.match(nameRegEx2);
 
-    //get the ontology
-    var ontology = this.getOntology(name[1]);
+    //get the KAnnSpec
+    var KAnnSpec = this.getKAnnSpec(name[1]);
 
-    if(!ontology){
+    if(!KAnnSpec){
       return false;
     }
 
     //get the concept
-    return ontology.getConcept(name[2]);
+    return KAnnSpec.getConcept(name[2]);
   }
 
   /**
-  * Finds all concepts in this OntologyCollection
+  * Finds all concepts in this KAnnSpecCollection
   *
   *
   * @function
   * @instance
-  * @name getOntology
-  * @memberof KAT.model.OntologyCollection
+  * @name getKAnnSpec
+  * @memberof KAT.model.KAnnSpecCollection
   * @return {Kat.model.Concept[]} - concepts found
   */
-  KAT.model.OntologyCollection.prototype.findConcepts = function(){
+  KAT.model.KAnnSpecCollection.prototype.findConcepts = function(){
     var concepts = [];
 
-    for(var i=0;i<this.ontologies.length;i++){
-      for(var j=0;j<this.ontologies[i].concepts.length;j++){
-        concepts.push(this.ontologies[i].concepts[j]);
+    for(var i=0;i<this.KAnnSpecs.length;i++){
+      for(var j=0;j<this.KAnnSpecs[i].concepts.length;j++){
+        concepts.push(this.KAnnSpecs[i].concepts[j]);
       }
     }
 
@@ -236,15 +236,15 @@ KAT.model = {};
   /**
   * Finds a field by name.
   *
-  * @param {string} name - Name of field to search for. Should be of the form OntologyName.ConceptName.FieldName
+  * @param {string} name - Name of field to search for. Should be of the form KAnnSpecName.ConceptName.FieldName
   *
   * @function
   * @instance
   * @name getField
-  * @memberof KAT.model.OntologyCollection
+  * @memberof KAT.model.KAnnSpecCollection
   * @return {KAT.model.Field|boolean} - the field searched for or false.
   */
-  KAT.model.OntologyCollection.prototype.getField = function(name){
+  KAT.model.KAnnSpecCollection.prototype.getField = function(name){
     //normalise the name
     var name = nameNormaliser(name);
 
@@ -255,15 +255,15 @@ KAT.model = {};
     //match the name regex
     var name = name.match(nameRegEx3);
 
-    //get the ontology
-    var ontology = this.getOntology(name[1]);
+    //get the KAnnSpec
+    var KAnnSpec = this.getKAnnSpec(name[1]);
 
-    if(!ontology){
+    if(!KAnnSpec){
       return false;
     }
 
     //get the concept
-    var concept = ontology.getConcept(name[2]);
+    var concept = KAnnSpec.getConcept(name[2]);
 
     if(!concept){
       return false;
@@ -274,51 +274,51 @@ KAT.model = {};
   }
 
 
-  /** Creates a new Ontology instance.
+  /** Creates a new KAnnSpec instance.
   *
-  * @param {document} xml - XML document representing ontology.
-  * @param {KAT.model.OntologyCollection} collection - Ontology collection this ontology is declared in.
-  * @param {string} name - Name of this ontology
-  * @name KAT.model.Ontology
-  * @this {KAT.model.Ontology}
-  * @Alias KAT.model.Ontology
+  * @param {document} xml - XML document representing KAnnSpec.
+  * @param {KAT.model.KAnnSpecCollection} collection - KAnnSpec collection this KAnnSpec is declared in.
+  * @param {string} name - Name of this KAnnSpec
+  * @name KAT.model.KAnnSpec
+  * @this {KAT.model.KAnnSpec}
+  * @Alias KAT.model.KAnnSpec
   * @class
   */
-  KAT.model.Ontology = function(xml, collection, name){
+  KAT.model.KAnnSpec = function(xml, collection, name){
     var me = this;
 
     //parse the XML
     try{
       /**
-      * XML document representing ontology.
+      * XML document representing KAnnSpec.
       *
       * @type {document}
-      * @name KAT.model.Ontology#xml
+      * @name KAT.model.KAnnSpec#xml
       */
       this.xml = jQuery(xml);
     } catch(e){
-      throw new KAT.model.ParsingError("KAT.model.Ontology: Invalid XML (Unable to parse XML). ", this.xml);
+      throw new KAT.model.ParsingError("KAT.model.KAnnSpec: Invalid XML (Unable to parse XML). ", this.xml);
       return;
     }
 
     //TODO: Parse name automatically from xml
     /**
-    * Name of this ontology.
+    * Name of this KAnnSpec.
     *
     * @type {string}
-    * @name KAT.model.Ontology#name
+    * @name KAT.model.KAnnSpec#name
     */
     this.name = nameNormaliser(name);
 
     //Check if the name is valid.
     //TODO: Change error when using XML Node
     if(!nameRegEx.test(this.name)){
-      throw new KAT.model.ParsingError("KAT.model.Ontology: Unable to create ontology ('"+this.name+"' is not a valid name). ", this.xml);
+      throw new KAT.model.ParsingError("KAT.model.KAnnSpec: Unable to create KAnnSpec ('"+this.name+"' is not a valid name). ", this.xml);
     }
 
     //check the top level element
     if(this.xml.children().length != 1 || !this.xml.children().eq(0).is("annotation")){
-      throw new KAT.model.ParsingError("KAT.model.Ontology: Invalid XML (Expected exactly one top-level <annotation>). ", this.xml);
+      throw new KAT.model.ParsingError("KAT.model.KAnnSpec: Invalid XML (Expected exactly one top-level <annotation>). ", this.xml);
       return;
     }
 
@@ -326,30 +326,30 @@ KAT.model = {};
     var annotRoot = this.xml.children().eq(0);
 
     if(annotRoot.children().length <= 1 || !annotRoot.children().eq(0).is("documentation")){
-      throw new KAT.model.ParsingError("KAT.model.Ontology: Invalid XML for ontology '"+this.getFullName()+"' (Expected exactly one <documentation>). ", annotRoot);
+      throw new KAT.model.ParsingError("KAT.model.KAnnSpec: Invalid XML for KAnnSpec '"+this.getFullName()+"' (Expected exactly one <documentation>). ", annotRoot);
     }
 
     /**
-    * OntologyCollection this Ontology belongs to.
+    * KAnnSpecCollection this KAnnSpec belongs to.
     *
-    * @type {KAT.model.OntologyCollection}
-    * @name KAT.model.Ontology#collection
+    * @type {KAT.model.KAnnSpecCollection}
+    * @name KAT.model.KAnnSpec#collection
     */
     this.collection = collection;
 
     /**
-    * Documentation for this ontology.
+    * Documentation for this KAnnSpec.
     *
     * @type {string}
-    * @name KAT.model.Ontology#documentation
+    * @name KAT.model.KAnnSpec#documentation
     */
     this.documentation = annotRoot.children().eq(0).text().trim();
 
     /**
-    * Concepts defined in this ontology.
+    * Concepts defined in this KAnnSpec.
     *
     * @type {KAT.model.Concept[]}
-    * @name KAT.model.Ontology#concepts
+    * @name KAT.model.KAnnSpec#concepts
     */
     this.concepts = [];
 
@@ -357,7 +357,7 @@ KAT.model = {};
     annotRoot.children().slice(1).each((function(i, e){
       var e = $(e);
       if(!e.is("concept")){
-        throw new KAT.model.ParsingError("KAT.model.Ontology: Invalid XML for ontology '"+this.getFullName()+"' (Expected child tag <concept>). ", e);
+        throw new KAT.model.ParsingError("KAT.model.KAnnSpec: Invalid XML for KAnnSpec '"+this.getFullName()+"' (Expected child tag <concept>). ", e);
       }
 
       //and add them to the right thing.
@@ -367,15 +367,15 @@ KAT.model = {};
   }
 
   /**
-  * Gets the full name of this ontology.
+  * Gets the full name of this KAnnSpec.
   *
   * @function
   * @instance
   * @name getFullName
-  * @memberof KAT.model.Ontology
-  * @return {string} - full Name of this ontology
+  * @memberof KAT.model.KAnnSpec
+  * @return {string} - full Name of this KAnnSpec
   */
-  KAT.model.Ontology.prototype.getFullName = function(){
+  KAT.model.KAnnSpec.prototype.getFullName = function(){
     return this.name;
   }
 
@@ -387,10 +387,10 @@ KAT.model = {};
   * @function
   * @instance
   * @name getConcept
-  * @memberof KAT.model.Ontology
+  * @memberof KAT.model.KAnnSpec
   * @return {KAT.model.Concept|boolean} - the concept searched for or false.
   */
-  KAT.model.Ontology.prototype.getConcept = function(name){
+  KAT.model.KAnnSpec.prototype.getConcept = function(name){
     //normalise the name
     var name = nameNormaliser(name);
 
@@ -417,10 +417,10 @@ KAT.model = {};
   * @function
   * @instance
   * @name getField
-  * @memberof KAT.model.Ontology
+  * @memberof KAT.model.KAnnSpec
   * @return {KAT.model.Field|boolean} - the field searched for or false.
   */
-  KAT.model.Ontology.prototype.getField = function(name){
+  KAT.model.KAnnSpec.prototype.getField = function(name){
     //normalise the name
     var name = nameNormaliser(name);
 
@@ -446,13 +446,13 @@ KAT.model = {};
   /** Creates a new Concept instance.
   *
   * @param {document} xml - XML document representing the concept.
-  * @param {KAT.model.Ontology} ontology - Ontology this concept was declared in.
+  * @param {KAT.model.KAnnSpec} KAnnSpec - KAnnSpec this concept was declared in.
   * @name KAT.model.Concept
   * @this {KAT.model.Concept}
   * @Alias KAT.model.Concept
   * @class
   */
-  KAT.model.Concept = function(xml, ontology){
+  KAT.model.Concept = function(xml, KAnnSpec){
     var me = this;
 
     //parse the XML
@@ -470,12 +470,12 @@ KAT.model = {};
     }
 
     /**
-    * Ontology this concept was declared in.
+    * KAnnSpec this concept was declared in.
     *
     * @type {document}
-    * @name KAT.model.Concept#ontology
+    * @name KAT.model.Concept#KAnnSpec
     */
-    this.ontology = ontology;
+    this.KAnnSpec = KAnnSpec;
 
     //and name
     if(typeof this.xml.attr("name") != "string"){
@@ -496,7 +496,7 @@ KAT.model = {};
     }
 
     //Check if this concept already exists
-    if(this.ontology.getConcept(this.name)){
+    if(this.KAnnSpec.getConcept(this.name)){
       throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Concept '"+this.getFullName()+"' already exists). ", this.xml);
     }
 
@@ -644,7 +644,7 @@ KAT.model = {};
   * @return {string} - full Name of this concept
   */
   KAT.model.Concept.prototype.getFullName = function(){
-    return this.ontology.getFullName()+"."+this.name;
+    return this.KAnnSpec.getFullName()+"."+this.name;
   }
 
   /**
@@ -680,7 +680,7 @@ KAT.model = {};
   /** Creates a new Field instance.
   *
   * @param {document} xml - XML document representing the field.
-  * @param {KAT.model.Ontology} concept - concept this field was declared in.
+  * @param {KAT.model.KAnnSpec} concept - concept this field was declared in.
   * @name KAT.model.Field
   * @this {KAT.model.Field}
   * @Alias KAT.model.Field

@@ -16,9 +16,9 @@ KAT.storage = {}
 */
 KAT.storage.Store = function(gui){
   /**
-  * OntologyCollection this store instance knows.
+  * KAnnSpecCollection this store instance knows.
   *
-  * @type {KAT.model.OntologyCollection}
+  * @type {KAT.model.KAnnSpecCollection}
   * @name KAT.storage.Store#collection
   */
   this.collection = gui.collection;

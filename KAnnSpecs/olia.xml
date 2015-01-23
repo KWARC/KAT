@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--     Penn Tree Bank Annotation Ontology for KAT, generated from
+<!--     Penn Tree Bank Annotation KAnnSpec for KAT, generated from
    http://acoli.cs.uni-frankfurt.de/resources/olia/penn.owl --> 
 
 <annotation  name="OLiA"
     xmlns="https://github.com/KWARC/KAT/"  
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:o="http://omdoc.org/ontology#">
+    xmlns:o="http://omdoc.org/KAnnSpec#">
   <documentation>
     OLiA Annotation Model for Penn Treebank (PTB) part-of-speech annotation (Santorini 1990)
 

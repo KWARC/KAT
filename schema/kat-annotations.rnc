@@ -1,4 +1,4 @@
-# A RelaxNG Schema for KAT annotation ontologies
+# A RelaxNG Schema for KAT annotation KAnnSpecs
 # (c) 2013 Michael Kohlhase, released under the GNU Public License (GPL)
 
 default namespace kat = "https://github.com/KWARC/KAT/"
@@ -9,7 +9,7 @@ name.att = attribute name {text}
 type.att = attribute type {text}
 src.att = attribute src {xsd:anyURI}
 
-## an annotation ontology for mathematical documents.
+## an annotation KAnnSpec for mathematical documents.
 annotation = element annotation {name.att & concept* & documentation?}
 
 ## it can be documented (e.g. in HTML) or by a reference to a documentation page

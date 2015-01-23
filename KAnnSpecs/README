@@ -1,13 +1,13 @@
-Annotation ontologies for the KAT system.
+Annotation KAnnSpecs for the KAT system.
 =========================================
 
-Annotation Ontologies: 
-omdoc-annotations.xml: the OMDoc annotation ontology (see http://omdoc.org)
+Annotation KAnnSpecs: 
+omdoc-annotations.xml: the OMDoc annotation KAnnSpec (see http://omdoc.org)
 olia.xml:              OLiA Annotation Model for Penn Treebank part-of-speech annotation. 
 stanford.xml:          OLiA Annotation Model for Stanford Parser Dependency Labels
 
-The OMDoc annotation ontology is hand-written and uses most of the KAT features. The
-latter two are generated from existing linguistic ontologies.
+The OMDoc annotation KAnnSpec is hand-written and uses most of the KAT features. The
+latter two are generated from existing linguistic KAnnSpecs.
 
 Auxiliary files:
 schemas.xml:           allows RelaxNG schema validation with nxml-mode

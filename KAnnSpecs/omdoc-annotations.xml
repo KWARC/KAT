@@ -7,9 +7,9 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 <annotation name="OMDoc"
 	xmlns="https://github.com/KWARC/KAT/"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:o="http://omdoc.org/ontology#">
+	xmlns:o="http://omdoc.org/KAnnSpec#">
 	<documentation>
-		The OMDoc ontology is a flexiformal data model for mathematical (and general STEM) documents
+		The OMDoc KAnnSpec is a flexiformal data model for mathematical (and general STEM) documents
 	</documentation>
 	<concept name="Symbol">
 		<documentation>An OpenMath/OMDoc Symbol</documentation>
@@ -27,7 +27,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 		</display>
 		<rdf:RDF>
 			<rdf:Description>
-				<rdf:type rdf:resource="http://omdoc.org/ontology#Symbol"/>
+				<rdf:type rdf:resource="http://omdoc.org/KAnnSpec#Symbol"/>
 				<o:symbolname>{name}</o:symbolname>
 			</rdf:Description>
 		</rdf:RDF>
@@ -64,7 +64,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 		</display>
 		<rdf:RDF>
 			<rdf:Description>
-				<rdf:type rdf:resource="http://omdoc.org/ontology#GeneralDefinition"/>
+				<rdf:type rdf:resource="http://omdoc.org/KAnnSpec#GeneralDefinition"/>
 				<o:defines rdf:resource="{for}"/>
 			</rdf:Description>
 		</rdf:RDF>
@@ -112,7 +112,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 		</display>
 		<rdf:RDF>
 			<rdf:Description>
-				<rdf:type rdf:resource="http://omdoc.org/ontology#Assertion"/>
+				<rdf:type rdf:resource="http://omdoc.org/KAnnSpec#Assertion"/>
 				<o:assertiontype>{type}</o:assertiontype>
 				<!-- *** this does not exist yet *** -->
 			</rdf:Description>
@@ -150,7 +150,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 		</display>
 		<rdf:RDF>
 			<rdf:Description>
-				<rdf:type rdf:resource="http://omdoc.org/ontology#Declaration"/>
+				<rdf:type rdf:resource="http://omdoc.org/KAnnSpec#Declaration"/>
 				<!-- *** this does not exist yet! *** -->
 				<!-- *** how to add the declaration type? *** -->
 			</rdf:Description>
@@ -168,7 +168,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 		</display>
 		<rdf:RDF>
 			<rdf:Description>
-				<rdf:type rdf:resource="http://omdoc.org/ontology#Reference"/>
+				<rdf:type rdf:resource="http://omdoc.org/KAnnSpec#Reference"/>
 				<!-- *** this does not exist yet! *** -->
 				<o:references rdf:resource="{declaration}"/>
 				<!-- *** this does not exist yet! *** -->
@@ -201,7 +201,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 		</display>
 		<rdf:RDF>
 			<rdf:Description>
-				<rdf:type rdf:resource="http://omdoc.org/ontology#{type}"/>
+				<rdf:type rdf:resource="http://omdoc.org/KAnnSpec#{type}"/>
 			</rdf:Description>
 		</rdf:RDF>
 	</concept>
@@ -226,7 +226,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 		</display>
 		<rdf:RDF>
 			<rdf:Description>
-				<rdf:type rdf:resource="http://omdoc.org/ontology#Proof"/>
+				<rdf:type rdf:resource="http://omdoc.org/KAnnSpec#Proof"/>
 				<o:proves rdf:resource="{proof}"/>
 			</rdf:Description>
 		</rdf:RDF>
@@ -251,7 +251,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 		</display>
 		<rdf:RDF>
 			<rdf:Description>
-				<rdf:type rdf:resource="http://omdoc.org/ontology#Theory"/>
+				<rdf:type rdf:resource="http://omdoc.org/KAnnSpec#Theory"/>
 				<o:imports rdf:resource="{imports}"/>
 			</rdf:Description>
 		</rdf:RDF>
@@ -280,7 +280,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 		</display>
 		<rdf:RDF>
 			<rdf:Description>
-				<rdf:type rdf:resource="http://omdoc.org/ontology#View"/>
+				<rdf:type rdf:resource="http://omdoc.org/KAnnSpec#View"/>
 				<!-- *** this does not exist yet! *** -->
 				<o:source rdf:resource="{from}"/>
 				<o:target rdf:resource="{to}"/>

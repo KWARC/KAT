@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--   Stanford Annotation Ontology for KAT, generated from
+<!--   Stanford Annotation KAnnSpec for KAT, generated from
    http://acoli.cs.uni-frankfurt.de/resources/olia/stanford.owl --> 
 
 <annotation name="stanford"
         xmlns="https://github.com/KWARC/KAT/"  
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:o="http://omdoc.org/ontology#">
+	xmlns:o="http://omdoc.org/KAnnSpec#">
   <documentation>
     OLiA Annotation Model of Stanford Parser dependency labels (de Marneffe and Manning 2011)
 

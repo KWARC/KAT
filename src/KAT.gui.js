@@ -18,31 +18,23 @@ along with KAT.  If not, see <http://www.gnu.org/licenses/>
 /** Creates a new Editor instance.
 *
 * @param {jQuery} element - The element this editor is bound to.
-* @param {KAT.model.OntologyCollection} ontologyCollection - The ontologyCollection this editor can annotate.
+* @param {KAT.model.KAnnSpecCollection} KAnnSpecCollection - The KAnnSpecCollection this editor can annotate.
 *
 * @Alias KAT.gui
 * @class
 */
-KAT.gui = function(element, ontologyCollection){
+KAT.gui = function(element, KAnnSpecCollection){
 
   //intialise and make sure everything is set up
-  ontologyCollection.init();
+  KAnnSpecCollection.init();
 
   /**
-  * The ontologyCollection this editor can annotate.
+  * The KAnnSpecCollection this editor can annotate.
   *
-  * @type {KAT.model.OntologyCollection}
+  * @type {KAT.model.KAnnSpecCollection}
   * @name KAT.gui#collection
   */
-  this.collection = ontologyCollection;
-
-  /**
-  * The ontologyCollection this editor can annotate.
-  *
-  * @type {KAT.model.OntologyCollection}
-  * @name KAT.gui#
-  */
-  this.collection = ontologyCollection;
+  this.collection = KAnnSpecCollection;
 
   /**
   * The element this editor is bound to.
@@ -51,249 +43,31 @@ KAT.gui = function(element, ontologyCollection){
   * @name KAT.gui#element
   */
   this.element = element;
-
-  /**
-  * Currently open bubble element.
-  *
-  * @type {jQuery}
-  * @name KAT.gui#bubble
-  */
-  this.bubble = $([]);
-
-  /**
-  * Indicates if this KAT.gui is currently intialised.
-  *
-  * @type {boolean}
-  * @name KAT.gui#flagAlive
-  */
-  this.flagAlive = false;
-
-  /**
-  * Indicates if this KAT.gui currently has an open Bubble element.
-  *
-  * @type {boolean}
-  * @name KAT.gui#flagBubbleOpen
-  */
-  this.flagBubbleOpen = false;
-
-  /**
-  * Indicates if this KAT.gui currently has an open Dialog element.
-  *
-  * @type {boolean}
-  * @name KAT.gui#flagDialogOpen
-  */
-  this.flagDialogOpen = false;
-
 }
 
 /**
-* Initalises the GUI
+* gets the current selection.
 *
 *
 * @function
 * @instance
-* @name init
+* @name getSelection
 * @memberof KAT.gui
 */
-KAT.gui.prototype.init = function(){
-  //we are already alive.
-  if(this.flagAlive){
-    return;
+KAT.gui.prototype.getSelection = function(){
+  var selection = window.getSelection().getRangeAt(0);
+
+  var within = KAT.gui.getXPath(theElement, selection.commonAncestorContainer);
+  var start = KAT.gui.getXPath(theElement, selection.startContainer.parentElement);
+  var end = KAT.gui.getXPath(theElement, selection.endContainer.parentElement);
+
+  return {
+    "within": within || start,
+    "start": start,
+    "startOffset": selection.startOffset,
+    "end": end,
+    "endOffset": selection.endOffset
   }
-
-  KAT.gui.prototype.init._01.bind(this)(function(selection){
-    if(!this.flagDialogOpen){
-      //TODO: Check if the selection is within the bubble.
-
-      if(this.flagBubbleOpen){
-        this.closeBubble(); //force close the bubble
-      }
-
-      this.showBubble(selection);
-    }
-    // a dialog is open, so we don't care.
-  });
-
-}
-
-KAT.gui.prototype.init._01 = function(handler){
-  var theElement = this.element;
-  var me = this;
-
-  var getSelection = function(){
-    var selection = window.getSelection().getRangeAt(0);
-
-    var within = KAT.gui.getXPath(theElement, selection.commonAncestorContainer);
-    var start = KAT.gui.getXPath(theElement, selection.startContainer.parentElement);
-    var end = KAT.gui.getXPath(theElement, selection.endContainer.parentElement);
-
-    return {
-      "within": within || start,
-      "start": start,
-      "startOffset": selection.startOffset,
-      "end": end,
-      "endOffset": selection.endOffset
-    }
-  }
-
-  var pollSelectionChange = function(){
-    var selection = getSelection();
-
-    if(!selection.within){
-      return false;
-    }
-
-    if(selection.start == selection.end && selection.startOffset === selection.endOffset){
-      //we have start === end, so no selection
-      return false;
-    }
-
-    handler.call(me, selection);
-  }
-
-  theElement.on("mousedown.KAT.selectionChange", function(){
-    theElement.one("mouseup.KAT.selectionChange", function(){
-      pollSelectionChange();
-    });
-  });
-}
-
-
-/**
-* Deinitalises the GUI
-*
-*
-* @function
-* @instance
-* @name deinit
-* @memberof KAT.gui
-*/
-KAT.gui.prototype.deinit = function(){
-  if(!this.flagAlive){
-    return;
-  }
-
-  KAT.gui.prototype.deinit._01.bind(this)();
-}
-
-KAT.gui.prototype.deinit._01 = function(){
-  this.element.off("mousedown.KAT.selectionChange", "mouseup.KAT.selectionChange");
-}
-
-
-/**
-* Shows a bubble.
-*
-* @param {KAT.gui.selection} selection - current selection
-*
-* @function
-* @instance
-* @name showBubble
-* @memberof KAT.gui
-*/
-KAT.gui.prototype.showBubble = function(selection){
-
-  var me = this;
-
-  //the element where we will put the bubble
-  var bubbleElement = $(KAT.gui.resolveXPath(this.element, selection.start));
-
-  //we do not seem to have a container
-  //so no selection
-  //this should not happen, but some of the APIs seem buggy.
-  if(bubbleElement.length == 0){
-    return;
-  }
-
-  //we have opened the bubble or will do so asap
-  this.flagBubbleOpen = true;
-
-  //the Size of the bubble, in pixels
-  var bubbleSize = 40;
-
-  //the margin of the bubble, in pixels
-  var bubbleMargin = 10;
-
-
-  //find the position of the element
-  var position = bubbleElement.position();
-
-  //Check that we are not to far on the top
-  position.top = Math.max(bubbleMargin, position.top - (bubbleSize + bubbleMargin));
-
-  //Check that we are not to far left
-  position.left = Math.max(0, position.left);
-
-  //TODO: Check right, up, down
-
-  //Create the bubble
-  //and append it to the body
-  this.bubble = $("<div>").css({
-    "position": "absolute",
-    "width": 40,
-    "height": 40,
-    "background-color": "red"
-  }).css(position).appendTo("body").click(function(){
-    //close the bubble
-    me.closeBubble();
-
-    //show a new annotation dialog.
-    me.showNewAnnotationDialog();
-  });
-
-  //We want to close the bubble
-  //whenever we have clicked anywhere else.
-  $("body").on("mousedown.KAT.bubble", function(evt){
-    if(me.bubble.is(evt.target)){
-      //we are the bubble => do nothing
-      return;
-    }
-    me.closeBubble();
-  });
-}
-
-/**
-* Closes the bubble.
-*
-*
-* @function
-* @instance
-* @name closeBubble
-* @memberof KAT.gui
-*/
-KAT.gui.prototype.closeBubble = function(){
-  //we have closed the bubble
-  this.flagBubbleOpen = false;
-
-  //remove the bubble
-  this.bubble.remove();
-
-  //reset the bubble property
-  this.bubble = $([]);
-
-  //we do not need to click it anymore
-  $("body").off("mousedown.KAT.bubble");
-}
-
-/**
-* Shows a new annotation dialog.
-*
-* @param {KAT.gui.selection} selection - Current selection
-*
-* @function
-* @instance
-* @name showNewAnnotationDialog
-* @memberof KAT.gui
-*/
-KAT.gui.prototype.showNewAnnotationDialog = function(selection){
-  if(this.flagDialogOpen){
-    return;
-  }
-
-  //there is a dialog open
-  this.flagDialogOpen = true;
-
-  this.createNewAnnotation();
 }
 
 /**
