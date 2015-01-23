@@ -11,9 +11,14 @@ There is auto-generated documentation in the 'doc' subdirectory. You can re-gene
 rm -rf doc && jsdoc -c jsdoc.json
 ```
 
+## Dependencies
+* [JOBAD](https://github.com/KWARC/jobad)
+  * which depends on [Bootstrap](https://github.com/twbs/bootstrap)
+* [jQuery](https://github.com/jquery/jquery)
+
 ## Compatibility
 
-The library has been tested on the latest Chrome and Firefox versions.
+The library itself has been tested with latest Chrome and Firefox versions. If you want MathML support, please use Firefox. 
 
 ## License
 
