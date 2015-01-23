@@ -1,25 +1,38 @@
 $(function(){
-    $.get("KAnnSpecs/omdoc-annotations.xml", function(xml){
-      try{
-        var collection = window.collection = new KAT.model.KAnnSpecCollection();
-        var KAnnSpec = window.spec = collection.addNewKAnnSpec(xml);
 
-        collection.init(); //intialise this store.
+  //some joabd setup for styling.
+  JOBAD.config.BootstrapScope = "bootstrap"; //Bootstrap CSS scope
 
-        $.get("content/sample1.html", function(data){
+  var start = function(contentElement, specXML){
 
-          //load the content
-          var content = $("#content").html(data);
+    //create a collection
+    var collection = window.collection = new KAT.model.KAnnSpecCollection();
 
-          var gui = window.gui = new KAT.gui(content, collection);
-          var store = window.store = new KAT.storage.Store(gui);
+    //and add a KannSpec, then init
+    var KAnnSpec = window.spec = collection.addNewKAnnSpec(specXML);
+    collection.init();
 
-        }, "html");
-      } catch(e){
-        console.log("Error", e.message, "Node", e.node);
-        console.log(e.stack);
-      }
-    }, "xml").fail(function(e){
-      console.log("Unable to load xml!");
+    //now create a gui
+    var gui = window.gui = new KAT.gui(content, collection);
+
+    //and a store for the gui.
+    var store = window.store = new KAT.storage.Store(gui);
+
+    //now we can load jobad.
+    var myJOBADInstance = new JOBAD(contentElement);
+
+    //load the KAT element.
+    myJOBADInstance.modules.load('KAT.module', [store], function(){
+      this.Setup();
     });
+  }
+
+  $.get("content/sample1.html", function(data){
+    //First load the content element.
+    var data = $("#content").html(data);
+    $.get("KAnnSpecs/omdoc-annotations.xml", function(xml){
+      //and now start
+      start(data, xml);
+    }, "xml");
+  }, "html");
 });

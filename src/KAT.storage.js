@@ -85,6 +85,28 @@ KAT.storage.Store.prototype.find = function(uuid){
   return undefined;
 }
 
+/** Returns an annotation given a gui element.
+*
+* @param {jQuery} element - Element of annotation to find.
+* @returns {KAT.storage.Annotation|undefined} - The given annotation if found.
+*
+* @function
+* @instance
+* @name addNew
+* @memberof KAT.storage.Store
+*/
+KAT.storage.Store.prototype.findfromElement = function(element){
+  var elements = $(element).parentsUntil(this.element).andSelf().add(this.element);
+
+  for(var i=elements.length - 1; i >= 0; i--){
+    if(elements.eq(i).data("KAT.Annotation.UUID")){
+      return this.find(elements.eq(i).data("KAT.Annotation.UUID"));
+    }
+  }
+
+  return undefined;
+}
+
 
 /** Performs a sanity check.
 *
@@ -96,16 +118,7 @@ KAT.storage.Store.prototype.find = function(uuid){
 */
 KAT.storage.Store.prototype.sanityCheck = function(){
 
-  var verification = undefined;
-
-  //verify the annotations
-  for(var i=0;i<this.annotations.length;i++){
-    verification = this.annotations[i].verify();
-    if(verification){
-      return verification;
-    }
-  }
-
+  //TODO: Implement me. 
   return true;
 }
 
@@ -194,6 +207,31 @@ KAT.storage.Annotation = function(store, uuid, selection, concept, values){
   */
   this.values = values;
 }
+
+/**
+* Deletes an annotation
+*
+* @function
+* @name delete
+* @memberof KAT.storage.Annotation
+*/
+KAT.storage.Annotation.prototype.delete = function(){
+
+  //undraw me.
+  this.undraw();
+
+  //look for this annotation by id and remove it.
+  for(var i=0;i<this.store.annotations.length;i++){
+    if(this.store.annotations[i].uuid == this.uuid){
+      this.store.annotations.splice(i, 1)
+      break;
+    }
+  }
+
+  //and re-run the sanity check.
+  this.store.sanityCheck();
+}
+
 /**
 * Draws an annotation to the text.
 *
@@ -206,8 +244,20 @@ KAT.storage.Annotation.prototype.draw = function(){
   var range = this.store.gui.getRange(this.selection);
 
   //add a class for the selection.
-  range.addClass("KAT-selection");
+  range.addClass("KAT-selection").data("KAT.Annotation.UUID", this.uuid);
+}
 
-  //and return it - for now. 
-  return range;
+/**
+* Un-draws an annotation to the text.
+*
+* @function
+* @name undraw
+* @memberof KAT.storage.Annotation
+*/
+KAT.storage.Annotation.prototype.undraw = function(){
+  //find the elements in the selection.
+  var range = this.store.gui.getRange(this.selection);
+
+  //remove the class and data
+  range.removeClass("KAT-selection").removeData("KAT.Annotation.UUID");
 }

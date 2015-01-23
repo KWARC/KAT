@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: KAT.js</title>
+    <title>JSDoc: Source: KAT.module.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: KAT.js</h1>
+    <h1 class="page-title">Source: KAT.module.js</h1>
 
     
 
@@ -44,11 +44,83 @@ along with KAT.  If not, see &lt;http://www.gnu.org/licenses/>
 */
 
 /**
-* Namespace everything used by KAT
+* Namespace for KAT JOBAD module.
 * @namespace
-* @alias KAT
+* @alias KAT.module
 */
-var KAT = {};
+KAT.module = {
+  /* Module Info / Meta Data */
+  info:{
+    'identifier':   'KAT.module',
+    'title':    'KAT module',
+    'author':   'The KWARC group',
+    'description':  'A template you may use as a starting point for writing other modules. ', //A human readable description of the module.
+    'url': 'http://kwarc.github.io/KAT',
+    'version':  '2.0',
+    'dependencies': [],
+    'externals': {
+      "js": [],
+      "css": []
+    },
+    'async': false,
+    'hasCleanNamespace': false
+  },
+  init: function(JOBADInstance, annotationStore){
+    this.store = annotationStore;
+    this.gui = this.store.gui;
+  },
+  contextMenuEntries: function(target, JOBADInstance){
+    var me = this;
+
+    //texts
+    var text_new    = "Add new Annotation";
+    var text_remove = "Delete Annotation"
+
+    //the menu to return
+    var menu = {};
+
+    //add the text
+    menu[text_new] = false;
+    menu[text_remove] = false;
+
+    //get an existing annotation
+    var oldAnnotation = this.store.findfromElement(target);
+
+
+    if(!oldAnnotation){
+      //try and get the selection.
+      try{
+        var selection = this.gui.getSelection();
+      } catch(e){}
+      if(selection){
+        if(!(selection.start == selection.end &amp;&amp; selection.startOffset == selection.endOffset)){
+          menu[text_new] = {};
+
+          $.each(this.gui.collection.findConcepts(), function(index, concept){
+            menu[text_new][concept.getFullName()] = function(){
+              //add a new Annotation
+              var newAnnotation = me.store.addNew(selection, concept);
+
+              //and draw it.
+              newAnnotation.draw();
+            }
+          });
+        }
+      }
+
+    } else {
+      //remove the element.
+      menu[text_remove] = function(){
+        oldAnnotation.delete();
+      };
+    }
+
+    //return the menu.
+    return menu;
+  }
+};
+
+JOBAD.modules.register(KAT.module); //register the module.
 </code></pre>
         </article>
     </section>

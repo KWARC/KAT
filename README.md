@@ -6,7 +6,7 @@ Version 2.0, not yet finished. Documentation is currently being created.
 
 ## Documentation
 
-There is auto-generated documentation in the 'doc' subdirectory. You can re-generate it with:
+There is auto-generated documentation in the 'doc' subdirectory. [JSDoc](https://github.com/jsdoc3/jsdoc) is used to generate it. You can re-generate it with:
 ```
 rm -rf doc && jsdoc -c jsdoc.json
 ```
@@ -18,7 +18,7 @@ rm -rf doc && jsdoc -c jsdoc.json
 
 ## Compatibility
 
-The library itself has been tested with latest Chrome and Firefox versions. If you want MathML support, please use Firefox. 
+The library itself has been tested with latest Chrome and Firefox versions. If you want MathML support, please use Firefox.
 
 ## License
 
