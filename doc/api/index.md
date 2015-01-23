@@ -27,19 +27,7 @@
 * ```kat.Display.run()```: Encapsulates the behavior of the Display by adding classes to annotated spans and creating display handlers. 
 * ```kat.Display.reset()```: Resets the display object.
 * ```kat.Display.update()```: Updates the display. 
-* ```kat.Display._registerEditAnnotationCallback(bubble)```: registers an edit Annotation Callback. 
-	* ```bubble``` jQuery reference to the bubble displaying the current annotation. 
-* ```kat.Display._registerCloseAnnotationCallback(bubble)```: registers an close Annotation Callback. 
-	* ```bubble``` jQuery reference to the bubble displaying the current annotation. 
-
-# kat.display.ArrowConnector
-
-* ```kat.display.ArrowConnector(arrowBaseElement, arrowHeadElement): Creates an svg arrow that can be used to connect two dom elements, for example a reference field annotation to the referenced item. 
-	* ```arrowBaseElement```: Base Element for the arrow. 
-	* ```arrowHeadElement```: Head Element for the arrow. 
-* ```kat.display.ArrowConnector.render()```: Renders the arrow represented by this class instance. 
-* ```kat.display.ArrowConnector.destroy()```: Removes the rendered arrow represented by this class instance. 
-* ```kat.display.ArrowConnector._createSVGArrow()```: Creates the SVG object belonging to the arrow. 
+* ```kat.Display._registerEditAnnotationCallback()```: register Edit Annotation Callback. 
 
 # kat.display.ControlPanel
 
