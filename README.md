@@ -1,5 +1,7 @@
 # KWARC Annotation Tool
 
+** This is the classic branch. See the master branch for the current version. This branch  is no longer maintained and almost completely undocumented. **
+
 KWARC Annotation Tool: An Annotation Tool for STEM Documents. 
 
 ## Installation
@@ -16,11 +18,6 @@ can be found in the classes from the remote/ directory.
 
 A pdf manual for KAT can be found in [doc/manual/kat.pdf](doc/manual/kat.pdf)
 
-A demo can be found at [http://kwarc.github.io/KAT/](http://kwarc.github.io/KAT/)
-
-## Dev Branch
-
-This is the dev branch. Everything is experimental and unstable here. 
 
 ## License
 
