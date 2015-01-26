@@ -97,7 +97,7 @@ KAT.gui.getXPath = function(from, to){
   var tagName = undefined;
   var currentChildren = [];
 
-  while(!currentElement.isSameNode(start.get(0))){
+  while(currentElement !== start.get(0)){
 
     //set the parent
     currentParent = currentElement.parentNode;
@@ -114,7 +114,7 @@ KAT.gui.getXPath = function(from, to){
 
     //find the index of the currentElement
     for(var i=0;i<currentChildren.length; i++){
-      if(currentChildren[i].isSameNode(currentElement)){
+      if(currentChildren[i] !== currentElement){
         break;
   var index = -1;
       }
