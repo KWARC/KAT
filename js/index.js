@@ -13,7 +13,7 @@ $(function(){
     collection.init();
 
     //now create a gui
-    var gui = window.gui = new KAT.gui(content, collection);
+    var gui = window.gui = new KAT.gui(contentElement, collection);
 
     //and a store for the gui.
     var store = window.store = new KAT.storage.Store(gui);
