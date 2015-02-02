@@ -84,54 +84,41 @@ KAT.gui.prototype.getSelection = function(){
 * @memberof KAT.gui
 */
 KAT.gui.getXPath = function(from, to){
-  var start = $(from);
-  var end = $(to);
 
-  if(start.find(end).length == 0){
-    return false;
-  }
+  //the elements we start and end at.
+  var element = $(to).get(0);
+  var base = $(from).get(0);
 
-  var path = "";
-  var currentElement = end.get(0);
-  var currentParent = undefined;
-  var tagName = undefined;
-  var currentChildren = [];
+  /*
+   adapted from the Firebug source code
+   which is
 
-  while(currentElement !== start.get(0)){
+   Copyright (c) 2009, Mozilla Foundation
+   All rights reserved.
+  */
 
-    //set the parent
-    currentParent = currentElement.parentNode;
+  var paths = [];
 
-    //find what type the child is.
-    tagName = (currentElement.tagName || currentElement.nodeName).toLowerCase();
+  // Use nodeName (instead of localName) so namespace prefix is included (if any).
+  for (; element && element !== base; element = element.parentNode)
+  {
+    var index = 0;
+    for (var sibling = element.previousSibling; sibling; sibling = sibling.previousSibling)
+    {
+      // Ignore document type declaration.
+      if (sibling.nodeType == Node.DOCUMENT_TYPE_NODE)
+      continue;
 
-    //find all the children of that type
-    currentChildren = Array.prototype.filter.call(currentParent.children,
-      function(e){
-        return (e.tagName || e.nodeName).toLowerCase() == tagName.toLowerCase();
-      }
-    );
-
-    //find the index of the currentElement
-    for(var i=0;i<currentChildren.length; i++){
-      if(currentChildren[i] !== currentElement){
-        break;
-  var index = -1;
-      }
+      if (sibling.nodeName == element.nodeName)
+      ++index;
     }
 
-    //xpaths are one-based
-    i++;
-
-    //and add to the path
-    path = "/"+tagName+"["+i+"]" + path;
-
-
-    //and next one.
-    currentElement = currentParent;
+    var tagName = element.nodeName.toLowerCase();
+    var pathIndex = (index ? "[" + (index+1) + "]" : "");
+    paths.splice(0, 0, tagName + pathIndex);
   }
 
-  return path;
+  return paths.length ? "/" + paths.join("/") : null;
 }
 
 /**
@@ -147,16 +134,19 @@ KAT.gui.getXPath = function(from, to){
 * @memberof KAT.gui
 */
 KAT.gui.resolveXPath = function(from, path){
-
   var element = $(from).get(0);
   var parts = path.split("/").splice(1);
   var part, tagName, elementIndex;
+  var _element;
 
   for(var i=0;i<parts.length;i++){
     //extract tagName and elementIndex
     part = parts[i];
     tagName = part.split("[")[0];
     elementIndex = parseInt((part.split("[")[1] || "1]").split("]")[0]) - 1;
+
+    //cache the old element
+    _element = element;
 
     //find the next element
     element = Array.prototype.filter.call(element.children,
@@ -165,8 +155,11 @@ KAT.gui.resolveXPath = function(from, path){
       }
     )[elementIndex];
 
+
+
     //woops, it's undefined
     if(element === undefined){
+      console.log("undefined", _element, part, tagName, elementIndex);
       return undefined;
     }
 
