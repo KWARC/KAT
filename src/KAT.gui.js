@@ -192,10 +192,11 @@ KAT.gui.prototype.getRange = function(selection){
     KAT.gui.resolveXPath(this.element, selection.start)
   );
 
+  //find the end element
+  var endElement = $(KAT.gui.resolveXPath(this.element, selection.end));
+
   //find the end index
-  var endIndex = containedElements.index(
-    KAT.gui.resolveXPath(this.element, selection.end)
-  );
+  var endIndex = containedElements.index(endElement);
 
   //restrict to elements in this range.
   containedElements = containedElements.slice(startIndex, endIndex);
@@ -206,7 +207,7 @@ KAT.gui.prototype.getRange = function(selection){
 
     //do we contain all children?
     return children.length == containedElements.filter(children).length;
-  });
+  }).add(endElement.find("*").andSelf());
 }
 
 /**
