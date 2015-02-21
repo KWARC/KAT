@@ -45,47 +45,63 @@ KAT.module = {
     var me = this;
 
     //texts
-    var text_new    = "Add new Annotation";
-    var text_remove = "Delete Annotation"
+    var text_new        = "Add new Annotation";
+    var text_remove     = "Delete Annotation";
+    var text_highlight  = "Highlight Annotation";
 
     //the menu to return
     var menu = {};
 
     //add the text
     menu[text_new] = false;
-    menu[text_remove] = false;
+    menu[text_remove] = {};
+    menu[text_highlight] = {};
 
-    //get an existing annotation
-    var oldAnnotation = this.store.findfromElement(target);
+    //MENUITEM for new item
+    try{
+      var selection = this.gui.getSelection();
+    } catch(e){}
 
+    if(selection){
+      if(!(selection.start == selection.end && selection.startOffset == selection.endOffset)){
+        menu[text_new] = {};
 
-    if(!oldAnnotation){
-      //try and get the selection.
-      try{
-        var selection = this.gui.getSelection();
-      } catch(e){}
-      if(selection){
-        if(!(selection.start == selection.end && selection.startOffset == selection.endOffset)){
-          menu[text_new] = {};
+        $.each(this.gui.collection.findConcepts(), function(index, concept){
+          menu[text_new][concept.getFullName()] = function(){
+            //add a new Annotation
+            var newAnnotation = me.store.addNew(selection, concept);
 
-          $.each(this.gui.collection.findConcepts(), function(index, concept){
-            menu[text_new][concept.getFullName()] = function(){
-              //add a new Annotation
-              var newAnnotation = me.store.addNew(selection, concept);
+            //and draw it.
+            newAnnotation.draw();
+          }
+        });
+      }
+    }
 
-              //and draw it.
-              newAnnotation.draw();
-            }
-          });
-        }
+    //find all the annotations.
+    var annots = this.store.findfromElement(target);
+
+    if(annots.length != 0){
+      //iterate over all the annotations.
+      for(var i=0;i<annots.length;i++){
+        (function(i){
+          //add a menu item to delete it.
+          var annotation = annots[i];
+          menu[text_remove][annotation.uuid] = function(){
+            annotation.delete();
+          };
+          menu[text_highlight][annotation.uuid] = function(){
+            annotation.flash(); 
+          };
+        })(i);
       }
 
     } else {
-      //remove the element.
-      menu[text_remove] = function(){
-        oldAnnotation.delete();
-      };
+      menu[text_remove] = false;
+      menu[text_highlight] = false;
     }
+
+
 
     //return the menu.
     return menu;

@@ -1,3 +1,5 @@
+//TODO: Take out some of the GUI elements in a seperate highlighted-GUI class
+
 /**
 * Namespace for storage used by KAT.
 * @namespace
@@ -85,10 +87,10 @@ KAT.storage.Store.prototype.find = function(uuid){
   return undefined;
 }
 
-/** Returns an annotation given a gui element.
+/** Returns all (drawn) annotations which match a certain element.
 *
 * @param {jQuery} element - Element of annotation to find.
-* @returns {KAT.storage.Annotation|undefined} - The given annotation if found.
+* @returns {KAT.storage.Annotation[]} - The given annotations if found.
 *
 * @function
 * @instance
@@ -97,14 +99,24 @@ KAT.storage.Store.prototype.find = function(uuid){
 */
 KAT.storage.Store.prototype.findfromElement = function(element){
   var elements = $(element).parentsUntil(this.element).andSelf().add(this.element);
+  var ids = [];
+
+  var results = [];
 
   for(var i=elements.length - 1; i >= 0; i--){
-    if(elements.eq(i).data("KAT.Annotation.UUID")){
-      return this.find(elements.eq(i).data("KAT.Annotation.UUID"));
+    //find all the current ones.
+    var annotations = elements.eq(i).data("KAT.Annotation.UUID") || [];
+
+    for(var j=0;j<annotations.length;j++){
+      //add them by id if we do not already have it.
+      if(ids.indexOf(annotations[j]) == -1){
+        ids.push(annotations[j]);
+        results.push(this.find(annotations[j]));
+      }
     }
   }
 
-  return undefined;
+  return results;
 }
 
 
@@ -118,7 +130,7 @@ KAT.storage.Store.prototype.findfromElement = function(element){
 */
 KAT.storage.Store.prototype.sanityCheck = function(){
 
-  //TODO: Implement me. 
+  //TODO: Implement me.
   return true;
 }
 
@@ -240,11 +252,38 @@ KAT.storage.Annotation.prototype.delete = function(){
 * @memberof KAT.storage.Annotation
 */
 KAT.storage.Annotation.prototype.draw = function(){
+  //this is me.
+  var me = this;
+
   //find the elements in the selection.
   var range = this.store.gui.getRange(this.selection);
 
   //add a class for the selection.
-  range.addClass("KAT-selection").data("KAT.Annotation.UUID", this.uuid);
+  range.addClass("KAT-selection").each(function(){
+    var $me = $(this);
+
+    var current = $me.data("KAT.Annotation.UUID") || [];
+    current.push(me.uuid);
+
+    //write it back
+    $me.data("KAT.Annotation.UUID", current);
+  });
+}
+
+/**
+* Flashes an annotation.
+*
+* @function
+* @name flash
+* @memberof KAT.storage.Annotation
+*/
+KAT.storage.Annotation.prototype.flash = function(){
+  //get the range.
+  this.store.gui
+  .getRange(this.selection).stop()
+	.animate({ backgroundColor: "red"}, 1500, function(){
+    $(this).css("background-color", ""); 
+  });
 }
 
 /**
@@ -255,9 +294,24 @@ KAT.storage.Annotation.prototype.draw = function(){
 * @memberof KAT.storage.Annotation
 */
 KAT.storage.Annotation.prototype.undraw = function(){
+  //this is me
+  var me = this;
+
   //find the elements in the selection.
   var range = this.store.gui.getRange(this.selection);
 
   //remove the class and data
-  range.removeClass("KAT-selection").removeData("KAT.Annotation.UUID");
+  range.removeClass("KAT-selection").each(function(){
+    var $me = $(this);
+
+    //the current data
+    var current = $(this).data("KAT.Annotation.UUID") || [];
+
+    //find the current index and remove it.
+    var index = current.indexOf(me.uuid);
+    if(index != -1){
+      $me.data("KAT.Annotation.UUID", current.slice(index, 1));
+    }
+
+  });
 }
