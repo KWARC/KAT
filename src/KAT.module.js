@@ -47,6 +47,7 @@ KAT.module = {
     //texts
     var text_new        = "Add new Annotation";
     var text_remove     = "Delete Annotation";
+    var text_ginfo      = "Display Annotation";
     var text_highlight  = "Highlight Annotation";
 
     //the menu to return
@@ -56,6 +57,7 @@ KAT.module = {
     menu[text_new] = false;
     menu[text_remove] = {};
     menu[text_highlight] = {};
+    menu[text_ginfo] = {};
 
     //MENUITEM for new item
     try{
@@ -85,13 +87,19 @@ KAT.module = {
       //iterate over all the annotations.
       for(var i=0;i<annots.length;i++){
         (function(i){
-          //add a menu item to delete it.
+          //add a menu item for each of the actions.
           var annotation = annots[i];
           menu[text_remove][annotation.uuid] = function(){
             annotation.delete();
           };
           menu[text_highlight][annotation.uuid] = function(){
-            annotation.flash(); 
+            annotation.flash();
+          };
+          menu[text_ginfo][annotation.uuid] = function(){
+            alert(
+              "UUID:    "+annotation.uuid+"\n"+
+              "Concept: "+annotation.concept.getFullName()+"\n"
+            );
           };
         })(i);
       }
@@ -99,6 +107,7 @@ KAT.module = {
     } else {
       menu[text_remove] = false;
       menu[text_highlight] = false;
+      menu[text_ginfo] = false;
     }
 
 
