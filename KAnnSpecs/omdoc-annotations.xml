@@ -42,7 +42,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 		<field name="type" type="select">
 			<option default="true">
 				<value>simple</value>
-				<documentation>definiens is does not contain the definiendum</documentation>
+				<documentation>definiens does not contain the definiendum</documentation>
 			</option>
 			<option>
 				<documentation>definiendum applied to formal variables</documentation>
@@ -239,7 +239,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 			<validation>[A-Z][a-z]*</validation>
 			<number atleast="1" atmost="1"/>
 		</field>
-		<!-- **** this is not clear yet, imports can be outside as well **** --> 
+		<!-- **** this is not clear yet, imports can be outside as well **** -->
 		<field name="imports" type="reference">
 			<value>imports</value>
 			<number/>
