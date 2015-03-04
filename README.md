@@ -15,9 +15,9 @@ rm -rf doc && jsdoc -c jsdoc.json
 
 1. Place your KAnnSpec into the KAnnSpec/ directory.
 2. Place your document into the content/ directory. Make sure it only contains the actual document content (inside the body tag)
-3. Edit lines 30 and 33 in js/index.js and change "content/sample1.html" to the path of the document you want to use and change "KAnnSpecs/omdoc-annotations.xml" to the annotation you want to create.
+3. Edit line 3 in js/index.js and change "content/sample1.html" to the path of the document you want to use and change "KAnnSpecs/omdoc-annotations.xml" to the annotation you want to create.
 4. Start up a webserver and serve the this directory.
-5. Navigate your webbrowser to the URL where you are serving this directory at. 
+5. Navigate your webbrowser to the URL where you are serving this directory at.
 
 ## Dependencies
 * [JOBAD](https://github.com/KWARC/jobad)
