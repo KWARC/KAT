@@ -1,38 +1,48 @@
 $(function(){
-
-  //some joabd setup for styling.
-  JOBAD.config.BootstrapScope = "bootstrap"; //Bootstrap CSS scope
-
-  var start = function(contentElement, specXML){
-
-    //create a collection
-    var collection = window.collection = new KAT.model.KAnnSpecCollection();
-
-    //and add a KannSpec, then init
-    var KAnnSpec = window.spec = collection.addNewKAnnSpec(specXML);
-    collection.init();
-
-    //now create a gui
-    var gui = window.gui = new KAT.gui(contentElement, collection);
-
-    //and a store for the gui.
-    var store = window.store = new KAT.storage.Store(gui);
-
-    //now we can load jobad.
-    var myJOBADInstance = new JOBAD(contentElement);
-
-    //load the KAT element.
-    myJOBADInstance.modules.load('KAT.module', [store], function(){
-      this.Setup();
-    });
-  }
-
-  $.get("content/sample1.html", function(data){
-    //First load the content element.
-    var data = $("#content").html(data);
-    $.get("KAnnSpecs/omdoc-annotations.xml", function(xml){
-      //and now start
-      start(data, xml);
-    }, "xml");
-  }, "html");
+  //CHANGE THESE URLS TO CHANGE DOCUMENT AND KANNSPEC
+  getKATStarted("content/sample1.html", "KAnnSpecs/omdoc-annotations.xml");
 });
+
+function getKATStarted(documentURL, KAnnSpecURL){
+
+  //set up bootstrap
+  JOBAD.config.BootstrapScope = "bootstrap";
+
+  //load the document
+  $.get(documentURL, function(documentData){
+
+    //some contants
+    var data = $("#content").html(documentData);
+
+    //load the KAnnSpec
+    $.get(KAnnSpecURL, function(KannSpecXML){
+      //build all the things we need
+
+      /*
+      * Build all of the needed objects
+      */
+
+      //now we can load jobad.
+      var myJOBADInstance = new JOBAD(data);
+
+      //create a collection
+      var collection = window.collection = new KAT.model.KAnnSpecCollection();
+
+      //now create a gui
+      var gui = window.gui = new KAT.gui(data, collection);
+
+      //and a store for the gui.
+      var store = window.store = new KAT.storage.Store(gui);
+
+      //and add a KannSpec, then init
+      var KAnnSpec = window.spec = collection.addNewKAnnSpec(KannSpecXML);
+      collection.init();
+
+      //load the KAT element.
+      myJOBADInstance.modules.load('KAT.module', [store], function(){
+        this.Setup();
+      });
+    });
+  });
+
+};
