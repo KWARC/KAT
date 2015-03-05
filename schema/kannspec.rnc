@@ -29,8 +29,9 @@ field.text = element field {attribute type {"text"} & field.all & katdefault? & 
 ## a reference field, referencedType restricts the annotation of the target.
 field.ref = element field {attribute type {"reference"} & field.all & referencedType*}
 
-## a selector field, the option elements specify a non-empty list of options to select from
-field.select = element field {attribute type {"select"} & field.all & option+}
+## a selector field, the option elements specify a non-empty list of options to select
+## from. Only one may have a default element.
+field.select = element field {attribute type {"select"} & field.all & option* & defaultoption?}
 
 ## the parts that all incarnations share
 field.all = name.att & value? & number? & documentation?
@@ -50,8 +51,9 @@ referencedType = element referencedType {text}
 
 ## an option in a selection field, it is characterized by a value and its documentation
 ## (which can be shown to the annotator in the dialogue)
-default.att = attribute default {"true"}
-option = element option {default.att? & value & documentation?}
+## One of the options is made the default option, by a default attribute
+option = element option {value & documentation?}
+defaultoption = element defaultoption {value & documentation?}
 
 ## the number elements specifies how many of this field are required:
 ## if atleast is not given the field is optional

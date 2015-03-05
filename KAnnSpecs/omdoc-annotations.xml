@@ -40,10 +40,10 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 			<number atleast="1"/>
 		</field>
 		<field name="type" type="select">
-			<option default="true">
+			<defaultoption>
 				<value>simple</value>
 				<documentation>definiens does not contain the definiendum</documentation>
-			</option>
+			</defaultoption>
 			<option>
 				<documentation>definiendum applied to formal variables</documentation>
 				<value>pattern</value>
@@ -100,10 +100,10 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 				<value>assumption</value>
 				<documentation>A statement that we assume to be true (without being able/willing) to prove it.</documentation>
 			</option>
-			<option default="true">
+			<defaultoption>
 				<value>formula</value>
 				<documentation>If all else fails.</documentation>
-			</option>
+			</defaultoption>
 		</field>
 		<display>
 			<template>
