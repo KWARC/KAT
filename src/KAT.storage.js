@@ -282,8 +282,20 @@ KAT.storage.Annotation.prototype.flash = function(){
   this.store.gui
   .getRange(this.selection).stop()
 	.animate({ backgroundColor: "red"}, 1500, function(){
-    $(this).css("background-color", ""); 
+    $(this).css("background-color", "");
   });
+}
+
+/**
+* Shows an edit form for an annotation.
+*
+* @function
+* @name edit
+* @memberof KAT.storage.Annotation
+*/
+KAT.storage.Annotation.prototype.edit = function(){
+  //TODO: show an edit form.
+  alert("Unimplemented!");
 }
 
 /**

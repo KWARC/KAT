@@ -22,6 +22,7 @@
     
 
 
+
     
     <section>
         <article>
@@ -68,50 +69,94 @@ KAT.module = {
     this.store = annotationStore;
     this.gui = this.store.gui;
   },
+  hoverText: function(target, JOBADInstance){
+    //find the current annotations.
+    var annots = this.store.findfromElement(target);
+
+    //TODO: Make this smarter
+    annots = annots[0];
+
+    //if there is no annotation, do nothing
+    if(!annots){
+      return;
+    }
+
+    //TODO: Return content
+    return annots.uuid; 
+  },
   contextMenuEntries: function(target, JOBADInstance){
     var me = this;
 
     //texts
-    var text_new    = "Add new Annotation";
-    var text_remove = "Delete Annotation"
+    var text_new        = "Add new Annotation";
+    var text_remove     = "Delete Annotation";
+    var text_ginfo      = "Display Annotation";
+    var text_highlight  = "Highlight Annotation";
+    var text_edit       = "Edit Annotation";
 
     //the menu to return
     var menu = {};
 
     //add the text
     menu[text_new] = false;
-    menu[text_remove] = false;
+    menu[text_remove] = {};
+    menu[text_highlight] = {};
+    menu[text_ginfo] = {};
+    menu[text_edit] = {};
 
-    //get an existing annotation
-    var oldAnnotation = this.store.findfromElement(target);
+    //MENUITEM for new item
+    try{
+      var selection = this.gui.getSelection();
+    } catch(e){}
 
+    if(selection){
+      if(!(selection.start == selection.end &amp;&amp; selection.startOffset == selection.endOffset)){
+        menu[text_new] = {};
 
-    if(!oldAnnotation){
-      //try and get the selection.
-      try{
-        var selection = this.gui.getSelection();
-      } catch(e){}
-      if(selection){
-        if(!(selection.start == selection.end &amp;&amp; selection.startOffset == selection.endOffset)){
-          menu[text_new] = {};
+        $.each(this.gui.collection.findConcepts(), function(index, concept){
+          menu[text_new][concept.getFullName()] = function(){
+            //add a new Annotation
+            var newAnnotation = me.store.addNew(selection, concept);
 
-          $.each(this.gui.collection.findConcepts(), function(index, concept){
-            menu[text_new][concept.getFullName()] = function(){
-              //add a new Annotation
-              var newAnnotation = me.store.addNew(selection, concept);
+            //and draw it.
+            newAnnotation.draw();
+          }
+        });
+      }
+    }
 
-              //and draw it.
-              newAnnotation.draw();
-            }
-          });
-        }
+    //find all the annotations.
+    var annots = this.store.findfromElement(target);
+
+    if(annots.length != 0){
+      //iterate over all the annotations.
+      for(var i=0;i&lt;annots.length;i++){
+        (function(i){
+          //add a menu item for each of the actions.
+          var annotation = annots[i];
+          menu[text_remove][annotation.uuid] = function(){
+            annotation.delete();
+          };
+          menu[text_highlight][annotation.uuid] = function(){
+            annotation.flash();
+          };
+          menu[text_edit][annotation.uuid] = function(){
+            annotation.edit();
+          };
+          menu[text_ginfo][annotation.uuid] = function(){
+            alert(
+              "UUID:    "+annotation.uuid+"\n"+
+              "Concept: "+annotation.concept.getFullName()+"\n"
+            );
+          };
+        })(i);
       }
 
     } else {
-      //remove the element.
-      menu[text_remove] = function(){
-        oldAnnotation.delete();
-      };
+      menu[text_remove] = false;
+      menu[text_highlight] = false;
+      menu[text_ginfo] = false;
+      menu[text_edit] = false;
     }
 
     //return the menu.
@@ -130,13 +175,13 @@ JOBAD.modules.register(KAT.module); //register the module.
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="KAT.gui.html">gui</a></li><li><a href="KAT.model.Concept.html">Concept</a></li><li><a href="KAT.model.Field.html">Field</a></li><li><a href="KAT.model.KAnnSpec.html">KAnnSpec</a></li><li><a href="KAT.model.KAnnSpecCollection.html">KAnnSpecCollection</a></li><li><a href="KAT.model.Option.html">Option</a></li><li><a href="KAT.model.ParsingError.html">ParsingError</a></li><li><a href="KAT.storage.Annotation.html">Annotation</a></li><li><a href="KAT.storage.Store.html">Store</a></li></ul><h3>Namespaces</h3><ul><li><a href="KAT.html">KAT</a></li><li><a href="KAT.model.html">model</a></li><li><a href="KAT.module.html">module</a></li><li><a href="KAT.storage.html">storage</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="KAT.gui.html">gui</a></li><li><a href="KAT.model.Concept.html">Concept</a></li><li><a href="KAT.model.Field.html">Field</a></li><li><a href="KAT.model.KAnnSpec.html">KAnnSpec</a></li><li><a href="KAT.model.KAnnSpecCollection.html">KAnnSpecCollection</a></li><li><a href="KAT.model.Option.html">Option</a></li><li><a href="KAT.model.ParsingError.html">ParsingError</a></li><li><a href="KAT.storage.Annotation.html">Annotation</a></li><li><a href="KAT.storage.Store.html">Store</a></li></ul><h3>Namespaces</h3><ul><li><a href="KAT.html">KAT</a></li><li><a href="KAT.model.html">model</a></li><li><a href="KAT.module.html">module</a></li><li><a href="KAT.storage.html">storage</a></li></ul>
 </nav>
 
-<br clear="both">
+<br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha9</a> on Mon Feb 02 2015 16:31:55 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha13</a> on Sat Mar 14 2015 15:01:46 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

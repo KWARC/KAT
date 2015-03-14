@@ -41,6 +41,21 @@ KAT.module = {
     this.store = annotationStore;
     this.gui = this.store.gui;
   },
+  hoverText: function(target, JOBADInstance){
+    //find the current annotations.
+    var annots = this.store.findfromElement(target);
+
+    //TODO: Make this smarter
+    annots = annots[0];
+
+    //if there is no annotation, do nothing
+    if(!annots){
+      return;
+    }
+
+    //TODO: Return content
+    return annots.uuid; 
+  },
   contextMenuEntries: function(target, JOBADInstance){
     var me = this;
 
@@ -49,6 +64,7 @@ KAT.module = {
     var text_remove     = "Delete Annotation";
     var text_ginfo      = "Display Annotation";
     var text_highlight  = "Highlight Annotation";
+    var text_edit       = "Edit Annotation";
 
     //the menu to return
     var menu = {};
@@ -58,6 +74,7 @@ KAT.module = {
     menu[text_remove] = {};
     menu[text_highlight] = {};
     menu[text_ginfo] = {};
+    menu[text_edit] = {};
 
     //MENUITEM for new item
     try{
@@ -95,6 +112,9 @@ KAT.module = {
           menu[text_highlight][annotation.uuid] = function(){
             annotation.flash();
           };
+          menu[text_edit][annotation.uuid] = function(){
+            annotation.edit();
+          };
           menu[text_ginfo][annotation.uuid] = function(){
             alert(
               "UUID:    "+annotation.uuid+"\n"+
@@ -108,9 +128,8 @@ KAT.module = {
       menu[text_remove] = false;
       menu[text_highlight] = false;
       menu[text_ginfo] = false;
+      menu[text_edit] = false;
     }
-
-
 
     //return the menu.
     return menu;

@@ -512,7 +512,7 @@ KAT.model = {};
     * Fields declared in this concept.
     *
     * @type {KAT.model.Field[]}
-    * @name KAT.model.Concept#fieldsname
+    * @name KAT.model.Concept#fields
     */
     this.fields = [];
 
