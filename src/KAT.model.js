@@ -886,6 +886,8 @@ KAT.model = {};
         this.validation.push(e.text());
       } else if(e.is("option") && this.type == KAT.model.Field.types.select){
         this.validation.push(new KAT.model.Option(e, this));
+      } else if(e.is("defaultoption") && this.type == KAT.model.Field.types.select){
+        this.validation.push(new KAT.model.Option(e, this));
       } else {
         throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Unexpected tag '"+e.prop("tagName")+"'). ", e);
       }
@@ -961,7 +963,7 @@ KAT.model = {};
     }
 
 
-    if(this.xml.attr("default") == "true" || this.xml.attr("default") === true){
+    if(this.xml.is("defaultoption")){
       if(this.field.default !== ""){
         throw new KAT.model.ParsingError("KAT.model.Option: Invalid XML (Default already exists)", this.xml);
       }
