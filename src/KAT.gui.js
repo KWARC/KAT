@@ -251,7 +251,7 @@ KAT.gui.dialog = function(title, content, buttons, on_button){
   var $content = $("<p>").text(content);
 
   //Create the element.
-  var $dialog = $('<div class="modal fade">')
+  var $dialog = $('<div class="modal hide large">')
   .append(
     $('<div class="modal-dialog">').append(
       $('<div class="modal-content">')
@@ -271,11 +271,18 @@ KAT.gui.dialog = function(title, content, buttons, on_button){
 
   var $title = $("<div>");
 
-  //append the dialog.
-  $dialog.appendTo("body").modal({
-    backdrop: true,
-    keyboard: true
+  //append the dialog
+  $dialog.appendTo(
+    $("<div>").BS().appendTo("body")
+  ).modal()
+  .on("hidden", function(){
+    //BS Cleanup
+    JOBAD.UI.BSStyle();
   });
+
+  //Some bootstrap magic
+  //to show the dialog properly.
+  JOBAD.UI.BSStyle();
 
   $self = {
     "$dialog": $dialog, //the dialog element
@@ -287,8 +294,12 @@ KAT.gui.dialog = function(title, content, buttons, on_button){
       .one("hidden.bs.modal", function(){
         $dialog.remove();
       }).modal("hide");
+
+
     }
   }
+
+
 
   return $self;
 }
