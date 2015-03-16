@@ -47,7 +47,6 @@ KAT.module = {
     //texts
     var text_new        = "Add new Annotation";
     var text_remove     = "Delete Annotation";
-    var text_ginfo      = "Export Annotation";
     var text_highlight  = "Highlight Annotation";
     var text_edit       = "Edit Annotation";
 
@@ -58,7 +57,6 @@ KAT.module = {
     menu[text_new] = false;
     menu[text_remove] = {};
     menu[text_highlight] = {};
-    menu[text_ginfo] = {};
     menu[text_edit] = {};
 
     //MENUITEM for new item
@@ -100,29 +98,40 @@ KAT.module = {
           menu[text_edit][annotation.uuid] = function(){
             annotation.edit();
           };
-          menu[text_ginfo][annotation.uuid] = function(){
-            prompt("Press CTRL+C to copy", JSON.stringify(annotation.toJSON()));
-          };
         })(i);
       }
 
     } else {
       menu[text_remove] = false;
       menu[text_highlight] = false;
-      menu[text_ginfo] = false;
       menu[text_edit] = false;
     }
 
-    menu["Import Annotation"] = function(){
-      var json = prompt("Paste enter the annotation below: ");
+    menu["Storage"] = {
+      "Import": function(){
+        var json = prompt("Paste the annotations below: ");
 
-      if(json){
-        //parse the json
-        json = JSON.parse(json);
-        //add the new annotation
-        json = this.store.addFromJSON(json);
-        //and draw it.
-        json.draw();
+        if(json){
+          //parse the json
+          json = JSON.parse(json);
+
+          for(var i=0;i<json.length;i++){
+            //add the new annotation
+            json[i] = me.store.addFromJSON(json[i]);
+            //and draw it.
+            json[i].draw();
+          }
+
+        }
+      },
+      "Export": function(){
+        var exporter = [];
+
+        for(var i=0;i<me.store.annotations.length;i++){
+          exporter.push(me.store.annotations[i].toJSON());
+        }
+
+        prompt("Press CTRL+C to export annotations: ", JSON.stringify(exporter));
       }
     }
 
