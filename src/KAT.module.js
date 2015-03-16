@@ -41,28 +41,13 @@ KAT.module = {
     this.store = annotationStore;
     this.gui = this.store.gui;
   },
-  hoverText: function(target, JOBADInstance){
-    //find the current annotations.
-    var annots = this.store.findfromElement(target);
-
-    //TODO: Make this smarter
-    annots = annots[0];
-
-    //if there is no annotation, do nothing
-    if(!annots){
-      return;
-    }
-
-    //TODO: Return content
-    return annots.uuid; 
-  },
   contextMenuEntries: function(target, JOBADInstance){
     var me = this;
 
     //texts
     var text_new        = "Add new Annotation";
     var text_remove     = "Delete Annotation";
-    var text_ginfo      = "Display Annotation";
+    var text_ginfo      = "Export Annotation";
     var text_highlight  = "Highlight Annotation";
     var text_edit       = "Edit Annotation";
 
@@ -116,10 +101,7 @@ KAT.module = {
             annotation.edit();
           };
           menu[text_ginfo][annotation.uuid] = function(){
-            alert(
-              "UUID:    "+annotation.uuid+"\n"+
-              "Concept: "+annotation.concept.getFullName()+"\n"
-            );
+            prompt("Press CTRL+C to copy", JSON.stringify(annotation.toJSON()));
           };
         })(i);
       }
@@ -129,6 +111,19 @@ KAT.module = {
       menu[text_highlight] = false;
       menu[text_ginfo] = false;
       menu[text_edit] = false;
+    }
+
+    menu["Import Annotation"] = function(){
+      var json = prompt("Paste enter the annotation below: ");
+
+      if(json){
+        //parse the json
+        json = JSON.parse(json);
+        //add the new annotation
+        json = this.store.addFromJSON(json);
+        //and draw it.
+        json.draw();
+      }
     }
 
     //return the menu.

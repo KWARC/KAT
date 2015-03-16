@@ -64,6 +64,30 @@ KAT.storage.Store.prototype.addNew = function(selection, concept){
   return newAnnotation;
 }
 
+/** Adds a new annotation to this Store based on a JSON object.
+*
+* @param {KAT.storage.Annotation~JSON} json - Serialised annotation to add.
+*
+* @function
+* @instance
+* @name addFromJSON
+* @memberof KAT.storage.Store
+*/
+KAT.storage.Store.prototype.addFromJSON = function(json){
+
+  //create new annotation.
+  var newAnnotation = new KAT.storage.Annotation(this, json.uuid, json.selection, this.collection.getConcept(json.concept));
+
+  //load the values.
+  newAnnotation.values = json.values;
+
+  //store it in this store.
+  this.annotations.push(newAnnotation);
+
+  //and return it.
+  return newAnnotation;
+}
+
 /** Returns an annotation if it exists.
 *
 * @param {string} uuid - UUID of annotation to find.
@@ -327,3 +351,36 @@ KAT.storage.Annotation.prototype.undraw = function(){
 
   });
 }
+
+/**
+* Exports an annotation to JSON.
+*
+* @return KAT.storage.Annotation~JSON
+* @function
+* @name toJSON
+* @memberof KAT.storage.Annotation
+*/
+KAT.storage.Annotation.prototype.toJSON = function(){
+  return {
+    //the UUID of this annotation
+    "uuid": this.uuid,
+
+    //The selection of the annotation
+    "selection": this.selection,
+
+    //the full name.
+    "concept": this.concept.getFullName(),
+
+    //the values.
+    "values": this.values
+  }
+}
+
+/**
+ * A serialised version of KAT.storage.Annotation
+ * @typedef {Object} KAT.storage.Annotation~JSON
+ * @property {string} uuid - UUID of this annotation.
+ * @property {KAT.gui.selection} selection - Selection of the annotation.
+ * @property {string} concept - (Full) name of the used concept.
+ * @property {object} values - Values of the fields of this annotation.
+ */
