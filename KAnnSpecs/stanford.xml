@@ -5,7 +5,9 @@
 
 <annotation name="stanford"
         xmlns="https://github.com/KWARC/KAT/"  
+        xmlns:kat="https://github.com/KWARC/KAT/"  
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:os="http://purl.org/olia/system.owl#"
 	xmlns:o="http://purl.org/olia/stanford.owl#">
   <documentation>
     OLiA Annotation Model of Stanford Parser dependency labels (de Marneffe and Manning 2011)
@@ -22,19 +24,19 @@
       "The Australian Broadcasting Corporation (ABC)"
       abbrev(Corporation, ABC)
       </documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#AbbreviationModifier"/>
             <value>Name</value>
             <default>AbbreviationModifier</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -54,19 +56,19 @@
 
 "She looks very beautiful"
 acomp(looks, beautiful)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#AdjectivalComplement"/>
             <value>Name</value>
             <default>AdjectivalComplement</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -86,19 +88,19 @@ acomp(looks, beautiful)</documentation>
 
 "Sam eats red meat"
 amod(meat, red)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#AdjectivalModifier"/>
             <value>Name</value>
             <default>AdjectivalModifier</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -121,19 +123,19 @@ advcl(happened, falling)
 
 "If you know who did it, you should tell the teacher"
 advcl(tell, know)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#AdverbialClauseModifier"/>
             <value>Name</value>
             <default>AdverbialClauseModifier</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -156,19 +158,19 @@ advmod(modified, genetically)
 
 "less often"
 advmod(often, less)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#AdverbialModifier"/>
             <value>Name</value>
             <default>AdverbialModifier</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -191,19 +193,19 @@ agent(killed, police)
 
 "Effects caused by the protein are important"
 agent(caused, protein)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Agent"/>
             <value>Name</value>
             <default>Agent</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -226,19 +228,19 @@ appos(Sam, brother)
 
 "Bill (John's cousin)"
 appos(Bill, cousin)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#AppositionalModifier"/>
             <value>Name</value>
             <default>AppositionalModifier</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -255,7 +257,7 @@ appos(Bill, cousin)</documentation>
 
     <concept name="Argument" rdftype="o:Argument">
       <documentation></documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Argument"/>
             <value>Name</value>
             <default>Argument</default>
@@ -277,19 +279,19 @@ appos(Bill, cousin)</documentation>
 
 "What is that?"
 attr (is, What)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Attributive"/>
             <value>Name</value>
             <default>Attributive</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -312,19 +314,19 @@ aux(died, has)
 
 "He should leave"
 aux(leave, should)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Auxiliary"/>
             <value>Name</value>
             <default>Auxiliary</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -347,19 +349,19 @@ xcomp(like, swim)
 
 "I am ready to leave"
 xcomp(ready, leave)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#ClausalComplementWithExternalSubject"/>
             <value>Name</value>
             <default>ClausalComplementWithExternalSubject</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -385,19 +387,19 @@ ccomp(certain, did)
 
 "I admire the fact that you are honest"
 ccomp(fact, honest)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#ClausalComplementWithInternalSubject"/>
             <value>Name</value>
             <default>ClausalComplementWithInternalSubject</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -420,19 +422,19 @@ csubj (makes, said)
 
 "What she said is not true"
 csubj (true, said)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#ClausalSubject"/>
             <value>Name</value>
             <default>ClausalSubject</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -450,7 +452,7 @@ csubj (true, said)</documentation>
 
     <concept name="Complement" rdftype="o:Complement">
       <documentation></documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Complement"/>
             <value>Name</value>
             <default>Complement</default>
@@ -472,7 +474,7 @@ csubj (true, said)</documentation>
 
 "He says that you like to swim"
 complm(like, that)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Complementizer"/>
             <value>Name</value>
             <default>Complementizer</default>
@@ -494,19 +496,19 @@ complm(like, that)</documentation>
 
 "I lost $ 3.2 billion"
 number($, billion)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#CompountNumberElement"/>
             <value>Name</value>
             <default>CompountNumberElement</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -531,19 +533,19 @@ conj (big, honest)
 
 "They either ski or snowboard"
 conj (ski, snowboard)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Conjunct"/>
             <value>Name</value>
             <default>Conjunct</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -564,19 +566,19 @@ conj (ski, snowboard)</documentation>
 
 "Tom likes to eat fish"
 xsubj (eat, Tom)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#ControllingSubject"/>
             <value>Name</value>
             <default>ControllingSubject</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -600,19 +602,19 @@ cc(big, and)
 
 "They either ski or snowboard"
 cc(ski, or)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Coordination"/>
             <value>Name</value>
             <default>Coordination</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -636,19 +638,19 @@ cop(big, is)
 
 "Bill is an honest man"
 cop(man, is)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Copula"/>
             <value>Name</value>
             <default>Copula</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -666,7 +668,7 @@ cop(man, is)</documentation>
 
     <concept name="DependencyLabel" rdftype="o:DependencyLabel">
       <documentation></documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#DependencyLabel"/>
             <value>Name</value>
             <default>DependencyLabel</default>
@@ -685,7 +687,7 @@ cop(man, is)</documentation>
 
     <concept name="DependencyRelation" rdftype="o:DependencyRelation">
       <documentation></documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#DependencyRelation"/>
             <value>Name</value>
             <default>DependencyRelation</default>
@@ -709,19 +711,19 @@ A dependency is labeled as dep when the system is unable to determine a more pre
 
 "Then, as if to show that he could, . . . "
 dep(show, if)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Dependent"/>
             <value>Name</value>
             <default>Dependent</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -745,19 +747,19 @@ det(man, the)
 
 "Which book do you prefer?"
 det(book, which)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Determiner"/>
             <value>Name</value>
             <default>Determiner</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -781,19 +783,19 @@ dobj (gave, raise)
 
 "They win the lottery"
 dobj (win, lottery)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#DirectObject"/>
             <value>Name</value>
             <default>DirectObject</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -814,19 +816,19 @@ dobj (win, lottery)</documentation>
 
 "There is a ghost in the room"
 expl(is, There)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Expletive"/>
             <value>Name</value>
             <default>Expletive</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -847,19 +849,19 @@ expl(is, There)</documentation>
 
 "She gave me a raise"
 iobj (gave, me)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#IndirectObject"/>
             <value>Name</value>
             <default>IndirectObject</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -883,19 +885,19 @@ infmod(points, establish)
 
 "I don't have anything to say"
 infmod(anything, say)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#InfinitivalModifier"/>
             <value>Name</value>
             <default>InfinitivalModifier</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -916,19 +918,19 @@ infmod(anything, say)</documentation>
 
 "Forces engaged in fighting after insurgents attacked"
 mark(attacked, after)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Marker"/>
             <value>Name</value>
             <default>Marker</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -946,7 +948,7 @@ mark(attacked, after)</documentation>
 
     <concept name="MeasurePhraseModifier" rdftype="o:MeasurePhraseModifier">
       <documentation></documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#MeasurePhraseModifier"/>
             <value>Name</value>
             <default>MeasurePhraseModifier</default>
@@ -965,7 +967,7 @@ mark(attacked, after)</documentation>
 
     <concept name="Modifier" rdftype="o:Modifier">
       <documentation></documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Modifier"/>
             <value>Name</value>
             <default>Modifier</default>
@@ -993,19 +995,19 @@ mwe(well, as)
 
 "He cried because of you"
 mwe(of, because)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#MultiWordExpression"/>
             <value>Name</value>
             <default>MultiWordExpression</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1029,19 +1031,19 @@ neg(scientist, not)
 
 "Bill doesn't drive"
 neg(drive, n't)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#NegationModifier"/>
             <value>Name</value>
             <default>NegationModifier</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1065,19 +1067,19 @@ nsubj (defeated, Clinton)
 
 "The baby is cute"
 nsubj (cute, baby)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#NominalSubject"/>
             <value>Name</value>
             <default>NominalSubject</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1100,19 +1102,19 @@ Penn Treebank represents the branching structure of NPs.)
 "Oil price futures"
 nn(futures, oil)
 nn(futures, price)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#NounCompoundModifier"/>
             <value>Name</value>
             <default>NounCompoundModifier</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1148,19 +1150,19 @@ npadvmod(significant, itself)
 
 "90% of Australians like him, the most of any country"
 npadvmod(like, most)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#NounPhraseAsAdverbialModifier"/>
             <value>Name</value>
             <default>NounPhraseAsAdverbialModifier</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1181,19 +1183,19 @@ npadvmod(like, most)</documentation>
 
 "Sam eats 3 sheep"
 num(sheep, 3)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#NumericModifier"/>
             <value>Name</value>
             <default>NumericModifier</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1211,7 +1213,7 @@ num(sheep, 3)</documentation>
 
     <concept name="Object" rdftype="o:Object">
       <documentation></documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Object"/>
             <value>Name</value>
             <default>Object</default>
@@ -1233,19 +1235,19 @@ num(sheep, 3)</documentation>
 
 "I sat on the chair"
 pobj (on, chair)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#ObjectOfPreposition"/>
             <value>Name</value>
             <default>ObjectOfPreposition</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1266,19 +1268,19 @@ pobj (on, chair)</documentation>
 
 "The guy, John said, left early in the morning"
 parataxis(left, said)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Parataxis"/>
             <value>Name</value>
             <default>Parataxis</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1302,19 +1304,19 @@ partmod(truffles, picked)
 
 "Bill tried to shoot demonstrating his incompetence"
 partmod(shoot, demonstrating)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#ParticipalModifier"/>
             <value>Name</value>
             <default>ParticipalModifier</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1339,19 +1341,19 @@ aux(killed,has)
 
 "Kennedy was/got killed"
 auxpass(killed, was/got)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#PassiveAuxiliary"/>
             <value>Name</value>
             <default>PassiveAuxiliary</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1372,19 +1374,19 @@ auxpass(killed, was/got)</documentation>
 
 "That she lied was suspected by everyone"
 csubjpass(suspected, lied)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#PassiveClausalSubject"/>
             <value>Name</value>
             <default>PassiveClausalSubject</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1405,19 +1407,19 @@ csubjpass(suspected, lied)</documentation>
 
 "Dole was defeated by Clinton"
 nsubjpass(defeated, Dole)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#PassiveNominalSubject"/>
             <value>Name</value>
             <default>PassiveNominalSubject</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1438,19 +1440,19 @@ nsubjpass(defeated, Dole)</documentation>
 
 "They shut down the station"
 prt(shut, down)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#PhrasalVerbParticle"/>
             <value>Name</value>
             <default>PhrasalVerbParticle</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1474,19 +1476,19 @@ poss(offices, their)
 
 "Bill's clothes"
 poss(clothes, Bill)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#PossessionModifier"/>
             <value>Name</value>
             <default>PossessionModifier</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1507,19 +1509,19 @@ poss(clothes, Bill)</documentation>
 
 "Bill's clothes"
 possessive(John, 's)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#PossessiveModifier"/>
             <value>Name</value>
             <default>PossessiveModifier</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1540,19 +1542,19 @@ possessive(John, 's)</documentation>
 
 "Both the boys and the girls are here"
 preconj (boys, both)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Preconjunct"/>
             <value>Name</value>
             <default>Preconjunct</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1573,19 +1575,19 @@ preconj (boys, both)</documentation>
 
 "All the boys are here"
 predet(boys, all)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Predeterminer"/>
             <value>Name</value>
             <default>Predeterminer</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1606,7 +1608,7 @@ predet(boys, all)</documentation>
 
 "He purchased it without paying a premium"
 prepc_without(purchased, paying)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#PrepositionalClausalModifier"/>
             <value>Name</value>
             <default>PrepositionalClausalModifier</default>
@@ -1631,19 +1633,19 @@ pcomp(on, are)
 
 "They heard about you missing classes"
 pcomp(about, missing)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#PrepositionalComplement"/>
             <value>Name</value>
             <default>PrepositionalComplement</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1670,19 +1672,19 @@ prep(saw, with)
 
 "He is responsible for meals"
 prep(responsible, for)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#PrepositionalModifier"/>
             <value>Name</value>
             <default>PrepositionalModifier</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1703,19 +1705,19 @@ prep(responsible, for)</documentation>
 
 "Go home!"
 punct(Go, !)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Punctuation"/>
             <value>Name</value>
             <default>Punctuation</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1736,19 +1738,19 @@ punct(Go, !)</documentation>
 
 "He talked to him in order to secure the account"
 purpcl(talked, secure)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#PurposeClauseModifier"/>
             <value>Name</value>
             <default>PurposeClauseModifier</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1769,19 +1771,19 @@ purpcl(talked, secure)</documentation>
 
 "About 200 people came to the party"
 quantmod(200, About)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#QuantifierModifier"/>
             <value>Name</value>
             <default>QuantifierModifier</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1802,19 +1804,19 @@ quantmod(200, About)</documentation>
 
 "I saw the book which you bought"
 ref (book, which)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Referent"/>
             <value>Name</value>
             <default>Referent</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1835,19 +1837,19 @@ ref (book, which)</documentation>
 
 "I saw the man whose wife you love"
 rel (love, wife)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Relative"/>
             <value>Name</value>
             <default>Relative</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1871,19 +1873,19 @@ rcmod(man, love)
 
 "I saw the book which you bought"
 rcmod(book,bought)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#RelativeClauseModifier"/>
             <value>Name</value>
             <default>RelativeClauseModifier</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1907,19 +1909,19 @@ root(ROOT, love)
 
 "Bill is an honest man"
 root(ROOT, man)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Root"/>
             <value>Name</value>
             <default>Root</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -1937,7 +1939,7 @@ root(ROOT, man)</documentation>
 
     <concept name="SemanticDependent" rdftype="o:SemanticDependent">
       <documentation></documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#SemanticDependent"/>
             <value>Name</value>
             <default>SemanticDependent</default>
@@ -1956,7 +1958,7 @@ root(ROOT, man)</documentation>
 
     <concept name="Subject" rdftype="o:Subject">
       <documentation></documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Subject"/>
             <value>Name</value>
             <default>Subject</default>
@@ -1978,19 +1980,19 @@ root(ROOT, man)</documentation>
 
 "Last night, I swam in the pool"
 tmod(swam, night)</documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#TemporalModifier"/>
             <value>Name</value>
             <default>TemporalModifier</default>
             <validation>[A-Z][a-z]*</validation>
             <number atleast="1" atmost="1"></number>
           </field>
-          <field name="from" type="text">
+          <field name="from" type="reference" rdfpred="os:hasSource">
               <value>From</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
           </field>
-          <field name="to" type="text">
+          <field name="to" type="reference" rdfpred="os:hasTarget">
               <value>To</value>
               <number atleast="1" atmost="1"></number>
               <!-- <textdType>Theory</textdType> -->
@@ -2008,7 +2010,7 @@ tmod(swam, night)</documentation>
 
     <concept name="Token" rdftype="o:Token">
       <documentation></documentation>
-          <field name="name" type="text">
+          <field name="name" type="text" rdfpred="kat:name">
             <documentation xref="http://purl.org/olia/stanford.owl#Token"/>
             <value>Name</value>
             <default>Token</default>
