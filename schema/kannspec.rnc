@@ -9,6 +9,15 @@ name.att = attribute name {text}
 type.att = attribute type {text}
 src.att = attribute src {xsd:anyURI}
 
+## the attributes for RDF generation, they take qualified names that stand for ontology
+## URIs.
+## the class of the annotated objects
+rdftype.att = attribute rdftype {xsd:QName}
+## the predicate 
+rdfpred.att = attribute rdfpred {xsd:QName}
+## and the object (only for 
+rdfobj.att = attribute rdfobj {xsd:QName}
+
 ## an annotation KAnnSpec for mathematical documents.
 annotation = element annotation {name.att & concept* & documentation?}
 
@@ -17,7 +26,7 @@ documentation = element documentation {richtext | attribute xref {xsd:anyURI}}
 
 ## a concept classifies a text fragment and specifies what metadata can be
 ## attached to it. concepts are used to generate annotation dialogs in KAT.
-concept = element concept {name.att & field* &  display & rdf & documentation?}
+concept = element concept {name.att & rdftype.att & field* &  display & documentation?}
 
 ## a field specifies an slot in the annotation dialog for a text fragment.
 ## there are various types of fields, which we specify next.
@@ -34,7 +43,7 @@ field.ref = element field {attribute type {"reference"} & field.all & referenced
 field.select = element field {attribute type {"select"} & field.all & option* & defaultoption?}
 
 ## the parts that all incarnations share
-field.all = name.att & value? & number? & documentation?
+field.all = name.att & rdfpred.att & value? & number? & documentation?
 
 ## the text that describes the field in the annotation interface (should be html5 inline)
 value = element value {text}
@@ -52,8 +61,9 @@ referencedType = element referencedType {text}
 ## an option in a selection field, it is characterized by a value and its documentation
 ## (which can be shown to the annotator in the dialogue)
 ## One of the options is made the default option, by a default attribute
-option = element option {value & documentation?}
-defaultoption = element defaultoption {value & documentation?}
+option.model = rdfobj.att? & value & documentation? 
+option = element option {option.model}
+defaultoption = element defaultoption {option.model}
 
 ## the number elements specifies how many of this field are required:
 ## if atleast is not given the field is optional
@@ -72,10 +82,6 @@ template = element template {richtext}
 css = element css {src.att | text}
 ## and Javascript as well.
 javascript = element javascript {src.att | text}
-
-## the rdf:RDF field contains a RDF (in XML serialization) template (using {} again)
-## that is used to generate the annotations in RDF form.
-rdf = external "rdfxml.rnc"
 
 ## richtext is a placeholder for a well-behaved fragment of HTML5. After all, we want
 ## use KAT in a browser.

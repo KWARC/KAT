@@ -6,7 +6,7 @@
 <annotation name="stanford"
         xmlns="https://github.com/KWARC/KAT/"  
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:o="http://omdoc.org/KAnnSpec#">
+	xmlns:o="http://purl.org/olia/stanford.owl#">
   <documentation>
     OLiA Annotation Model of Stanford Parser dependency labels (de Marneffe and Manning 2011)
 
@@ -16,7 +16,7 @@
     Marie-Catherine de Marneffe and Christopher D. Manning (2011), Stanford typed dependencies manual, September 2008, revised for Stanford Parser v. 1.6.9 in September 2011, http://nlp.stanford.edu/software/dependencies_manual.pdf
   </documentation>
 
-    <concept name="AbbreviationModifier">
+    <concept name="AbbreviationModifier" rdftype="o:AbbreviationModifier">
       <documentation>An abbreviation modifier of an NP is a parenthesized NP that serves to abbreviate the NP (or to define an abbreviation).
       
       "The Australian Broadcasting Corporation (ABC)"
@@ -46,16 +46,10 @@
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AbbreviationModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="AdjectivalComplement">
+    <concept name="AdjectivalComplement" rdftype="o:AdjectivalComplement">
       <documentation>An adjectival complement of a verb is an adjectival phrase which functions as the complement (like an object of the verb).
 
 "She looks very beautiful"
@@ -84,16 +78,10 @@ acomp(looks, beautiful)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AdjectivalComplement"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="AdjectivalModifier">
+    <concept name="AdjectivalModifier" rdftype="o:AdjectivalModifier">
       <documentation>An adjectival modifier of an NP is any adjectival phrase that serves to modify the meaning of the NP.
 
 "Sam eats red meat"
@@ -122,16 +110,10 @@ amod(meat, red)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AdjectivalModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="AdverbialClauseModifier">
+    <concept name="AdverbialClauseModifier" rdftype="o:AdverbialClauseModifier">
       <documentation>An adverbial clause modifier of a VP or S is a clause modifying the verb (temporal clause, consequence, conditional clause, etc.).
 
 "The accident happened as the night was falling"
@@ -163,16 +145,10 @@ advcl(tell, know)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AdverbialClauseModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="AdverbialModifier">
+    <concept name="AdverbialModifier" rdftype="o:AdverbialModifier">
       <documentation>An adverbial modifier of a word is a (non-clausal) adverb or adverbial phrase (ADVP) that serves to modify the meaning of the word.
 
 "Genetically modified food"
@@ -204,16 +180,10 @@ advmod(often, less)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AdverbialModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Agent">
+    <concept name="Agent" rdftype="o:Agent">
       <documentation>An agent is the complement of a passive verb which is introduced by the preposition "by" and does the action.
 
 "The man has been killed by the police"
@@ -245,16 +215,10 @@ agent(caused, protein)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Agent"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="AppositionalModifier">
+    <concept name="AppositionalModifier" rdftype="o:AppositionalModifier">
       <documentation>An appositional modifier of an NP is an NP immediately to the right of the first NP that serves to define or modify that NP. It includes parenthesized examples.
 
 "Sam, my brother"
@@ -286,16 +250,10 @@ appos(Bill, cousin)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#AppositionalModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Argument">
+    <concept name="Argument" rdftype="o:Argument">
       <documentation></documentation>
           <field name="name" type="text">
             <documentation xref="http://purl.org/olia/stanford.owl#Argument"/>
@@ -311,16 +269,10 @@ appos(Bill, cousin)</documentation>
               {name}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Argument"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Attributive">
+    <concept name="Attributive" rdftype="o:Attributive">
       <documentation>An attributive is a WHNP complement of a copular verb such as "to be", "to seem", "to appear".
 
 "What is that?"
@@ -349,16 +301,10 @@ attr (is, What)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Attributive"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Auxiliary">
+    <concept name="Auxiliary" rdftype="o:Auxiliary">
       <documentation>An auxiliary of a clause is a non-main verb of the clause, e.g. modal auxiliary, "be" and "have" in a composed tense.
 
 "Reagan has died"
@@ -390,16 +336,10 @@ aux(leave, should)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Auxiliary"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="ClausalComplementWithExternalSubject">
+    <concept name="ClausalComplementWithExternalSubject" rdftype="o:ClausalComplementWithExternalSubject">
       <documentation>An open clausal complement (xcomp) of a VP or an ADJP is a clausal complement without its own subject, whose reference is determined by an external subject. These complements are always non-finite. The name xcomp is borrowed from Lexical-Functional Grammar.
 
 "He says that you like to swim"
@@ -431,16 +371,10 @@ xcomp(ready, leave)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ClausalComplementWithExternalSubject"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="ClausalComplementWithInternalSubject">
+    <concept name="ClausalComplementWithInternalSubject" rdftype="o:ClausalComplementWithInternalSubject">
       <documentation>A clausal complement of a verb or adjective is a dependent clause with an internal subject which functions like an object of the verb, or adjective. Clausal complements for nouns are limited to complement clauses with a subset of nouns like "fact" or "report". We analyze them the same (parallel to the analysis of this class as "content clauses" in Huddleston and Pullum 2002). Such clausal complements are usually finite (though there are occasional remnant English subjunctives).
 
 "He says that you like to swim"
@@ -475,16 +409,10 @@ ccomp(fact, honest)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ClausalComplementWithInternalSubject"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="ClausalSubject">
+    <concept name="ClausalSubject" rdftype="o:ClausalSubject">
       <documentation>A clausal subject is a clausal syntactic subject of a clause, i.e., the subject is itself a clause. The governor of this relation might not always be a verb: when the verb is a copular verb, the root of the clause is the complement of the copular verb. In the two following examples, "what she said" is the subject.
 
 "What she said makes sense"
@@ -517,16 +445,10 @@ csubj (true, said)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ClausalSubject"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Complement">
+    <concept name="Complement" rdftype="o:Complement">
       <documentation></documentation>
           <field name="name" type="text">
             <documentation xref="http://purl.org/olia/stanford.owl#Complement"/>
@@ -542,16 +464,10 @@ csubj (true, said)</documentation>
               {name}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Complement"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Complementizer">
+    <concept name="Complementizer" rdftype="o:Complementizer">
       <documentation>A complementizer of a clausal complement (ccomp) is the word introducing it. It will be the subordinating conjunction "that" or "whether".
 
 "He says that you like to swim"
@@ -570,16 +486,10 @@ complm(like, that)</documentation>
               {name}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Complementizer"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="CompountNumberElement">
+    <concept name="CompountNumberElement" rdftype="o:CompountNumberElement">
       <documentation>An element of compound number is a part of a number phrase or currency amount.
 
 "I lost $ 3.2 billion"
@@ -609,16 +519,10 @@ number($, billion)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#CompountNumberElement"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Conjunct">
+    <concept name="Conjunct" rdftype="o:Conjunct">
       <documentation>A conjunct is the relation between two elements connected by a coordinating conjunction, such as "and", "or", etc. We treat conjunctions asymmetrically: The head of the relation is the first
 conjunct and other conjunctions depend on it via the conj relation.
 
@@ -652,16 +556,10 @@ conj (ski, snowboard)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Conjunct"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="ControllingSubject">
+    <concept name="ControllingSubject" rdftype="o:ControllingSubject">
       <documentation>A controlling subject is the relation between the head of a open clausal complement (xcomp) and the external subject of that clause.
 
 "Tom likes to eat fish"
@@ -691,16 +589,10 @@ xsubj (eat, Tom)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ControllingSubject"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Coordination">
+    <concept name="Coordination" rdftype="o:Coordination">
       <documentation>A coordination is the relation between an element of a conjunct and the coordinating conjunction word of the conjunct. (Note: different dependency grammars have different treatments of coordination. We take one conjunct of a conjunction (normally the first) as the head of the conjunction.)
 
 "Bill is big and honest"
@@ -733,16 +625,10 @@ cc(ski, or)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Coordination"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Copula">
+    <concept name="Copula" rdftype="o:Copula">
       <documentation>A copula is the relation between the complement of a copular verb and the copular verb. (We normally take a copula as a dependent of its complement.)
 
 "Bill is big"
@@ -775,16 +661,10 @@ cop(man, is)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Copula"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="DependencyLabel">
+    <concept name="DependencyLabel" rdftype="o:DependencyLabel">
       <documentation></documentation>
           <field name="name" type="text">
             <documentation xref="http://purl.org/olia/stanford.owl#DependencyLabel"/>
@@ -800,16 +680,10 @@ cop(man, is)</documentation>
               {name}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#DependencyLabel"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="DependencyRelation">
+    <concept name="DependencyRelation" rdftype="o:DependencyRelation">
       <documentation></documentation>
           <field name="name" type="text">
             <documentation xref="http://purl.org/olia/stanford.owl#DependencyRelation"/>
@@ -825,16 +699,10 @@ cop(man, is)</documentation>
               {name}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#DependencyRelation"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Dependent">
+    <concept name="Dependent" rdftype="o:Dependent">
       <documentation>Dependencies are established between tokens, i.e., exactly those entities that are subject to part of speech annotation.
 
 A dependency is labeled as dep when the system is unable to determine a more precise dependency relation between two words. This may be because of a weird grammatical construction, a limitation in the Stanford Dependency conversion software, a parser error, or because of an unresolved long distance dependency.
@@ -866,16 +734,10 @@ dep(show, if)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Dependent"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Determiner">
+    <concept name="Determiner" rdftype="o:Determiner">
       <documentation>A determiner is the relation between the head of an NP and its determiner.
 
 "The man is here"
@@ -908,16 +770,10 @@ det(book, which)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Determiner"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="DirectObject">
+    <concept name="DirectObject" rdftype="o:DirectObject">
       <documentation>The direct object of a VP is the noun phrase which is the (accusative) object of the verb.
 
 "She gave me a raise"
@@ -950,16 +806,10 @@ dobj (win, lottery)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#DirectObject"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Expletive">
+    <concept name="Expletive" rdftype="o:Expletive">
       <documentation>This relation captures an existential "there". The main verb of the clause is the governor.
 
 "There is a ghost in the room"
@@ -989,16 +839,10 @@ expl(is, There)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Expletive"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="IndirectObject">
+    <concept name="IndirectObject" rdftype="o:IndirectObject">
       <documentation>The indirect object of a VP is the noun phrase which is the (dative) object of the verb.
 
 "She gave me a raise"
@@ -1028,16 +872,10 @@ iobj (gave, me)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#IndirectObject"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="InfinitivalModifier">
+    <concept name="InfinitivalModifier" rdftype="o:InfinitivalModifier">
       <documentation>An infinitival modifier of an NP is an infinitive that serves to modify the meaning of the NP.
 
 "Points to establish are . . . "
@@ -1070,16 +908,10 @@ infmod(anything, say)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#InfinitivalModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Marker">
+    <concept name="Marker" rdftype="o:Marker">
       <documentation>A marker of an adverbial clausal complement (advcl) is the word introducing it. It will be a subordinating conjunction different from "that" or "whether": e.g. "because", "when", "although", etc.
 
 "Forces engaged in fighting after insurgents attacked"
@@ -1109,16 +941,10 @@ mark(attacked, after)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Marker"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="MeasurePhraseModifier">
+    <concept name="MeasurePhraseModifier" rdftype="o:MeasurePhraseModifier">
       <documentation></documentation>
           <field name="name" type="text">
             <documentation xref="http://purl.org/olia/stanford.owl#MeasurePhraseModifier"/>
@@ -1134,16 +960,10 @@ mark(attacked, after)</documentation>
               {name}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#MeasurePhraseModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Modifier">
+    <concept name="Modifier" rdftype="o:Modifier">
       <documentation></documentation>
           <field name="name" type="text">
             <documentation xref="http://purl.org/olia/stanford.owl#Modifier"/>
@@ -1159,16 +979,10 @@ mark(attacked, after)</documentation>
               {name}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Modifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="MultiWordExpression">
+    <concept name="MultiWordExpression" rdftype="o:MultiWordExpression">
       <documentation>The multi-word expression (modifier) relation is used for certain multi-word idioms that behave like a single function word. It is used for a closed set of dependencies between words in common multi-word expressions for which it seems difficult or unclear to assign any other relationships.
 At present, this relation is used inside the following expressions: rather than, as well as, instead of, such as, because of, instead of, in addition to, all but, such as, because of, instead of, due to.
 The boundaries of this class are unclear; it could grow or shrink a little over time.
@@ -1204,16 +1018,10 @@ mwe(of, because)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#MultiWordExpression"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="NegationModifier">
+    <concept name="NegationModifier" rdftype="o:NegationModifier">
       <documentation>The negation modifier is the relation between a negation word and the word it modifies.
 
 "Bill is not a scientist"
@@ -1246,16 +1054,10 @@ neg(drive, n't)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NegationModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="NominalSubject">
+    <concept name="NominalSubject" rdftype="o:NominalSubject">
       <documentation>A nominal subject is a noun phrase which is the syntactic subject of a clause. The governor of this relation might not always be a verb: when the verb is a copular verb, the root of the clause is the complement of the copular verb, which can be an adjective or noun.
 
 "Clinton defeated Dole"
@@ -1288,16 +1090,10 @@ nsubj (cute, baby)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NominalSubject"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="NounCompoundModifier">
+    <concept name="NounCompoundModifier" rdftype="o:NounCompoundModifier">
       <documentation>A noun compound modifier of an NP is any noun that serves to modify the head noun. (Note that in the current system for dependency extraction, all nouns modify the rightmost noun of the NP -- there is no intelligent noun compound analysis. This is likely to be fixed once the
 Penn Treebank represents the branching structure of NPs.)
 
@@ -1329,16 +1125,10 @@ nn(futures, price)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NounCompoundModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="NounPhraseAsAdverbialModifier">
+    <concept name="NounPhraseAsAdverbialModifier" rdftype="o:NounPhraseAsAdverbialModifier">
       <documentation>This relation captures various places where something syntactically a noun phrase (NP) is used as an adverbial modifier in a sentence. These usages include: (i) a measure phrase, which is the relation between the head of an ADJP/ADVP/PP and the head of a measure phrase modifying the ADJP/ADVP; (ii) noun phrases giving an extent inside a VP which are not objects; (iii) financial constructions involving an adverbial or PP-like NP, notably the following construction $5 a share, where the second NP means "per share"; (iv) floating reflexives; and (v) certain other absolutive NP constructions. A temporal modifier (tmod) is a subclass of npadvmod which is distinguished as a separate relation.
 
 "The director is 65 years old"
@@ -1383,16 +1173,10 @@ npadvmod(like, most)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NounPhraseAsAdverbialModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="NumericModifier">
+    <concept name="NumericModifier" rdftype="o:NumericModifier">
       <documentation>A numeric modifier of a noun is any number phrase that serves to modify the meaning of the noun.
 
 "Sam eats 3 sheep"
@@ -1422,16 +1206,10 @@ num(sheep, 3)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#NumericModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Object">
+    <concept name="Object" rdftype="o:Object">
       <documentation></documentation>
           <field name="name" type="text">
             <documentation xref="http://purl.org/olia/stanford.owl#Object"/>
@@ -1447,16 +1225,10 @@ num(sheep, 3)</documentation>
               {name}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Object"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="ObjectOfPreposition">
+    <concept name="ObjectOfPreposition" rdftype="o:ObjectOfPreposition">
       <documentation>The object of a preposition is the head of a noun phrase following the preposition, or the adverbs "here" and "there". (The preposition in turn may be modifying a noun, verb, etc.) Unlike the Penn Treebank, we here define cases of VBG quasi-prepositions like "including", "concerning", etc. as instances of pobj. (The preposition can be called a FW for "pace", "versus", etc. It can also be called a CC -- but we don't currently handle that and would need to distinguish from conjoined prepositions.) In the case of preposition stranding, the object can precede the preposition (e.g., "What does CPR stand for?").
 
 "I sat on the chair"
@@ -1486,16 +1258,10 @@ pobj (on, chair)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ObjectOfPreposition"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Parataxis">
+    <concept name="Parataxis" rdftype="o:Parataxis">
       <documentation>The parataxis relation (from Greek for "place side by side") is a relation between the main verb of a clause and other sentential elements, such as a sentential parenthetical, or a clause after a ":" or a ";".
 
 "The guy, John said, left early in the morning"
@@ -1525,16 +1291,10 @@ parataxis(left, said)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Parataxis"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="ParticipalModifier">
+    <concept name="ParticipalModifier" rdftype="o:ParticipalModifier">
       <documentation>A participial modifier of an NP or VP or sentence is a participial verb form that serves to modify the meaning of a noun phrase or sentence.
 
 "Truffles picked during the spring are tasty"
@@ -1567,16 +1327,10 @@ partmod(shoot, demonstrating)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#ParticipalModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="PassiveAuxiliary">
+    <concept name="PassiveAuxiliary" rdftype="o:PassiveAuxiliary">
       <documentation>A passive auxiliary of a clause is a non-main verb of the clause which contains the passive information.
 
 "Kennedy has been killed"
@@ -1610,16 +1364,10 @@ auxpass(killed, was/got)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PassiveAuxiliary"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="PassiveClausalSubject">
+    <concept name="PassiveClausalSubject" rdftype="o:PassiveClausalSubject">
       <documentation>A clausal passive subject is a clausal syntactic subject of a passive clause. In the example below, "that she lied" is the subject.
 
 "That she lied was suspected by everyone"
@@ -1649,16 +1397,10 @@ csubjpass(suspected, lied)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PassiveClausalSubject"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="PassiveNominalSubject">
+    <concept name="PassiveNominalSubject" rdftype="o:PassiveNominalSubject">
       <documentation>A passive nominal subject is a noun phrase which is the syntactic subject of a passive clause.
 
 "Dole was defeated by Clinton"
@@ -1688,16 +1430,10 @@ nsubjpass(defeated, Dole)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PassiveNominalSubject"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="PhrasalVerbParticle">
+    <concept name="PhrasalVerbParticle" rdftype="o:PhrasalVerbParticle">
       <documentation>The phrasal verb particle relation identifies a phrasal verb, and holds between the verb and its particle.
 
 "They shut down the station"
@@ -1727,16 +1463,10 @@ prt(shut, down)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PhrasalVerbParticle"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="PossessionModifier">
+    <concept name="PossessionModifier" rdftype="o:PossessionModifier">
       <documentation>The possession modifier relation holds between the head of an NP and its possessive determiner, or a genitive 's complement.
 
 "their offices"
@@ -1769,16 +1499,10 @@ poss(clothes, Bill)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PossessionModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="PossessiveModifier">
+    <concept name="PossessiveModifier" rdftype="o:PossessiveModifier">
       <documentation>The possessive modifier relation appears between the head of an NP and the genitive 's.
 
 "Bill's clothes"
@@ -1808,16 +1532,10 @@ possessive(John, 's)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PossessiveModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Preconjunct">
+    <concept name="Preconjunct" rdftype="o:Preconjunct">
       <documentation>A preconjunct is the relation between the head of an NP and a word that appears at the beginning bracketing a conjunction (and puts emphasis on it), such as "either", "both", "neither").
 
 "Both the boys and the girls are here"
@@ -1847,16 +1565,10 @@ preconj (boys, both)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Preconjunct"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Predeterminer">
+    <concept name="Predeterminer" rdftype="o:Predeterminer">
       <documentation>A predeterminer is the relation between the head of an NP and a word that precedes and modifies the meaning of the NP determiner.
 
 "All the boys are here"
@@ -1886,16 +1598,10 @@ predet(boys, all)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Predeterminer"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="PrepositionalClausalModifier">
+    <concept name="PrepositionalClausalModifier" rdftype="o:PrepositionalClausalModifier">
       <documentation>In the collapsed representation, a prepositional clausal modifier of a verb, adjective, or noun is a clause introduced by a preposition which serves to modify the meaning of the verb, adjective, or noun.
 
 "He purchased it without paying a premium"
@@ -1914,16 +1620,10 @@ prepc_without(purchased, paying)</documentation>
               {name}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PrepositionalClausalModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="PrepositionalComplement">
+    <concept name="PrepositionalComplement" rdftype="o:PrepositionalComplement">
       <documentation>This is used when the complement of a preposition is a clause or prepositional phrase (or occasionally, an adverbial phrase). The prepositional complement of a preposition is the head of a clause following the preposition, or the preposition head of the following PP.
 
 "We have no information on whether users are at risk"
@@ -1956,16 +1656,10 @@ pcomp(about, missing)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PrepositionalComplement"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="PrepositionalModifier">
+    <concept name="PrepositionalModifier" rdftype="o:PrepositionalModifier">
       <documentation>A prepositional modifier of a verb, adjective, or noun is any prepositional phrase that serves to modify the meaning of the verb, adjective, noun, or even another prepositon. In the collapsed representation, this is used only for prepositions with NP complements.
 
 "I saw a cat in a hat"
@@ -2001,16 +1695,10 @@ prep(responsible, for)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PrepositionalModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Punctuation">
+    <concept name="Punctuation" rdftype="o:Punctuation">
       <documentation>This is used for any piece of punctuation in a clause, if punctuation is being retained in the typed dependencies. By default, punctuation is not retained in the output.
 
 "Go home!"
@@ -2040,16 +1728,10 @@ punct(Go, !)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Punctuation"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="PurposeClauseModifier">
+    <concept name="PurposeClauseModifier" rdftype="o:PurposeClauseModifier">
       <documentation>A purpose clause modifier of a VP is a clause headed by "(in order) to" specifying a purpose. At present the system only recognizes ones that have "in order to" as otherwise the system is unable to distinguish from the surface representations between these and open clausal complements (xcomp). It can also recognize fronted "to" purpose clauses in sentences.
 
 "He talked to him in order to secure the account"
@@ -2079,16 +1761,10 @@ purpcl(talked, secure)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#PurposeClauseModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="QuantifierModifier">
+    <concept name="QuantifierModifier" rdftype="o:QuantifierModifier">
       <documentation>A quantifier modifier is an element modifying the head of a QP constituent. (These are modifiers in complex numeric quantifiers, not other types of "quantification". Quantifiers like "all" become det.)
 
 "About 200 people came to the party"
@@ -2118,16 +1794,10 @@ quantmod(200, About)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#QuantifierModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Referent">
+    <concept name="Referent" rdftype="o:Referent">
       <documentation>A referent of the head of an NP is the relative word introducing the relative clause modifying the NP.
 
 "I saw the book which you bought"
@@ -2157,16 +1827,10 @@ ref (book, which)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Referent"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Relative">
+    <concept name="Relative" rdftype="o:Relative">
       <documentation>A relative of a relative clause is the head word of the WH-phrase introducing it. This analysis is used only for relative words which are not the subject of the relative clause. Relative words which act as the subject of a relative clause are analyzed as a nsubj.
 
 "I saw the man whose wife you love"
@@ -2196,16 +1860,10 @@ rel (love, wife)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Relative"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="RelativeClauseModifier">
+    <concept name="RelativeClauseModifier" rdftype="o:RelativeClauseModifier">
       <documentation>A relative clause modifier of an NP is a relative clause modifying the NP. The relation points from the head noun of the NP to the head of the relative clause, normally a verb.
 
 "I saw the man you love"
@@ -2238,16 +1896,10 @@ rcmod(book,bought)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#RelativeClauseModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Root">
+    <concept name="Root" rdftype="o:Root">
       <documentation>The root grammatical relation points to the root of the sentence. A fake node "ROOT" is used as the governor. The ROOT node is indexed with "0", since the indexation of real words in the sentence starts at 1.
 
 "I love French fries."
@@ -2280,16 +1932,10 @@ root(ROOT, man)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Root"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="SemanticDependent">
+    <concept name="SemanticDependent" rdftype="o:SemanticDependent">
       <documentation></documentation>
           <field name="name" type="text">
             <documentation xref="http://purl.org/olia/stanford.owl#SemanticDependent"/>
@@ -2305,16 +1951,10 @@ root(ROOT, man)</documentation>
               {name}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#SemanticDependent"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
-    </concept>
+  </concept>
 
 
-    <concept name="Subject">
+    <concept name="Subject" rdftype="o:Subject">
       <documentation></documentation>
           <field name="name" type="text">
             <documentation xref="http://purl.org/olia/stanford.owl#Subject"/>
@@ -2330,16 +1970,10 @@ root(ROOT, man)</documentation>
               {name}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Subject"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="TemporalModifier">
+    <concept name="TemporalModifier" rdftype="o:TemporalModifier">
       <documentation>A temporal modifier (of a VP, NP, or an ADJP is a bare noun phrase constituent that serves to modify the meaning of the constituent by specifying a time. (Other temporal modifiers are prepositional phrases and are introduced as prep.)
 
 "Last night, I swam in the pool"
@@ -2369,16 +2003,10 @@ tmod(swam, night)</documentation>
               {name} from {from} to {to}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#TemporalModifier"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 
 
-    <concept name="Token">
+    <concept name="Token" rdftype="o:Token">
       <documentation></documentation>
           <field name="name" type="text">
             <documentation xref="http://purl.org/olia/stanford.owl#Token"/>
@@ -2394,11 +2022,5 @@ tmod(swam, night)</documentation>
               {name}
           </template>
       </display>
-      <rdf:RDF>
-          <rdf:Description>
-              <rdf:type rdf:resource="http://purl.org/olia/stanford.owl#Token"/>
-              <o:symbolname>{name}</o:symbolname>
-          </rdf:Description>
-      </rdf:RDF>
     </concept>
 </annotation>
