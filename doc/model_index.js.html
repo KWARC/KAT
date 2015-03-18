@@ -159,16 +159,16 @@ KAT.model = {};
   }
 
   //regular expression for names string, may not have a capturing group
-  var nameRegExS = "(?:\\w|\\d|\\-|\\_|\\+)+";
+  var KAT.model.nameRegExS = "(?:\\w|\\d|\\-|\\_|\\+)+";
 
   //regexes for strings
-  var nameRegEx = new RegExp("^"+nameRegExS+"$");
-  var nameRegEx2 = new RegExp("^("+nameRegExS+")\\.("+nameRegExS+")$");
-  var nameRegEx3 = new RegExp("^("+nameRegExS+")\\.("+nameRegExS+")\\.("+nameRegExS+")$");
+  var KAT.model.nameRegEx = new RegExp("^"+KAT.model.nameRegExS+"$");
+  var KAT.model.nameRegEx2 = new RegExp("^("+KAT.model.nameRegExS+")\\.("+KAT.model.nameRegExS+")$");
+  var KAT.model.nameRegEx3 = new RegExp("^("+KAT.model.nameRegExS+")\\.("+KAT.model.nameRegExS+")\\.("+KAT.model.nameRegExS+")$");
 
   //can be used to normalise names
   //if we ever need it
-  var nameNormaliser = function(name){
+  var KAT.model.nameNormaliser = function(name){
     return name;
   }
 
@@ -186,9 +186,9 @@ KAT.model = {};
   */
   KAT.model.KAnnSpecCollection.prototype.getKAnnSpec = function(name){
     //normalise the name
-    var name = nameNormaliser(name);
+    var name = KAT.model.nameNormaliser(name);
 
-    if(!nameRegEx.test(name)){
+    if(!KAT.model.nameRegEx.test(name)){
       return false;
     }
 
@@ -216,14 +216,14 @@ KAT.model = {};
   */
   KAT.model.KAnnSpecCollection.prototype.getConcept = function(name){
     //normalise the name
-    var name = nameNormaliser(name);
+    var name = KAT.model.nameNormaliser(name);
 
-    if(!nameRegEx2.test(name)){
+    if(!KAT.model.nameRegEx2.test(name)){
       return false;
     }
 
     //match the name regex
-    var name = name.match(nameRegEx2);
+    var name = name.match(KAT.model.nameRegEx2);
 
     //get the KAnnSpec
     var KAnnSpec = this.getKAnnSpec(name[1]);
@@ -271,14 +271,14 @@ KAT.model = {};
   */
   KAT.model.KAnnSpecCollection.prototype.getField = function(name){
     //normalise the name
-    var name = nameNormaliser(name);
+    var name = KAT.model.nameNormaliser(name);
 
-    if(!nameRegEx3.test(name)){
+    if(!KAT.model.nameRegEx3.test(name)){
       return false;
     }
 
     //match the name regex
-    var name = name.match(nameRegEx3);
+    var name = name.match(KAT.model.nameRegEx3);
 
     //get the KAnnSpec
     var KAnnSpec = this.getKAnnSpec(name[1]);
@@ -337,10 +337,10 @@ KAT.model = {};
     * @type {string}
     * @name KAT.model.KAnnSpec#name
     */
-    this.name = nameNormaliser(this.xml.children().eq(0).attr("name"));
+    this.name = KAT.model.nameNormaliser(this.xml.children().eq(0).attr("name"));
 
     //Check if the name is valid.
-    if(!this.name || !nameRegEx.test(this.name)){
+    if(!this.name || !KAT.model.nameRegEx.test(this.name)){
       throw new KAT.model.ParsingError("KAT.model.KAnnSpec: Unable to create KAnnSpec ('"+this.name+"' is not a valid name). ", this.xml);
     }
 
@@ -414,9 +414,9 @@ KAT.model = {};
   */
   KAT.model.KAnnSpec.prototype.getConcept = function(name){
     //normalise the name
-    var name = nameNormaliser(name);
+    var name = KAT.model.nameNormaliser(name);
 
-    if(!nameRegEx.test(name)){
+    if(!KAT.model.nameRegEx.test(name)){
       return false;
     }
 
@@ -444,14 +444,14 @@ KAT.model = {};
   */
   KAT.model.KAnnSpec.prototype.getField = function(name){
     //normalise the name
-    var name = nameNormaliser(name);
+    var name = KAT.model.nameNormaliser(name);
 
-    if(!nameRegEx2.test(name)){
+    if(!KAT.model.nameRegEx2.test(name)){
       return false;
     }
 
     //match the name regex
-    var name = name.match(nameRegEx2);
+    var name = name.match(KAT.model.nameRegEx2);
 
     //get the concept
     var concept = this.getConcept(name[1]);
@@ -510,10 +510,10 @@ KAT.model = {};
     * @type {string}
     * @name KAT.model.Concept#name
     */
-    this.name = nameNormaliser(this.xml.attr("name"));
+    this.name = KAT.model.nameNormaliser(this.xml.attr("name"));
 
     //Check if the name is valid.
-    if(!nameRegEx.test(this.name)){
+    if(!KAT.model.nameRegEx.test(this.name)){
       throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML ('"+this.getFullName()+"' is not a valid name). ", this.xml);
     }
 
@@ -682,9 +682,9 @@ KAT.model = {};
   */
   KAT.model.Concept.prototype.getField = function(name){
     //normalise the name
-    var name = nameNormaliser(name);
+    var name = KAT.model.nameNormaliser(name);
 
-    if(!nameRegEx.test(name)){
+    if(!KAT.model.nameRegEx.test(name)){
       return false;
     }
 
@@ -744,10 +744,10 @@ KAT.model = {};
     * @type {string}
     * @name KAT.model.Field#name
     */
-    this.name = nameNormaliser(this.xml.attr("name"));
+    this.name = KAT.model.nameNormaliser(this.xml.attr("name"));
 
     //Check for a valid name
-    if(!nameRegEx.test(this.name)){
+    if(!KAT.model.nameRegEx.test(this.name)){
       throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML ('"+this.getFullName()+"' is not a valid name). ", this.xml);
     }
 
