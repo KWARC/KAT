@@ -35,18 +35,19 @@ KAT.model.nameRegEx3 = new RegExp("^("+KAT.model.nameRegExS+")\\.("+KAT.model.na
 
 /**
 * Normalises a theory name.
+*
 * @param {string} name - The name to normalise.
 * @returns {string} - the normalised name.
 *
 * @static
-* @Alias KAT.model.nameNormaliser
-* @class
+* @function
+* @memberof KAT.model
 */
 KAT.model.nameNormaliser = function(name){
   //does nothing.
   //we might want to use this later or just remove it.
   return name;
-}
+};
 
 
 /** Represents a parsing error.
@@ -92,15 +93,15 @@ KAT.model.ParsingError = function (message, xml_element) {
 
   Object.defineProperty(this, 'stack', {
     get: function() {
-      return tmp.stack
+      return tmp.stack;
     }
-  })
+  }); 
 
   return this;
 };
 
 (function(){
-  var IntermediateInheritor = function() {}
+  var IntermediateInheritor = function() {};
   IntermediateInheritor.prototype = Error.prototype;
   KAT.model.ParsingError.prototype = new IntermediateInheritor();
 })();

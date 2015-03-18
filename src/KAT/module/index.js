@@ -9,7 +9,7 @@ KAT.module = {
     'identifier':   'KAT.module',
     'title':    'KAT module',
     'author':   'The KWARC group',
-    'description':  'A template you may use as a starting point for writing other modules. ', //A human readable description of the module.
+    'description':  'A module for KAT',
     'url': 'http://kwarc.github.io/KAT',
     'version':  '2.0',
     'dependencies': [],

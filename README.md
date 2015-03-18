@@ -4,25 +4,48 @@ KWARC Annotation Tool: An Annotation Tool for STEM Documents.
 
 Version 2.0, not yet finished. Documentation is currently being created.
 
-## Documentation
+## Development
+### Getting started
 
-There is auto-generated documentation in the 'doc' subdirectory. [JSDoc](https://github.com/jsdoc3/jsdoc) is used to generate it. You can re-generate it with:
-```
-rm -rf doc && jsdoc -c jsdoc.json
+We use [Grunt](http://gruntjs.com/) for minimising source files and running the demo. To get started, run:
+
+```bash
+git clone https://github.com/KWARC/KAT
+cd KAT
+npm install -g grunt # Might require sudo depending on your system configuration
+npm install . 
+grunt serve
 ```
 
-## How to use your own KAnnSpec and documents
+You can then navigate to localhost:3000 and take a look at the demo.
+
+### Developing KAnnSpecs with KAT
+
+Perform the steps described above. To use your own KAnnSpecs you can then:
 
 1. Place your KAnnSpec into the KAnnSpec/ directory.
 2. Place your document into the content/ directory. Make sure it only contains the actual document content (inside the body tag)
 3. Edit line 3 in js/index.js and change "content/sample1.html" to the path of the document you want to use and change "KAnnSpecs/omdoc-annotations.xml" to the annotation you want to create.
-4. Start up a webserver and serve the this directory.
-5. Navigate your webbrowser to the URL where you are serving this directory at.
+4. Run grunt serve if it is not already running.
+5. Navigate to localhost:3000 and see the demo at work.
+
+### Developing KAT itself
+
+The source files are in src/KAT. When your run ```grunt serve``` the will automatically be concatinated and added to the page. The Gruntfile also enables a live reload module which reloads the page automatically when one of the modules is updated. If you add a new file, make sure to add them in Gruntfile.js.
+
+### Documentation
+
+There is auto-generated documentation in the 'doc' subdirectory. [JSDoc](https://github.com/jsdoc3/jsdoc) is used to generate it. You can re-generate by running
+```
+grunt docs
+```
+The documentation will also be served by `grunt serve`. You can access it by going to http://localhost:3000/doc.
 
 ## Dependencies
 * [JOBAD](https://github.com/KWARC/jobad)
   * which depends on [Bootstrap](https://github.com/twbs/bootstrap)
 * [jQuery](https://github.com/jquery/jquery)
+* [Grunt](http://gruntjs.com/) - for the development part.
 
 ## Compatibility
 
