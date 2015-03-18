@@ -26,7 +26,7 @@ KAT.gui = function(element, KAnnSpecCollection){
   * @name KAT.gui#element
   */
   this.element = element;
-}
+};
 
 /**
 * gets the current selection.
@@ -51,8 +51,8 @@ KAT.gui.prototype.getSelection = function(){
     "startOffset": selection.startOffset,
     "end": end,
     "endOffset": selection.endOffset
-  }
-}
+  };
+};
 
 /**
 * Gets an XPath from one element to another.
@@ -102,7 +102,7 @@ KAT.gui.getXPath = function(from, to){
   }
 
   return paths.length ? "/" + paths.join("/") : null;
-}
+};
 
 /**
 * Gets an XPath from one element to another.
@@ -119,8 +119,13 @@ KAT.gui.getXPath = function(from, to){
 KAT.gui.resolveXPath = function(from, path){
   var element = $(from).get(0);
   var parts = path.split("/").splice(1);
-  var part, tagName, elementIndex;
-  var _element;
+  
+  var part, tagName, elementIndex, _element;
+
+
+  var compare = function(e){
+    return (e.tagName || e.nodeName).toLowerCase() == tagName.toLowerCase();
+  };
 
   for(var i=0;i<parts.length;i++){
     //extract tagName and elementIndex
@@ -132,11 +137,7 @@ KAT.gui.resolveXPath = function(from, path){
     _element = element;
 
     //find the next element
-    element = Array.prototype.filter.call(element.children,
-      function(e){
-        return (e.tagName || e.nodeName).toLowerCase() == tagName.toLowerCase();
-      }
-    )[elementIndex];
+    element = Array.prototype.filter.call(element.children, compare)[elementIndex];
 
 
 
@@ -149,7 +150,7 @@ KAT.gui.resolveXPath = function(from, path){
   }
 
   return element;
-}
+};
 
 /**
 * gets the list of contihuous elements in given selection.
@@ -191,7 +192,7 @@ KAT.gui.prototype.getRange = function(selection){
     //do we contain all children?
     return children.length == containedElements.filter(children).length;
   }).add(endElement.find("*").andSelf());
-}
+};
 
 /**
 * Creates a new dialog.
@@ -214,20 +215,18 @@ KAT.gui.dialog = function(title, content, buttons, on_button){
   //Crate Buttons
   var $buttons = $([]);
 
-  for(var i=0;i<buttons.length;i++){
-    (function(i){
-      $buttons = $buttons.add(
-        $("<button class='btn btn-"+(i==0?"primary":"default")+"'>")
-        .text(buttons[i])
-        .click(function(){
-          on_button.call($self, buttons[i], i);
-        })
-      );
-    }).call(this, i)
-  }
+  $.each(buttons, function(i){
+    $buttons = $buttons.add(
+      $("<button class='btn btn-"+(i===0?"primary":"default")+"'>")
+      .text(buttons[i])
+      .click(function(){
+        on_button.call($self, buttons[i], i);
+      })
+    );
+  });
 
   //reverse the array.
-  $buttons = $($buttons.get().reverse())
+  $buttons = $($buttons.get().reverse());
 
   //set up other things.
   var $title = $('<h4 class="modal-title"></h4>').text(title);
@@ -250,9 +249,7 @@ KAT.gui.dialog = function(title, content, buttons, on_button){
         $('<div class="modal-footer">').append($buttons)
       )
     )
-  )
-
-  var $title = $("<div>");
+  );
 
   //append the dialog
   $dialog.appendTo(
@@ -277,15 +274,11 @@ KAT.gui.dialog = function(title, content, buttons, on_button){
       .one("hidden.bs.modal", function(){
         $dialog.remove();
       }).modal("hide");
-
-
     }
-  }
-
-
+  };
 
   return $self;
-}
+};
 
 /**
 * Creates a new select dialog.
@@ -304,22 +297,19 @@ KAT.gui.dialog = function(title, content, buttons, on_button){
 */
 KAT.gui.selectDialog = function(title, query, options, descriptions, callback){
   var selectedIndex = 0; //the currently selectedIndex
-  var options = options;
-  var descriptions = descriptions;
-  var callback = callback;
   var redraw;
 
   if(typeof descriptions == "function" && typeof callback == "undefined"){
     callback = descriptions;
     descriptions = function(){
       return "";
-    }
+    };
   }
   if(Array.isArray(descriptions)){
     var oldDescriptions = descriptions;
     descriptions = function(text, index){
       return oldDescriptions[index];
-    }
+    };
   }
 
   //build the dialog.
@@ -328,7 +318,7 @@ KAT.gui.selectDialog = function(title, query, options, descriptions, callback){
     $self.close();
 
     if(id === 0){
-      callback.call($self, options[selectedIndex], selectedIndex)
+      callback.call($self, options[selectedIndex], selectedIndex);
     } else {
       //We canceled or just closed.
       callback.call($self, "", -1);
@@ -337,7 +327,7 @@ KAT.gui.selectDialog = function(title, query, options, descriptions, callback){
 
   var $span = $("<span>");
   var $textspan = $("<span style='margin-left: 10px; '>");
-  var $ul = $('<ul class="dropdown-menu" role="menu">')
+  var $ul = $('<ul class="dropdown-menu" role="menu">');
 
   var $div = $("<div class='dropdown'>").append(
     $('<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">').append(
@@ -370,13 +360,13 @@ KAT.gui.selectDialog = function(title, query, options, descriptions, callback){
   redraw = function(){
     $span.text(options[selectedIndex]);
     $textspan.text(descriptions(options[selectedIndex], selectedIndex));
-  }
+  };
 
   //and draw it again.
   redraw();
 
   return $self;
-}
+};
 
 /**
 * A dialog object.

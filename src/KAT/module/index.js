@@ -43,8 +43,10 @@ KAT.module = {
     menu[text_edit] = {};
 
     //MENUITEM for new item
+    var selection;
+
     try{
-      var selection = this.gui.getSelection();
+      selection = this.gui.getSelection();
     } catch(e){}
 
     if(selection){
@@ -58,7 +60,7 @@ KAT.module = {
 
             //and draw it.
             newAnnotation.draw();
-          }
+          };
         });
       }
     }
@@ -66,23 +68,20 @@ KAT.module = {
     //find all the annotations.
     var annots = this.store.findfromElement(target);
 
-    if(annots.length != 0){
+    if(annots.length !== 0){
       //iterate over all the annotations.
-      for(var i=0;i<annots.length;i++){
-        (function(i){
-          //add a menu item for each of the actions.
-          var annotation = annots[i];
-          menu[text_remove][annotation.uuid] = function(){
-            annotation.delete();
-          };
-          menu[text_highlight][annotation.uuid] = function(){
-            annotation.flash();
-          };
-          menu[text_edit][annotation.uuid] = function(){
-            annotation.edit();
-          };
-        })(i);
-      }
+      $.each(annots, function(i, annotation){
+        //add a menu item for each of the actions.
+        menu[text_remove][annotation.uuid] = function(){
+          annotation.delete();
+        };
+        menu[text_highlight][annotation.uuid] = function(){
+          annotation.flash();
+        };
+        menu[text_edit][annotation.uuid] = function(){
+          annotation.edit();
+        };
+      });
 
     } else {
       menu[text_remove] = false;
@@ -90,7 +89,7 @@ KAT.module = {
       menu[text_edit] = false;
     }
 
-    menu["Storage"] = {
+    menu.Storage = {
       "Import": function(){
         var json = prompt("Paste the annotations below: ");
 
@@ -116,7 +115,7 @@ KAT.module = {
 
         prompt("Press CTRL+C to export annotations: ", JSON.stringify(exporter));
       }
-    }
+    };
 
     //return the menu.
     return menu;

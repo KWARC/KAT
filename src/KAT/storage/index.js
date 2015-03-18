@@ -3,4 +3,4 @@
 * @namespace
 * @alias KAT.storage
 */
-KAT.storage = {}
+KAT.storage = {};

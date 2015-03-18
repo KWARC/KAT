@@ -21,13 +21,11 @@ KAT.model.KAnnSpec = function(xml, collection){
     this.xml = jQuery(xml);
   } catch(e){
     throw new KAT.model.ParsingError("KAT.model.KAnnSpec: Invalid XML (Unable to parse XML). ", this.xml);
-    return;
   }
 
   //check the top level element
   if(this.xml.children().length != 1 || !this.xml.children().eq(0).is("annotation")){
     throw new KAT.model.ParsingError("KAT.model.KAnnSpec: Invalid XML (Expected exactly one top-level <annotation>). ", this.xml);
-    return;
   }
 
   /**
@@ -76,16 +74,16 @@ KAT.model.KAnnSpec = function(xml, collection){
 
   //find the concepts
   annotRoot.children().slice(1).each((function(i, e){
-    var e = $(e);
+    e = $(e);
     if(!e.is("concept")){
       throw new KAT.model.ParsingError("KAT.model.KAnnSpec: Invalid XML for KAnnSpec '"+this.getFullName()+"' (Expected child tag <concept>). ", e);
     }
 
     //and add them to the right thing.
     this.concepts.push(new KAT.model.Concept(e, this));
-  }).bind(this))
+  }).bind(this));
 
-}
+};
 
 /**
 * Gets the full name of this KAnnSpec.
@@ -98,7 +96,7 @@ KAT.model.KAnnSpec = function(xml, collection){
 */
 KAT.model.KAnnSpec.prototype.getFullName = function(){
   return this.name;
-}
+};
 
 /**
 * Finds a concept by name.
@@ -113,7 +111,7 @@ KAT.model.KAnnSpec.prototype.getFullName = function(){
 */
 KAT.model.KAnnSpec.prototype.getConcept = function(name){
   //normalise the name
-  var name = KAT.model.nameNormaliser(name);
+  name = KAT.model.nameNormaliser(name);
 
   if(!KAT.model.nameRegEx.test(name)){
     return false;
@@ -128,7 +126,7 @@ KAT.model.KAnnSpec.prototype.getConcept = function(name){
 
   //return false if not found.
   return false;
-}
+};
 
 /**
 * Finds a field by name.
@@ -143,14 +141,14 @@ KAT.model.KAnnSpec.prototype.getConcept = function(name){
 */
 KAT.model.KAnnSpec.prototype.getField = function(name){
   //normalise the name
-  var name = KAT.model.nameNormaliser(name);
+  name = KAT.model.nameNormaliser(name);
 
   if(!KAT.model.nameRegEx2.test(name)){
     return false;
   }
 
   //match the name regex
-  var name = name.match(KAT.model.nameRegEx2);
+  name = name.match(KAT.model.nameRegEx2);
 
   //get the concept
   var concept = this.getConcept(name[1]);
@@ -161,4 +159,4 @@ KAT.model.KAnnSpec.prototype.getField = function(name){
 
   //get the field
   return concept.getField(name[2]);
-}
+};

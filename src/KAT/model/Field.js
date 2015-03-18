@@ -21,7 +21,6 @@ KAT.model.Field = function(xml, concept){
     this.xml = jQuery(xml);
   } catch(e){
     throw new KAT.model.Field("KAT.model.Field: Invalid XML (Unable to parse XML). ", this.xml);
-    return;
   }
 
   /**
@@ -139,7 +138,7 @@ KAT.model.Field = function(xml, concept){
   }
 
   this.xml.children().each((function(i, e){
-    var e = $(e);
+    e = $(e);
 
     if(e.is("value")){
 
@@ -225,7 +224,7 @@ KAT.model.Field = function(xml, concept){
     this.value = this.name;
   }
 
-  if(this.type == KAT.model.Field.types.select && this.validation.length == 0){
+  if(this.type == KAT.model.Field.types.select && this.validation.length === 0){
     throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (KAT.model.Field.types.select must have a non-empty list of options. ). ", e);
   }
 
@@ -236,7 +235,7 @@ KAT.model.Field = function(xml, concept){
     }
   }
 
-}
+};
 
 /**
 * Gets the full name of this field.
@@ -249,7 +248,7 @@ KAT.model.Field = function(xml, concept){
 */
 KAT.model.Field.prototype.getFullName = function(){
   return this.concept.getFullName()+"."+this.name;
-}
+};
 
 /**
 * Field Types known to KAT.

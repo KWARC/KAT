@@ -31,7 +31,7 @@ KAT.storage.Store = function(gui){
   * @name KAT.storage.Store#annotations
   */
   this.annotations = [];
-}
+};
 
 /** Adds a new annotation to this Store.
 *
@@ -53,7 +53,7 @@ KAT.storage.Store.prototype.addNew = function(selection, concept){
 
   //and return it.
   return newAnnotation;
-}
+};
 
 /** Adds a new annotation to this Store based on a JSON object.
 *
@@ -77,7 +77,7 @@ KAT.storage.Store.prototype.addFromJSON = function(json){
 
   //and return it.
   return newAnnotation;
-}
+};
 
 /** Returns an annotation if it exists.
 *
@@ -100,7 +100,7 @@ KAT.storage.Store.prototype.find = function(uuid){
 
   //nope, we want undefined.
   return undefined;
-}
+};
 
 /** Returns all (drawn) annotations which match a certain element.
 *
@@ -132,7 +132,7 @@ KAT.storage.Store.prototype.findfromElement = function(element){
   }
 
   return results;
-}
+};
 
 
 /** Performs a sanity check.
@@ -146,7 +146,7 @@ KAT.storage.Store.prototype.findfromElement = function(element){
 KAT.storage.Store.prototype.sanityCheck = function(){
   //TODO: Implement me.
   return true;
-}
+};
 
 /**
 * Generates a UUID from a selection.
@@ -160,7 +160,7 @@ KAT.storage.Store.prototype.sanityCheck = function(){
 */
 KAT.storage.Store.Selection2UUID = function(selection){
   return "cse("+selection.container+","+selection.start+","+selection.end+")";
-}
+};
 
 /**
 * Generates a selection from a UUID.
@@ -205,5 +205,5 @@ KAT.storage.Store.UUID2Selection = function(selection){
     "end": selection[2],
     "startOffset": 0,
     "endOffset": 0
-  }
-}
+  };
+};

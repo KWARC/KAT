@@ -198,43 +198,37 @@ KAT.model.KAnnSpecCollection.prototype.addNewKAnnSpec = function(xml){
 KAT.model.KAnnSpecCollection.prototype.init = function(){
   //iterate over the fields
   //this may take a while
-  for(var i=0;i<this.KAnnSpecs.length;i++){
-    (function(){
-      for(var j=0;j<this.concepts.length;j++){
-        (function(){
-          for(var k=0;k<this.fields.length;k++){
-            (function(k){
-              if(this.type == KAT.model.Field.types.reference){
-                for(var l=0;l<this.validation.length;l++){
-                  var name = this.validation[l];
+  $.each(this.KAnnSpecs, (function(i, spec){
+    $.each(spec.concepts, (function(j, concept){
+        $.each(concept.fields, (function(k){
+          if(this.type == KAT.model.Field.types.reference){
+            for(var l=0;l<this.validation.length;l++){
+              var name = this.validation[l];
 
-                  //it is already referenced, get the name out of it
-                  if(name instanceof KAT.model.Concept){
-                    name = name.getFullName();
-                  }
-
-                  //find the concept, try it within this KAnnSpec first
-                  var concept = this.concept.KAnnSpec.getConcept(name);
-
-                  //and then do it in the KAnnSpecCollection
-                  if(!concept){
-                    concept = this.concept.KAnnSpec.collection.getConcept(name);
-                  }
-
-                  if(!concept){
-                    throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Concept not found: '"+name+"'). ", this.xml);
-                  }
-
-                  //store the concept in the validation.
-                  this.validation[l] = concept;
-                }
+              //it is already referenced, get the name out of it
+              if(name instanceof KAT.model.Concept){
+                name = name.getFullName();
               }
-            }).call(this.fields[k]);
+
+              //find the concept, try it within this KAnnSpec first
+              var concept = this.concept.KAnnSpec.getConcept(name);
+
+              //and then do it in the KAnnSpecCollection
+              if(!concept){
+                concept = this.concept.KAnnSpec.collection.getConcept(name);
+              }
+
+              if(!concept){
+                throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Concept not found: '"+name+"'). ", this.xml);
+              }
+
+              //store the concept in the validation.
+              this.validation[l] = concept;
+            }
           }
-        }).call(this.concepts[j]);
-      }
-    }).call(this.KAnnSpecs[i]);
-  }
+        }).bind(concept));
+      }).bind(spec));
+    }));
 
   return this;
 };
@@ -338,7 +332,7 @@ KAT.model.KAnnSpecCollection.prototype.findConcepts = function(){
 */
 KAT.model.KAnnSpecCollection.prototype.getField = function(name){
   //normalise the name
-  var name = KAT.model.nameNormaliser(name);
+  name = KAT.model.nameNormaliser(name);
 
   if(!KAT.model.nameRegEx3.test(name)){
     return false;
@@ -389,13 +383,11 @@ KAT.model.KAnnSpec = function(xml, collection){
     this.xml = jQuery(xml);
   } catch(e){
     throw new KAT.model.ParsingError("KAT.model.KAnnSpec: Invalid XML (Unable to parse XML). ", this.xml);
-    return;
   }
 
   //check the top level element
   if(this.xml.children().length != 1 || !this.xml.children().eq(0).is("annotation")){
     throw new KAT.model.ParsingError("KAT.model.KAnnSpec: Invalid XML (Expected exactly one top-level <annotation>). ", this.xml);
-    return;
   }
 
   /**
@@ -444,16 +436,16 @@ KAT.model.KAnnSpec = function(xml, collection){
 
   //find the concepts
   annotRoot.children().slice(1).each((function(i, e){
-    var e = $(e);
+    e = $(e);
     if(!e.is("concept")){
       throw new KAT.model.ParsingError("KAT.model.KAnnSpec: Invalid XML for KAnnSpec '"+this.getFullName()+"' (Expected child tag <concept>). ", e);
     }
 
     //and add them to the right thing.
     this.concepts.push(new KAT.model.Concept(e, this));
-  }).bind(this))
+  }).bind(this));
 
-}
+};
 
 /**
 * Gets the full name of this KAnnSpec.
@@ -466,7 +458,7 @@ KAT.model.KAnnSpec = function(xml, collection){
 */
 KAT.model.KAnnSpec.prototype.getFullName = function(){
   return this.name;
-}
+};
 
 /**
 * Finds a concept by name.
@@ -481,7 +473,7 @@ KAT.model.KAnnSpec.prototype.getFullName = function(){
 */
 KAT.model.KAnnSpec.prototype.getConcept = function(name){
   //normalise the name
-  var name = KAT.model.nameNormaliser(name);
+  name = KAT.model.nameNormaliser(name);
 
   if(!KAT.model.nameRegEx.test(name)){
     return false;
@@ -496,7 +488,7 @@ KAT.model.KAnnSpec.prototype.getConcept = function(name){
 
   //return false if not found.
   return false;
-}
+};
 
 /**
 * Finds a field by name.
@@ -511,14 +503,14 @@ KAT.model.KAnnSpec.prototype.getConcept = function(name){
 */
 KAT.model.KAnnSpec.prototype.getField = function(name){
   //normalise the name
-  var name = KAT.model.nameNormaliser(name);
+  name = KAT.model.nameNormaliser(name);
 
   if(!KAT.model.nameRegEx2.test(name)){
     return false;
   }
 
   //match the name regex
-  var name = name.match(KAT.model.nameRegEx2);
+  name = name.match(KAT.model.nameRegEx2);
 
   //get the concept
   var concept = this.getConcept(name[1]);
@@ -529,7 +521,7 @@ KAT.model.KAnnSpec.prototype.getField = function(name){
 
   //get the field
   return concept.getField(name[2]);
-}
+};
 
 // Source: src/KAT/model/Concept.js
 /** Creates a new Concept instance.
@@ -555,7 +547,6 @@ KAT.model.Concept = function(xml, KAnnSpec){
     this.xml = jQuery(xml);
   } catch(e){
     throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Unable to parse XML). ", this.xml);
-    return;
   }
 
   /**
@@ -688,7 +679,7 @@ KAT.model.Concept = function(xml, KAnnSpec){
   if(index != children.length){
     throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML for concept '"+this.getFullName()+"' (Expected at least 2 of <documentation>, <fields>, <display> and <rdf:RDF>). ", children);
   }
-}
+};
 
 /**
 * Gets default values for this concept.
@@ -702,26 +693,24 @@ KAT.model.Concept = function(xml, KAnnSpec){
 KAT.model.Concept.prototype.getDefault = function(){
   var defaultValues = {};
 
-  for(var i=0;i<this.fields.length;i++){
-    (function(field){
-      if(field.type == KAT.model.Field.types.text){
-        //the default is simply a text
-        defaultValues[field.value] = field.default;
-      } else if(field.type == KAT.model.Field.types.select){
-        //the default is an option
-        //either the specefied one
-        //or the first one.
-        defaultValues[field.value] = (field.default == "")?field.validation[0]:field.default;
-      } else if(field.type == KAT.model.Field.types.reference){
-        //we do want a reference, but it may be an empty reference.
-        //we neccessarily want this so we can avoid conflicts.
-        defaultValues[field.value] = "";
-      }
-    }).call(this, this.fields[i]);
-  }
+  $.each(this.fields, function(field){
+    if(field.type == KAT.model.Field.types.text){
+      //the default is simply a text
+      defaultValues[field.value] = field.default;
+    } else if(field.type == KAT.model.Field.types.select){
+      //the default is an option
+      //either the specefied one
+      //or the first one.
+      defaultValues[field.value] = (field.default === "")?field.validation[0]:field.default;
+    } else if(field.type == KAT.model.Field.types.reference){
+      //we do want a reference, but it may be an empty reference.
+      //we neccessarily want this so we can avoid conflicts.
+      defaultValues[field.value] = "";
+    }
+  });
 
   return defaultValues;
-}
+};
 
 /**
 * Gets the full name of this concept.
@@ -734,7 +723,7 @@ KAT.model.Concept.prototype.getDefault = function(){
 */
 KAT.model.Concept.prototype.getFullName = function(){
   return this.KAnnSpec.getFullName()+"."+this.name;
-}
+};
 
 /**
 * Finds a field by name.
@@ -749,7 +738,7 @@ KAT.model.Concept.prototype.getFullName = function(){
 */
 KAT.model.Concept.prototype.getField = function(name){
   //normalise the name
-  var name = KAT.model.nameNormaliser(name);
+  name = KAT.model.nameNormaliser(name);
 
   if(!KAT.model.nameRegEx.test(name)){
     return false;
@@ -764,7 +753,7 @@ KAT.model.Concept.prototype.getField = function(name){
 
   //return false if not found.
   return false;
-}
+};
 
 // Source: src/KAT/model/Field.js
 /** Creates a new Field instance.
@@ -790,7 +779,6 @@ KAT.model.Field = function(xml, concept){
     this.xml = jQuery(xml);
   } catch(e){
     throw new KAT.model.Field("KAT.model.Field: Invalid XML (Unable to parse XML). ", this.xml);
-    return;
   }
 
   /**
@@ -908,7 +896,7 @@ KAT.model.Field = function(xml, concept){
   }
 
   this.xml.children().each((function(i, e){
-    var e = $(e);
+    e = $(e);
 
     if(e.is("value")){
 
@@ -994,7 +982,7 @@ KAT.model.Field = function(xml, concept){
     this.value = this.name;
   }
 
-  if(this.type == KAT.model.Field.types.select && this.validation.length == 0){
+  if(this.type == KAT.model.Field.types.select && this.validation.length === 0){
     throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (KAT.model.Field.types.select must have a non-empty list of options. ). ", e);
   }
 
@@ -1005,7 +993,7 @@ KAT.model.Field = function(xml, concept){
     }
   }
 
-}
+};
 
 /**
 * Gets the full name of this field.
@@ -1018,7 +1006,7 @@ KAT.model.Field = function(xml, concept){
 */
 KAT.model.Field.prototype.getFullName = function(){
   return this.concept.getFullName()+"."+this.name;
-}
+};
 
 /**
 * Field Types known to KAT.
@@ -1058,7 +1046,6 @@ KAT.model.Option = function(xml, field){
     this.xml = jQuery(xml);
   } catch(e){
     throw new KAT.model.ParsingError("KAT.model.Option: Invalid XML (Unable to parse XML). ", this.xml);
-    return;
   }
 
   /**
@@ -1109,7 +1096,7 @@ KAT.model.Option = function(xml, field){
     throw new KAT.model.ParsingError("KAT.model.Option: Invalid XML (Too many children. )", this.xml);
   }
 
-}
+};
 
 // Source: src/KAT/gui/index.js
 /** Creates a new Editor instance.
@@ -1140,7 +1127,7 @@ KAT.gui = function(element, KAnnSpecCollection){
   * @name KAT.gui#element
   */
   this.element = element;
-}
+};
 
 /**
 * gets the current selection.
@@ -1165,8 +1152,8 @@ KAT.gui.prototype.getSelection = function(){
     "startOffset": selection.startOffset,
     "end": end,
     "endOffset": selection.endOffset
-  }
-}
+  };
+};
 
 /**
 * Gets an XPath from one element to another.
@@ -1216,7 +1203,7 @@ KAT.gui.getXPath = function(from, to){
   }
 
   return paths.length ? "/" + paths.join("/") : null;
-}
+};
 
 /**
 * Gets an XPath from one element to another.
@@ -1233,8 +1220,13 @@ KAT.gui.getXPath = function(from, to){
 KAT.gui.resolveXPath = function(from, path){
   var element = $(from).get(0);
   var parts = path.split("/").splice(1);
-  var part, tagName, elementIndex;
-  var _element;
+  
+  var part, tagName, elementIndex, _element;
+
+
+  var compare = function(e){
+    return (e.tagName || e.nodeName).toLowerCase() == tagName.toLowerCase();
+  };
 
   for(var i=0;i<parts.length;i++){
     //extract tagName and elementIndex
@@ -1246,11 +1238,7 @@ KAT.gui.resolveXPath = function(from, path){
     _element = element;
 
     //find the next element
-    element = Array.prototype.filter.call(element.children,
-      function(e){
-        return (e.tagName || e.nodeName).toLowerCase() == tagName.toLowerCase();
-      }
-    )[elementIndex];
+    element = Array.prototype.filter.call(element.children, compare)[elementIndex];
 
 
 
@@ -1263,7 +1251,7 @@ KAT.gui.resolveXPath = function(from, path){
   }
 
   return element;
-}
+};
 
 /**
 * gets the list of contihuous elements in given selection.
@@ -1305,7 +1293,7 @@ KAT.gui.prototype.getRange = function(selection){
     //do we contain all children?
     return children.length == containedElements.filter(children).length;
   }).add(endElement.find("*").andSelf());
-}
+};
 
 /**
 * Creates a new dialog.
@@ -1328,20 +1316,18 @@ KAT.gui.dialog = function(title, content, buttons, on_button){
   //Crate Buttons
   var $buttons = $([]);
 
-  for(var i=0;i<buttons.length;i++){
-    (function(i){
-      $buttons = $buttons.add(
-        $("<button class='btn btn-"+(i==0?"primary":"default")+"'>")
-        .text(buttons[i])
-        .click(function(){
-          on_button.call($self, buttons[i], i);
-        })
-      );
-    }).call(this, i)
-  }
+  $.each(buttons, function(i){
+    $buttons = $buttons.add(
+      $("<button class='btn btn-"+(i===0?"primary":"default")+"'>")
+      .text(buttons[i])
+      .click(function(){
+        on_button.call($self, buttons[i], i);
+      })
+    );
+  });
 
   //reverse the array.
-  $buttons = $($buttons.get().reverse())
+  $buttons = $($buttons.get().reverse());
 
   //set up other things.
   var $title = $('<h4 class="modal-title"></h4>').text(title);
@@ -1364,9 +1350,7 @@ KAT.gui.dialog = function(title, content, buttons, on_button){
         $('<div class="modal-footer">').append($buttons)
       )
     )
-  )
-
-  var $title = $("<div>");
+  );
 
   //append the dialog
   $dialog.appendTo(
@@ -1391,15 +1375,11 @@ KAT.gui.dialog = function(title, content, buttons, on_button){
       .one("hidden.bs.modal", function(){
         $dialog.remove();
       }).modal("hide");
-
-
     }
-  }
-
-
+  };
 
   return $self;
-}
+};
 
 /**
 * Creates a new select dialog.
@@ -1418,22 +1398,19 @@ KAT.gui.dialog = function(title, content, buttons, on_button){
 */
 KAT.gui.selectDialog = function(title, query, options, descriptions, callback){
   var selectedIndex = 0; //the currently selectedIndex
-  var options = options;
-  var descriptions = descriptions;
-  var callback = callback;
   var redraw;
 
   if(typeof descriptions == "function" && typeof callback == "undefined"){
     callback = descriptions;
     descriptions = function(){
       return "";
-    }
+    };
   }
   if(Array.isArray(descriptions)){
     var oldDescriptions = descriptions;
     descriptions = function(text, index){
       return oldDescriptions[index];
-    }
+    };
   }
 
   //build the dialog.
@@ -1442,7 +1419,7 @@ KAT.gui.selectDialog = function(title, query, options, descriptions, callback){
     $self.close();
 
     if(id === 0){
-      callback.call($self, options[selectedIndex], selectedIndex)
+      callback.call($self, options[selectedIndex], selectedIndex);
     } else {
       //We canceled or just closed.
       callback.call($self, "", -1);
@@ -1451,7 +1428,7 @@ KAT.gui.selectDialog = function(title, query, options, descriptions, callback){
 
   var $span = $("<span>");
   var $textspan = $("<span style='margin-left: 10px; '>");
-  var $ul = $('<ul class="dropdown-menu" role="menu">')
+  var $ul = $('<ul class="dropdown-menu" role="menu">');
 
   var $div = $("<div class='dropdown'>").append(
     $('<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">').append(
@@ -1484,13 +1461,13 @@ KAT.gui.selectDialog = function(title, query, options, descriptions, callback){
   redraw = function(){
     $span.text(options[selectedIndex]);
     $textspan.text(descriptions(options[selectedIndex], selectedIndex));
-  }
+  };
 
   //and draw it again.
   redraw();
 
   return $self;
-}
+};
 
 /**
 * A dialog object.
@@ -1535,7 +1512,7 @@ KAT.gui.selectDialog = function(title, query, options, descriptions, callback){
 * @namespace
 * @alias KAT.storage
 */
-KAT.storage = {}
+KAT.storage = {};
 
 // Source: src/KAT/storage/store.js
 /** Creates a new Store instance.
@@ -1571,7 +1548,7 @@ KAT.storage.Store = function(gui){
   * @name KAT.storage.Store#annotations
   */
   this.annotations = [];
-}
+};
 
 /** Adds a new annotation to this Store.
 *
@@ -1593,7 +1570,7 @@ KAT.storage.Store.prototype.addNew = function(selection, concept){
 
   //and return it.
   return newAnnotation;
-}
+};
 
 /** Adds a new annotation to this Store based on a JSON object.
 *
@@ -1617,7 +1594,7 @@ KAT.storage.Store.prototype.addFromJSON = function(json){
 
   //and return it.
   return newAnnotation;
-}
+};
 
 /** Returns an annotation if it exists.
 *
@@ -1640,7 +1617,7 @@ KAT.storage.Store.prototype.find = function(uuid){
 
   //nope, we want undefined.
   return undefined;
-}
+};
 
 /** Returns all (drawn) annotations which match a certain element.
 *
@@ -1672,7 +1649,7 @@ KAT.storage.Store.prototype.findfromElement = function(element){
   }
 
   return results;
-}
+};
 
 
 /** Performs a sanity check.
@@ -1686,7 +1663,7 @@ KAT.storage.Store.prototype.findfromElement = function(element){
 KAT.storage.Store.prototype.sanityCheck = function(){
   //TODO: Implement me.
   return true;
-}
+};
 
 /**
 * Generates a UUID from a selection.
@@ -1700,7 +1677,7 @@ KAT.storage.Store.prototype.sanityCheck = function(){
 */
 KAT.storage.Store.Selection2UUID = function(selection){
   return "cse("+selection.container+","+selection.start+","+selection.end+")";
-}
+};
 
 /**
 * Generates a selection from a UUID.
@@ -1745,8 +1722,8 @@ KAT.storage.Store.UUID2Selection = function(selection){
     "end": selection[2],
     "startOffset": 0,
     "endOffset": 0
-  }
-}
+  };
+};
 
 // Source: src/KAT/storage/annotation.js
 /** Creates a new Annotation instance.
@@ -1777,7 +1754,6 @@ KAT.storage.Annotation = function(store, selection, concept, values){
   //Check if we already have the uuid.
   if(this.store.find(uuid)){
     throw new Error("Annotation with given uuid already exists. ");
-    return;
   }
 
   /**
@@ -1805,7 +1781,7 @@ KAT.storage.Annotation = function(store, selection, concept, values){
   this.concept = concept;
 
   //Either use existing values or use the default.
-  var values = (typeof values !== "undefined")?values:concept.getDefault();
+  values = (typeof values !== "undefined")?values:concept.getDefault();
 
   /**
   * The current values of this annotation, excluding selection.
@@ -1814,7 +1790,7 @@ KAT.storage.Annotation = function(store, selection, concept, values){
   * @name KAT.storage.Annotation#values
   */
   this.values = values;
-}
+};
 
 /**
 * Deletes an annotation
@@ -1831,14 +1807,14 @@ KAT.storage.Annotation.prototype.delete = function(){
   //look for this annotation by id and remove it.
   for(var i=0;i<this.store.annotations.length;i++){
     if(this.store.annotations[i].uuid == this.uuid){
-      this.store.annotations.splice(i, 1)
+      this.store.annotations.splice(i, 1);
       break;
     }
   }
 
   //and re-run the sanity check.
   this.store.sanityCheck();
-}
+};
 
 /**
 * Draws an annotation to the text.
@@ -1864,7 +1840,7 @@ KAT.storage.Annotation.prototype.draw = function(){
     //write it back
     $me.data("KAT.Annotation.UUID", current);
   });
-}
+};
 
 /**
 * Flashes an annotation.
@@ -1880,7 +1856,7 @@ KAT.storage.Annotation.prototype.flash = function(){
 	.animate({ backgroundColor: "red"}, 1500, function(){
     $(this).css("background-color", "");
   });
-}
+};
 
 /**
 * Shows an edit form for an annotation.
@@ -1892,7 +1868,7 @@ KAT.storage.Annotation.prototype.flash = function(){
 KAT.storage.Annotation.prototype.edit = function(){
   //TODO: show an edit form.
   alert("Unimplemented!");
-}
+};
 
 /**
 * Un-draws an annotation to the text.
@@ -1924,7 +1900,7 @@ KAT.storage.Annotation.prototype.undraw = function(){
       $me.data("KAT.Annotation.UUID", current);
     }
   });
-}
+};
 
 /**
 * Exports an annotation to JSON.
@@ -1944,8 +1920,8 @@ KAT.storage.Annotation.prototype.toJSON = function(){
 
     //the values.
     "values": this.values
-  }
-}
+  };
+};
 
 /**
  * A serialised version of KAT.storage.Annotation
@@ -2001,8 +1977,10 @@ KAT.module = {
     menu[text_edit] = {};
 
     //MENUITEM for new item
+    var selection;
+
     try{
-      var selection = this.gui.getSelection();
+      selection = this.gui.getSelection();
     } catch(e){}
 
     if(selection){
@@ -2016,7 +1994,7 @@ KAT.module = {
 
             //and draw it.
             newAnnotation.draw();
-          }
+          };
         });
       }
     }
@@ -2024,23 +2002,20 @@ KAT.module = {
     //find all the annotations.
     var annots = this.store.findfromElement(target);
 
-    if(annots.length != 0){
+    if(annots.length !== 0){
       //iterate over all the annotations.
-      for(var i=0;i<annots.length;i++){
-        (function(i){
-          //add a menu item for each of the actions.
-          var annotation = annots[i];
-          menu[text_remove][annotation.uuid] = function(){
-            annotation.delete();
-          };
-          menu[text_highlight][annotation.uuid] = function(){
-            annotation.flash();
-          };
-          menu[text_edit][annotation.uuid] = function(){
-            annotation.edit();
-          };
-        })(i);
-      }
+      $.each(annots, function(i, annotation){
+        //add a menu item for each of the actions.
+        menu[text_remove][annotation.uuid] = function(){
+          annotation.delete();
+        };
+        menu[text_highlight][annotation.uuid] = function(){
+          annotation.flash();
+        };
+        menu[text_edit][annotation.uuid] = function(){
+          annotation.edit();
+        };
+      });
 
     } else {
       menu[text_remove] = false;
@@ -2048,7 +2023,7 @@ KAT.module = {
       menu[text_edit] = false;
     }
 
-    menu["Storage"] = {
+    menu.Storage = {
       "Import": function(){
         var json = prompt("Paste the annotations below: ");
 
@@ -2074,7 +2049,7 @@ KAT.module = {
 
         prompt("Press CTRL+C to export annotations: ", JSON.stringify(exporter));
       }
-    }
+    };
 
     //return the menu.
     return menu;

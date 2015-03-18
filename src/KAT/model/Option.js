@@ -19,7 +19,6 @@ KAT.model.Option = function(xml, field){
     this.xml = jQuery(xml);
   } catch(e){
     throw new KAT.model.ParsingError("KAT.model.Option: Invalid XML (Unable to parse XML). ", this.xml);
-    return;
   }
 
   /**
@@ -70,4 +69,4 @@ KAT.model.Option = function(xml, field){
     throw new KAT.model.ParsingError("KAT.model.Option: Invalid XML (Too many children. )", this.xml);
   }
 
-}
+};

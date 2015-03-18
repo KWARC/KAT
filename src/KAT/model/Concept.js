@@ -21,7 +21,6 @@ KAT.model.Concept = function(xml, KAnnSpec){
     this.xml = jQuery(xml);
   } catch(e){
     throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Unable to parse XML). ", this.xml);
-    return;
   }
 
   /**
@@ -154,7 +153,7 @@ KAT.model.Concept = function(xml, KAnnSpec){
   if(index != children.length){
     throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML for concept '"+this.getFullName()+"' (Expected at least 2 of <documentation>, <fields>, <display> and <rdf:RDF>). ", children);
   }
-}
+};
 
 /**
 * Gets default values for this concept.
@@ -168,26 +167,24 @@ KAT.model.Concept = function(xml, KAnnSpec){
 KAT.model.Concept.prototype.getDefault = function(){
   var defaultValues = {};
 
-  for(var i=0;i<this.fields.length;i++){
-    (function(field){
-      if(field.type == KAT.model.Field.types.text){
-        //the default is simply a text
-        defaultValues[field.value] = field.default;
-      } else if(field.type == KAT.model.Field.types.select){
-        //the default is an option
-        //either the specefied one
-        //or the first one.
-        defaultValues[field.value] = (field.default == "")?field.validation[0]:field.default;
-      } else if(field.type == KAT.model.Field.types.reference){
-        //we do want a reference, but it may be an empty reference.
-        //we neccessarily want this so we can avoid conflicts.
-        defaultValues[field.value] = "";
-      }
-    }).call(this, this.fields[i]);
-  }
+  $.each(this.fields, function(field){
+    if(field.type == KAT.model.Field.types.text){
+      //the default is simply a text
+      defaultValues[field.value] = field.default;
+    } else if(field.type == KAT.model.Field.types.select){
+      //the default is an option
+      //either the specefied one
+      //or the first one.
+      defaultValues[field.value] = (field.default === "")?field.validation[0]:field.default;
+    } else if(field.type == KAT.model.Field.types.reference){
+      //we do want a reference, but it may be an empty reference.
+      //we neccessarily want this so we can avoid conflicts.
+      defaultValues[field.value] = "";
+    }
+  });
 
   return defaultValues;
-}
+};
 
 /**
 * Gets the full name of this concept.
@@ -200,7 +197,7 @@ KAT.model.Concept.prototype.getDefault = function(){
 */
 KAT.model.Concept.prototype.getFullName = function(){
   return this.KAnnSpec.getFullName()+"."+this.name;
-}
+};
 
 /**
 * Finds a field by name.
@@ -215,7 +212,7 @@ KAT.model.Concept.prototype.getFullName = function(){
 */
 KAT.model.Concept.prototype.getField = function(name){
   //normalise the name
-  var name = KAT.model.nameNormaliser(name);
+  name = KAT.model.nameNormaliser(name);
 
   if(!KAT.model.nameRegEx.test(name)){
     return false;
@@ -230,4 +227,4 @@ KAT.model.Concept.prototype.getField = function(name){
 
   //return false if not found.
   return false;
-}
+};

@@ -136,7 +136,7 @@ module.exports = function(grunt) {
   // Building tasks
   // creates everything.
   grunt.registerTask('build', [
-    // 'jshint',
+    'jshint',
     'docs',
     'rebuild'
   ]);

@@ -26,7 +26,6 @@ KAT.storage.Annotation = function(store, selection, concept, values){
   //Check if we already have the uuid.
   if(this.store.find(uuid)){
     throw new Error("Annotation with given uuid already exists. ");
-    return;
   }
 
   /**
@@ -54,7 +53,7 @@ KAT.storage.Annotation = function(store, selection, concept, values){
   this.concept = concept;
 
   //Either use existing values or use the default.
-  var values = (typeof values !== "undefined")?values:concept.getDefault();
+  values = (typeof values !== "undefined")?values:concept.getDefault();
 
   /**
   * The current values of this annotation, excluding selection.
@@ -63,7 +62,7 @@ KAT.storage.Annotation = function(store, selection, concept, values){
   * @name KAT.storage.Annotation#values
   */
   this.values = values;
-}
+};
 
 /**
 * Deletes an annotation
@@ -80,14 +79,14 @@ KAT.storage.Annotation.prototype.delete = function(){
   //look for this annotation by id and remove it.
   for(var i=0;i<this.store.annotations.length;i++){
     if(this.store.annotations[i].uuid == this.uuid){
-      this.store.annotations.splice(i, 1)
+      this.store.annotations.splice(i, 1);
       break;
     }
   }
 
   //and re-run the sanity check.
   this.store.sanityCheck();
-}
+};
 
 /**
 * Draws an annotation to the text.
@@ -113,7 +112,7 @@ KAT.storage.Annotation.prototype.draw = function(){
     //write it back
     $me.data("KAT.Annotation.UUID", current);
   });
-}
+};
 
 /**
 * Flashes an annotation.
@@ -129,7 +128,7 @@ KAT.storage.Annotation.prototype.flash = function(){
 	.animate({ backgroundColor: "red"}, 1500, function(){
     $(this).css("background-color", "");
   });
-}
+};
 
 /**
 * Shows an edit form for an annotation.
@@ -141,7 +140,7 @@ KAT.storage.Annotation.prototype.flash = function(){
 KAT.storage.Annotation.prototype.edit = function(){
   //TODO: show an edit form.
   alert("Unimplemented!");
-}
+};
 
 /**
 * Un-draws an annotation to the text.
@@ -173,7 +172,7 @@ KAT.storage.Annotation.prototype.undraw = function(){
       $me.data("KAT.Annotation.UUID", current);
     }
   });
-}
+};
 
 /**
 * Exports an annotation to JSON.
@@ -193,8 +192,8 @@ KAT.storage.Annotation.prototype.toJSON = function(){
 
     //the values.
     "values": this.values
-  }
-}
+  };
+};
 
 /**
  * A serialised version of KAT.storage.Annotation

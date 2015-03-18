@@ -64,43 +64,37 @@ KAT.model.KAnnSpecCollection.prototype.addNewKAnnSpec = function(xml){
 KAT.model.KAnnSpecCollection.prototype.init = function(){
   //iterate over the fields
   //this may take a while
-  for(var i=0;i<this.KAnnSpecs.length;i++){
-    (function(){
-      for(var j=0;j<this.concepts.length;j++){
-        (function(){
-          for(var k=0;k<this.fields.length;k++){
-            (function(k){
-              if(this.type == KAT.model.Field.types.reference){
-                for(var l=0;l<this.validation.length;l++){
-                  var name = this.validation[l];
+  $.each(this.KAnnSpecs, (function(i, spec){
+    $.each(spec.concepts, (function(j, concept){
+        $.each(concept.fields, (function(k){
+          if(this.type == KAT.model.Field.types.reference){
+            for(var l=0;l<this.validation.length;l++){
+              var name = this.validation[l];
 
-                  //it is already referenced, get the name out of it
-                  if(name instanceof KAT.model.Concept){
-                    name = name.getFullName();
-                  }
-
-                  //find the concept, try it within this KAnnSpec first
-                  var concept = this.concept.KAnnSpec.getConcept(name);
-
-                  //and then do it in the KAnnSpecCollection
-                  if(!concept){
-                    concept = this.concept.KAnnSpec.collection.getConcept(name);
-                  }
-
-                  if(!concept){
-                    throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Concept not found: '"+name+"'). ", this.xml);
-                  }
-
-                  //store the concept in the validation.
-                  this.validation[l] = concept;
-                }
+              //it is already referenced, get the name out of it
+              if(name instanceof KAT.model.Concept){
+                name = name.getFullName();
               }
-            }).call(this.fields[k]);
+
+              //find the concept, try it within this KAnnSpec first
+              var concept = this.concept.KAnnSpec.getConcept(name);
+
+              //and then do it in the KAnnSpecCollection
+              if(!concept){
+                concept = this.concept.KAnnSpec.collection.getConcept(name);
+              }
+
+              if(!concept){
+                throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Concept not found: '"+name+"'). ", this.xml);
+              }
+
+              //store the concept in the validation.
+              this.validation[l] = concept;
+            }
           }
-        }).call(this.concepts[j]);
-      }
-    }).call(this.KAnnSpecs[i]);
-  }
+        }).bind(concept));
+      }).bind(spec));
+    }));
 
   return this;
 };
@@ -204,7 +198,7 @@ KAT.model.KAnnSpecCollection.prototype.findConcepts = function(){
 */
 KAT.model.KAnnSpecCollection.prototype.getField = function(name){
   //normalise the name
-  var name = KAT.model.nameNormaliser(name);
+  name = KAT.model.nameNormaliser(name);
 
   if(!KAT.model.nameRegEx3.test(name)){
     return false;
