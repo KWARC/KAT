@@ -12,8 +12,8 @@ We use [Grunt](http://gruntjs.com/) for minimising source files and running the 
 ```bash
 git clone https://github.com/KWARC/KAT
 cd KAT
-npm install -g grunt # Might require sudo depending on your system configuration
-npm install . 
+npm install -g grunt-cli # Might require sudo depending on your system configuration
+npm install .
 grunt serve
 ```
 
