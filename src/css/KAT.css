@@ -1,3 +1,50 @@
 .KAT-selection {
-  background-color: yellow; 
+  background-color: yellow;
+}
+div.scrollingDiv{
+   overflow-y:scroll;
+}
+
+.leftAlign {
+  float:left;
+}
+.rightAlign {
+  float:right;
+}
+
+.collapsible {
+    background: #EBEBEB;
+    border: 1px solid #CCCCCC;
+    padding: 2px;
+    width: 250px;
+    font: 12px Arial, Helvetica, sans-serif;
+    color: #333333;
+    z-index: 2;
+    overflow: scroll;
+}
+.collapsible button {
+    float: left;
+    border: 1px solid #999999;
+    background: #999999;
+    color: #CECECE;
+    margin-left: 2px;
+    z-index: 3;
+}
+.collapsible button:hover {
+    background: #EEBB00;
+    color: #000000;
+}
+
+.collapsible ul {
+    position:relative;
+    right: 10px;
+    list-style: none;
+}
+
+.collapsible ul li {
+  word-wrap: break-word;
+  padding: 10px;
+  padding-bottom: 80px;
+  border : 1px solid black;
+  font: 14px Arial, Helvetica, sans-serif;
 }

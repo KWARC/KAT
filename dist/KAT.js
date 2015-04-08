@@ -1989,7 +1989,9 @@ KAT.module = {
 
         $.each(this.gui.collection.findConcepts(), function(index, concept){
           menu[text_new][concept.getFullName()] = function(){
-            //add a new Annotation
+            //load new Annotation form
+            
+            genNewAnnotationForm(selection,concept);
             var newAnnotation = me.store.addNew(selection, concept);
 
             //and draw it.
