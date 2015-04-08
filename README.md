@@ -13,6 +13,11 @@ We use [Grunt](http://gruntjs.com/) for minimising source files and running the 
 git clone https://github.com/KWARC/KAT
 cd KAT
 npm install -g grunt-cli # Might require sudo depending on your system configuration
+# Whenever you update you will have to re-run this command.
+rm -rf node_modules
+# The order is VERY important. 
+npm install grunt-jsdoc-ng
+npm install jsdoc
 npm install .
 grunt serve
 ```
