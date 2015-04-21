@@ -196,6 +196,36 @@ KAT.storage.Annotation.prototype.toJSON = function(){
 };
 
 /**
+* Exports an annotation to RDF.
+*
+* @return Document
+* @function
+* @name toRDF
+* @memberof KAT.storage.Annotation
+*/
+KAT.storage.Annotation.prototype.toRDF = function(){
+
+  var me = this;
+
+  jQuery.each(this.concept.fields, function(i, field){
+    var fieldVal = me.values[field.name];
+    console.log(field, "=", fieldVal);
+  });
+
+
+  return {
+    //the UUID of this annotation
+    "uuid": this.uuid,
+
+    //the full name.
+    "concept": this.concept.getFullName(),
+
+    //the values.
+    "values": this.values
+  };
+};
+
+/**
  * A serialised version of KAT.storage.Annotation
  * @typedef {Object} KAT.storage.Annotation~JSON
  * @property {string} uuid - UUID of this annotation.

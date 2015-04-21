@@ -1924,6 +1924,36 @@ KAT.storage.Annotation.prototype.toJSON = function(){
 };
 
 /**
+* Exports an annotation to RDF.
+*
+* @return Document
+* @function
+* @name toRDF
+* @memberof KAT.storage.Annotation
+*/
+KAT.storage.Annotation.prototype.toRDF = function(){
+
+  var me = this;
+
+  jQuery.each(this.concept.fields, function(i, field){
+    var fieldVal = me.values[field.name];
+    console.log(field, "=", fieldVal);
+  });
+
+
+  return {
+    //the UUID of this annotation
+    "uuid": this.uuid,
+
+    //the full name.
+    "concept": this.concept.getFullName(),
+
+    //the values.
+    "values": this.values
+  };
+};
+
+/**
  * A serialised version of KAT.storage.Annotation
  * @typedef {Object} KAT.storage.Annotation~JSON
  * @property {string} uuid - UUID of this annotation.
@@ -1966,12 +1996,14 @@ KAT.module = {
     var text_remove     = "Delete Annotation";
     var text_highlight  = "Highlight Annotation";
     var text_edit       = "Edit Annotation";
+    var text_rdf        = "View RDF"; 
 
     //the menu to return
     var menu = {};
 
     //add the text
     menu[text_new] = false;
+    menu[text_rdf] = {};
     menu[text_remove] = {};
     menu[text_highlight] = {};
     menu[text_edit] = {};
@@ -1990,7 +2022,7 @@ KAT.module = {
         $.each(this.gui.collection.findConcepts(), function(index, concept){
           menu[text_new][concept.getFullName()] = function(){
             //load new Annotation form
-            
+
             genNewAnnotationForm(selection,concept);
             var newAnnotation = me.store.addNew(selection, concept);
 
@@ -2017,12 +2049,16 @@ KAT.module = {
         menu[text_edit][annotation.uuid] = function(){
           annotation.edit();
         };
+        menu[text_rdf][annotation.uuid] = function(){
+          console.log(annotation.toRDF());
+        };
       });
 
     } else {
       menu[text_remove] = false;
       menu[text_highlight] = false;
       menu[text_edit] = false;
+      menu[text_rdf] = false;
     }
 
     menu.Storage = {

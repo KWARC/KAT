@@ -32,12 +32,14 @@ KAT.module = {
     var text_remove     = "Delete Annotation";
     var text_highlight  = "Highlight Annotation";
     var text_edit       = "Edit Annotation";
+    var text_rdf        = "View RDF"; 
 
     //the menu to return
     var menu = {};
 
     //add the text
     menu[text_new] = false;
+    menu[text_rdf] = {};
     menu[text_remove] = {};
     menu[text_highlight] = {};
     menu[text_edit] = {};
@@ -56,7 +58,7 @@ KAT.module = {
         $.each(this.gui.collection.findConcepts(), function(index, concept){
           menu[text_new][concept.getFullName()] = function(){
             //load new Annotation form
-            
+
             genNewAnnotationForm(selection,concept);
             var newAnnotation = me.store.addNew(selection, concept);
 
@@ -83,12 +85,16 @@ KAT.module = {
         menu[text_edit][annotation.uuid] = function(){
           annotation.edit();
         };
+        menu[text_rdf][annotation.uuid] = function(){
+          console.log(annotation.toRDF());
+        };
       });
 
     } else {
       menu[text_remove] = false;
       menu[text_highlight] = false;
       menu[text_edit] = false;
+      menu[text_rdf] = false;
     }
 
     menu.Storage = {
