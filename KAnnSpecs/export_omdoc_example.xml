@@ -1,0 +1,29 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	 xmlns:kat="https://github.com/KWARC/KAT/"
+	 xmlns:omdoc="http://omdoc.org/ns/">
+  <rdf:Description about="path-to-fragment-in-doc">
+    <kat:annotation rdf:nodeID="_:a"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="_:a">
+    <kat:annotator>mySpotter</kat:annotator>
+    <kat:annotation-date>....</kat:annotation-date>
+    <rdf:type resource="omdoc:symbol"/>
+    <omdoc:name>foo</omdoc:name>
+    ...
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="_:a">
+    <rdf:type resource="omdoc:symbol"/>
+    <omdoc:name>foo</omdoc:name>
+    ...
+  </rdf:Description>
+
+  <rdf:Description about="path-to-fragment-in-doc">
+    <kat:annotation rdf:nodeID="_:b"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="_:b">
+    <rdf:type resource="omdoc:definition"/>
+    <omdoc:name>bar</omdoc:name>
+    ....
+  </rdf:Description>
+</rdf:RDF>
+      
