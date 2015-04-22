@@ -93,8 +93,7 @@ KAT.storage.Store.prototype.filterByConcept = function(concept){
   filteredAnnotations = [];
   //look for the annotation by concept.
   for(var i=0;i<this.annotations.length;i++){
-    console.log(this.annotations[i].concept.name);
-    if(this.annotations[i].concept.name == concept || concept == "all"){
+    if(this.annotations[i].concept.name == concept || concept === ''){
       filteredAnnotations.push(this.annotations[i].uuid);
     }
   }

@@ -81,12 +81,11 @@ KAT.sidebar.genNewAnnotationForm = function(env,selection,concept){
       if (current.type == "reference"){
         var allowedAnnotations = current.validation;
         options = env.store.filterByConcept(allowedAnnotations[0]);
-        console.log(options);
         newSelectField = document.createElement('select');
         for (optionIndex = 0; optionIndex < options.length; ++optionIndex){
           opt = options[optionIndex];
           newOption = document.createElement('option');
-          jQuery( newOption ).html(opt.value);
+          jQuery( newOption ).html(opt);
           jQuery( newSelectField ).append(newOption);  
         }
         jQuery( newAnnotation ).append(newSelectField);
@@ -95,15 +94,16 @@ KAT.sidebar.genNewAnnotationForm = function(env,selection,concept){
   var button = document.createElement('input');
     button.type="submit";
     button.value="Add";
+    var mylist = [];
     jQuery( button ).click(function(){
-      valuesJSON = [];
-      item = {};
+      valuesJSON = {};
       for (fieldIndex = 0; fieldIndex < fields.length; ++fieldIndex) {
         current = fields[fieldIndex];
         var value = current.value;
-        item [value] = jQuery( this ).parent().children("input:eq("+fieldIndex+")").val();
+        mylist.push(jQuery( this ).parent().children("input:eq("+fieldIndex+")").val());
+        valuesJSON [value] = mylist;
+        mylist = [];
       }
-      valuesJSON.push(item);
       jQuery( this ).parent().remove();
       var newAnnotation = env.store.addNew(selection, concept, valuesJSON);
       newAnnotation.draw();
