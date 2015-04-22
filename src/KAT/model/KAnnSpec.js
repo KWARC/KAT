@@ -36,6 +36,14 @@ KAT.model.KAnnSpec = function(xml, collection){
   */
   this.name = KAT.model.nameNormaliser(this.xml.children().eq(0).attr("name"));
 
+  /**
+  * RDF Node ID of KAnnSpec.
+  *
+  * @type {string}
+  * @name KAT.model.KAnnSpec#rdf_nodeid
+  */
+  this.rdf_nodeid = "KAT:"+(new Date().getTime())+"_"+this.name; 
+
   //Check if the name is valid.
   if(!this.name || !KAT.model.nameRegEx.test(this.name)){
     throw new KAT.model.ParsingError("KAT.model.KAnnSpec: Unable to create KAnnSpec ('"+this.name+"' is not a valid name). ", this.xml);
@@ -127,6 +135,7 @@ KAT.model.KAnnSpec.prototype.getConcept = function(name){
   //return false if not found.
   return false;
 };
+
 
 /**
 * Finds a field by name.

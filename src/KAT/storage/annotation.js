@@ -198,31 +198,54 @@ KAT.storage.Annotation.prototype.toJSON = function(){
 /**
 * Exports an annotation to RDF.
 *
-* @return Document
+* @param {string} docURL - The URL of the document currently opened
+* @param {string} runID - rdf:nodeID of the run.
+*
+* @return document
 * @function
 * @name toRDF
 * @memberof KAT.storage.Annotation
 */
-KAT.storage.Annotation.prototype.toRDF = function(){
+KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
 
   var me = this;
+  var concept = this.concept;
 
-  jQuery.each(this.concept.fields, function(i, field){
+  //create a parent.
+  var parent = $("<rdf:RDF>");
+
+  //make a new id for the export.
+  var id="KAT:"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
+
+  //create an RDF-description for pointing to the text.
+  var annotDoc =
+  $('<rdf:Description>')
+  .attr("about", docURL+'#sec('+this.selection.start+','+this.selection.end+','+this.selection.container+')')
+  .appendTo(parent)
+  .append(
+    $('<kat:annotation>').attr("rdf:nodeID", id)
+  );
+
+  //create an ID pointing to the content Description.
+  var contentDesc = $('<rdf:Description>')
+  .attr("rdf:nodeID", id)
+  .appendTo(parent).append(
+    $('<kat:run>').attr("rdf:nodeID", runID),
+    $('<kat:kannspec>').attr("rdf:nodeID", concept.KAnnSpec.rdf_nodeid),
+    $('<kat:concept>').text(concept.name)
+  );
+
+  jQuery.each(concept.fields, function(i, field){
     var fieldVal = me.values[field.name];
-    console.log(field, "=", fieldVal);
+
+    jQuery.each(fieldVal, function(i, value){
+      
+    });
   });
 
 
-  return {
-    //the UUID of this annotation
-    "uuid": this.uuid,
-
-    //the full name.
-    "concept": this.concept.getFullName(),
-
-    //the values.
-    "values": this.values
-  };
+  //get the Dom Node.
+  return parent.get(0);
 };
 
 /**

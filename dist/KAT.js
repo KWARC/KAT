@@ -58,6 +58,33 @@ KAT.model.nameRegEx2 = new RegExp("^("+KAT.model.nameRegExS+")\\.("+KAT.model.na
 */
 KAT.model.nameRegEx3 = new RegExp("^("+KAT.model.nameRegExS+")\\.("+KAT.model.nameRegExS+")\\.("+KAT.model.nameRegExS+")$");
 
+
+/** Resolves a relative URI with namespace.
+*
+* @param {string} uri - URI to resolve
+* @param {document} xml - Top level xml node with namespaces contained.
+* @name KAT.model.resolveWithNameSpace
+* @static
+*/
+KAT.model.resolveWithNameSpace = function(uri, xml){
+  var uriparts = uri.split(":");
+
+  console.log($(xml).find('root').html()); 
+
+  // check if we have exactly 2 parts.
+  if(uriparts.length == 2){
+
+    var resolved = $(xml).attr("xmlns:"+uriparts[0])+uriparts[1];
+    console.log(resolved);
+
+    return resolved
+  } else {
+    return uri;
+  }
+
+}
+
+
 /**
 * Normalises a theory name.
 *
@@ -120,7 +147,7 @@ KAT.model.ParsingError = function (message, xml_element) {
     get: function() {
       return tmp.stack;
     }
-  }); 
+  });
 
   return this;
 };
@@ -398,6 +425,14 @@ KAT.model.KAnnSpec = function(xml, collection){
   */
   this.name = KAT.model.nameNormaliser(this.xml.children().eq(0).attr("name"));
 
+  /**
+  * RDF Node ID of KAnnSpec.
+  *
+  * @type {string}
+  * @name KAT.model.KAnnSpec#rdf_nodeid
+  */
+  this.rdf_nodeid = "KAT:"+(new Date().getTime())+"_"+this.name; 
+
   //Check if the name is valid.
   if(!this.name || !KAT.model.nameRegEx.test(this.name)){
     throw new KAT.model.ParsingError("KAT.model.KAnnSpec: Unable to create KAnnSpec ('"+this.name+"' is not a valid name). ", this.xml);
@@ -490,6 +525,7 @@ KAT.model.KAnnSpec.prototype.getConcept = function(name){
   return false;
 };
 
+
 /**
 * Finds a field by name.
 *
@@ -552,14 +588,19 @@ KAT.model.Concept = function(xml, KAnnSpec){
   /**
   * KAnnSpec this concept was declared in.
   *
-  * @type {document}
+  * @type {KAT.model.KAnnSpec}
   * @name KAT.model.Concept#KAnnSpec
   */
   this.KAnnSpec = KAnnSpec;
 
-  //and name
+  // check if we have a name
   if(typeof this.xml.attr("name") != "string"){
     throw new KAT.model.ParsingError("KAT.model.Concept: Invalid Invalid XML (Missing name attribute for <concept>). ", this.xml);
+  }
+
+  // check if we have an rdftype
+  if(typeof this.xml.attr("rdftype") != "string"){
+    throw new KAT.model.ParsingError("KAT.model.Concept: Invalid Invalid XML (Missing rdftype attribute for <concept>). ", this.xml);
   }
 
   /**
@@ -580,6 +621,13 @@ KAT.model.Concept = function(xml, KAnnSpec){
     throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Concept '"+this.getFullName()+"' already exists). ", this.xml);
   }
 
+  /**
+  * RDF Type attribute for this concept.
+  *
+  * @type {string}
+  * @name KAT.model.Concept#rdf_type
+  */
+  this.rdf_type = KAT.model.resolveWithNameSpace(this.xml.attr("rdftype"), this.KAnnSpec.xml);
 
   //validation
   if(this.xml.length != 1 || !this.xml.is("concept")){
@@ -609,14 +657,6 @@ KAT.model.Concept = function(xml, KAnnSpec){
   * @name KAT.model.Concept#display
   */
   this.display = "";
-
-  /**
-  * RDF to generate for this concept.
-  *
-  * @type {string}
-  * @name KAT.model.Concept#rdf
-  */
-  this.rdf = "";
 
   //validate the children
   var children = this.xml.children();
@@ -817,6 +857,13 @@ KAT.model.Field = function(xml, concept){
     throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Missing type attribute for <field>). ", this.xml);
   }
 
+  //do we have the rdfpref attribute.
+  if(typeof this.xml.attr("rdfpred") != "string"){
+    throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Missing rdfpred attribute for <field>). ", this.xml);
+  }
+
+
+
   //do we know the type
   if(!KAT.model.Field.types.hasOwnProperty(this.xml.attr("type"))){
     throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Unknown <field> type). ", this.xml);
@@ -829,6 +876,14 @@ KAT.model.Field = function(xml, concept){
   * @name KAT.model.Field#type
   */
   this.type = KAT.model.Field.types[this.xml.attr("type")];
+
+  /**
+  * RDF Predicate of this field.
+  *
+  * @type {string}
+  * @name KAT.model.Field#rdf_pred
+  */
+  this.rdf_pred = KAT.model.resolveWithNameSpace(this.xml.attr("rdfpred"), this.concept.KAnnSpec.xml);
 
   /**
   * Minimum number of times this field should be used.
@@ -1081,6 +1136,18 @@ KAT.model.Option = function(xml, field){
       throw new KAT.model.ParsingError("KAT.model.Option: Invalid XML (Default already exists)", this.xml);
     }
     this.field.default = this.value;
+  }
+
+  /**
+  * RDF Obj for this Option or false.
+  *
+  * @type {string|boolean}
+  * @name KAT.model.Option#rdf_obj
+  */
+  this.rdf_obj = false;
+
+  if(typeof this.xml.attr("rdfobj") === "string"){
+    this.rdf_obj = KAT.model.resolveWithNameSpace(this.xml.attr("rdfobj"), this.field.concept.KAnnSpec.xml);
   }
 
   /**
@@ -2064,31 +2131,54 @@ KAT.storage.Annotation.prototype.toJSON = function(){
 /**
 * Exports an annotation to RDF.
 *
-* @return Document
+* @param {string} docURL - The URL of the document currently opened
+* @param {string} runID - rdf:nodeID of the run.
+*
+* @return document
 * @function
 * @name toRDF
 * @memberof KAT.storage.Annotation
 */
-KAT.storage.Annotation.prototype.toRDF = function(){
+KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
 
   var me = this;
+  var concept = this.concept;
 
-  jQuery.each(this.concept.fields, function(i, field){
+  //create a parent.
+  var parent = $("<rdf:RDF>");
+
+  //make a new id for the export.
+  var id="KAT:"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
+
+  //create an RDF-description for pointing to the text.
+  var annotDoc =
+  $('<rdf:Description>')
+  .attr("about", docURL+'#sec('+this.selection.start+','+this.selection.end+','+this.selection.container+')')
+  .appendTo(parent)
+  .append(
+    $('<kat:annotation>').attr("rdf:nodeID", id)
+  );
+
+  //create an ID pointing to the content Description.
+  var contentDesc = $('<rdf:Description>')
+  .attr("rdf:nodeID", id)
+  .appendTo(parent).append(
+    $('<kat:run>').attr("rdf:nodeID", runID),
+    $('<kat:kannspec>').attr("rdf:nodeID", concept.KAnnSpec.rdf_nodeid),
+    $('<kat:concept>').text(concept.name)
+  );
+
+  jQuery.each(concept.fields, function(i, field){
     var fieldVal = me.values[field.name];
-    console.log(field, "=", fieldVal);
+
+    jQuery.each(fieldVal, function(i, value){
+      
+    });
   });
 
 
-  return {
-    //the UUID of this annotation
-    "uuid": this.uuid,
-
-    //the full name.
-    "concept": this.concept.getFullName(),
-
-    //the values.
-    "values": this.values
-  };
+  //get the Dom Node.
+  return parent.get(0);
 };
 
 /**

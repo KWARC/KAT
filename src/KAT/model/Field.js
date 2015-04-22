@@ -59,6 +59,13 @@ KAT.model.Field = function(xml, concept){
     throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Missing type attribute for <field>). ", this.xml);
   }
 
+  //do we have the rdfpref attribute.
+  if(typeof this.xml.attr("rdfpred") != "string"){
+    throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Missing rdfpred attribute for <field>). ", this.xml);
+  }
+
+
+
   //do we know the type
   if(!KAT.model.Field.types.hasOwnProperty(this.xml.attr("type"))){
     throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Unknown <field> type). ", this.xml);
@@ -71,6 +78,14 @@ KAT.model.Field = function(xml, concept){
   * @name KAT.model.Field#type
   */
   this.type = KAT.model.Field.types[this.xml.attr("type")];
+
+  /**
+  * RDF Predicate of this field.
+  *
+  * @type {string}
+  * @name KAT.model.Field#rdf_pred
+  */
+  this.rdf_pred = KAT.model.resolveWithNameSpace(this.xml.attr("rdfpred"), this.concept.KAnnSpec.xml);
 
   /**
   * Minimum number of times this field should be used.

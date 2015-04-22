@@ -57,6 +57,18 @@ KAT.model.Option = function(xml, field){
   }
 
   /**
+  * RDF Obj for this Option or false.
+  *
+  * @type {string|boolean}
+  * @name KAT.model.Option#rdf_obj
+  */
+  this.rdf_obj = false;
+
+  if(typeof this.xml.attr("rdfobj") === "string"){
+    this.rdf_obj = KAT.model.resolveWithNameSpace(this.xml.attr("rdfobj"), this.field.concept.KAnnSpec.xml);
+  }
+
+  /**
   * Documentation for this option.
   *
   * @type {string}
