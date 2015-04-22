@@ -1,0 +1,46 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	 xmlns:kat="https://github.com/KWARC/KAT/"
+	 xmlns:omdoc="http://omdoc.org/ns/">
+
+  <!-- first we specify the run of the spotter or annotation campaign in a blank node -->
+  <rdf:Description>
+    <kat:annotation rdf:nodeID="_:r"/>
+  </rdf:Description>
+  <!-- we add the data about the run -->
+  <rdf:Description rdf:nodeID="_:r">
+    <rdf:type resource="kat:run"/>
+    <kat:date resource="2015-13-..." rdf:datatype="xs:dateTime"/>
+    <kat:tool>mySpotter</kat:tool>
+    <kat:runid>sdfsdfsdfsdf</kat:runid>
+    ...
+  </rdf:Description>
+
+  <!-- for all the KAnnspecs we use we have a blank node  each-->
+  <rdf:Description>
+    <kat:kannspec rdf:nodeID="_:k"/>
+  </rdf:Description>
+  <!-- and we specify its name and URI -->
+  <rdf:Description rdf:nodeID="_:k">
+    <kat:kannspec-name>OMDoc</kat:kannspec-name>
+    <kat:kannspec-URI>http:......</kat:kannspec-URI>
+  </rdf:Description>
+
+  <!-- Now the annotation data --> 
+  
+  <!-- for all the annotations we make a blank node each -->
+  <rdf:Description about="path-to-fragment-in-doc">
+    <kat:annotation rdf:nodeID="_:a"/>
+  </rdf:Description>
+  <!-- and we give the data of the anntation -->
+  <rdf:Description rdf:nodeID="_:a">
+    <!-- first the metadata -->
+    <kat:run rdf:nodeID="_:r"/>
+    <kat:kannspec rdf:nodeID="_:k"/>
+    <kat:concept>Symbol</kat:concept> 
+    <!-- then the ontology data -->
+    <rdf:type resource="omdoc:symbol"/>
+    <omdoc:name>foo</omdoc:name>
+    ...
+  </rdf:Description>
+</rdf:RDF>
+      

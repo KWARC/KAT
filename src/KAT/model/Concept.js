@@ -26,14 +26,19 @@ KAT.model.Concept = function(xml, KAnnSpec){
   /**
   * KAnnSpec this concept was declared in.
   *
-  * @type {document}
+  * @type {KAT.model.KAnnSpec}
   * @name KAT.model.Concept#KAnnSpec
   */
   this.KAnnSpec = KAnnSpec;
 
-  //and name
+  // check if we have a name
   if(typeof this.xml.attr("name") != "string"){
     throw new KAT.model.ParsingError("KAT.model.Concept: Invalid Invalid XML (Missing name attribute for <concept>). ", this.xml);
+  }
+
+  // check if we have an rdftype
+  if(typeof this.xml.attr("rdftype") != "string"){
+    throw new KAT.model.ParsingError("KAT.model.Concept: Invalid Invalid XML (Missing rdftype attribute for <concept>). ", this.xml);
   }
 
   /**
@@ -54,6 +59,13 @@ KAT.model.Concept = function(xml, KAnnSpec){
     throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML (Concept '"+this.getFullName()+"' already exists). ", this.xml);
   }
 
+  /**
+  * RDF Type attribute for this concept.
+  *
+  * @type {string}
+  * @name KAT.model.Concept#rdf_type
+  */
+  this.rdf_type = KAT.model.resolveWithNameSpace(this.xml.attr("rdftype"), this.KAnnSpec.xml);
 
   //validation
   if(this.xml.length != 1 || !this.xml.is("concept")){
@@ -83,14 +95,6 @@ KAT.model.Concept = function(xml, KAnnSpec){
   * @name KAT.model.Concept#display
   */
   this.display = "";
-
-  /**
-  * RDF to generate for this concept.
-  *
-  * @type {string}
-  * @name KAT.model.Concept#rdf
-  */
-  this.rdf = "";
 
   //validate the children
   var children = this.xml.children();
