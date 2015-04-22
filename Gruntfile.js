@@ -18,6 +18,8 @@ module.exports = function(grunt) {
 
     'src/KAT/gui/index.js',
 
+    'src/KAT/sidebar/index.js',
+
     'src/KAT/storage/index.js',
     'src/KAT/storage/store.js',
     'src/KAT/storage/annotation.js',

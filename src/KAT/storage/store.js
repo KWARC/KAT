@@ -44,9 +44,9 @@ KAT.storage.Store = function(gui){
 * @name addNew
 * @memberof KAT.storage.Store
 */
-KAT.storage.Store.prototype.addNew = function(selection, concept){
+KAT.storage.Store.prototype.addNew = function(selection, concept, values){
   //create new annotation.
-  var newAnnotation = new KAT.storage.Annotation(this, selection, concept );
+  var newAnnotation = new KAT.storage.Annotation(this, selection, concept, values );
 
   //store it in this store.
   this.annotations.push(newAnnotation);
@@ -79,6 +79,29 @@ KAT.storage.Store.prototype.addFromJSON = function(json){
   return newAnnotation;
 };
 
+/** Returns a list of annotation if they exists.
+*
+* @param {string} concept - Concept of annotation to find.
+* @returns {KAT.storage.Annotation|undefined} - The given annotation if found.
+*
+* @function
+* @instance
+* @name filterByConcept
+* @memberof KAT.storage.Store
+*/
+KAT.storage.Store.prototype.filterByConcept = function(concept){
+  filteredAnnotations = [];
+  //look for the annotation by concept.
+  for(var i=0;i<this.annotations.length;i++){
+    console.log(this.annotations[i].concept.name);
+    if(this.annotations[i].concept.name == concept || concept == "all"){
+      filteredAnnotations.push(this.annotations[i].uuid);
+    }
+  }
+  //nope, we want undefined
+  return filteredAnnotations;
+};
+
 /** Returns an annotation if it exists.
 *
 * @param {string} uuid - UUID of annotation to find.
@@ -98,7 +121,7 @@ KAT.storage.Store.prototype.find = function(uuid){
     }
   }
 
-  //nope, we want undefined.
+  //nope, we want empty.
   return undefined;
 };
 

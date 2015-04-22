@@ -57,11 +57,11 @@ KAT.module = {
           menu[text_new][concept.getFullName()] = function(){
             //load new Annotation form
             
-            genNewAnnotationForm(selection,concept);
-            var newAnnotation = me.store.addNew(selection, concept);
+            var values = KAT.sidebar.genNewAnnotationForm(me,selection,concept);
+            //var newAnnotation = me.store.addNew(selection, concept);
 
             //and draw it.
-            newAnnotation.draw();
+            //newAnnotation.draw();
           };
         });
       }

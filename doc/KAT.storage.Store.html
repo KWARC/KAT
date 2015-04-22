@@ -516,7 +516,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="storage_store.js.html">storage/store.js</a>, <a href="storage_store.js.html#line165">line 165</a>
+        <a href="storage_store.js.html">storage/store.js</a>, <a href="storage_store.js.html#line188">line 188</a>
     </li></ul></dd>
     
 
@@ -672,7 +672,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="storage_store.js.html">storage/store.js</a>, <a href="storage_store.js.html#line151">line 151</a>
+        <a href="storage_store.js.html">storage/store.js</a>, <a href="storage_store.js.html#line174">line 174</a>
     </li></ul></dd>
     
 
@@ -848,6 +848,159 @@
 
 
 
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="addNew"><span class="type-signature"></span>addNew<span class="signature">(element)</span><span class="type-signature"> &rarr; {Array.&lt;<a href="KAT.storage.Annotation.html">KAT.storage.Annotation</a>>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns all (drawn) annotations which match a certain element.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>element</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">jQuery</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Element of annotation to find.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="storage_store.js.html">storage/store.js</a>, <a href="storage_store.js.html#line128">line 128</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - The given annotations if found.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;<a href="KAT.storage.Annotation.html">KAT.storage.Annotation</a>></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1032,14 +1185,14 @@
 
     
 
-    <h4 class="name" id="addNew"><span class="type-signature"></span>addNew<span class="signature">(element)</span><span class="type-signature"> &rarr; {Array.&lt;<a href="KAT.storage.Annotation.html">KAT.storage.Annotation</a>>}</span></h4>
+    <h4 class="name" id="addNew"><span class="type-signature"></span>addNew<span class="signature">(uuid)</span><span class="type-signature"> &rarr; {<a href="KAT.storage.Annotation.html">KAT.storage.Annotation</a>|undefined}</span></h4>
 
     
 
 
 
 <div class="description">
-    Returns all (drawn) annotations which match a certain element.
+    Returns an annotation if it exists.
 </div>
 
 
@@ -1075,13 +1228,13 @@
 
         <tr>
             
-                <td class="name"><code>element</code></td>
+                <td class="name"><code>uuid</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">jQuery</span>
+<span class="param-type">string</span>
 
 
             
@@ -1091,7 +1244,7 @@
 
             
 
-            <td class="description last">Element of annotation to find.</td>
+            <td class="description last">UUID of annotation to find.</td>
         </tr>
 
     
@@ -1159,7 +1312,7 @@
 
         
 <div class="param-desc">
-    - The given annotations if found.
+    - The given annotation if found.
 </div>
 
 
@@ -1170,7 +1323,10 @@
     </dt>
     <dd>
         
-<span class="param-type">Array.&lt;<a href="KAT.storage.Annotation.html">KAT.storage.Annotation</a>></span>
+<span class="param-type"><a href="KAT.storage.Annotation.html">KAT.storage.Annotation</a></span>
+|
+
+<span class="param-type">undefined</span>
 
 
     </dd>
@@ -1185,14 +1341,14 @@
 
     
 
-    <h4 class="name" id="addNew"><span class="type-signature"></span>addNew<span class="signature">(uuid)</span><span class="type-signature"> &rarr; {<a href="KAT.storage.Annotation.html">KAT.storage.Annotation</a>|undefined}</span></h4>
+    <h4 class="name" id="filterByConcept"><span class="type-signature"></span>filterByConcept<span class="signature">(concept)</span><span class="type-signature"> &rarr; {<a href="KAT.storage.Annotation.html">KAT.storage.Annotation</a>|undefined}</span></h4>
 
     
 
 
 
 <div class="description">
-    Returns an annotation if it exists.
+    Returns a list of annotation if they exists.
 </div>
 
 
@@ -1228,7 +1384,7 @@
 
         <tr>
             
-                <td class="name"><code>uuid</code></td>
+                <td class="name"><code>concept</code></td>
             
 
             <td class="type">
@@ -1244,7 +1400,7 @@
 
             
 
-            <td class="description last">UUID of annotation to find.</td>
+            <td class="description last">Concept of annotation to find.</td>
         </tr>
 
     
@@ -1392,7 +1548,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="storage_store.js.html">storage/store.js</a>, <a href="storage_store.js.html#line138">line 138</a>
+        <a href="storage_store.js.html">storage/store.js</a>, <a href="storage_store.js.html#line161">line 161</a>
     </li></ul></dd>
     
 
@@ -1465,7 +1621,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Wed Apr 08 2015 15:08:20 GMT-0400 (EDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Wed Apr 22 2015 11:03:47 GMT-0400 (EDT)
 </footer>
 
 <script> prettyPrint(); </script>
