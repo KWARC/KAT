@@ -69,20 +69,13 @@ KAT.model.nameRegEx3 = new RegExp("^("+KAT.model.nameRegExS+")\\.("+KAT.model.na
 KAT.model.resolveWithNameSpace = function(uri, xml){
   var uriparts = uri.split(":");
 
-  console.log($(xml).find('root').html()); 
-
   // check if we have exactly 2 parts.
   if(uriparts.length == 2){
-
-    var resolved = $(xml).attr("xmlns:"+uriparts[0])+uriparts[1];
-    console.log(resolved);
-
-    return resolved
+    return $(xml).attr("xmlns:"+uriparts[0])+uriparts[1];
   } else {
     return uri;
   }
-
-}
+};
 
 
 /**

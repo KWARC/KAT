@@ -50,8 +50,7 @@ KAT.model.resolveWithNameSpace = function(uri, xml){
   } else {
     return uri;
   }
-
-}
+};
 
 
 /**
