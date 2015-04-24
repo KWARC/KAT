@@ -170,6 +170,115 @@ KAT.storage.Store.prototype.sanityCheck = function(){
   return true;
 };
 
+/** Exports all the annotations in this store to RDF.
+*
+* @param {string} docURL URL of the current document.
+* @function
+* @instance
+* @name toRDF
+* @memberof KAT.storage.Store
+* @return {document} - returns
+*/
+KAT.storage.Store.prototype.toRDF = function(docURL){
+  //self-reference
+  var me = this;
+
+
+
+  // Create the top-level rdf document.
+  var rdfTopLevel = $(KAT.rdf.create("rdf:RDF"))
+  .attr("xmlns:kat", "https://github.com/KWARC/KAT/")
+  .attr("xmlns:rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+
+  // Create a run element.
+  // TODO: Read this when importing and store this?
+  var runID = "kat_run";
+
+
+  rdfTopLevel.append(
+
+    // referencing to the blank node
+    $(KAT.rdf.create("rdf:Description")).append(
+      KAT.rdf.attr($(KAT.rdf.create("kat:annotation")), "rdf:nodeID", runID)
+    ),
+
+    // create the blanknode
+    KAT.rdf.attr(
+      $(KAT.rdf.create("rdf:Description")),
+      "rdf:nodeID",
+      runID
+    ).append(
+      KAT.rdf.attr(
+        $(KAT.rdf.create("rdf:type")),
+        "rdf:resource",
+        "kat:run"
+      ),
+      KAT.rdf.attr(
+        $("<kat:date />").text((new Date()).toISOString()),
+        "rdf:datatype",
+        "xs:dateTime"
+      ),
+      $("<kat:tool>").text("KAT"),
+      $("<kat:runid>").text("0") //TODO: Have a better runID
+    )
+  );
+
+  //stores KannSpecs already run.
+  var specsRun = {};
+
+  //Find all the KAnnSpecs
+  jQuery.each(this.annotations, function(i, annotation){
+    // The KAnnSpec
+    var spec = annotation.concept.KAnnSpec;
+
+    // if we have already run it, just return.
+    if(!specsRun[spec.rdf_nodeid]){
+
+      // we have run this KAnnSpec.
+      specsRun[spec.rdf_nodeid] = true;
+
+      // find all the XML namespaces. Ignore the default namespace because we don't want that.
+      // and write them onto the top-level RDF element.
+      spec.xml.find("annotation").each(function(){
+        $.each(this.attributes, function(i, attrib){
+           var name = attrib.name;
+           var value = attrib.value;
+
+           if(name.startsWith("xmlns:")){
+             rdfTopLevel.attr(name, value);
+           }
+        });
+      });
+
+     // and create a blank node for it.
+     rdfTopLevel.append(
+       $(KAT.rdf.create("rdf:Description")).append(
+         KAT.rdf.attr(
+           $(KAT.rdf.create("kat:annotation")),
+           "rdf:nodeID",
+           spec.rdf_nodeid
+        )
+       ),
+
+       KAT.rdf.attr($(KAT.rdf.create("rdf:Description")), "rdf:nodeID", spec.rdf_nodeid).append(
+         KAT.rdf.attr($("<rdf:type>"), "rdf:resource", "kat:kannspec"),
+
+         $("<kat:kannspec-name>").text(spec.name),
+         $("<kat:kannspec-URI>").text("about:blank")
+       )
+     );
+
+   }
+
+   // now create a new blank node for the actual annotation.
+   // we have a function for this.
+   rdfTopLevel.append($(annotation.toRDF(docURL, runID)).children());
+  });
+
+  //return a string because javascrt
+  return rdfTopLevel.get(0).outerHTML;
+};
+
 /**
 * Generates a UUID from a selection.
 *

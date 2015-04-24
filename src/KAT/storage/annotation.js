@@ -212,37 +212,62 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
   var concept = this.concept;
 
   //create a parent.
-  var parent = $("<rdf:RDF>");
+  var parent = $(KAT.rdf.create("rdf:RDF"));
 
   //make a new id for the export.
-  var id="KAT:"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
+  var id="KAT_"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
 
   //create an RDF-description for pointing to the text.
   var annotDoc =
-  $('<rdf:Description>')
-  .attr("about", docURL+'#sec('+this.selection.start+','+this.selection.end+','+this.selection.container+')')
+  KAT.rdf.attr(
+    $(KAT.rdf.create('rdf:Description')),
+    "rdf:about",
+    docURL+"#"+encodeURIComponent(KAT.storage.Store.Selection2UUID(this.selection))
+  )
   .appendTo(parent)
   .append(
-    $('<kat:annotation>').attr("rdf:nodeID", id)
+    KAT.rdf.attr(
+      $(KAT.rdf.create('kat:annotation')),
+      "rdf:nodeID",
+      id
+    )
   );
 
   //create an ID pointing to the content Description.
-  var contentDesc = $('<rdf:Description>')
-  .attr("rdf:nodeID", id)
-  .appendTo(parent).append(
-    $('<kat:run>').attr("rdf:nodeID", runID),
-    $('<kat:kannspec>').attr("rdf:nodeID", concept.KAnnSpec.rdf_nodeid),
+  var contentDesc =
+  KAT.rdf.attr(
+    $(KAT.rdf.create('rdf:Description')),
+    "rdf:nodeID",
+    id
+  ).appendTo(parent).append(
+    KAT.rdf.attr(
+      $(KAT.rdf.create('kat:run')),
+      "rdf:nodeID",
+      runID
+    ),
+    KAT.rdf.attr(
+      $(KAT.rdf.create('kat:kannspec')),
+      "rdf:nodeID",
+      concept.KAnnSpec.rdf_nodeid
+    ),
     $('<kat:concept>').text(concept.name)
   );
 
   jQuery.each(concept.fields, function(i, field){
-    var fieldVal = me.values[field.name];
+    var value = me.values[field.name];
+
+    //HACK, we check if fieldVal is an array and otherwise typecast it.
+    var fieldVal = jQuery.isArray(value)?value:[value];
+
+    //Please commit.
+    if(!jQuery.isArray(value)){
+      alert("Sourabh, fix your code and make values an array!");
+    }
 
     jQuery.each(fieldVal, function(i, value){
-      
+      //TODO: Generate individual values.
     });
   });
-
 
   //get the Dom Node.
   return parent.get(0);

@@ -42,7 +42,7 @@ KAT.model.KAnnSpec = function(xml, collection){
   * @type {string}
   * @name KAT.model.KAnnSpec#rdf_nodeid
   */
-  this.rdf_nodeid = "KAT:"+(new Date().getTime())+"_"+this.name; 
+  this.rdf_nodeid = "KAT_"+(new Date().getTime())+"_"+this.name;
 
   //Check if the name is valid.
   if(!this.name || !KAT.model.nameRegEx.test(this.name)){
