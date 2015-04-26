@@ -52,6 +52,14 @@ KAT.storage.Annotation = function(store, selection, concept, values){
   */
   this.concept = concept;
 
+  /**
+  * Id of this concept for RDF export. 
+  *
+  * @type {string}
+  * @name KAT.storage.Annotation#rdf_id
+  */
+  this.rdf_id = "KAT_"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
+
   //Either use existing values or use the default.
   values = (typeof values !== "undefined")?values:concept.getDefault();
 
@@ -214,9 +222,6 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
   //create a parent.
   var parent = $(KAT.rdf.create("rdf:RDF"));
 
-  //make a new id for the export.
-  var id="KAT_"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
-
   //create an RDF-description for pointing to the text.
   var annotDoc =
   KAT.rdf.attr(
@@ -250,7 +255,7 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
       "rdf:nodeID",
       concept.KAnnSpec.rdf_nodeid
     ),
-    $('<kat:concept>').text(concept.name)
+    $(KAT.rdf.create('kat:concept')).text(concept.name)
   );
 
   jQuery.each(concept.fields, function(i, field){
@@ -266,6 +271,13 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
 
     jQuery.each(fieldVal, function(i, value){
       //TODO: Generate individual values.
+
+      if(field.type == KAT.model.Field.types.text){
+        $(KAT.rdf.create(fieldVal.rdf_pred)).text(value).appendTo(contentDesc);
+      } else if(field.type == KAT.model.Field.types.reference){
+        $(KAT.rdf.create(fieldVal.rdf_pred)).text(value).appendTo(contentDesc);
+      }
+
     });
   });
 

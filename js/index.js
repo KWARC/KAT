@@ -8,8 +8,8 @@ function getKATStarted(documentURL, KAnnSpecURL){
   //set up bootstrap
   JOBAD.config.BootstrapScope = "bootstrap";
 
-  //load sidebar
-  var sidebar = new KAT.sidebar();
+  //Create the sidebar. 
+  var sidebar = KAT.sidebar();
 
   //load the document
   $.get(documentURL, function(documentData){

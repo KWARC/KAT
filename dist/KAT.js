@@ -1607,118 +1607,159 @@ KAT.gui.selectDialog = function(title, query, options, descriptions, callback){
 // Source: src/KAT/sidebar/index.js
 KAT.sidebar = function(){
 
-/* Set up and insert Annotation Toolkit (sidemenu) */
+  /* Set up and insert Annotation Toolkit (sidemenu) */
 
-  //globalVariables
-  var hideWidth = '-230px'; //width that will be hidden
-  var winHeight = jQuery(window).height(); 
-  var collapsibleStatus = false;
+  // GENERAL COMMENT: Use jQuery's chaining functionality more.
+  // I added it whenever possible
+
+  // globalVariables
+  //TODO: (@Sourabh) Try and move global state into the KAT.sidebar namespace directly.
+  var hideWidth = -230; //width that will be hidden
+  var winHeight = jQuery(window).height();
 
   //create collapsible sidemenu & define properties
-  var collapsibleMenu = document.createElement('div');
-  jQuery(collapsibleMenu).addClass("collapsible")
-    .html("<ul class=\"KATMenuItems\"></ul>")
-    .css({'position':'fixed','right': hideWidth,'height': winHeight-10});
+  var collapsibleMenu = jQuery('<div>')
+  .addClass("collapsible")
+  .append(
+    $("<ul>").addClass("KATMenuItems")
+  )
+  .css({
+    'position':'fixed',
+    'right': hideWidth,
+    'height': winHeight-10
+  }).prependTo("body");
 
   // create button to toggle collapse and resurection of sidemenu and define properties
-  var collapsibleToggle = document.createElement('button');
-  jQuery(collapsibleToggle).html("&laquo;")
-    .css({'height': winHeight-10})
-    .click(function(){
-      if(collapsibleStatus){
-          jQuery(this).parent().animate({right: hideWidth}, 300 );
-          jQuery(this).html('&laquo;'); //change text of button
-          jQuery("body").css({'width': jQuery(window).width()-50});
-          collapsibleStatus = false;
-      }else{
-          jQuery(this).parent().animate({right: "0"}, 300 ); 
-          jQuery(this).html('&raquo;'); //change text of button
-          jQuery("body").css({'width': jQuery(window).width()-260});
-          collapsibleStatus = true;
-      }
-    });
+  // TODO (@Sourabh): Make the button a bit bigger so that we can click on the
+  // entire side of the window.
 
-  //render sidemenu on page ready
-  jQuery( document ).ready(function(){
-    jQuery( collapsibleMenu ).prepend(collapsibleToggle);
-    jQuery( "body" ).prepend(collapsibleMenu);
-    jQuery("body").css({'width': jQuery(window).width()-50});
-  });
+  var collapsibleToggle = $("<button>")
+  .text("«")
+  .css({'height': winHeight-10})
+  .click(function(){
+
+    if (KAT.sidebar.collapsibleStatus){
+
+      //we are now hidden
+      KAT.sidebar.collapsibleStatus = false;
+
+      jQuery(this)
+      .text("«") // Change text of button.
+      .parent().animate({right: hideWidth}, 300 );
+
+      jQuery("body").css({'width': jQuery(window).width()-50}); //HACK! Remove this please, as this interferes with global styling.
+    } else {
+
+      //we are now visible
+      KAT.sidebar.collapsibleStatus = true;
+
+      jQuery(this)
+      .text("»")  // Change text of button.
+      .parent().animate({right: "0"}, 300 ); 
+
+      jQuery("body").css({'width': jQuery(window).width()-260}); //HACK! Remove this please, as this interferes with global styling.
+    }
+  }).prependTo(collapsibleMenu); //adapted from init function below
+
+  //HACK! Remove this please, as this interferes with global styling.
+  jQuery("body").css({'width': jQuery(window).width()-50});
 
   //define changes to sidemenu when page is resized
+  // this seems hacky, try to make it all relative with global CSS
   jQuery( window ).resize(function() {
     winHeight = jQuery(window).height();
-    jQuery(collapsibleMenu).css({'position':'fixed','right': hideWidth,'height': winHeight-10});
-    jQuery(collapsibleToggle).css({'height': winHeight-10});
+
+    collapsibleMenu.css({
+      'position':'fixed',
+      'right': hideWidth,
+      'height': winHeight-10
+    });
+
+    collapsibleToggle.css({
+      'height': winHeight-10
+    });
+
+    //HACK! Remove this please, as this interferes with global styling.
     jQuery("body").css({'width': jQuery(window).width()-50});
   });
 };
 
+//TODO (@Tom): Look at the stuff below
+
 KAT.sidebar.genNewAnnotationForm = function(env,selection,concept){
   fields = concept.fields;
   var fieldIndex;
-  
+
   var newAnnotation = document.createElement('li');
   jQuery(newAnnotation).addClass("currentForm");
 
   for (fieldIndex = 0; fieldIndex < fields.length; ++fieldIndex) {
-      current = fields[fieldIndex];
-      var value = current.value;
-      var newTextField;
-      var newSelectField;
-      var options;
-      jQuery( newAnnotation ).append(value);
-      if (current.type == "text"){
-        newTextField = document.createElement('input');
-        newTextField.type="text";
-        jQuery( newAnnotation ).append(newTextField);
+    current = fields[fieldIndex];
+    var value = current.value;
+    var newTextField;
+    var newSelectField;
+    var options;
+    jQuery( newAnnotation ).append(value);
+    if (current.type == "text"){
+      newTextField = document.createElement('input');
+      newTextField.type="text";
+      jQuery( newAnnotation ).append(newTextField);
+    }
+    if (current.type == "select"){
+      options = current.validation;
+      newSelectField = document.createElement('select');
+      for (optionIndex = 0; optionIndex < options.length; ++optionIndex){
+        opt = options[optionIndex];
+        newOption = document.createElement('option');
+        jQuery( newOption ).html(opt.value);
+        jQuery( newSelectField ).append(newOption);
       }
-      if (current.type == "select"){
-        options = current.validation;
-        newSelectField = document.createElement('select');
-        for (optionIndex = 0; optionIndex < options.length; ++optionIndex){
-          opt = options[optionIndex];
-          newOption = document.createElement('option');
-          jQuery( newOption ).html(opt.value);
-          jQuery( newSelectField ).append(newOption);  
-        }
-        jQuery( newAnnotation ).append(newSelectField);
-      }
+      jQuery( newAnnotation ).append(newSelectField);
+    }
 
-      if (current.type == "reference"){
-        var allowedAnnotations = current.validation;
-        options = env.store.filterByConcept(allowedAnnotations[0]);
-        newSelectField = document.createElement('select');
-        for (optionIndex = 0; optionIndex < options.length; ++optionIndex){
-          opt = options[optionIndex];
-          newOption = document.createElement('option');
-          jQuery( newOption ).html(opt);
-          jQuery( newSelectField ).append(newOption);  
-        }
-        jQuery( newAnnotation ).append(newSelectField);
+    if (current.type == "reference"){
+      var allowedAnnotations = current.validation;
+      options = env.store.filterByConcept(allowedAnnotations[0]);
+      newSelectField = document.createElement('select');
+      for (optionIndex = 0; optionIndex < options.length; ++optionIndex){
+        opt = options[optionIndex];
+        newOption = document.createElement('option');
+        jQuery( newOption ).html(opt);
+        jQuery( newSelectField ).append(newOption);
       }
+      jQuery( newAnnotation ).append(newSelectField);
+    }
   }
   var button = document.createElement('input');
-    button.type="submit";
-    button.value="Add";
-    var mylist = [];
-    jQuery( button ).click(function(){
-      valuesJSON = {};
-      for (fieldIndex = 0; fieldIndex < fields.length; ++fieldIndex) {
-        current = fields[fieldIndex];
-        var value = current.value;
-        mylist.push(jQuery( this ).parent().children("input:eq("+fieldIndex+")").val());
-        valuesJSON [value] = mylist;
-        mylist = [];
-      }
-      jQuery( this ).parent().remove();
-      var newAnnotation = env.store.addNew(selection, concept, valuesJSON);
-      newAnnotation.draw();
+  button.type="submit";
+  button.value="Add";
+  var mylist = [];
+  jQuery( button ).click(function(){
+    valuesJSON = {};
+    for (fieldIndex = 0; fieldIndex < fields.length; ++fieldIndex) {
+      current = fields[fieldIndex];
+      var value = current.value;
+      mylist.push(jQuery( this ).parent().children("input:eq("+fieldIndex+")").val());
+      valuesJSON [value] = mylist;
+      mylist = [];
+    }
+    jQuery( this ).parent().remove();
+    var newAnnotation = env.store.addNew(selection, concept, valuesJSON);
+    newAnnotation.draw();
   });
   jQuery( newAnnotation ).append(button);
   jQuery( newAnnotation ).prepend("<b> Enter Annotation Details</b><br>");
   jQuery( ".KATMenuItems" ).append(newAnnotation);
 };
+
+/**
+* Is the sidebar extended?
+*
+* @type {boolean}
+* @name KAT.sidebar.collapsibleStatus
+*/
+KAT.sidebar.collapsibleStatus = false;
+
 // Source: src/KAT/storage/index.js
 /**
 * Namespace for storage used by KAT.
@@ -2124,6 +2165,14 @@ KAT.storage.Annotation = function(store, selection, concept, values){
   */
   this.concept = concept;
 
+  /**
+  * Id of this concept for RDF export. 
+  *
+  * @type {string}
+  * @name KAT.storage.Annotation#rdf_id
+  */
+  this.rdf_id = "KAT_"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
+
   //Either use existing values or use the default.
   values = (typeof values !== "undefined")?values:concept.getDefault();
 
@@ -2286,9 +2335,6 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
   //create a parent.
   var parent = $(KAT.rdf.create("rdf:RDF"));
 
-  //make a new id for the export.
-  var id="KAT_"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
-
   //create an RDF-description for pointing to the text.
   var annotDoc =
   KAT.rdf.attr(
@@ -2322,7 +2368,7 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
       "rdf:nodeID",
       concept.KAnnSpec.rdf_nodeid
     ),
-    $('<kat:concept>').text(concept.name)
+    $(KAT.rdf.create('kat:concept')).text(concept.name)
   );
 
   jQuery.each(concept.fields, function(i, field){
@@ -2338,6 +2384,13 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
 
     jQuery.each(fieldVal, function(i, value){
       //TODO: Generate individual values.
+
+      if(field.type == KAT.model.Field.types.text){
+        $(KAT.rdf.create(fieldVal.rdf_pred)).text(value).appendTo(contentDesc);
+      } else if(field.type == KAT.model.Field.types.reference){
+        $(KAT.rdf.create(fieldVal.rdf_pred)).text(value).appendTo(contentDesc);
+      }
+
     });
   });
 
