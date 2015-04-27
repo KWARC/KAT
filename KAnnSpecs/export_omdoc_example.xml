@@ -31,7 +31,7 @@
   <rdf:Description about="path-to-fragment-in-doc">
     <kat:annotation rdf:nodeID="_:a"/>
   </rdf:Description>
-  <!-- and we give the data of the anntation -->
+  <!-- and we give the data of the annotation -->
   <rdf:Description rdf:nodeID="_:a">
     <!-- first the metadata -->
     <kat:run rdf:nodeID="_:r"/>
