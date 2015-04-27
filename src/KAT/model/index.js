@@ -33,27 +33,6 @@ KAT.model.nameRegEx2 = new RegExp("^("+KAT.model.nameRegExS+")\\.("+KAT.model.na
 */
 KAT.model.nameRegEx3 = new RegExp("^("+KAT.model.nameRegExS+")\\.("+KAT.model.nameRegExS+")\\.("+KAT.model.nameRegExS+")$");
 
-
-/** Resolves a relative URI with namespace.
-*
-* @param {string} uri - URI to resolve
-* @param {document} xml - Top level xml node with namespaces contained.
-* @name KAT.model.resolveWithNameSpace
-* @static
-*/
-KAT.model.resolveWithNameSpace = function(uri, xml){
-  var uriparts = uri.split(":");
-
-  // check if we have exactly 2 parts.
-  if(uriparts.length == 2){
-    return $(xml).attr("xmlns:"+uriparts[0])+uriparts[1];
-  } else {
-    return uri;
-  }
-
-};
-
-
 /**
 * Normalises a theory name.
 *

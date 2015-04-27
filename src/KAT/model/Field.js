@@ -85,7 +85,7 @@ KAT.model.Field = function(xml, concept){
   * @type {string}
   * @name KAT.model.Field#rdf_pred
   */
-  this.rdf_pred = KAT.model.resolveWithNameSpace(this.xml.attr("rdfpred"), this.concept.KAnnSpec.xml);
+  this.rdf_pred = KAT.rdf.resolveWithNameSpace(this.xml.attr("rdfpred"), this.concept.KAnnSpec.xml);
 
   /**
   * Minimum number of times this field should be used.

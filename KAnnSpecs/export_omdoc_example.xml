@@ -4,43 +4,48 @@
 
   <!-- first we specify the run of the spotter or annotation campaign in a blank node -->
   <rdf:Description>
-    <kat:annotation rdf:nodeID="_:r"/>
+    <kat:annotation rdf:nodeID="kat_run"/>
   </rdf:Description>
   <!-- we add the data about the run -->
-  <rdf:Description rdf:nodeID="_:r">
-    <rdf:type resource="kat:run"/>
-    <kat:date resource="2015-13-..." rdf:datatype="xs:dateTime"/>
+  <rdf:Description rdf:nodeID="kat_run">
+    <rdf:type rdf:resource="kat:run"/>
+    <kat:date rdf:datatype="xs:dateTime">2015-04-24T15:07:59.219Z</kat:date>
     <kat:tool>mySpotter</kat:tool>
     <kat:runid>sdfsdfsdfsdf</kat:runid>
-    ...
+		<!-- Other META here -->
   </rdf:Description>
 
   <!-- for all the KAnnspecs we use we have a blank node  each-->
   <rdf:Description>
-    <kat:kannspec rdf:nodeID="_:k"/>
+    <kat:kannspec rdf:nodeID="kat_kannspec_1"/>
   </rdf:Description>
   <!-- and we specify its name and URI -->
-  <rdf:Description rdf:nodeID="_:k">
+  <rdf:Description rdf:nodeID="kat_kannspec_1">
+		<rdf:type rdf:resource="kat:kannspec"/>
     <kat:kannspec-name>OMDoc</kat:kannspec-name>
     <kat:kannspec-URI>http:......</kat:kannspec-URI>
   </rdf:Description>
 
-  <!-- Now the annotation data --> 
-  
+  <!-- Now the annotation data -->
+
   <!-- for all the annotations we make a blank node each -->
-  <rdf:Description about="path-to-fragment-in-doc">
-    <kat:annotation rdf:nodeID="_:a"/>
+  <rdf:Description rdf:about="path-to-fragment-in-doc">
+    <kat:annotation rdf:nodeID="kat_annot_1"/>
   </rdf:Description>
+<<<<<<< HEAD
   <!-- and we give the data of the annotation -->
   <rdf:Description rdf:nodeID="_:a">
+=======
+  <!-- and we give the data of the anntation -->
+  <rdf:Description rdf:nodeID="kat_annot_1">
+>>>>>>> b163abbc885369a0ffbd5a975d7b9750321a18ef
     <!-- first the metadata -->
-    <kat:run rdf:nodeID="_:r"/>
-    <kat:kannspec rdf:nodeID="_:k"/>
-    <kat:concept>Symbol</kat:concept> 
+    <kat:run rdf:nodeID="kat_run"/>
+    <kat:kannspec rdf:nodeID="kat_kannspec_1"/>
+    <kat:concept>Symbol</kat:concept>
     <!-- then the ontology data -->
-    <rdf:type resource="omdoc:symbol"/>
+    <rdf:type rdf:resource="omdoc:symbol"/>
     <omdoc:name>foo</omdoc:name>
-    ...
+    <!-- Other field values here -->
   </rdf:Description>
 </rdf:RDF>
-      

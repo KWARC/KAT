@@ -52,6 +52,14 @@ KAT.storage.Annotation = function(store, selection, concept, values){
   */
   this.concept = concept;
 
+  /**
+  * Id of this concept for RDF export.
+  *
+  * @type {string}
+  * @name KAT.storage.Annotation#rdf_id
+  */
+  this.rdf_id = "KAT_"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
+
   //Either use existing values or use the default.
   values = (typeof values !== "undefined")?values:concept.getDefault();
 
@@ -190,7 +198,8 @@ KAT.storage.Annotation.prototype.toJSON = function(){
     //the full name.
     "concept": this.concept.getFullName(),
 
-    //the values.
+    //the values
+    // TODO: Map UUIDs.
     "values": this.values
   };
 };
@@ -212,37 +221,91 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
   var concept = this.concept;
 
   //create a parent.
-  var parent = $("<rdf:RDF>");
-
-  //make a new id for the export.
-  var id="KAT:"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
+  var parent = $(KAT.rdf.create("rdf:RDF"));
 
   //create an RDF-description for pointing to the text.
   var annotDoc =
-  $('<rdf:Description>')
-  .attr("about", docURL+'#sec('+this.selection.start+','+this.selection.end+','+this.selection.container+')')
+  KAT.rdf.attr(
+    $(KAT.rdf.create('rdf:Description')),
+    "rdf:about",
+    docURL+"#"+encodeURIComponent(KAT.storage.Store.Selection2UUID(this.selection))
+  )
   .appendTo(parent)
   .append(
-    $('<kat:annotation>').attr("rdf:nodeID", id)
+    KAT.rdf.attr(
+      $(KAT.rdf.create('kat:annotation')),
+      "rdf:nodeID",
+      this.rdf_id
+    )
   );
 
   //create an ID pointing to the content Description.
-  var contentDesc = $('<rdf:Description>')
-  .attr("rdf:nodeID", id)
-  .appendTo(parent).append(
-    $('<kat:run>').attr("rdf:nodeID", runID),
-    $('<kat:kannspec>').attr("rdf:nodeID", concept.KAnnSpec.rdf_nodeid),
-    $('<kat:concept>').text(concept.name)
+  var contentDesc =
+  KAT.rdf.attr(
+    $(KAT.rdf.create('rdf:Description')),
+    "rdf:nodeID",
+    this.rdf_id
+  ).appendTo(parent).append(
+    KAT.rdf.attr(
+      $(KAT.rdf.create('kat:run')),
+      "rdf:nodeID",
+      runID
+    ),
+    KAT.rdf.attr(
+      $(KAT.rdf.create('kat:kannspec')),
+      "rdf:nodeID",
+      concept.KAnnSpec.rdf_nodeid
+    ),
+    $(KAT.rdf.create('kat:concept')).text(concept.name)
   );
 
+
   jQuery.each(concept.fields, function(i, field){
-    var fieldVal = me.values[field.name];
+    var value = me.values[field.value];
+
+    //TODO: Remove this / check if we still need it.
+    var fieldVal = jQuery.isArray(value)?value:[value];
 
     jQuery.each(fieldVal, function(i, value){
-      
+      //TODO: Generate individual values.
+
+      if(field.type == KAT.model.Field.types.text){
+        // for a text field, simply store the value.
+        $(
+          KAT.rdf.create(
+            KAT.rdf.buildNameSpace(field.rdf_pred, concept.KAnnSpec.xml)
+          )
+        )
+        .text(value).appendTo(contentDesc);
+
+      } else if(field.type == KAT.model.Field.types.reference){
+        // for a reference, point to the RDF id.
+        KAT.rdf.attr(
+          $(
+            KAT.rdf.create(
+              KAT.rdf.buildNameSpace(field.rdf_pred, concept.KAnnSpec.xml)
+            )
+          ).appendTo(contentDesc),
+          "rdf:resource",
+          value.rdf_id
+        );
+      } else if(field.type == KAT.model.Field.types.select){
+        // For a select, use the rdf_obj property
+
+        KAT.rdf.attr(
+          $(
+            KAT.rdf.create(
+              KAT.rdf.buildNameSpace(field.rdf_pred, concept.KAnnSpec.xml)
+            )
+          ).appendTo(contentDesc),
+          "rdf:resource",
+          value.rdf_obj?field.rdf_obj:(value.value)
+        );
+
+      }
+
     });
   });
-
 
   //get the Dom Node.
   return parent.get(0);

@@ -32,14 +32,13 @@ KAT.module = {
     var text_remove     = "Delete Annotation";
     var text_highlight  = "Highlight Annotation";
     var text_edit       = "Edit Annotation";
-    var text_rdf        = "View RDF"; 
+    var text_rdf        = "View RDF";
 
     //the menu to return
     var menu = {};
 
     //add the text
     menu[text_new] = false;
-    menu[text_rdf] = {};
     menu[text_remove] = {};
     menu[text_highlight] = {};
     menu[text_edit] = {};
@@ -59,7 +58,7 @@ KAT.module = {
           menu[text_new][concept.getFullName()] = function(){
             //load new Annotation form
 
-            
+
             var values = KAT.sidebar.genNewAnnotationForm(me,selection,concept);
           };
         });
@@ -82,16 +81,12 @@ KAT.module = {
         menu[text_edit][annotation.uuid] = function(){
           annotation.edit();
         };
-        menu[text_rdf][annotation.uuid] = function(){
-          console.log(annotation.toRDF());
-        };
       });
 
     } else {
       menu[text_remove] = false;
       menu[text_highlight] = false;
       menu[text_edit] = false;
-      menu[text_rdf] = false;
     }
 
     menu.Storage = {
@@ -112,13 +107,9 @@ KAT.module = {
         }
       },
       "Export": function(){
-        var exporter = [];
-
-        for(var i=0;i<me.store.annotations.length;i++){
-          exporter.push(me.store.annotations[i].toJSON());
-        }
-
-        prompt("Press CTRL+C to export annotations: ", JSON.stringify(exporter));
+        var rdfDoc = me.store.toRDF();
+        console.log(rdfDoc);
+        prompt("Press CTRL+C to export annotations: ", rdfDoc);
       }
     };
 

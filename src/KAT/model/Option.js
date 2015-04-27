@@ -65,7 +65,7 @@ KAT.model.Option = function(xml, field){
   this.rdf_obj = false;
 
   if(typeof this.xml.attr("rdfobj") === "string"){
-    this.rdf_obj = KAT.model.resolveWithNameSpace(this.xml.attr("rdfobj"), this.field.concept.KAnnSpec.xml);
+    this.rdf_obj = KAT.rdf.resolveWithNameSpace(this.xml.attr("rdfobj"), this.field.concept.KAnnSpec.xml);
   }
 
   /**

@@ -9,6 +9,8 @@ module.exports = function(grunt) {
   var source_files = [
     'src/KAT/index.js',
 
+    'src/KAT/rdf/index.js',
+
     'src/KAT/model/index.js',
     'src/KAT/model/KAnnSpecCollection.js',
     'src/KAT/model/KAnnSpec.js',
@@ -42,6 +44,7 @@ module.exports = function(grunt) {
     //we want to conatinate files
     concat: {
       options: {
+        sourceMap: true,
         stripBanners: true,
         banner: Banner,
         process: function(src, filepath) {
@@ -82,6 +85,7 @@ module.exports = function(grunt) {
     //we also want to minimise it.
     uglify: {
       options: {
+        sourceMap: true,
         banner: Banner
       },
       build: {
@@ -95,6 +99,16 @@ module.exports = function(grunt) {
       server: {
         options: {
           port: 3000,
+          hostname: 'localhost',
+          base: {
+            path: '.'
+          }
+        },
+      },
+      keepalive: {
+        options: {
+          port: 3000,
+          keepalive: true, 
           hostname: 'localhost',
           base: {
             path: '.'
@@ -143,10 +157,16 @@ module.exports = function(grunt) {
     'rebuild'
   ]);
 
-  //Have the serve tasks
+  //Have the serve task
+
+  grunt.registerTask('run', [
+    'build',
+    'connect:keepalive'
+  ]);
+
   grunt.registerTask('serve', [
     'build',
-    'connect',
+    'connect:server',
     'watch'
   ]);
 

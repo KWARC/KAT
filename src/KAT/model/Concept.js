@@ -65,7 +65,7 @@ KAT.model.Concept = function(xml, KAnnSpec){
   * @type {string}
   * @name KAT.model.Concept#rdf_type
   */
-  this.rdf_type = KAT.model.resolveWithNameSpace(this.xml.attr("rdftype"), this.KAnnSpec.xml);
+  this.rdf_type = KAT.rdf.resolveWithNameSpace(this.xml.attr("rdftype"), this.KAnnSpec.xml);
 
   //validation
   if(this.xml.length != 1 || !this.xml.is("concept")){

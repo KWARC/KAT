@@ -22,6 +22,104 @@ along with KAT.  If not, see <http://www.gnu.org/licenses/>
 */
 var KAT = {};
 
+// Source: src/KAT/rdf/index.js
+/**
+* Namespace for RDF functionality used by KAT.
+* @namespace
+* @alias KAT.rdf
+*/
+KAT.rdf = {};
+
+/** Creates an RDF element.
+*
+* @param {string} name - Name of element to create.
+* @name KAT.rdf.create
+* @static
+* @returns {document}
+*/
+KAT.rdf.create = function(name){
+  // create a namespaced attribute
+  // so that we keep the capitalisation.
+  return document.createElementNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", name);
+};
+
+/** Sets an RDF attribute.
+*
+* @param {jQuery|document} element - Element to modify.
+* @param {string} name - Name of element to create.
+* @param {string} value - Value of element to set.
+* @name KAT.rdf.attr
+* @static
+* @returns {document|jQuery}
+*/
+KAT.rdf.attr = function(element, name, value){
+  // set the rdf attribute
+  // we use the html function directly for this.
+
+  $(element).get(0).setAttribute(name, value);
+  // and return the original value.
+  return element;
+};
+
+/** Resolves a relative URI with namespace.
+*
+* @param {string} uri - URI to resolve
+* @param {document} xml - Top level xml node with namespaces contained.
+* @name KAT.rdf.resolveWithNameSpace
+* @static
+* @returns {string}
+*/
+KAT.rdf.resolveWithNameSpace = function(uri, xml){
+  var uriparts = uri.split(":");
+
+  // check if we have exactly 2 parts.
+  if(uriparts.length == 2){
+
+    var annotationElement = $(xml).find("annotation").eq(0);
+
+    return annotationElement.attr("xmlns:"+uriparts[0])+uriparts[1];
+  } else {
+    return uri;
+  }
+};
+
+/** Builds a namespaced version of a URI.
+*
+* @param {string} uri - URI to resolve
+* @param {document} xml - Top level xml node with namespaces contained.
+* @name KAT.rdf.resolveWithNameSpace
+* @static
+* @returns {string}
+*/
+KAT.rdf.buildNameSpace = function(uri, xml){
+
+  // find the annotation element.
+  var annEl = $(xml).find("annotation").get(0);
+  var attr, name, suffix;
+
+  // iterate through the attributes
+  for(var i=0;i<annEl.attributes.length; i++){
+    attr = annEl.attributes[i];
+
+    // which are a namespace.
+    if(attr.name.substring(0, "xmlns".length) == "xmlns"){
+      name = attr.name.split(":")[1] || "";
+
+      // if the uri starts with the right string
+      if(uri.startsWith(attr.value)){
+
+        // we get the suffix of the uri
+        suffix = uri.substring(attr.value.length);
+
+        //and return it with namespace if needed
+        return name!==""?(name+":"+suffix):suffix;
+      }
+    }
+  }
+
+  return uri;
+};
+
 // Source: src/KAT/model/index.js
 /**
 * Namespace for models used by KAT.
@@ -57,27 +155,6 @@ KAT.model.nameRegEx2 = new RegExp("^("+KAT.model.nameRegExS+")\\.("+KAT.model.na
 * @name KAT.model.nameRegEx3
 */
 KAT.model.nameRegEx3 = new RegExp("^("+KAT.model.nameRegExS+")\\.("+KAT.model.nameRegExS+")\\.("+KAT.model.nameRegExS+")$");
-
-
-/** Resolves a relative URI with namespace.
-*
-* @param {string} uri - URI to resolve
-* @param {document} xml - Top level xml node with namespaces contained.
-* @name KAT.model.resolveWithNameSpace
-* @static
-*/
-KAT.model.resolveWithNameSpace = function(uri, xml){
-  var uriparts = uri.split(":");
-
-  // check if we have exactly 2 parts.
-  if(uriparts.length == 2){
-    return $(xml).attr("xmlns:"+uriparts[0])+uriparts[1];
-  } else {
-    return uri;
-  }
-
-};
-
 
 /**
 * Normalises a theory name.
@@ -425,7 +502,7 @@ KAT.model.KAnnSpec = function(xml, collection){
   * @type {string}
   * @name KAT.model.KAnnSpec#rdf_nodeid
   */
-  this.rdf_nodeid = "KAT:"+(new Date().getTime())+"_"+this.name; 
+  this.rdf_nodeid = "KAT_"+(new Date().getTime())+"_"+this.name;
 
   //Check if the name is valid.
   if(!this.name || !KAT.model.nameRegEx.test(this.name)){
@@ -621,7 +698,7 @@ KAT.model.Concept = function(xml, KAnnSpec){
   * @type {string}
   * @name KAT.model.Concept#rdf_type
   */
-  this.rdf_type = KAT.model.resolveWithNameSpace(this.xml.attr("rdftype"), this.KAnnSpec.xml);
+  this.rdf_type = KAT.rdf.resolveWithNameSpace(this.xml.attr("rdftype"), this.KAnnSpec.xml);
 
   //validation
   if(this.xml.length != 1 || !this.xml.is("concept")){
@@ -877,7 +954,7 @@ KAT.model.Field = function(xml, concept){
   * @type {string}
   * @name KAT.model.Field#rdf_pred
   */
-  this.rdf_pred = KAT.model.resolveWithNameSpace(this.xml.attr("rdfpred"), this.concept.KAnnSpec.xml);
+  this.rdf_pred = KAT.rdf.resolveWithNameSpace(this.xml.attr("rdfpred"), this.concept.KAnnSpec.xml);
 
   /**
   * Minimum number of times this field should be used.
@@ -1141,7 +1218,7 @@ KAT.model.Option = function(xml, field){
   this.rdf_obj = false;
 
   if(typeof this.xml.attr("rdfobj") === "string"){
-    this.rdf_obj = KAT.model.resolveWithNameSpace(this.xml.attr("rdfobj"), this.field.concept.KAnnSpec.xml);
+    this.rdf_obj = KAT.rdf.resolveWithNameSpace(this.xml.attr("rdfobj"), this.field.concept.KAnnSpec.xml);
   }
 
   /**
@@ -1568,120 +1645,235 @@ KAT.gui.selectDialog = function(title, query, options, descriptions, callback){
 */
 
 // Source: src/KAT/sidebar/index.js
-KAT.sidebar = function(){
+/**
+* Namespace for the sidebar
+* @namespace
+* @alias KAT.sidebar
+*/
+KAT.sidebar = {};
 
-/* Set up and insert Annotation Toolkit (sidemenu) */
+/**
+* Set up and insert Annotation Toolkit sidemenu
+*
+* @function
+* @static
+* @name init
+* @memberof KAT.sidebar
+*/
+KAT.sidebar.init = function(){
 
-  //globalVariables
-  var hideWidth = '-230px'; //width that will be hidden
-  var winHeight = jQuery(window).height(); 
-  var collapsibleStatus = false;
+  // GENERAL COMMENT: Use jQuery's chaining functionality more.
+  // I added it whenever possible
+  // TODO: Finish documentation of function
+  // TODO: Remove all the TODO comments once they have been dealt with.
+
+  // TODO: Check HERE if the sidebar was already intialised
+  // and if so, just return.
+
+
+  //TODO: (@Sourabh) Try and move global state into the KAT.sidebar namespace directly.
+  var hideWidth = -230; //width that will be hidden
+  var winHeight = jQuery(window).height();
 
   //create collapsible sidemenu & define properties
-  var collapsibleMenu = document.createElement('div');
-  jQuery(collapsibleMenu).addClass("collapsible")
-    .html("<ul class=\"KATMenuItems\"></ul>")
-    .css({'position':'fixed','right': hideWidth,'height': winHeight-10});
+  var collapsibleMenu = jQuery('<div>')
+  .addClass("collapsible")
+  .append(
+    $("<ul>").addClass("KATMenuItems")
+  )
+  .css({
+    'position':'fixed',
+    'right': hideWidth,
+    'height': winHeight-10
+  }).prependTo("body");
 
   // create button to toggle collapse and resurection of sidemenu and define properties
-  var collapsibleToggle = document.createElement('button');
-  jQuery(collapsibleToggle).html("&laquo;")
-    .css({'height': winHeight-10})
-    .click(function(){
-      if(collapsibleStatus){
-          jQuery(this).parent().animate({right: hideWidth}, 300 );
-          jQuery(this).html('&laquo;'); //change text of button
-          jQuery("body").css({'width': jQuery(window).width()-50});
-          collapsibleStatus = false;
-      }else{
-          jQuery(this).parent().animate({right: "0"}, 300 ); 
-          jQuery(this).html('&raquo;'); //change text of button
-          jQuery("body").css({'width': jQuery(window).width()-260});
-          collapsibleStatus = true;
+  // TODO (@Sourabh): Make the button a bit bigger so that we can click on the
+  // entire side of the window.
+
+  var collapsibleToggle = $("<button>")
+  .text("«")
+  .css({'height': winHeight-10})
+  .click(function(){
+
+    if (KAT.sidebar.collapsibleStatus){
+
+      //we are now hidden
+      KAT.sidebar.collapsibleStatus = false;
+
+      jQuery(this)
+      .text("«") // Change text of button.
+      .parent().animate({right: hideWidth}, 300 );
+
+      jQuery("body").css({'width': jQuery(window).width()-50}); //HACK! Remove this please, as this interferes with global styling.
+    } else {
+
+      //we are now visible
+      KAT.sidebar.collapsibleStatus = true;
+
+      jQuery(this)
+      .text("»")  // Change text of button.
+      .parent().animate({right: "0"}, 300 );
+
+      jQuery("body").css({'width': jQuery(window).width()-260}); //HACK! Remove this please, as this interferes with global styling.
+    }
+  }).prependTo(collapsibleMenu); //adapted from init function below
+
+  //HACK! Remove this please, as this interferes with global styling.
+  jQuery("body").css({'width': jQuery(window).width()-50});
+
+  //define changes to sidemenu when page is resized
+  // this seems hacky, try to make it all relative with global CSS
+  jQuery( window ).resize(function() {
+    winHeight = jQuery(window).height();
+
+    collapsibleMenu.css({
+      'position':'fixed',
+      'right': hideWidth,
+      'height': winHeight-10
+    });
+
+    collapsibleToggle.css({
+      'height': winHeight-10
+    });
+
+    //HACK! Remove this please, as this interferes with global styling.
+    jQuery("body").css({'width': jQuery(window).width()-50});
+  });
+};
+
+/**
+* Set up and insert Annotation Toolkit sidemenu
+*
+* @param {JOBAD.modules.loadedModule} env - JOBAD loaded Module instance
+* @param {KAT.gui.selection} selection - The selection to create an annotation for.
+* @param {KAT.model.Concept} concept - Concept to generate annotation for.
+* @function
+* @static
+* @name genNewAnnotationForm
+* @memberof KAT.sidebar
+*/
+KAT.sidebar.genNewAnnotationForm = function(env, selection, concept){
+  // TODO complete documentation comment above.
+  // TODO: Work on a stored annotation, so values can be pre-filled.
+
+
+  // create a new element to add to the sidebar.
+  // TODO: Have the .KATMenuItems in a variable from the init function.
+  var newAnnotation = $("<li>").addClass("currentForm").append(
+    "<b> Enter Annotation Details</b><br>"
+  ).appendTo(".KATMenuItems");
+
+
+  var inputFields = jQuery.map(concept.fields, function(current){
+    // a new input element we will create
+    var newField;
+
+    // The current validation.
+    var options = current.validation;
+
+    // grab the value of the field and add it to the sidebar
+    var value = current.value;
+    newAnnotation.append(jQuery("<span>").text(value));
+
+    //TODO: Implement repeat of fields.
+
+    // for text fields, we just have a text field.
+    // TODO: Implement validation of text fields.
+    if(current.type === KAT.model.Field.types.text){
+      newField =
+      jQuery("<input type='text'>")
+      .appendTo(newAnnotation);
+    }
+
+    // for select fields, create a dropdown
+    // TODO: Possibly use a styled dropbown from Bootstrap
+    if(current.type === KAT.model.Field.types.select){
+      // Create a select element.
+      newField = jQuery("<select>").appendTo(newAnnotation);
+
+      // and add options to it.
+      $.each(options, function(j, opt){
+        jQuery("<option>")
+        .text(opt.value)
+        .val(j)
+        .appendTo(newField);
+      });
+    }
+
+    // for a reference list possible annotations.
+    if(current.type === KAT.model.Field.types.reference){
+
+      // create a new field.
+      newField = jQuery("<select>").appendTo(newAnnotation);
+
+      // Find all the allowed concepts
+      // @Sourabh: I updated env.store.filterByConcept for this to work properly.
+      var allowedAnnotations = env.store.filterByConcept.call(env.store, allowedAnnotations);
+
+      // for eacjh
+      jQuery.each(allowedAnnotations, function(index, annot){
+
+        $("<option>")
+        .text(annot.uuid)
+        .value(annot.uuid)
+        .appendTo(newField);
+
+      });
+    }
+
+    return newField;
+  });
+
+  // Create a button
+  //TODO: Make this more general.
+  // Also do not use type='submit' here, as clicking that would reload page
+  // if you are in a <form> tag, unless you cancel explititly
+  $("<input type='button'>")
+  .val("Add")
+  .appendTo(newAnnotation)
+  .click(function(){
+
+    // The result JSON
+    var valuesJSON = {};
+
+    // go over the input fields and gather the values.
+    $.each(concept.fields, function(i, current){
+
+      //also get the current input field.
+      var field = inputFields[i];
+
+      // store the value in the valueJSON as an array
+      // TODO: Handle multiple fields here.
+      if(concept.type == KAT.model.Field.types.reference){
+        // for references, find the actual UUID.
+        valuesJSON[current.value] = [env.store.find(field.val())];
+      } else if(concept.type == KAT.model.Field.types.reference){
+        // for option, store the selected option.
+        valuesJSON[current.value] = [current.validation[field.val()]];
+      } else {
+        // for text, just store the text.
+        valuesJSON[current.value] = [field.val()];
       }
     });
 
-  //render sidemenu on page ready
-  jQuery( document ).ready(function(){
-    jQuery( collapsibleMenu ).prepend(collapsibleToggle);
-    jQuery( "body" ).prepend(collapsibleMenu);
-    jQuery("body").css({'width': jQuery(window).width()-50});
-  });
+    // remove the entire form
+    newAnnotation.remove();
 
-  //define changes to sidemenu when page is resized
-  jQuery( window ).resize(function() {
-    winHeight = jQuery(window).height();
-    jQuery(collapsibleMenu).css({'position':'fixed','right': hideWidth,'height': winHeight-10});
-    jQuery(collapsibleToggle).css({'height': winHeight-10});
-    jQuery("body").css({'width': jQuery(window).width()-50});
+    // TODO: Have a callback here instead of hard-coding what happens.
+    var theannotation = env.store.addNew(selection, concept, valuesJSON);
+    theannotation.draw();
   });
 };
 
-KAT.sidebar.genNewAnnotationForm = function(env,selection,concept){
-  fields = concept.fields;
-  var fieldIndex;
-  
-  var newAnnotation = document.createElement('li');
-  jQuery(newAnnotation).addClass("currentForm");
+/**
+* Is the sidebar extended?
+*
+* @type {boolean}
+* @name KAT.sidebar.collapsibleStatus
+*/
+KAT.sidebar.collapsibleStatus = false;
 
-  for (fieldIndex = 0; fieldIndex < fields.length; ++fieldIndex) {
-      current = fields[fieldIndex];
-      var value = current.value;
-      var newTextField;
-      var newSelectField;
-      var options;
-      jQuery( newAnnotation ).append(value);
-      if (current.type == "text"){
-        newTextField = document.createElement('input');
-        newTextField.type="text";
-        jQuery( newAnnotation ).append(newTextField);
-      }
-      if (current.type == "select"){
-        options = current.validation;
-        newSelectField = document.createElement('select');
-        for (optionIndex = 0; optionIndex < options.length; ++optionIndex){
-          opt = options[optionIndex];
-          newOption = document.createElement('option');
-          jQuery( newOption ).html(opt.value);
-          jQuery( newSelectField ).append(newOption);  
-        }
-        jQuery( newAnnotation ).append(newSelectField);
-      }
-
-      if (current.type == "reference"){
-        var allowedAnnotations = current.validation;
-        options = env.store.filterByConcept(allowedAnnotations[0]);
-        newSelectField = document.createElement('select');
-        for (optionIndex = 0; optionIndex < options.length; ++optionIndex){
-          opt = options[optionIndex];
-          newOption = document.createElement('option');
-          jQuery( newOption ).html(opt);
-          jQuery( newSelectField ).append(newOption);  
-        }
-        jQuery( newAnnotation ).append(newSelectField);
-      }
-  }
-  var button = document.createElement('input');
-    button.type="submit";
-    button.value="Add";
-    var mylist = [];
-    jQuery( button ).click(function(){
-      valuesJSON = {};
-      for (fieldIndex = 0; fieldIndex < fields.length; ++fieldIndex) {
-        current = fields[fieldIndex];
-        var value = current.value;
-        mylist.push(jQuery( this ).parent().children("input:eq("+fieldIndex+")").val());
-        valuesJSON [value] = mylist;
-        mylist = [];
-      }
-      jQuery( this ).parent().remove();
-      var newAnnotation = env.store.addNew(selection, concept, valuesJSON);
-      newAnnotation.draw();
-  });
-  jQuery( newAnnotation ).append(button);
-  jQuery( newAnnotation ).prepend("<b> Enter Annotation Details</b><br>");
-  jQuery( ".KATMenuItems" ).append(newAnnotation);
-};
 // Source: src/KAT/storage/index.js
 /**
 * Namespace for storage used by KAT.
@@ -1772,10 +1964,10 @@ KAT.storage.Store.prototype.addFromJSON = function(json){
   return newAnnotation;
 };
 
-/** Returns a list of annotation if they exists.
+/** Filters all annotations by a certain name.
 *
 * @param {string} concept - Concept of annotation to find.
-* @returns {KAT.storage.Annotation|undefined} - The given annotation if found.
+* @returns {KAT.storage.Annotation[]} - List of annotations.
 *
 * @function
 * @instance
@@ -1783,25 +1975,34 @@ KAT.storage.Store.prototype.addFromJSON = function(json){
 * @memberof KAT.storage.Store
 */
 KAT.storage.Store.prototype.filterByConcept = function(concept){
-  filteredAnnotations = [];
-  //look for the annotation by concept.
-  for(var i=0;i<this.annotations.length;i++){
-    if(this.annotations[i].concept.name == concept || concept === ''){
-      filteredAnnotations.push(this.annotations[i].uuid);
+  //the filtered annotation we want to find.
+  var filteredAnnotations = [];
+
+  //we want to look over the arguments
+  var conceptNames = jQuery.makeArray(arguments);
+  var showAll = (conceptNames.length === 0);
+
+  console.log(conceptNames); 
+
+  //and check that we can find the right annotations.
+  jQuery.each(this.annotations, function(index, annot){
+    if(showAll || conceptNames.indexOf(annot.concept.name) != -1){
+      filteredAnnotations.push(annot);
     }
-  }
-  //nope, we want undefined
+  });
+
+  //return the annotations.
   return filteredAnnotations;
 };
 
-/** Returns an annotation if it exists.
+/** Finds an annotation if it exists.
 *
 * @param {string} uuid - UUID of annotation to find.
 * @returns {KAT.storage.Annotation|undefined} - The given annotation if found.
 *
 * @function
 * @instance
-* @name addNew
+* @name find
 * @memberof KAT.storage.Store
 */
 KAT.storage.Store.prototype.find = function(uuid){
@@ -1824,7 +2025,7 @@ KAT.storage.Store.prototype.find = function(uuid){
 *
 * @function
 * @instance
-* @name addNew
+* @name findfromElement
 * @memberof KAT.storage.Store
 */
 KAT.storage.Store.prototype.findfromElement = function(element){
@@ -1861,6 +2062,115 @@ KAT.storage.Store.prototype.findfromElement = function(element){
 KAT.storage.Store.prototype.sanityCheck = function(){
   //TODO: Implement me.
   return true;
+};
+
+/** Exports all the annotations in this store to RDF.
+*
+* @param {string} docURL URL of the current document.
+* @function
+* @instance
+* @name toRDF
+* @memberof KAT.storage.Store
+* @return {document} - returns
+*/
+KAT.storage.Store.prototype.toRDF = function(docURL){
+  //self-reference
+  var me = this;
+
+
+
+  // Create the top-level rdf document.
+  var rdfTopLevel = $(KAT.rdf.create("rdf:RDF"))
+  .attr("xmlns:kat", "https://github.com/KWARC/KAT/")
+  .attr("xmlns:rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+
+  // Create a run element.
+  // TODO: Read this when importing and store this?
+  var runID = "kat_run";
+
+
+  rdfTopLevel.append(
+
+    // referencing to the blank node
+    $(KAT.rdf.create("rdf:Description")).append(
+      KAT.rdf.attr($(KAT.rdf.create("kat:annotation")), "rdf:nodeID", runID)
+    ),
+
+    // create the blanknode
+    KAT.rdf.attr(
+      $(KAT.rdf.create("rdf:Description")),
+      "rdf:nodeID",
+      runID
+    ).append(
+      KAT.rdf.attr(
+        $(KAT.rdf.create("rdf:type")),
+        "rdf:resource",
+        "kat:run"
+      ),
+      KAT.rdf.attr(
+        $("<kat:date />").text((new Date()).toISOString()),
+        "rdf:datatype",
+        "xs:dateTime"
+      ),
+      $("<kat:tool>").text("KAT"),
+      $("<kat:runid>").text("0") //TODO: Have a better runID
+    )
+  );
+
+  //stores KannSpecs already run.
+  var specsRun = {};
+
+  //Find all the KAnnSpecs
+  jQuery.each(this.annotations, function(i, annotation){
+    // The KAnnSpec
+    var spec = annotation.concept.KAnnSpec;
+
+    // if we have already run it, just return.
+    if(!specsRun[spec.rdf_nodeid]){
+
+      // we have run this KAnnSpec.
+      specsRun[spec.rdf_nodeid] = true;
+
+      // find all the XML namespaces. Ignore the default namespace because we don't want that.
+      // and write them onto the top-level RDF element.
+      spec.xml.find("annotation").each(function(){
+        $.each(this.attributes, function(i, attrib){
+           var name = attrib.name;
+           var value = attrib.value;
+
+           if(name.startsWith("xmlns:")){
+             rdfTopLevel.attr(name, value);
+           }
+        });
+      });
+
+     // and create a blank node for it.
+     rdfTopLevel.append(
+       $(KAT.rdf.create("rdf:Description")).append(
+         KAT.rdf.attr(
+           $(KAT.rdf.create("kat:annotation")),
+           "rdf:nodeID",
+           spec.rdf_nodeid
+        )
+       ),
+
+       KAT.rdf.attr($(KAT.rdf.create("rdf:Description")), "rdf:nodeID", spec.rdf_nodeid).append(
+         KAT.rdf.attr($("<rdf:type>"), "rdf:resource", "kat:kannspec"),
+
+         $("<kat:kannspec-name>").text(spec.name),
+         $("<kat:kannspec-URI>").text("about:blank")
+       )
+     );
+
+   }
+
+   // now create a new blank node for the actual annotation.
+   // we have a function for this.
+   rdfTopLevel.append($(annotation.toRDF(docURL, runID)).children());
+  });
+
+  //return a string because javascrt
+  return rdfTopLevel.get(0).outerHTML;
 };
 
 /**
@@ -1977,6 +2287,14 @@ KAT.storage.Annotation = function(store, selection, concept, values){
   * @name KAT.storage.Annotation#concept
   */
   this.concept = concept;
+
+  /**
+  * Id of this concept for RDF export.
+  *
+  * @type {string}
+  * @name KAT.storage.Annotation#rdf_id
+  */
+  this.rdf_id = "KAT_"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
 
   //Either use existing values or use the default.
   values = (typeof values !== "undefined")?values:concept.getDefault();
@@ -2116,7 +2434,8 @@ KAT.storage.Annotation.prototype.toJSON = function(){
     //the full name.
     "concept": this.concept.getFullName(),
 
-    //the values.
+    //the values
+    // TODO: Map UUIDs.
     "values": this.values
   };
 };
@@ -2138,37 +2457,91 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
   var concept = this.concept;
 
   //create a parent.
-  var parent = $("<rdf:RDF>");
-
-  //make a new id for the export.
-  var id="KAT:"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
+  var parent = $(KAT.rdf.create("rdf:RDF"));
 
   //create an RDF-description for pointing to the text.
   var annotDoc =
-  $('<rdf:Description>')
-  .attr("about", docURL+'#sec('+this.selection.start+','+this.selection.end+','+this.selection.container+')')
+  KAT.rdf.attr(
+    $(KAT.rdf.create('rdf:Description')),
+    "rdf:about",
+    docURL+"#"+encodeURIComponent(KAT.storage.Store.Selection2UUID(this.selection))
+  )
   .appendTo(parent)
   .append(
-    $('<kat:annotation>').attr("rdf:nodeID", id)
+    KAT.rdf.attr(
+      $(KAT.rdf.create('kat:annotation')),
+      "rdf:nodeID",
+      this.rdf_id
+    )
   );
 
   //create an ID pointing to the content Description.
-  var contentDesc = $('<rdf:Description>')
-  .attr("rdf:nodeID", id)
-  .appendTo(parent).append(
-    $('<kat:run>').attr("rdf:nodeID", runID),
-    $('<kat:kannspec>').attr("rdf:nodeID", concept.KAnnSpec.rdf_nodeid),
-    $('<kat:concept>').text(concept.name)
+  var contentDesc =
+  KAT.rdf.attr(
+    $(KAT.rdf.create('rdf:Description')),
+    "rdf:nodeID",
+    this.rdf_id
+  ).appendTo(parent).append(
+    KAT.rdf.attr(
+      $(KAT.rdf.create('kat:run')),
+      "rdf:nodeID",
+      runID
+    ),
+    KAT.rdf.attr(
+      $(KAT.rdf.create('kat:kannspec')),
+      "rdf:nodeID",
+      concept.KAnnSpec.rdf_nodeid
+    ),
+    $(KAT.rdf.create('kat:concept')).text(concept.name)
   );
 
+
   jQuery.each(concept.fields, function(i, field){
-    var fieldVal = me.values[field.name];
+    var value = me.values[field.value];
+
+    //TODO: Remove this / check if we still need it.
+    var fieldVal = jQuery.isArray(value)?value:[value];
 
     jQuery.each(fieldVal, function(i, value){
-      
+      //TODO: Generate individual values.
+
+      if(field.type == KAT.model.Field.types.text){
+        // for a text field, simply store the value.
+        $(
+          KAT.rdf.create(
+            KAT.rdf.buildNameSpace(field.rdf_pred, concept.KAnnSpec.xml)
+          )
+        )
+        .text(value).appendTo(contentDesc);
+
+      } else if(field.type == KAT.model.Field.types.reference){
+        // for a reference, point to the RDF id.
+        KAT.rdf.attr(
+          $(
+            KAT.rdf.create(
+              KAT.rdf.buildNameSpace(field.rdf_pred, concept.KAnnSpec.xml)
+            )
+          ).appendTo(contentDesc),
+          "rdf:resource",
+          value.rdf_id
+        );
+      } else if(field.type == KAT.model.Field.types.select){
+        // For a select, use the rdf_obj property
+
+        KAT.rdf.attr(
+          $(
+            KAT.rdf.create(
+              KAT.rdf.buildNameSpace(field.rdf_pred, concept.KAnnSpec.xml)
+            )
+          ).appendTo(contentDesc),
+          "rdf:resource",
+          value.rdf_obj?field.rdf_obj:(value.value)
+        );
+
+      }
+
     });
   });
-
 
   //get the Dom Node.
   return parent.get(0);
@@ -2217,14 +2590,13 @@ KAT.module = {
     var text_remove     = "Delete Annotation";
     var text_highlight  = "Highlight Annotation";
     var text_edit       = "Edit Annotation";
-    var text_rdf        = "View RDF"; 
+    var text_rdf        = "View RDF";
 
     //the menu to return
     var menu = {};
 
     //add the text
     menu[text_new] = false;
-    menu[text_rdf] = {};
     menu[text_remove] = {};
     menu[text_highlight] = {};
     menu[text_edit] = {};
@@ -2244,7 +2616,7 @@ KAT.module = {
           menu[text_new][concept.getFullName()] = function(){
             //load new Annotation form
 
-            
+
             var values = KAT.sidebar.genNewAnnotationForm(me,selection,concept);
           };
         });
@@ -2267,16 +2639,12 @@ KAT.module = {
         menu[text_edit][annotation.uuid] = function(){
           annotation.edit();
         };
-        menu[text_rdf][annotation.uuid] = function(){
-          console.log(annotation.toRDF());
-        };
       });
 
     } else {
       menu[text_remove] = false;
       menu[text_highlight] = false;
       menu[text_edit] = false;
-      menu[text_rdf] = false;
     }
 
     menu.Storage = {
@@ -2297,13 +2665,9 @@ KAT.module = {
         }
       },
       "Export": function(){
-        var exporter = [];
-
-        for(var i=0;i<me.store.annotations.length;i++){
-          exporter.push(me.store.annotations[i].toJSON());
-        }
-
-        prompt("Press CTRL+C to export annotations: ", JSON.stringify(exporter));
+        var rdfDoc = me.store.toRDF();
+        console.log(rdfDoc);
+        prompt("Press CTRL+C to export annotations: ", rdfDoc);
       }
     };
 
@@ -2313,3 +2677,5 @@ KAT.module = {
 };
 
 JOBAD.modules.register(KAT.module); //register the module.
+
+//# sourceMappingURL=KAT.js.map
