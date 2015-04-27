@@ -105,6 +105,16 @@ module.exports = function(grunt) {
           }
         },
       },
+      keepalive: {
+        options: {
+          port: 3000,
+          keepalive: true, 
+          hostname: 'localhost',
+          base: {
+            path: '.'
+          }
+        },
+      },
     },
 
     //we want to rebuild when a source file changes.
@@ -151,11 +161,12 @@ module.exports = function(grunt) {
 
   grunt.registerTask('run', [
     'build',
-    'connect'
+    'connect:keepalive'
   ]);
 
   grunt.registerTask('serve', [
-    'run',
+    'build',
+    'connect:server',
     'watch'
   ]);
 

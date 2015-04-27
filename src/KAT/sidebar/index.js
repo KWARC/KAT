@@ -98,7 +98,7 @@ KAT.sidebar.init = function(){
 /**
 * Set up and insert Annotation Toolkit sidemenu
 *
-* @param {object} env - ???
+* @param {JOBAD.modules.loadedModule} env - JOBAD loaded Module instance
 * @param {KAT.gui.selection} selection - The selection to create an annotation for.
 * @param {KAT.model.Concept} concept - Concept to generate annotation for.
 * @function
@@ -129,7 +129,7 @@ KAT.sidebar.genNewAnnotationForm = function(env, selection, concept){
     var value = current.value;
     newAnnotation.append(jQuery("<span>").text(value));
 
-    //TODO: Implement repetirion of fields.
+    //TODO: Implement repeat of fields.
 
     // for text fields, we just have a text field.
     // TODO: Implement validation of text fields.
@@ -149,8 +149,8 @@ KAT.sidebar.genNewAnnotationForm = function(env, selection, concept){
       $.each(options, function(j, opt){
         jQuery("<option>")
         .text(opt.value)
-        .val(opt.value)
-        .appendTo(newSelectField);
+        .val(j)
+        .appendTo(newField);
       });
     }
 
@@ -198,11 +198,17 @@ KAT.sidebar.genNewAnnotationForm = function(env, selection, concept){
 
       // store the value in the valueJSON as an array
       // TODO: Handle multiple fields here.
-      valuesJSON[current.value] = [field.val()];
+      if(concept.type == KAT.model.Field.types.reference){
+        // for references, find the actual UUID.
+        valuesJSON[current.value] = [env.store.find(field.val())];
+      } else if(concept.type == KAT.model.Field.types.reference){
+        // for option, store the selected option.
+        valuesJSON[current.value] = [current.validation[field.val()]];
+      } else {
+        // for text, just store the text.
+        valuesJSON[current.value] = [field.val()];
+      }
     });
-
-    // for debug: log the values JSON.
-    // console.log(valuesJSON);
 
     // remove the entire form
     newAnnotation.remove();

@@ -74,10 +74,50 @@ KAT.rdf.resolveWithNameSpace = function(uri, xml){
 
   // check if we have exactly 2 parts.
   if(uriparts.length == 2){
-    return $(xml).attr("xmlns:"+uriparts[0])+uriparts[1];
+
+    var annotationElement = $(xml).find("annotation").eq(0);
+
+    return annotationElement.attr("xmlns:"+uriparts[0])+uriparts[1];
   } else {
     return uri;
   }
+};
+
+/** Builds a namespaced version of a URI.
+*
+* @param {string} uri - URI to resolve
+* @param {document} xml - Top level xml node with namespaces contained.
+* @name KAT.rdf.resolveWithNameSpace
+* @static
+* @returns {string}
+*/
+KAT.rdf.buildNameSpace = function(uri, xml){
+
+  // find the annotation element.
+  var annEl = $(xml).find("annotation").get(0);
+  var attr, name, suffix;
+
+  // iterate through the attributes
+  for(var i=0;i<annEl.attributes.length; i++){
+    attr = annEl.attributes[i];
+
+    // which are a namespace.
+    if(attr.name.substring(0, "xmlns".length) == "xmlns"){
+      name = attr.name.split(":")[1] || "";
+
+      // if the uri starts with the right string
+      if(uri.startsWith(attr.value)){
+
+        // we get the suffix of the uri
+        suffix = uri.substring(attr.value.length);
+
+        //and return it with namespace if needed
+        return name!==""?(name+":"+suffix):suffix;
+      }
+    }
+  }
+
+  return uri;
 };
 
 // Source: src/KAT/model/index.js
@@ -1705,7 +1745,7 @@ KAT.sidebar.init = function(){
 /**
 * Set up and insert Annotation Toolkit sidemenu
 *
-* @param {object} env - ???
+* @param {JOBAD.modules.loadedModule} env - JOBAD loaded Module instance
 * @param {KAT.gui.selection} selection - The selection to create an annotation for.
 * @param {KAT.model.Concept} concept - Concept to generate annotation for.
 * @function
@@ -1736,7 +1776,7 @@ KAT.sidebar.genNewAnnotationForm = function(env, selection, concept){
     var value = current.value;
     newAnnotation.append(jQuery("<span>").text(value));
 
-    //TODO: Implement repetirion of fields.
+    //TODO: Implement repeat of fields.
 
     // for text fields, we just have a text field.
     // TODO: Implement validation of text fields.
@@ -1756,8 +1796,8 @@ KAT.sidebar.genNewAnnotationForm = function(env, selection, concept){
       $.each(options, function(j, opt){
         jQuery("<option>")
         .text(opt.value)
-        .val(opt.value)
-        .appendTo(newSelectField);
+        .val(j)
+        .appendTo(newField);
       });
     }
 
@@ -1805,11 +1845,17 @@ KAT.sidebar.genNewAnnotationForm = function(env, selection, concept){
 
       // store the value in the valueJSON as an array
       // TODO: Handle multiple fields here.
-      valuesJSON[current.value] = [field.val()];
+      if(concept.type == KAT.model.Field.types.reference){
+        // for references, find the actual UUID.
+        valuesJSON[current.value] = [env.store.find(field.val())];
+      } else if(concept.type == KAT.model.Field.types.reference){
+        // for option, store the selected option.
+        valuesJSON[current.value] = [current.validation[field.val()]];
+      } else {
+        // for text, just store the text.
+        valuesJSON[current.value] = [field.val()];
+      }
     });
-
-    // for debug: log the values JSON.
-    // console.log(valuesJSON);
 
     // remove the entire form
     newAnnotation.remove();
@@ -1936,6 +1982,8 @@ KAT.storage.Store.prototype.filterByConcept = function(concept){
   var conceptNames = jQuery.makeArray(arguments);
   var showAll = (conceptNames.length === 0);
 
+  console.log(conceptNames); 
+
   //and check that we can find the right annotations.
   jQuery.each(this.annotations, function(index, annot){
     if(showAll || conceptNames.indexOf(annot.concept.name) != -1){
@@ -1947,14 +1995,14 @@ KAT.storage.Store.prototype.filterByConcept = function(concept){
   return filteredAnnotations;
 };
 
-/** Returns an annotation if it exists.
+/** Finds an annotation if it exists.
 *
 * @param {string} uuid - UUID of annotation to find.
 * @returns {KAT.storage.Annotation|undefined} - The given annotation if found.
 *
 * @function
 * @instance
-* @name addNew
+* @name find
 * @memberof KAT.storage.Store
 */
 KAT.storage.Store.prototype.find = function(uuid){
@@ -1977,7 +2025,7 @@ KAT.storage.Store.prototype.find = function(uuid){
 *
 * @function
 * @instance
-* @name addNew
+* @name findfromElement
 * @memberof KAT.storage.Store
 */
 KAT.storage.Store.prototype.findfromElement = function(element){
@@ -2241,7 +2289,7 @@ KAT.storage.Annotation = function(store, selection, concept, values){
   this.concept = concept;
 
   /**
-  * Id of this concept for RDF export. 
+  * Id of this concept for RDF export.
   *
   * @type {string}
   * @name KAT.storage.Annotation#rdf_id
@@ -2386,7 +2434,8 @@ KAT.storage.Annotation.prototype.toJSON = function(){
     //the full name.
     "concept": this.concept.getFullName(),
 
-    //the values.
+    //the values
+    // TODO: Map UUIDs.
     "values": this.values
   };
 };
@@ -2422,7 +2471,7 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
     KAT.rdf.attr(
       $(KAT.rdf.create('kat:annotation')),
       "rdf:nodeID",
-      id
+      this.rdf_id
     )
   );
 
@@ -2431,7 +2480,7 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
   KAT.rdf.attr(
     $(KAT.rdf.create('rdf:Description')),
     "rdf:nodeID",
-    id
+    this.rdf_id
   ).appendTo(parent).append(
     KAT.rdf.attr(
       $(KAT.rdf.create('kat:run')),
@@ -2446,24 +2495,49 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
     $(KAT.rdf.create('kat:concept')).text(concept.name)
   );
 
+
   jQuery.each(concept.fields, function(i, field){
-    var value = me.values[field.name];
+    var value = me.values[field.value];
 
-    //HACK, we check if fieldVal is an array and otherwise typecast it.
+    //TODO: Remove this / check if we still need it.
     var fieldVal = jQuery.isArray(value)?value:[value];
-
-    //Please commit.
-    if(!jQuery.isArray(value)){
-      alert("Sourabh, fix your code and make values an array!");
-    }
 
     jQuery.each(fieldVal, function(i, value){
       //TODO: Generate individual values.
 
       if(field.type == KAT.model.Field.types.text){
-        $(KAT.rdf.create(fieldVal.rdf_pred)).text(value).appendTo(contentDesc);
+        // for a text field, simply store the value.
+        $(
+          KAT.rdf.create(
+            KAT.rdf.buildNameSpace(field.rdf_pred, concept.KAnnSpec.xml)
+          )
+        )
+        .text(value).appendTo(contentDesc);
+
       } else if(field.type == KAT.model.Field.types.reference){
-        $(KAT.rdf.create(fieldVal.rdf_pred)).text(value).appendTo(contentDesc);
+        // for a reference, point to the RDF id.
+        KAT.rdf.attr(
+          $(
+            KAT.rdf.create(
+              KAT.rdf.buildNameSpace(field.rdf_pred, concept.KAnnSpec.xml)
+            )
+          ).appendTo(contentDesc),
+          "rdf:resource",
+          value.rdf_id
+        );
+      } else if(field.type == KAT.model.Field.types.select){
+        // For a select, use the rdf_obj property
+
+        KAT.rdf.attr(
+          $(
+            KAT.rdf.create(
+              KAT.rdf.buildNameSpace(field.rdf_pred, concept.KAnnSpec.xml)
+            )
+          ).appendTo(contentDesc),
+          "rdf:resource",
+          value.rdf_obj?field.rdf_obj:(value.value)
+        );
+
       }
 
     });

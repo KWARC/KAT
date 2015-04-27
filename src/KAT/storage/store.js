@@ -97,6 +97,8 @@ KAT.storage.Store.prototype.filterByConcept = function(concept){
   var conceptNames = jQuery.makeArray(arguments);
   var showAll = (conceptNames.length === 0);
 
+  console.log(conceptNames); 
+
   //and check that we can find the right annotations.
   jQuery.each(this.annotations, function(index, annot){
     if(showAll || conceptNames.indexOf(annot.concept.name) != -1){
@@ -108,14 +110,14 @@ KAT.storage.Store.prototype.filterByConcept = function(concept){
   return filteredAnnotations;
 };
 
-/** Returns an annotation if it exists.
+/** Finds an annotation if it exists.
 *
 * @param {string} uuid - UUID of annotation to find.
 * @returns {KAT.storage.Annotation|undefined} - The given annotation if found.
 *
 * @function
 * @instance
-* @name addNew
+* @name find
 * @memberof KAT.storage.Store
 */
 KAT.storage.Store.prototype.find = function(uuid){
@@ -138,7 +140,7 @@ KAT.storage.Store.prototype.find = function(uuid){
 *
 * @function
 * @instance
-* @name addNew
+* @name findfromElement
 * @memberof KAT.storage.Store
 */
 KAT.storage.Store.prototype.findfromElement = function(element){

@@ -53,7 +53,7 @@ KAT.storage.Annotation = function(store, selection, concept, values){
   this.concept = concept;
 
   /**
-  * Id of this concept for RDF export. 
+  * Id of this concept for RDF export.
   *
   * @type {string}
   * @name KAT.storage.Annotation#rdf_id
@@ -198,7 +198,8 @@ KAT.storage.Annotation.prototype.toJSON = function(){
     //the full name.
     "concept": this.concept.getFullName(),
 
-    //the values.
+    //the values
+    // TODO: Map UUIDs.
     "values": this.values
   };
 };
@@ -234,7 +235,7 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
     KAT.rdf.attr(
       $(KAT.rdf.create('kat:annotation')),
       "rdf:nodeID",
-      id
+      this.rdf_id
     )
   );
 
@@ -243,7 +244,7 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
   KAT.rdf.attr(
     $(KAT.rdf.create('rdf:Description')),
     "rdf:nodeID",
-    id
+    this.rdf_id
   ).appendTo(parent).append(
     KAT.rdf.attr(
       $(KAT.rdf.create('kat:run')),
@@ -258,24 +259,49 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
     $(KAT.rdf.create('kat:concept')).text(concept.name)
   );
 
+
   jQuery.each(concept.fields, function(i, field){
-    var value = me.values[field.name];
+    var value = me.values[field.value];
 
-    //HACK, we check if fieldVal is an array and otherwise typecast it.
+    //TODO: Remove this / check if we still need it.
     var fieldVal = jQuery.isArray(value)?value:[value];
-
-    //Please commit.
-    if(!jQuery.isArray(value)){
-      alert("Sourabh, fix your code and make values an array!");
-    }
 
     jQuery.each(fieldVal, function(i, value){
       //TODO: Generate individual values.
 
       if(field.type == KAT.model.Field.types.text){
-        $(KAT.rdf.create(fieldVal.rdf_pred)).text(value).appendTo(contentDesc);
+        // for a text field, simply store the value.
+        $(
+          KAT.rdf.create(
+            KAT.rdf.buildNameSpace(field.rdf_pred, concept.KAnnSpec.xml)
+          )
+        )
+        .text(value).appendTo(contentDesc);
+
       } else if(field.type == KAT.model.Field.types.reference){
-        $(KAT.rdf.create(fieldVal.rdf_pred)).text(value).appendTo(contentDesc);
+        // for a reference, point to the RDF id.
+        KAT.rdf.attr(
+          $(
+            KAT.rdf.create(
+              KAT.rdf.buildNameSpace(field.rdf_pred, concept.KAnnSpec.xml)
+            )
+          ).appendTo(contentDesc),
+          "rdf:resource",
+          value.rdf_id
+        );
+      } else if(field.type == KAT.model.Field.types.select){
+        // For a select, use the rdf_obj property
+
+        KAT.rdf.attr(
+          $(
+            KAT.rdf.create(
+              KAT.rdf.buildNameSpace(field.rdf_pred, concept.KAnnSpec.xml)
+            )
+          ).appendTo(contentDesc),
+          "rdf:resource",
+          value.rdf_obj?field.rdf_obj:(value.value)
+        );
+
       }
 
     });
