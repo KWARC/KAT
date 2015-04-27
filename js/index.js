@@ -3,13 +3,15 @@ $(function(){
   getKATStarted("content/sample1.html", "KAnnSpecs/omdoc-annotations.xml");
 });
 
+
+
 function getKATStarted(documentURL, KAnnSpecURL){
 
   //set up bootstrap
   JOBAD.config.BootstrapScope = "bootstrap";
 
-  //Create the sidebar. 
-  var sidebar = KAT.sidebar();
+  //Create the sidebar.
+  KAT.sidebar.init(); 
 
   //load the document
   $.get(documentURL, function(documentData){

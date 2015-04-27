@@ -79,10 +79,10 @@ KAT.storage.Store.prototype.addFromJSON = function(json){
   return newAnnotation;
 };
 
-/** Returns a list of annotation if they exists.
+/** Filters all annotations by a certain name.
 *
 * @param {string} concept - Concept of annotation to find.
-* @returns {KAT.storage.Annotation|undefined} - The given annotation if found.
+* @returns {KAT.storage.Annotation[]} - List of annotations.
 *
 * @function
 * @instance
@@ -90,14 +90,21 @@ KAT.storage.Store.prototype.addFromJSON = function(json){
 * @memberof KAT.storage.Store
 */
 KAT.storage.Store.prototype.filterByConcept = function(concept){
-  filteredAnnotations = [];
-  //look for the annotation by concept.
-  for(var i=0;i<this.annotations.length;i++){
-    if(this.annotations[i].concept.name == concept || concept === ''){
-      filteredAnnotations.push(this.annotations[i].uuid);
+  //the filtered annotation we want to find.
+  var filteredAnnotations = [];
+
+  //we want to look over the arguments
+  var conceptNames = jQuery.makeArray(arguments);
+  var showAll = (conceptNames.length === 0);
+
+  //and check that we can find the right annotations.
+  jQuery.each(this.annotations, function(index, annot){
+    if(showAll || conceptNames.indexOf(annot.concept.name) != -1){
+      filteredAnnotations.push(annot);
     }
-  }
-  //nope, we want undefined
+  });
+
+  //return the annotations.
   return filteredAnnotations;
 };
 

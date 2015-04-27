@@ -15,11 +15,13 @@ cd KAT
 npm install -g grunt-cli # Might require sudo depending on your system configuration
 # Whenever you update you will have to re-run this command.
 rm -rf node_modules
-# The order is VERY important. 
+# The order is VERY important.
 npm install grunt-jsdoc-ng
 npm install jsdoc
 npm install .
-grunt serve
+# run either one of the commands below
+grunt run # To just start a server
+grunt serve # To develop with autoreload enabled.
 ```
 
 You can then navigate to localhost:3000 and take a look at the demo.
@@ -31,7 +33,7 @@ Perform the steps described above. To use your own KAnnSpecs you can then:
 1. Place your KAnnSpec into the KAnnSpec/ directory.
 2. Place your document into the content/ directory. Make sure it only contains the actual document content (inside the body tag)
 3. Edit line 3 in js/index.js and change "content/sample1.html" to the path of the document you want to use and change "KAnnSpecs/omdoc-annotations.xml" to the annotation you want to create.
-4. Run grunt serve if it is not already running.
+4. Run ```grunt run``` if it is not already running.
 5. Navigate to localhost:3000 and see the demo at work.
 
 ### Developing KAT itself

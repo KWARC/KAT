@@ -147,10 +147,15 @@ module.exports = function(grunt) {
     'rebuild'
   ]);
 
-  //Have the serve tasks
-  grunt.registerTask('serve', [
+  //Have the serve task
+
+  grunt.registerTask('run', [
     'build',
-    'connect',
+    'connect'
+  ]);
+
+  grunt.registerTask('serve', [
+    'run',
     'watch'
   ]);
 
