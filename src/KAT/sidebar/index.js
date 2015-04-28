@@ -162,14 +162,14 @@ KAT.sidebar.genNewAnnotationForm = function(env, selection, concept){
 
       // Find all the allowed concepts
       // @Sourabh: I updated env.store.filterByConcept for this to work properly.
-      var allowedAnnotations = env.store.filterByConcept.call(env.store, allowedAnnotations);
+      var allowedAnnotations = env.store.filterByConcept.apply(env.store, options);
 
       // for eacjh
       jQuery.each(allowedAnnotations, function(index, annot){
 
         $("<option>")
         .text(annot.uuid)
-        .value(annot.uuid)
+        .val(annot.uuid)
         .appendTo(newField);
 
       });

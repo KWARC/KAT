@@ -1809,14 +1809,14 @@ KAT.sidebar.genNewAnnotationForm = function(env, selection, concept){
 
       // Find all the allowed concepts
       // @Sourabh: I updated env.store.filterByConcept for this to work properly.
-      var allowedAnnotations = env.store.filterByConcept.call(env.store, allowedAnnotations);
+      var allowedAnnotations = env.store.filterByConcept.apply(env.store, options);
 
       // for eacjh
       jQuery.each(allowedAnnotations, function(index, annot){
 
         $("<option>")
         .text(annot.uuid)
-        .value(annot.uuid)
+        .val(annot.uuid)
         .appendTo(newField);
 
       });
@@ -1982,7 +1982,7 @@ KAT.storage.Store.prototype.filterByConcept = function(concept){
   var conceptNames = jQuery.makeArray(arguments);
   var showAll = (conceptNames.length === 0);
 
-  console.log(conceptNames); 
+  console.log(conceptNames);
 
   //and check that we can find the right annotations.
   jQuery.each(this.annotations, function(index, annot){
@@ -1990,6 +1990,8 @@ KAT.storage.Store.prototype.filterByConcept = function(concept){
       filteredAnnotations.push(annot);
     }
   });
+
+  console.log(filteredAnnotations); 
 
   //return the annotations.
   return filteredAnnotations;
