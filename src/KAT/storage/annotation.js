@@ -289,6 +289,8 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
           "rdf:resource",
           value.rdf_id
         );
+
+        console.log(value); 
       } else if(field.type == KAT.model.Field.types.select){
         // For a select, use the rdf_obj property
 

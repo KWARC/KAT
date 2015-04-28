@@ -1848,9 +1848,12 @@ KAT.sidebar.genNewAnnotationForm = function(env, selection, concept){
       if(concept.type == KAT.model.Field.types.reference){
         // for references, find the actual UUID.
         valuesJSON[current.value] = [env.store.find(field.val())];
-      } else if(concept.type == KAT.model.Field.types.reference){
+      } else if(concept.type == KAT.model.Field.types.select){
         // for option, store the selected option.
-        valuesJSON[current.value] = [current.validation[field.val()]];
+
+        console.log(options, field.val()); 
+
+        valuesJSON[current.value] = [options[field.val()]];
       } else {
         // for text, just store the text.
         valuesJSON[current.value] = [field.val()];
@@ -2527,6 +2530,8 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
           "rdf:resource",
           value.rdf_id
         );
+
+        console.log(value); 
       } else if(field.type == KAT.model.Field.types.select){
         // For a select, use the rdf_obj property
 
