@@ -191,25 +191,22 @@ KAT.sidebar.genNewAnnotationForm = function(env, selection, concept){
     var valuesJSON = {};
 
     // go over the input fields and gather the values.
-    $.each(concept.fields, function(i, current){
+    $.each(concept.fields, function(i, field){
 
       //also get the current input field.
-      var field = inputFields[i];
+      var infield = inputFields[i];
 
       // store the value in the valueJSON as an array
       // TODO: Handle multiple fields here.
-      if(concept.type == KAT.model.Field.types.reference){
+      if(field.type == KAT.model.Field.types.reference){
         // for references, find the actual UUID.
-        valuesJSON[current.value] = [env.store.find(field.val())];
-      } else if(concept.type == KAT.model.Field.types.select){
+        valuesJSON[field.value] = [env.store.find(infield.val())];
+      } else if(field.type == KAT.model.Field.types.select){
         // for option, store the selected option.
-
-        console.log(options, field.val()); 
-
-        valuesJSON[current.value] = [options[field.val()]];
+        valuesJSON[field.value] = [field.validation[infield.val()]];
       } else {
         // for text, just store the text.
-        valuesJSON[current.value] = [field.val()];
+        valuesJSON[field.value] = [infield.val()];
       }
     });
 

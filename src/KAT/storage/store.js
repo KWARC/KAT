@@ -97,8 +97,6 @@ KAT.storage.Store.prototype.filterByConcept = function(concept){
   var conceptNames = jQuery.makeArray(arguments);
   var showAll = (conceptNames.length === 0);
 
-  console.log(conceptNames);
-
   //and check that we can find the right annotations.
   jQuery.each(this.annotations, function(index, annot){
     if(showAll || conceptNames.indexOf(annot.concept.name) != -1){
@@ -106,7 +104,7 @@ KAT.storage.Store.prototype.filterByConcept = function(concept){
     }
   });
 
-  console.log(filteredAnnotations); 
+  console.log(filteredAnnotations);
 
   //return the annotations.
   return filteredAnnotations;

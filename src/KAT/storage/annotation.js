@@ -290,9 +290,11 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
           value.rdf_id
         );
 
-        console.log(value); 
+        console.log(value);
       } else if(field.type == KAT.model.Field.types.select){
         // For a select, use the rdf_obj property
+
+        console.log(value); 
 
         KAT.rdf.attr(
           $(
@@ -301,7 +303,7 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
             )
           ).appendTo(contentDesc),
           "rdf:resource",
-          value.rdf_obj?field.rdf_obj:(value.value)
+          value.rdf_obj?value.rdf_obj:(value.value)
         );
 
       }
