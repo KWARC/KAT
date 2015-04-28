@@ -2620,9 +2620,6 @@ KAT.module = {
 
 
             var values = KAT.sidebar.genNewAnnotationForm(me,selection,concept);
-            //var newAnnotation = me.store.addNew(selection, concept);
-            //and draw it.
-            //newAnnotation.draw();
           };
         });
       }
