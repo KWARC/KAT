@@ -286,7 +286,7 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
               KAT.rdf.buildNameSpace(field.rdf_pred, concept.KAnnSpec.xml)
             )
           ).appendTo(contentDesc),
-          "rdf:resource",
+          "rdf:nodeID",
           value.rdf_id
         );
 
@@ -294,7 +294,7 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
       } else if(field.type == KAT.model.Field.types.select){
         // For a select, use the rdf_obj property
 
-        console.log(value); 
+        console.log(value);
 
         KAT.rdf.attr(
           $(
