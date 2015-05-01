@@ -104,8 +104,6 @@ KAT.storage.Store.prototype.filterByConcept = function(concept){
     }
   });
 
-  console.log(filteredAnnotations);
-
   //return the annotations.
   return filteredAnnotations;
 };

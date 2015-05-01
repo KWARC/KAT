@@ -38,10 +38,7 @@ KAT.module = {
     var menu = {};
 
     //add the text
-    menu[text_new] = false;
-    menu[text_remove] = {};
-    menu[text_highlight] = {};
-    menu[text_edit] = {};
+
 
     //MENUITEM for new item
     var selection;
@@ -52,14 +49,12 @@ KAT.module = {
 
     if(selection){
       if(!(selection.start == selection.end && selection.startOffset == selection.endOffset)){
-        menu[text_new] = {};
+        menu = {};
 
         $.each(this.gui.collection.findConcepts(), function(index, concept){
-          menu[text_new][concept.getFullName()] = function(){
+          menu[concept.getFullName()] = function(){
             //load new Annotation form
-
-
-            var values = KAT.sidebar.genNewAnnotationForm(me,selection,concept);
+            var values = KAT.sidebar.genNewAnnotationForm(me,me.store.addNew.bind(me.store),selection,concept);
           };
         });
       }
