@@ -1284,13 +1284,20 @@ KAT.gui.prototype.getSelection = function(){
   var start = KAT.gui.getXPath(theElement, selection.startContainer.parentElement);
   var end = KAT.gui.getXPath(theElement, selection.endContainer.parentElement);
 
-  return {
+  var sel = {
     "container": container,
     "start": start,
     "startOffset": selection.startOffset,
     "end": end,
-    "endOffset": selection.endOffset
+    "endOffset": selection.endOffset,
+    "isEmpty": false
   };
+
+  if (start == end && selection.startOffset == selection.endOffset){
+    sel.isEmpty = true;
+  }
+
+  return sel;
 };
 
 /**
@@ -1693,7 +1700,7 @@ KAT.sidebar.init = function(){
   .text("«")
   .addClass("collapseToggle")
   .css({'height': winHeight-10})
-  .click(KAT.sidebar.toggleAnnotationMode).prependTo(collapsibleMenu); //adapted from init function below
+  .click(KAT.sidebar.toggleSidebar).prependTo(collapsibleMenu); //adapted from init function below
 
   //HACK! Remove this please, as this interferes with global styling.
   jQuery("body").css({'width': jQuery(window).width()-50});
@@ -1718,12 +1725,12 @@ KAT.sidebar.init = function(){
   });
 };
 
-KAT.sidebar.toggleAnnotationMode = function(){
+KAT.sidebar.toggleSidebar = function(){
     var hideWidth = -230; //width that will be hidden
-    if (KAT.sidebar.annotationMode){
+    if (KAT.sidebar.extended){
 
       //we are now hidden
-      KAT.sidebar.annotationMode = false;
+      KAT.sidebar.extended = false;
 
       jQuery(".collapseToggle")
       .text("«") // Change text of button.
@@ -1733,7 +1740,7 @@ KAT.sidebar.toggleAnnotationMode = function(){
     } else {
 
       //we are now visible
-      KAT.sidebar.annotationMode = true;
+      KAT.sidebar.extended = true;
 
       jQuery(".collapseToggle")
       .text("»")  // Change text of button.
@@ -1741,7 +1748,11 @@ KAT.sidebar.toggleAnnotationMode = function(){
 
       jQuery("body").css({'width': jQuery(window).width()-260}); //HACK! Remove this please, as this interferes with global styling.
     }
-  }
+  };
+
+KAT.sidebar.toggleAnnotationMode = function(){
+  KAT.sidebar.annotationMode = !KAT.sidebar.annotationMode;
+};
 
 /**
 * Set up and insert Annotation Toolkit sidemenu
@@ -1758,8 +1769,8 @@ KAT.sidebar.genNewAnnotationForm = function(env, callback, selection, concept){
   // TODO complete documentation comment above.
   // TODO: Work on a stored annotation, so values can be pre-filled.
 
-  if(!KAT.sidebar.annotationMode){
-    KAT.sidebar.toggleAnnotationMode();  
+  if(!KAT.sidebar.extended){
+    KAT.sidebar.toggleSidebar();  
   }
 
   // create a new element to add to the sidebar.
@@ -1862,8 +1873,8 @@ KAT.sidebar.genNewAnnotationForm = function(env, callback, selection, concept){
 
     // remove the entire form
     newAnnotation.remove();
-    if (KAT.sidebar.annotationMode && $(".KATMenuItems").children().length < 1){
-      KAT.sidebar.toggleAnnotationMode();
+    if (KAT.sidebar.extended && $(".KATMenuItems").children().length < 1){
+      KAT.sidebar.toggleSidebar();
     }
     // TODO: Have a callback here instead of hard-coding what happens.
     var theannotation = callback(selection, concept, valuesJSON);
@@ -1880,8 +1891,8 @@ KAT.sidebar.genNewAnnotationForm = function(env, callback, selection, concept){
   .click(function(){
     // remove the entire form
     newAnnotation.remove();
-    if (KAT.sidebar.annotationMode && $(".KATMenuItems").children().length < 1){
-      KAT.sidebar.toggleAnnotationMode();
+    if (KAT.sidebar.extended && $(".KATMenuItems").children().length < 1){
+      KAT.sidebar.toggleSidebar();
     }
   });
 };
@@ -1890,10 +1901,17 @@ KAT.sidebar.genNewAnnotationForm = function(env, callback, selection, concept){
 * Is the sidebar extended?
 *
 * @type {boolean}
+* @name KAT.sidebar.extended
+*/
+KAT.sidebar.extended = false;
+
+/**
+* Is Annotation Mode active
+*
+* @type {boolean}
 * @name KAT.sidebar.annotationMode
 */
 KAT.sidebar.annotationMode = false;
-
 // Source: src/KAT/storage/index.js
 /**
 * Namespace for storage used by KAT.
@@ -2613,59 +2631,24 @@ KAT.module = {
     var text_highlight  = "Highlight Annotation";
     var text_edit       = "Edit Annotation";
     var text_rdf        = "View RDF";
+    var annot_modeOn    = "Enable Annotation Mode";
+    var annot_modeOff   = "Disable Annotation Mode";
+    var storage_import  = "Import Annotations";
+    var storage_export  = "Export Annotations";
 
     //the menu to return
     var menu = {};
 
-    //add the text
-
-
-    //MENUITEM for new item
-    var selection;
-
-    try{
-      selection = this.gui.getSelection();
-    } catch(e){}
-
-    if(selection){
-      if(!(selection.start == selection.end && selection.startOffset == selection.endOffset)){
-        menu = {};
-
-        $.each(this.gui.collection.findConcepts(), function(index, concept){
-          menu[concept.getFullName()] = function(){
-            //load new Annotation form
-            var values = KAT.sidebar.genNewAnnotationForm(me,me.store.addNew.bind(me.store),selection,concept);
-          };
-        });
-      }
-    }
-
-    //find all the annotations.
-    var annots = this.store.findfromElement(target);
-
-    if(annots.length !== 0){
-      //iterate over all the annotations.
-      $.each(annots, function(i, annotation){
-        //add a menu item for each of the actions.
-        menu[text_remove][annotation.uuid] = function(){
-          annotation.delete();
+    // Case A: Annotation Mode is disabled
+    if (!KAT.sidebar.annotationMode){
+      
+      //Menu item A.1 : Turn on annotation mode
+      menu[annot_modeOn] = function(){
+          KAT.sidebar.toggleAnnotationMode();
         };
-        menu[text_highlight][annotation.uuid] = function(){
-          annotation.flash();
-        };
-        menu[text_edit][annotation.uuid] = function(){
-          annotation.edit();
-        };
-      });
 
-    } else {
-      menu[text_remove] = false;
-      menu[text_highlight] = false;
-      menu[text_edit] = false;
-    }
-
-    menu.Storage = {
-      "Import": function(){
+      //Menu item A.2 : Import Annotations
+      menu[storage_import] = function(){
         var json = prompt("Paste the annotations below: ");
 
         if(json){
@@ -2678,15 +2661,111 @@ KAT.module = {
             //and draw it.
             json[i].draw();
           }
-
         }
-      },
-      "Export": function(){
+      };
+
+      //Menu item A.3 : Export Annotations
+      menu[storage_export] = function(){
         var rdfDoc = me.store.toRDF();
         console.log(rdfDoc);
         prompt("Press CTRL+C to export annotations: ", rdfDoc);
+      };
+    }
+
+    // Case B: Annotation Mode is enabled
+    else {
+
+      var selection;
+      try{
+        selection = this.gui.getSelection();
+      } catch(e){}
+
+
+      if(!selection || selection.isEmpty){
+        
+        /* Subcase B1:
+          User has not made a selection
+          Right click is not on an annotation
+        */
+
+        //Menu item B1.1 : Turn off annotation mode
+        menu[annot_modeOff] = function(){
+            KAT.sidebar.toggleAnnotationMode();
+        };
+
+        //Menu item B1.2 : Import Annotations
+        menu[storage_import] = function(){
+          var json = prompt("Paste the annotations below: ");
+
+          if(json){
+            //parse the json
+            json = JSON.parse(json);
+
+            for(var i=0;i<json.length;i++){
+              //add the new annotation
+              json[i] = me.store.addFromJSON(json[i]);
+              //and draw it.
+              json[i].draw();
+            }
+          }
+        };
+
+        //Menu item B1.3 : Export Annotations
+        menu[storage_export] = function(){
+          var rdfDoc = me.store.toRDF();
+          console.log(rdfDoc);
+          prompt("Press CTRL+C to export annotations: ", rdfDoc);
+        };
+
+        /* Subcase B2:
+          User has not made a selection
+          Right click is on an annotation
+        */
+
+        //find all the annotations.
+        var annots = this.store.findfromElement(target);
+
+        if(annots.length !== 0){
+          menu = {};
+          menu[text_remove] = {};
+          menu[text_highlight] = {};
+          menu[text_edit] = {};
+
+          //iterate over all the annotations.
+          $.each(annots, function(i, annotation){
+
+            //Menu item B2.1 : Delete annotation
+            menu[text_remove][annotation.uuid] = function(){
+              annotation.delete();
+            };
+
+            //Menu item B2.2 : Highlight annotation
+            menu[text_highlight][annotation.uuid] = function(){
+              annotation.flash();
+            };
+
+            //Menu item B2.3 : Edit annotation
+            menu[text_edit][annotation.uuid] = function(){
+              annotation.edit();
+            };
+          });
+        }
+      } else {
+        /* Subcase B3:
+          User has made a selection
+        */
+         if(!(selection.start == selection.end && selection.startOffset == selection.endOffset)){
+
+          //Menu item B3.n : Add annotation with nth concept found in Kannspec
+          $.each(this.gui.collection.findConcepts(), function(index, concept){
+            menu[concept.getFullName()] = function(){
+              //load new Annotation form
+              var values = KAT.sidebar.genNewAnnotationForm(me,me.store.addNew.bind(me.store),selection,concept);
+            };
+          });
+        }
       }
-    };
+    }
 
     //return the menu.
     return menu;

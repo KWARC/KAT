@@ -45,17 +45,20 @@ KAT.gui.prototype.getSelection = function(){
   var start = KAT.gui.getXPath(theElement, selection.startContainer.parentElement);
   var end = KAT.gui.getXPath(theElement, selection.endContainer.parentElement);
 
-  if (start == end && selection.startOffset == selection.endOffset){
-    return undefined;
-  }
-
-  return {
+  var sel = {
     "container": container,
     "start": start,
     "startOffset": selection.startOffset,
     "end": end,
-    "endOffset": selection.endOffset
+    "endOffset": selection.endOffset,
+    "isEmpty": false
   };
+
+  if (start == end && selection.startOffset == selection.endOffset){
+    sel.isEmpty = true;
+  }
+
+  return sel;
 };
 
 /**

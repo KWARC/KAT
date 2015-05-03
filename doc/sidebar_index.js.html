@@ -69,36 +69,12 @@ KAT.sidebar.init = function(){
   }).prependTo("body");
 
   // create button to toggle collapse and resurection of sidemenu and define properties
-  // TODO (@Sourabh): Make the button a bit bigger so that we can click on the
-  // entire side of the window.
-
+  
   var collapsibleToggle = $("&lt;button>")
   .text("«")
+  .addClass("collapseToggle")
   .css({'height': winHeight-10})
-  .click(function(){
-
-    if (KAT.sidebar.collapsibleStatus){
-
-      //we are now hidden
-      KAT.sidebar.collapsibleStatus = false;
-
-      jQuery(this)
-      .text("«") // Change text of button.
-      .parent().animate({right: hideWidth}, 300 );
-
-      jQuery("body").css({'width': jQuery(window).width()-50}); //HACK! Remove this please, as this interferes with global styling.
-    } else {
-
-      //we are now visible
-      KAT.sidebar.collapsibleStatus = true;
-
-      jQuery(this)
-      .text("»")  // Change text of button.
-      .parent().animate({right: "0"}, 300 );
-
-      jQuery("body").css({'width': jQuery(window).width()-260}); //HACK! Remove this please, as this interferes with global styling.
-    }
-  }).prependTo(collapsibleMenu); //adapted from init function below
+  .click(KAT.sidebar.toggleSidebar).prependTo(collapsibleMenu); //adapted from init function below
 
   //HACK! Remove this please, as this interferes with global styling.
   jQuery("body").css({'width': jQuery(window).width()-50});
@@ -123,6 +99,35 @@ KAT.sidebar.init = function(){
   });
 };
 
+KAT.sidebar.toggleSidebar = function(){
+    var hideWidth = -230; //width that will be hidden
+    if (KAT.sidebar.extended){
+
+      //we are now hidden
+      KAT.sidebar.extended = false;
+
+      jQuery(".collapseToggle")
+      .text("«") // Change text of button.
+      .parent().animate({right: hideWidth}, 2000 );
+
+      jQuery("body").css({'width': jQuery(window).width()-50}); //HACK! Remove this please, as this interferes with global styling.
+    } else {
+
+      //we are now visible
+      KAT.sidebar.extended = true;
+
+      jQuery(".collapseToggle")
+      .text("»")  // Change text of button.
+      .parent().animate({right: "0"}, 2000 );
+
+      jQuery("body").css({'width': jQuery(window).width()-260}); //HACK! Remove this please, as this interferes with global styling.
+    }
+  };
+
+KAT.sidebar.toggleAnnotationMode = function(){
+  KAT.sidebar.annotationMode = !KAT.sidebar.annotationMode;
+};
+
 /**
 * Set up and insert Annotation Toolkit sidemenu
 *
@@ -134,10 +139,13 @@ KAT.sidebar.init = function(){
 * @name genNewAnnotationForm
 * @memberof KAT.sidebar
 */
-KAT.sidebar.genNewAnnotationForm = function(env, selection, concept){
+KAT.sidebar.genNewAnnotationForm = function(env, callback, selection, concept){
   // TODO complete documentation comment above.
   // TODO: Work on a stored annotation, so values can be pre-filled.
 
+  if(!KAT.sidebar.extended){
+    KAT.sidebar.toggleSidebar();  
+  }
 
   // create a new element to add to the sidebar.
   // TODO: Have the .KATMenuItems in a variable from the init function.
@@ -189,7 +197,6 @@ KAT.sidebar.genNewAnnotationForm = function(env, selection, concept){
       newField = jQuery("&lt;select>").appendTo(newAnnotation);
 
       // Find all the allowed concepts
-      // @Sourabh: I updated env.store.filterByConcept for this to work properly.
       var allowedAnnotations = env.store.filterByConcept.apply(env.store, options);
 
       // for eacjh
@@ -240,10 +247,27 @@ KAT.sidebar.genNewAnnotationForm = function(env, selection, concept){
 
     // remove the entire form
     newAnnotation.remove();
-
+    if (KAT.sidebar.extended &amp;&amp; $(".KATMenuItems").children().length &lt; 1){
+      KAT.sidebar.toggleSidebar();
+    }
     // TODO: Have a callback here instead of hard-coding what happens.
-    var theannotation = env.store.addNew(selection, concept, valuesJSON);
+    var theannotation = callback(selection, concept, valuesJSON);
     theannotation.draw();
+  });
+
+    // Create a button
+  //TODO: Make this more general.
+  // Also do not use type='submit' here, as clicking that would reload page
+  // if you are in a &lt;form> tag, unless you cancel explititly
+  $("&lt;input type='button'>")
+  .val("Cancel")
+  .appendTo(newAnnotation)
+  .click(function(){
+    // remove the entire form
+    newAnnotation.remove();
+    if (KAT.sidebar.extended &amp;&amp; $(".KATMenuItems").children().length &lt; 1){
+      KAT.sidebar.toggleSidebar();
+    }
   });
 };
 
@@ -251,10 +275,17 @@ KAT.sidebar.genNewAnnotationForm = function(env, selection, concept){
 * Is the sidebar extended?
 *
 * @type {boolean}
-* @name KAT.sidebar.collapsibleStatus
+* @name KAT.sidebar.extended
 */
-KAT.sidebar.collapsibleStatus = false;
-</code></pre>
+KAT.sidebar.extended = false;
+
+/**
+* Is Annotation Mode active
+*
+* @type {boolean}
+* @name KAT.sidebar.annotationMode
+*/
+KAT.sidebar.annotationMode = false;</code></pre>
         </article>
     </section>
 
@@ -270,11 +301,7 @@ KAT.sidebar.collapsibleStatus = false;
 <br class="clear">
 
 <footer>
-<<<<<<< HEAD
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Thu Apr 30 2015 15:34:57 GMT-0400 (EDT)
-=======
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Wed Apr 29 2015 19:13:21 GMT+0200 (CEST)
->>>>>>> ba436cc69feec0359dcf63446ea73e77adf0926f
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Sun May 03 2015 15:53:55 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

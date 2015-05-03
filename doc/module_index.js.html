@@ -61,64 +61,24 @@ KAT.module = {
     var text_highlight  = "Highlight Annotation";
     var text_edit       = "Edit Annotation";
     var text_rdf        = "View RDF";
+    var annot_modeOn    = "Enable Annotation Mode";
+    var annot_modeOff   = "Disable Annotation Mode";
+    var storage_import  = "Import Annotations";
+    var storage_export  = "Export Annotations";
 
     //the menu to return
     var menu = {};
 
-    //add the text
-    menu[text_new] = false;
-    menu[text_remove] = {};
-    menu[text_highlight] = {};
-    menu[text_edit] = {};
-
-    //MENUITEM for new item
-    var selection;
-
-    try{
-      selection = this.gui.getSelection();
-    } catch(e){}
-
-    if(selection){
-      if(!(selection.start == selection.end &amp;&amp; selection.startOffset == selection.endOffset)){
-        menu[text_new] = {};
-
-        $.each(this.gui.collection.findConcepts(), function(index, concept){
-          menu[text_new][concept.getFullName()] = function(){
-            //load new Annotation form
-
-
-            var values = KAT.sidebar.genNewAnnotationForm(me,selection,concept);
-          };
-        });
-      }
-    }
-
-    //find all the annotations.
-    var annots = this.store.findfromElement(target);
-
-    if(annots.length !== 0){
-      //iterate over all the annotations.
-      $.each(annots, function(i, annotation){
-        //add a menu item for each of the actions.
-        menu[text_remove][annotation.uuid] = function(){
-          annotation.delete();
+    // Case A: Annotation Mode is disabled
+    if (!KAT.sidebar.annotationMode){
+      
+      //Menu item A.1 : Turn on annotation mode
+      menu[annot_modeOn] = function(){
+          KAT.sidebar.toggleAnnotationMode();
         };
-        menu[text_highlight][annotation.uuid] = function(){
-          annotation.flash();
-        };
-        menu[text_edit][annotation.uuid] = function(){
-          annotation.edit();
-        };
-      });
 
-    } else {
-      menu[text_remove] = false;
-      menu[text_highlight] = false;
-      menu[text_edit] = false;
-    }
-
-    menu.Storage = {
-      "Import": function(){
+      //Menu item A.2 : Import Annotations
+      menu[storage_import] = function(){
         var json = prompt("Paste the annotations below: ");
 
         if(json){
@@ -131,15 +91,92 @@ KAT.module = {
             //and draw it.
             json[i].draw();
           }
-
         }
-      },
-      "Export": function(){
+      };
+
+      //Menu item A.3 : Export Annotations
+      menu[storage_export] = function(){
         var rdfDoc = me.store.toRDF();
         console.log(rdfDoc);
         prompt("Press CTRL+C to export annotations: ", rdfDoc);
+      };
+    }
+
+    // Case B: Annotation Mode is enabled
+    else {
+      var selection;
+      try{
+        selection = this.gui.getSelection();
+      } catch(e){}
+
+      // Case B1: Annotation Mode is enabled &amp; User has made a selection
+      if(selection){
+        if(!(selection.start == selection.end &amp;&amp; selection.startOffset == selection.endOffset)){
+
+          //Menu item B1.n : Add annotation with nth concept found in Kannspec
+          $.each(this.gui.collection.findConcepts(), function(index, concept){
+            menu[concept.getFullName()] = function(){
+              //load new Annotation form
+              var values = KAT.sidebar.genNewAnnotationForm(me,me.store.addNew.bind(me.store),selection,concept);
+            };
+          });
+        }
+      } else {
+              // Case B2: Annotation Mode is enabled &amp; User has not made a selection
+        
+        //Menu item B2.1 : Turn off annotation mode
+        menu[annot_modeOff] = function(){
+            KAT.sidebar.toggleAnnotationMode();
+        };
+
+        //Menu item B2.2 : Import Annotations
+        menu[storage_import] = function(){
+          var json = prompt("Paste the annotations below: ");
+
+          if(json){
+            //parse the json
+            json = JSON.parse(json);
+
+            for(var i=0;i&lt;json.length;i++){
+              //add the new annotation
+              json[i] = me.store.addFromJSON(json[i]);
+              //and draw it.
+              json[i].draw();
+            }
+          }
+        };
+
+        //Menu item B2.2 : Export Annotations
+        menu[storage_export] = function(){
+          var rdfDoc = me.store.toRDF();
+          console.log(rdfDoc);
+          prompt("Press CTRL+C to export annotations: ", rdfDoc);
+        };
+
+        //find all the annotations.
+        var annots = this.store.findfromElement(target);
+        if(annots.length !== 0){
+          menu = {};
+          menu[text_remove] = {};
+          menu[text_highlight] = {};
+          menu[text_edit] = {};
+          console.log("found annotation");
+          //iterate over all the annotations.
+          $.each(annots, function(i, annotation){
+            //add a menu item for each of the actions.
+            menu[text_remove][annotation.uuid] = function(){
+              annotation.delete();
+            };
+            menu[text_highlight][annotation.uuid] = function(){
+              annotation.flash();
+            };
+            menu[text_edit][annotation.uuid] = function(){
+              annotation.edit();
+            };
+          });
+        }
       }
-    };
+    }
 
     //return the menu.
     return menu;
@@ -163,11 +200,7 @@ JOBAD.modules.register(KAT.module); //register the module.
 <br class="clear">
 
 <footer>
-<<<<<<< HEAD
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Thu Apr 30 2015 15:34:57 GMT-0400 (EDT)
-=======
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Wed Apr 29 2015 19:13:21 GMT+0200 (CEST)
->>>>>>> ba436cc69feec0359dcf63446ea73e77adf0926f
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Sun May 03 2015 15:53:55 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
