@@ -79,6 +79,12 @@ KAT.gui.getXPath = function(from, to){
   var element = $(to).get(0);
   var base = $(from).get(0);
 
+  // check if have an id
+  // return the id expression
+  if(element.hasAttribute("id")){
+    return "//*[@id='"+element.id+"']";
+  }
+
   /*
    adapted from the Firebug source code
    which is
@@ -124,9 +130,18 @@ KAT.gui.getXPath = function(from, to){
 * @memberof KAT.gui
 */
 KAT.gui.resolveXPath = function(from, path){
+
+  //try and match for id
+  var match = path.match(/^\/\/\*\[@id='([^']+)'\]$/);
+
+  //if we have a match, return that one.
+  if(match){
+    return document.getElementById(match[1]);
+  }
+
   var element = $(from).get(0);
   var parts = path.split("/").splice(1);
-  
+
   var part, tagName, elementIndex, _element;
 
 
@@ -175,30 +190,47 @@ KAT.gui.prototype.getRange = function(selection){
   //get the container
   var container = $(KAT.gui.resolveXPath(this.element, selection.container));
 
-  //and the elements inside
-  var containedElements = container.find("*").andSelf();
 
-  //find the start index
-  var startIndex = containedElements.index(
-    KAT.gui.resolveXPath(this.element, selection.start)
-  );
+  //create a range object
+  var range = document.createRange();
+  range.setStart(KAT.gui.resolveXPath(this.element, selection.start), selection.startOffset);
+  range.setEnd(KAT.gui.resolveXPath(this.element, selection.end), selection.endOffset);
 
-  //find the end element
-  var endElement = $(KAT.gui.resolveXPath(this.element, selection.end));
+  //and filter all the elements that are in the range.
+  return container.find("*").andSelf().filter(function(){
+    return KAT.gui.nodeInRange(range, this);
+  });
+};
 
-  //find the end index
-  var endIndex = containedElements.index(endElement);
+/**
+* Checks if a node is contained in the given range.
+*
+* @param {range} range - Range to check.
+* @param {node} node - Node to check.
+*
+* @returns {boolean}
+* @function
+* @static
+* @name nodeInRange
+* @memberof KAT.gui
+*/
+KAT.gui.nodeInRange = function(range, node){
+  //adapted from http://stackoverflow.com/a/1483487
 
-  //restrict to elements in this range.
-  containedElements = containedElements.slice(startIndex, endIndex);
+  var nodeRange;
+  if (range.intersectsNode) {
+      return range.intersectsNode(node);
+  } else {
+      nodeRange = node.ownerDocument.createRange();
+      try {
+          nodeRange.selectNode(node);
+      } catch (e) {
+          nodeRange.selectNodeContents(node);
+      }
 
-  //and remove all elements who do not have all children
-  return containedElements.filter(function(index, element){
-    var children = $(element).children();
-
-    //do we contain all children?
-    return children.length == containedElements.filter(children).length;
-  }).add(endElement.find("*").andSelf());
+      return range.compareBoundaryPoints(Range.END_TO_START, nodeRange) == -1 &&
+          range.compareBoundaryPoints(Range.START_TO_END, nodeRange) == 1;
+  }
 };
 
 /**

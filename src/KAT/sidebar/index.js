@@ -41,7 +41,7 @@ KAT.sidebar.init = function(){
   }).prependTo("body");
 
   // create button to toggle collapse and resurection of sidemenu and define properties
-  
+
   var collapsibleToggle = $("<button>")
   .text("«")
   .addClass("collapseToggle")
@@ -73,6 +73,8 @@ KAT.sidebar.init = function(){
 
 KAT.sidebar.toggleSidebar = function(){
     var hideWidth = -230; //width that will be hidden
+    var animateLength = 100; //duration of animation
+
     if (KAT.sidebar.extended){
 
       //we are now hidden
@@ -80,7 +82,7 @@ KAT.sidebar.toggleSidebar = function(){
 
       jQuery(".collapseToggle")
       .text("«") // Change text of button.
-      .parent().animate({right: hideWidth}, 2000 );
+      .parent().animate({right: hideWidth}, animateLength );
 
       jQuery("body").css({'width': jQuery(window).width()-50}); //HACK! Remove this please, as this interferes with global styling.
     } else {
@@ -90,7 +92,7 @@ KAT.sidebar.toggleSidebar = function(){
 
       jQuery(".collapseToggle")
       .text("»")  // Change text of button.
-      .parent().animate({right: "0"}, 2000 );
+      .parent().animate({right: "0"}, animateLength );
 
       jQuery("body").css({'width': jQuery(window).width()-260}); //HACK! Remove this please, as this interferes with global styling.
     }
@@ -116,7 +118,7 @@ KAT.sidebar.genNewAnnotationForm = function(env, callback, selection, concept){
   // TODO: Work on a stored annotation, so values can be pre-filled.
 
   if(!KAT.sidebar.extended){
-    KAT.sidebar.toggleSidebar();  
+    KAT.sidebar.toggleSidebar();
   }
 
   // create a new element to add to the sidebar.

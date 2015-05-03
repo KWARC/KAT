@@ -1318,6 +1318,12 @@ KAT.gui.getXPath = function(from, to){
   var element = $(to).get(0);
   var base = $(from).get(0);
 
+  // check if have an id
+  // return the id expression
+  if(element.hasAttribute("id")){
+    return "//*[@id='"+element.id+"']";
+  }
+
   /*
    adapted from the Firebug source code
    which is
@@ -1363,9 +1369,18 @@ KAT.gui.getXPath = function(from, to){
 * @memberof KAT.gui
 */
 KAT.gui.resolveXPath = function(from, path){
+
+  //try and match for id
+  var match = path.match(/^\/\/\*\[@id='([^']+)'\]$/);
+
+  //if we have a match, return that one.
+  if(match){
+    return document.getElementById(match[1]);
+  }
+
   var element = $(from).get(0);
   var parts = path.split("/").splice(1);
-  
+
   var part, tagName, elementIndex, _element;
 
 
@@ -1414,30 +1429,47 @@ KAT.gui.prototype.getRange = function(selection){
   //get the container
   var container = $(KAT.gui.resolveXPath(this.element, selection.container));
 
-  //and the elements inside
-  var containedElements = container.find("*").andSelf();
 
-  //find the start index
-  var startIndex = containedElements.index(
-    KAT.gui.resolveXPath(this.element, selection.start)
-  );
+  //create a range object
+  var range = document.createRange();
+  range.setStart(KAT.gui.resolveXPath(this.element, selection.start), selection.startOffset);
+  range.setEnd(KAT.gui.resolveXPath(this.element, selection.end), selection.endOffset);
 
-  //find the end element
-  var endElement = $(KAT.gui.resolveXPath(this.element, selection.end));
+  //and filter all the elements that are in the range.
+  return container.find("*").andSelf().filter(function(){
+    return KAT.gui.nodeInRange(range, this);
+  });
+};
 
-  //find the end index
-  var endIndex = containedElements.index(endElement);
+/**
+* Checks if a node is contained in the given range.
+*
+* @param {range} range - Range to check.
+* @param {node} node - Node to check.
+*
+* @returns {boolean}
+* @function
+* @static
+* @name nodeInRange
+* @memberof KAT.gui
+*/
+KAT.gui.nodeInRange = function(range, node){
+  //adapted from http://stackoverflow.com/a/1483487
 
-  //restrict to elements in this range.
-  containedElements = containedElements.slice(startIndex, endIndex);
+  var nodeRange;
+  if (range.intersectsNode) {
+      return range.intersectsNode(node);
+  } else {
+      nodeRange = node.ownerDocument.createRange();
+      try {
+          nodeRange.selectNode(node);
+      } catch (e) {
+          nodeRange.selectNodeContents(node);
+      }
 
-  //and remove all elements who do not have all children
-  return containedElements.filter(function(index, element){
-    var children = $(element).children();
-
-    //do we contain all children?
-    return children.length == containedElements.filter(children).length;
-  }).add(endElement.find("*").andSelf());
+      return range.compareBoundaryPoints(Range.END_TO_START, nodeRange) == -1 &&
+          range.compareBoundaryPoints(Range.START_TO_END, nodeRange) == 1;
+  }
 };
 
 /**
@@ -1695,7 +1727,7 @@ KAT.sidebar.init = function(){
   }).prependTo("body");
 
   // create button to toggle collapse and resurection of sidemenu and define properties
-  
+
   var collapsibleToggle = $("<button>")
   .text("«")
   .addClass("collapseToggle")
@@ -1727,6 +1759,8 @@ KAT.sidebar.init = function(){
 
 KAT.sidebar.toggleSidebar = function(){
     var hideWidth = -230; //width that will be hidden
+    var animateLength = 100; //duration of animation
+
     if (KAT.sidebar.extended){
 
       //we are now hidden
@@ -1734,7 +1768,7 @@ KAT.sidebar.toggleSidebar = function(){
 
       jQuery(".collapseToggle")
       .text("«") // Change text of button.
-      .parent().animate({right: hideWidth}, 2000 );
+      .parent().animate({right: hideWidth}, animateLength );
 
       jQuery("body").css({'width': jQuery(window).width()-50}); //HACK! Remove this please, as this interferes with global styling.
     } else {
@@ -1744,7 +1778,7 @@ KAT.sidebar.toggleSidebar = function(){
 
       jQuery(".collapseToggle")
       .text("»")  // Change text of button.
-      .parent().animate({right: "0"}, 2000 );
+      .parent().animate({right: "0"}, animateLength );
 
       jQuery("body").css({'width': jQuery(window).width()-260}); //HACK! Remove this please, as this interferes with global styling.
     }
@@ -1770,7 +1804,7 @@ KAT.sidebar.genNewAnnotationForm = function(env, callback, selection, concept){
   // TODO: Work on a stored annotation, so values can be pre-filled.
 
   if(!KAT.sidebar.extended){
-    KAT.sidebar.toggleSidebar();  
+    KAT.sidebar.toggleSidebar();
   }
 
   // create a new element to add to the sidebar.
@@ -1912,6 +1946,7 @@ KAT.sidebar.extended = false;
 * @name KAT.sidebar.annotationMode
 */
 KAT.sidebar.annotationMode = false;
+
 // Source: src/KAT/storage/index.js
 /**
 * Namespace for storage used by KAT.
