@@ -13,7 +13,7 @@ div.scrollingDiv{
 }
 
 .collapsible {
-    background: #EBEBEB;
+    background-color: rgba(235,235,235,0.75);
     border: 1px solid #CCCCCC;
     padding: 2px;
     width: 250px;
@@ -21,6 +21,14 @@ div.scrollingDiv{
     color: #333333;
     z-index: 2;
     overflow: scroll;
+    text-align: center;
+}
+
+.KATTitle{
+  text-align: center;
+  margin: 5px;
+  margin-top: 10px;
+  font-size: 
 }
 
 .collapseToggleTag{
@@ -32,7 +40,7 @@ div.scrollingDiv{
   margin-left: -75px;
 }
 
-.collapsible button {
+.collapseToggle {
     float: left;
     border: 1px solid #999999;
     background: #999999;
@@ -40,7 +48,7 @@ div.scrollingDiv{
     margin-left: 2px;
     z-index: 3;
 }
-.collapsible button:hover {
+.collapseToggle:hover {
     background: #EEBB00;
     color: #000000;
 }

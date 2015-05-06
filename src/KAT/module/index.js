@@ -34,7 +34,7 @@ KAT.module = {
     var text_edit       = "Edit Annotation";
     var text_rdf        = "View RDF";
     var annot_modeOn    = "Enable Annotation Mode";
-    var annot_modeOff   = "Disable Annotation Mode";
+    var annot_modeOff   = "Enable Reading Mode";
     var storage_import  = "Import Annotations";
     var storage_export  = "Export Annotations";
 
@@ -69,7 +69,6 @@ KAT.module = {
       //Menu item A.3 : Export Annotations
       menu[storage_export] = function(){
         var rdfDoc = me.store.toRDF();
-        console.log(rdfDoc);
         prompt("Press CTRL+C to export annotations: ", rdfDoc);
       };
     }
@@ -115,7 +114,6 @@ KAT.module = {
         //Menu item B1.3 : Export Annotations
         menu[storage_export] = function(){
           var rdfDoc = me.store.toRDF();
-          console.log(rdfDoc);
           prompt("Press CTRL+C to export annotations: ", rdfDoc);
         };
 
@@ -148,7 +146,7 @@ KAT.module = {
 
             //Menu item B2.3 : Edit annotation
             menu[text_edit][annotation.uuid] = function(){
-              annotation.edit();
+              KAT.sidebar.generateAnnotationForm(me,annotation.edit,annotation,annotation.selection,annotation.concept);
             };
           });
         }
@@ -162,7 +160,7 @@ KAT.module = {
           $.each(this.gui.collection.findConcepts(), function(index, concept){
             menu[concept.getFullName()] = function(){
               //load new Annotation form
-              var values = KAT.sidebar.genNewAnnotationForm(me,me.store.addNew.bind(me.store),selection,concept);
+              var values = KAT.sidebar.generateAnnotationForm(me,me.store.addNew.bind(me.store),0,selection,concept);
             };
           });
         }

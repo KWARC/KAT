@@ -145,9 +145,11 @@ KAT.storage.Annotation.prototype.flash = function(){
 * @name edit
 * @memberof KAT.storage.Annotation
 */
-KAT.storage.Annotation.prototype.edit = function(){
-  //TODO: show an edit form.
-  alert("Unimplemented!");
+KAT.storage.Annotation.prototype.edit = function(selection, concept, valuesJSON,annotation){
+  annotation.values = valuesJSON;
+  annotation.undraw();
+  annotation.draw();
+  annotation.flash();
 };
 
 /**
