@@ -24,10 +24,10 @@ KAT.sidebar.init = function(){
   // and if so, just return.
 
   var winHeight = jQuery(window).height();
-  
+
   var mode;
   if (KAT.sidebar.annotationMode){ mode = "Reading"; } else { mode = "Annotation"; }
-  
+
   //create collapsible sidemenu & define properties
   var collapsibleMenu = jQuery('<div>')
   .addClass("collapsible")
@@ -55,6 +55,7 @@ KAT.sidebar.init = function(){
         .addClass("helpButton")
         .click(function(){
           KAT.sidebar.toggleAnnotationMode();
+
         })
     )
     .append(
@@ -147,10 +148,10 @@ KAT.sidebar.toggleAnnotationMode = function(){
   KAT.sidebar.annotationMode = !KAT.sidebar.annotationMode;
 
   var mode;
-  if (KAT.sidebar.annotationMode){ 
+  if (KAT.sidebar.annotationMode){
     mode = "Reading";
     KAT.sidebar.showSidebar();
-  } else { 
+  } else {
     mode = "Annotation";
   }
   $(".annotationToggle").text("Enable " +mode+ " Mode");
@@ -200,7 +201,6 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     // grab the value of the field and add it to the sidebar
     var value = current.value;
     newAnnotation.append(jQuery("<span>").html("<br>"+value+": "));
-    
     //TODO: Implement repeat of fields.
 
     var prevValue;
@@ -212,7 +212,8 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       jQuery("<input type='text'>")
       .addClass("tfield")
       .appendTo(newAnnotation);
-      if (annotation!==0){
+
+      if (annotation !== 0){
         prevValue = values[value];
         newField.val(prevValue[0]);
       }
@@ -225,7 +226,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       newField = jQuery("<select>")
       .addClass("tfield")
       .appendTo(newAnnotation);
-      if (annotation!==0){
+      if (annotation !== 0){
         prevValue = values[value];
         jQuery("<option>")
         .text(prevValue[0].value)
@@ -275,7 +276,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       }
     }
 
-    
+
 
     return newField;
   });
