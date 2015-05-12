@@ -1728,7 +1728,6 @@ KAT.sidebar.init = function(){
         .addClass("annotationToggle")
         .click(function(){
           KAT.sidebar.toggleAnnotationMode();
-<<<<<<< HEAD
         })
     )
     .append(
@@ -1745,8 +1744,7 @@ KAT.sidebar.init = function(){
         .addClass("helpButton")
         .click(function(){
           KAT.sidebar.toggleAnnotationMode();
-=======
->>>>>>> a8ddc946f45a4f184836e8a6b60b088b264f6479
+
         })
     )
     .append(
@@ -1891,13 +1889,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
     // grab the value of the field and add it to the sidebar
     var value = current.value;
-<<<<<<< HEAD
     newAnnotation.append(jQuery("<span>").html("<br>"+value+": "));
-    
-=======
-    newAnnotation.append(jQuery("<span>").text(value));
-
->>>>>>> a8ddc946f45a4f184836e8a6b60b088b264f6479
     //TODO: Implement repeat of fields.
 
     var prevValue;
@@ -1909,11 +1901,8 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       jQuery("<input type='text'>")
       .addClass("tfield")
       .appendTo(newAnnotation);
-<<<<<<< HEAD
-      if (annotation!==0){
-=======
+
       if (annotation !== 0){
->>>>>>> a8ddc946f45a4f184836e8a6b60b088b264f6479
         prevValue = values[value];
         newField.val(prevValue[0]);
       }
@@ -1923,15 +1912,10 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     // TODO: Possibly use a styled dropbown from Bootstrap
     if(current.type === KAT.model.Field.types.select){
       // Create a select element.
-<<<<<<< HEAD
       newField = jQuery("<select>")
       .addClass("tfield")
       .appendTo(newAnnotation);
-      if (annotation!==0){
-=======
-      newField = jQuery("<select>").appendTo(newAnnotation);
       if (annotation !== 0){
->>>>>>> a8ddc946f45a4f184836e8a6b60b088b264f6479
         prevValue = values[value];
         jQuery("<option>")
         .text(prevValue[0].value)
