@@ -38,7 +38,23 @@ KAT.sidebar.init = function(){
         .text("Enable " +mode+ " Mode")
         .addClass("annotationToggle")
         .click(function(){
-          KAT.sidebar.toggleAnnotationMode()
+          KAT.sidebar.toggleAnnotationMode();
+        })
+    )
+    .append(
+      $("<button>")
+        .text("Import Annotations")
+        .addClass("helpButton")
+        .click(function(){
+          KAT.sidebar.toggleAnnotationMode();
+        })
+    )
+    .append(
+      $("<button>")
+        .text("Export Annotations")
+        .addClass("helpButton")
+        .click(function(){
+          KAT.sidebar.toggleAnnotationMode();
         })
     )
     .append(
@@ -137,7 +153,7 @@ KAT.sidebar.toggleAnnotationMode = function(){
   } else { 
     mode = "Annotation";
   }
-  $(".annotationToggle").text("Enable " +mode+ " Mode")
+  $(".annotationToggle").text("Enable " +mode+ " Mode");
 };
 
 /**
@@ -161,7 +177,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
   var values;
   var task;
-  if (annotation == 0){
+  if (annotation === 0){
     task = "Enter";
   }else{
     task = "Edit";
@@ -183,7 +199,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
     // grab the value of the field and add it to the sidebar
     var value = current.value;
-    newAnnotation.append(jQuery("<span>").text(value));
+    newAnnotation.append(jQuery("<span>").html("<br>"+value+": "));
     
     //TODO: Implement repeat of fields.
 
@@ -194,8 +210,9 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     if(current.type === KAT.model.Field.types.text){
       newField =
       jQuery("<input type='text'>")
+      .addClass("tfield")
       .appendTo(newAnnotation);
-      if (annotation!=0){
+      if (annotation!==0){
         prevValue = values[value];
         newField.val(prevValue[0]);
       }
@@ -205,8 +222,10 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     // TODO: Possibly use a styled dropbown from Bootstrap
     if(current.type === KAT.model.Field.types.select){
       // Create a select element.
-      newField = jQuery("<select>").appendTo(newAnnotation);
-      if (annotation!=0){
+      newField = jQuery("<select>")
+      .addClass("tfield")
+      .appendTo(newAnnotation);
+      if (annotation!==0){
         prevValue = values[value];
         jQuery("<option>")
         .text(prevValue[0].value)
@@ -235,12 +254,12 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     if(current.type === KAT.model.Field.types.reference){
 
       // create a new field.
-      newField = jQuery("<select>").appendTo(newAnnotation);
+      newField = jQuery("<select>").addClass("tfield").appendTo(newAnnotation);
 
       // Find all the allowed concepts
       var allowedAnnotations = env.store.filterByConcept.apply(env.store, options);
 
-      // for eacjh
+      // for each
       jQuery.each(allowedAnnotations, function(index, annot){
 
         $("<option>")
@@ -252,7 +271,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
       if(values){
         prevValue = values[value];
-        newField.val(prevValue[0].uuid)
+        newField.val(prevValue[0].uuid);
       }
     }
 

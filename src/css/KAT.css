@@ -12,6 +12,18 @@ div.scrollingDiv{
   float:right;
 }
 
+.annotationToggle{
+  width:200px;
+}
+
+.helpButton{
+  width:200px;
+}
+
+.tfield{
+  width: 120px;
+}
+
 .collapsible {
     background-color: rgba(235,235,235,0.75);
     border: 1px solid #CCCCCC;
@@ -60,9 +72,10 @@ div.scrollingDiv{
 }
 
 .collapsible ul li {
+  background-color: rgb(235,235,235);
   word-wrap: break-word;
   padding: 10px;
-  padding-bottom: 80px;
+  overflow: auto;
   border : 1px solid black;
   font: 14px Arial, Helvetica, sans-serif;
 }
