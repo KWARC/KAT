@@ -1413,32 +1413,35 @@ KAT.gui.resolveXPath = function(from, path){
   return element;
 };
 
-/**
-* gets the list of contihuous elements in given selection.
-*
-* @param {KAT.gui.selection} selection - The selection to use.
-*
-* @returns {jQuery} list of elements.
-* @function
-* @instance
-* @name getSelection
-* @memberof KAT.gui
-*/
 KAT.gui.prototype.getRange = function(selection){
 
   //get the container
   var container = $(KAT.gui.resolveXPath(this.element, selection.container));
 
+  //and the elements inside
+  var containedElements = container.find("*").andSelf();
 
-  //create a range object
-  var range = document.createRange();
-  range.setStart(KAT.gui.resolveXPath(this.element, selection.start), selection.startOffset);
-  range.setEnd(KAT.gui.resolveXPath(this.element, selection.end), selection.endOffset);
+  //find the start index
+  var startIndex = containedElements.index(
+    KAT.gui.resolveXPath(this.element, selection.start)
+  );
 
-  //and filter all the elements that are in the range.
-  return container.find("*").andSelf().filter(function(){
-    return KAT.gui.nodeInRange(range, this);
-  });
+  //find the end element
+  var endElement = $(KAT.gui.resolveXPath(this.element, selection.end));
+
+  //find the end index
+  var endIndex = containedElements.index(endElement);
+
+  //restrict to elements in this range.
+  containedElements = containedElements.slice(startIndex, endIndex);
+
+  //and remove all elements who do not have all children
+  return containedElements.filter(function(index, element){
+    var children = $(element).children();
+
+    //do we contain all children?
+    return children.length == containedElements.filter(children).length;
+  }).add(endElement.find("*").andSelf());
 };
 
 /**
@@ -1710,10 +1713,10 @@ KAT.sidebar.init = function(){
   // and if so, just return.
 
   var winHeight = jQuery(window).height();
-  
+
   var mode;
   if (KAT.sidebar.annotationMode){ mode = "Reading"; } else { mode = "Annotation"; }
-  
+
   //create collapsible sidemenu & define properties
   var collapsibleMenu = jQuery('<div>')
   .addClass("collapsible")
@@ -1724,7 +1727,7 @@ KAT.sidebar.init = function(){
         .text("Enable " +mode+ " Mode")
         .addClass("annotationToggle")
         .click(function(){
-          KAT.sidebar.toggleAnnotationMode()
+          KAT.sidebar.toggleAnnotationMode();
         })
     )
     .append(
@@ -1817,13 +1820,13 @@ KAT.sidebar.toggleAnnotationMode = function(){
   KAT.sidebar.annotationMode = !KAT.sidebar.annotationMode;
 
   var mode;
-  if (KAT.sidebar.annotationMode){ 
+  if (KAT.sidebar.annotationMode){
     mode = "Reading";
     KAT.sidebar.showSidebar();
-  } else { 
+  } else {
     mode = "Annotation";
   }
-  $(".annotationToggle").text("Enable " +mode+ " Mode")
+  $(".annotationToggle").text("Enable " +mode+ " Mode");
 };
 
 /**
@@ -1847,7 +1850,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
   var values;
   var task;
-  if (annotation == 0){
+  if (annotation === 0){
     task = "Enter";
   }else{
     task = "Edit";
@@ -1870,7 +1873,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     // grab the value of the field and add it to the sidebar
     var value = current.value;
     newAnnotation.append(jQuery("<span>").text(value));
-    
+
     //TODO: Implement repeat of fields.
 
     var prevValue;
@@ -1881,7 +1884,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       newField =
       jQuery("<input type='text'>")
       .appendTo(newAnnotation);
-      if (annotation!=0){
+      if (annotation !== 0){
         prevValue = values[value];
         newField.val(prevValue[0]);
       }
@@ -1892,7 +1895,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     if(current.type === KAT.model.Field.types.select){
       // Create a select element.
       newField = jQuery("<select>").appendTo(newAnnotation);
-      if (annotation!=0){
+      if (annotation !== 0){
         prevValue = values[value];
         jQuery("<option>")
         .text(prevValue[0].value)
@@ -1938,11 +1941,11 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
       if(values){
         prevValue = values[value];
-        newField.val(prevValue[0].uuid)
+        newField.val(prevValue[0].uuid);
       }
     }
 
-    
+
 
     return newField;
   });

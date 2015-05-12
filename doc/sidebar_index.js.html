@@ -51,20 +51,42 @@ KAT.sidebar.init = function(){
   // TODO: Check HERE if the sidebar was already intialised
   // and if so, just return.
 
-
-  //TODO: (@Sourabh) Try and move global state into the KAT.sidebar namespace directly.
-  var hideWidth = -230; //width that will be hidden
   var winHeight = jQuery(window).height();
+
+  var mode;
+  if (KAT.sidebar.annotationMode){ mode = "Reading"; } else { mode = "Annotation"; }
 
   //create collapsible sidemenu &amp; define properties
   var collapsibleMenu = jQuery('&lt;div>')
   .addClass("collapsible")
+  .append($("&lt;div>").addClass("KATTitle").html("&lt;h3>KWARC Annotation Tool&lt;/h3>"))
+  .append($("&lt;div>").addClass("KATSidebarButtons")
+    .append(
+      $("&lt;button>")
+        .text("Enable " +mode+ " Mode")
+        .addClass("annotationToggle")
+        .click(function(){
+          KAT.sidebar.toggleAnnotationMode();
+        })
+    )
+    .append(
+      $("&lt;button>")
+        .append(
+          $("&lt;span>").addClass("glyphicon glyphicon-info-sign")
+          .text("Help")
+        )
+        .addClass("helpButton")
+        .click(function(){
+          alert("Unimplemented!");
+        })
+    )
+  )
   .append(
     $("&lt;ul>").addClass("KATMenuItems")
   )
   .css({
     'position':'fixed',
-    'right': hideWidth,
+    'right': KAT.sidebar.hideWidth,
     'height': winHeight-10
   }).prependTo("body");
 
@@ -76,8 +98,11 @@ KAT.sidebar.init = function(){
   .css({'height': winHeight-10})
   .click(KAT.sidebar.toggleSidebar).prependTo(collapsibleMenu); //adapted from init function below
 
+  //Makes sidebar is open on load
+  KAT.sidebar.showSidebar();
+
   //HACK! Remove this please, as this interferes with global styling.
-  jQuery("body").css({'width': jQuery(window).width()-50});
+  //jQuery("body").css({'width': jQuery(window).width()-50});
 
   //define changes to sidemenu when page is resized
   // this seems hacky, try to make it all relative with global CSS
@@ -86,7 +111,7 @@ KAT.sidebar.init = function(){
 
     collapsibleMenu.css({
       'position':'fixed',
-      'right': hideWidth,
+      'right': KAT.sidebar.hideWidth,
       'height': winHeight-10
     });
 
@@ -95,45 +120,52 @@ KAT.sidebar.init = function(){
     });
 
     //HACK! Remove this please, as this interferes with global styling.
-    jQuery("body").css({'width': jQuery(window).width()-50});
+    //jQuery("body").css({'width': jQuery(window).width()-50});
   });
 };
 
-KAT.sidebar.showSidebar = function(animateLength){
+KAT.sidebar.showSidebar = function(){
     KAT.sidebar.extended = true;
 
     jQuery(".collapseToggle")
     .text("»")  // Change text of button.
-    .parent().animate({right: "0"}, animateLength );
+    .parent().animate({right: "0"}, KAT.sidebar.animateLength );
 
-    jQuery("body").css({'width': jQuery(window).width()-260}); //HACK! Remove this please, as this interferes with global styling.
+    //jQuery("body").css({'width': jQuery(window).width()-260}); //HACK! Remove this please, as this interferes with global styling.
 };
 
-KAT.sidebar.hideSidebar = function(hideWidth,animateLength){
+KAT.sidebar.hideSidebar = function(){
     KAT.sidebar.extended = false;
 
     jQuery(".collapseToggle")
     .text("«") // Change text of button.
-    .parent().animate({right: hideWidth}, animateLength );
+    .parent().animate({right: KAT.sidebar.hideWidth}, KAT.sidebar.animateLength );
 
-    jQuery("body").css({'width': jQuery(window).width()-50}); //HACK! Remove this please, as this interferes with global styling.
+    //jQuery("body").css({'width': jQuery(window).width()-50}); //HACK! Remove this please, as this interferes with global styling.
 };
 
 
 KAT.sidebar.toggleSidebar = function(){
-    var hideWidth = -230; //width that will be hidden
-    var animateLength = 100; //duration of animation
     if (KAT.sidebar.extended){
       //we are now hidden
-      KAT.sidebar.hideSidebar(hideWidth,animateLength);
+      KAT.sidebar.hideSidebar();
     } else {
       //we are now visible
-      KAT.sidebar.showSidebar(animateLength);
+      KAT.sidebar.showSidebar();
     }
   };
 
 KAT.sidebar.toggleAnnotationMode = function(){
   KAT.sidebar.annotationMode = !KAT.sidebar.annotationMode;
+
+  var mode;
+  if (KAT.sidebar.annotationMode){
+    mode = "Reading";
+    KAT.sidebar.showSidebar();
+  } else {
+    mode = "Annotation";
+  }
+  $(".annotationToggle").text("Enable " +mode+ " Mode");
 };
 
 /**
@@ -147,7 +179,7 @@ KAT.sidebar.toggleAnnotationMode = function(){
 * @name genNewAnnotationForm
 * @memberof KAT.sidebar
 */
-KAT.sidebar.generateAnnotationForm = function(env, callback, values, selection, concept){
+KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selection, concept){
   // TODO complete documentation comment above.
   // TODO: Work on a stored annotation, so values can be pre-filled.
 
@@ -155,15 +187,20 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, values, selection, 
     KAT.sidebar.toggleSidebar();
   }
 
+  var values;
   var task;
-  if (values == []){task = "Enter";}else{task = "Edit";}
+  if (annotation === 0){
+    task = "Enter";
+  }else{
+    task = "Edit";
+    values = annotation.values;
+  }
 
   // create a new element to add to the sidebar.
   // TODO: Have the .KATMenuItems in a variable from the init function.
   var newAnnotation = $("&lt;li>").addClass("currentForm").append(
     "&lt;b> "+task+" Annotation Details&lt;/b>&lt;br>"
   ).appendTo(".KATMenuItems");
-
 
   var inputFields = jQuery.map(concept.fields, function(current){
     // a new input element we will create
@@ -178,12 +215,18 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, values, selection, 
 
     //TODO: Implement repeat of fields.
 
+    var prevValue;
+
     // for text fields, we just have a text field.
     // TODO: Implement validation of text fields.
     if(current.type === KAT.model.Field.types.text){
       newField =
       jQuery("&lt;input type='text'>")
       .appendTo(newAnnotation);
+      if (annotation !== 0){
+        prevValue = values[value];
+        newField.val(prevValue[0]);
+      }
     }
 
     // for select fields, create a dropdown
@@ -191,14 +234,29 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, values, selection, 
     if(current.type === KAT.model.Field.types.select){
       // Create a select element.
       newField = jQuery("&lt;select>").appendTo(newAnnotation);
-
-      // and add options to it.
-      $.each(options, function(j, opt){
+      if (annotation !== 0){
+        prevValue = values[value];
         jQuery("&lt;option>")
-        .text(opt.value)
-        .val(j)
+        .text(prevValue[0].value)
+        .val(prevValue[0])
         .appendTo(newField);
+
+        $.each(options, function(j, opt){
+          if (opt.value != prevValue[0].value){
+            jQuery("&lt;option>")
+            .text(opt.value)
+            .val(j)
+            .appendTo(newField);
+          }
       });
+      } else {
+        $.each(options, function(j, opt){
+          jQuery("&lt;option>")
+            .text(opt.value)
+            .val(j)
+            .appendTo(newField);
+        });
+      }
     }
 
     // for a reference list possible annotations.
@@ -219,7 +277,14 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, values, selection, 
         .appendTo(newField);
 
       });
+
+      if(values){
+        prevValue = values[value];
+        newField.val(prevValue[0].uuid);
+      }
     }
+
+
 
     return newField;
   });
@@ -258,11 +323,9 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, values, selection, 
 
     // remove the entire form
     newAnnotation.remove();
-    if (KAT.sidebar.extended &amp;&amp; $(".KATMenuItems").children().length &lt; 1){
-      KAT.sidebar.toggleSidebar();
-    }
+
     // callback
-    var theannotation = callback(selection, concept, valuesJSON);
+    var theannotation = callback(selection, concept, valuesJSON, annotation);
     theannotation.draw();
   });
 
@@ -276,9 +339,6 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, values, selection, 
   .click(function(){
     // remove the entire form
     newAnnotation.remove();
-    if (KAT.sidebar.extended &amp;&amp; $(".KATMenuItems").children().length &lt; 1){
-      KAT.sidebar.toggleSidebar();
-    }
   });
 };
 
@@ -297,6 +357,9 @@ KAT.sidebar.extended = false;
 * @name KAT.sidebar.annotationMode
 */
 KAT.sidebar.annotationMode = false;
+
+KAT.sidebar.hideWidth = -230; //width that will be hidden
+KAT.sidebar.animateLength = 100; //duration of animation
 </code></pre>
         </article>
     </section>
@@ -313,7 +376,7 @@ KAT.sidebar.annotationMode = false;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Wed May 06 2015 13:35:42 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Tue May 12 2015 18:33:57 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

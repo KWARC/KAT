@@ -174,32 +174,35 @@ KAT.gui.resolveXPath = function(from, path){
   return element;
 };
 
-/**
-* gets the list of contihuous elements in given selection.
-*
-* @param {KAT.gui.selection} selection - The selection to use.
-*
-* @returns {jQuery} list of elements.
-* @function
-* @instance
-* @name getSelection
-* @memberof KAT.gui
-*/
 KAT.gui.prototype.getRange = function(selection){
 
   //get the container
   var container = $(KAT.gui.resolveXPath(this.element, selection.container));
 
+  //and the elements inside
+  var containedElements = container.find("*").andSelf();
 
-  //create a range object
-  var range = document.createRange();
-  range.setStart(KAT.gui.resolveXPath(this.element, selection.start), selection.startOffset);
-  range.setEnd(KAT.gui.resolveXPath(this.element, selection.end), selection.endOffset);
+  //find the start index
+  var startIndex = containedElements.index(
+    KAT.gui.resolveXPath(this.element, selection.start)
+  );
 
-  //and filter all the elements that are in the range.
-  return container.find("*").andSelf().filter(function(){
-    return KAT.gui.nodeInRange(range, this);
-  });
+  //find the end element
+  var endElement = $(KAT.gui.resolveXPath(this.element, selection.end));
+
+  //find the end index
+  var endIndex = containedElements.index(endElement);
+
+  //restrict to elements in this range.
+  containedElements = containedElements.slice(startIndex, endIndex);
+
+  //and remove all elements who do not have all children
+  return containedElements.filter(function(index, element){
+    var children = $(element).children();
+
+    //do we contain all children?
+    return children.length == containedElements.filter(children).length;
+  }).add(endElement.find("*").andSelf());
 };
 
 /**
