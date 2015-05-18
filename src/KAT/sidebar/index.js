@@ -350,5 +350,20 @@ KAT.sidebar.extended = false;
 */
 KAT.sidebar.annotationMode = false;
 
-KAT.sidebar.hideWidth = -230; //width that will be hidden
-KAT.sidebar.animateLength = 100; //duration of animation
+/**
+* Width of the sidebar that will be hidden
+*
+* @type {integer}
+* @default -230
+* @name KAT.sidebar.hideWidth
+*/
+KAT.sidebar.hideWidth = -230;
+
+/**
+* Duration of animation
+*
+* @type {integer}
+* @default 100
+* @name KAT.sidebar.animateLength
+*/
+KAT.sidebar.animateLength = 100;
