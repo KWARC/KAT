@@ -1,0 +1,90 @@
+\documentclass[11pt]{article}
+
+%We want to be wider
+\usepackage{a4wide}
+
+% Input encoding
+\usepackage[utf8]{inputenc}
+\usepackage{eurosym}
+\usepackage{placeins}
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+%Syntax Highlighting
+\usepackage{listings}
+
+\usepackage{color}
+
+% Math packages
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+%Add some color
+\usepackage{xcolor}
+
+% WE want colored links instead of ugly boxes
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{url}
+
+% Ednotes
+\usepackage[show]{ed}
+
+
+% BibTex
+\usepackage{cite}
+
+\title{KAT UI Paper}
+\author{Sourabh Lal, Michael Kohlhase, Tom Wiesing}
+
+\date{\today}
+
+\begin{document}
+
+%Title Page
+\maketitle
+
+%The abstract
+\begin{abstract}
+  \ednote{Write abstract}
+\end{abstract}
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\input{parts/1_intro.tex}
+
+\newpage
+
+\input{parts/2_sota.tex}
+
+\newpage
+
+\input{parts/3_katov.tex}
+
+\newpage
+
+\input{parts/4_katui.tex}
+
+\newpage
+
+\input{parts/5_discuss.tex}
+
+\newpage
+
+\input{parts/6_future.tex}
+
+\newpage
+
+\input{parts/7_conclusion.tex}
+
+\newpage
+
+%BIBLIOGRAPHY
+\bibliography{kwarc}{}
+\bibliographystyle{alpha} %plainURI?
+\end{document}
