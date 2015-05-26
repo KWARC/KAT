@@ -44,17 +44,8 @@ caption=A KAT Frame Specification for OMDoc Symbols]
         </rdf:Description>
     </rdf:RDF>
 </frame>
-\end{lstlisting}
+\end{lstlisting} \ednote{Update and redo KAnnSpecs}
 
-Even though KAT can work as a standalone library that can be added to any STEM document
-in HTML5, it is best used as a component of a corpus management system, such as the {Cor\TeX}
-system~\cite{CorTeX:on} developed by the second author. In this situation the annotator
-requests an annotation task from {Cor\TeX}, which serves the TEI-tokenized document with
-KAT and a set of bindings for the intended annotation ontologies. When the annotation is
-complete, the generated RDF is exported to the semantic blackboard -- an RDF triple store
-maintained by {Cor\TeX}. When combined with {Cor\TeX}, KAT can be used by multiple
-annotators; and can be used to review existing annotations, by importing them from the
-triple store.  KAT also has experimental support for inter-annotator agreement reviews
-via a side-by-side view of the various annotations.
+Even though KAT can work as a standalone library that can be added to any STEM document in HTML5, it is best used as a component of a corpus management system, such as the {Cor\TeX} system~\cite{CorTeX:on} developed by the second author. In this situation the annotator requests an annotation task from {Cor\TeX}, which serves the TEI-tokenized document with KAT and a set of bindings for the intended annotation ontologies. When the annotation is complete, the generated RDF is exported to the semantic blackboard -- an RDF triple store maintained by {Cor\TeX}. When combined with {Cor\TeX}, KAT can be used by multiple annotators; and can be used to review existing annotations, by importing them from the triple store.  KAT also has experimental support for inter-annotator agreement reviews via a side-by-side view of the various annotations.
 
 \ednote{UI Implementaton}
