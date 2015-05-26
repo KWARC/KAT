@@ -1,4 +1,18 @@
 \section{Introduction}
-What is KAT for?
-What annot are there?
-Sourabh
+  An annotation tool is a system that is used to manage annotations on a document. It provides features such as adding, modifying or removing annotations. Annotations are metadata about a document, and do not actually alter the content of the document. They can be thought of as a layer on top of a document which contains information about the text in the document. This can be done by creating annotations either inline or stand-off. Annotations can serve a variety of purposes including:
+  \begin{itemize}
+    \item Posting comments on the content.
+    \item Marking out parts of the document.
+    \item Demarcating relationships between information fragments.
+    \item Discussing the contents of the document (using a comment thread linked to each annotation).
+  \end{itemize}
+
+  Annotation tools can be categorized according to the type of annotations they make. Generally state of the art anotation tools create one of the following types of annotations:
+  \begin{enumerate}
+    \item \textit{Dynamic Annotations} - These create annotations that are anchored to the text of the document.
+    \item \textit{Static Annotations} - These create annotations that are anchored to a particular position in the page of the document. 
+  \end{enumerate}
+
+  Annotation tools are of particular interest to the KWARC research group. Digitized, mathematical text lies in the focus of KWARC's research direction, and they need an annotation tool that could be used to annotate mathematical documents. The most appropriate technique for this would be the use of a dynamic annotation tool. However, dynamic annotations are fundamentally flawed when handling structured documents as they are equipped to only handle plain-text documents. This meant that KWARC had to build a new tool, which unlike other state of the art annotation tools could create annotations in structured (XHTML) documents. This new system created structured annotations; annotations that are anchored to a node in the document tree.
+
+  A key component of this project involved development of the frontend for KAT. We aimed to develop a user interface that optimizes system usability and improves the user experience. This involved first identifying which aspects of the user interface maximize usability by conducting design research. Using the results from this design research, we developed each of the main features that an annotation tool should support: creating annotations, modifying annotations and appropriately displaying annotations.
