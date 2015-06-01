@@ -11,7 +11,7 @@ function getKATStarted(documentURL, KAnnSpecURL){
   JOBAD.config.BootstrapScope = "bootstrap";
 
   //Create the sidebar.
-  KAT.sidebar.init(); 
+  KAT.sidebar.init();
 
   //load the document
   $.get(documentURL, function(documentData){
@@ -37,7 +37,7 @@ function getKATStarted(documentURL, KAnnSpecURL){
       var gui = window.gui = new KAT.gui(data, collection);
 
       //and a store for the gui.
-      var store = window.store = new KAT.storage.Store(gui);
+      var store = window.store = new KAT.storage.Store(gui, documentURL);
 
       //and add a KannSpec, then init
       var KAnnSpec = window.spec = collection.addNewKAnnSpec(KannSpecXML);

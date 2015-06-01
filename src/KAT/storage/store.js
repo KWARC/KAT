@@ -1,13 +1,14 @@
 /** Creates a new Store instance.
 *
 * @param {KAT.gui} gui - Gui associated to this store.
+* @param {string} docURL - URL of document currently loaded.
 *
 * @name KAT.storage.Store
 * @this {KAT.storage.Store}
 * @Alias KAT.storage.Store
 * @class
 */
-KAT.storage.Store = function(gui){
+KAT.storage.Store = function(gui, docURL){
   /**
   * KAnnSpecCollection this store instance knows.
   *
@@ -23,6 +24,14 @@ KAT.storage.Store = function(gui){
   * @name KAT.storage.Store#gui
   */
   this.gui = gui;
+
+  /**
+  * URL of document currently loaded.
+  *
+  * @type {string}
+  * @name KAT.storage.Store#docURL
+  */
+  this.docURL = KAT.storage.resolve(docURL);
 
   /**
   * Stored annotations in this Store.
@@ -179,18 +188,15 @@ KAT.storage.Store.prototype.sanityCheck = function(){
 
 /** Exports all the annotations in this store to RDF.
 *
-* @param {string} docURL URL of the current document.
 * @function
 * @instance
 * @name toRDF
 * @memberof KAT.storage.Store
 * @return {document} - returns
 */
-KAT.storage.Store.prototype.toRDF = function(docURL){
+KAT.storage.Store.prototype.toRDF = function(){
   //self-reference
   var me = this;
-
-
 
   // Create the top-level rdf document.
   var rdfTopLevel = $(KAT.rdf.create("rdf:RDF"))
@@ -279,11 +285,28 @@ KAT.storage.Store.prototype.toRDF = function(docURL){
 
    // now create a new blank node for the actual annotation.
    // we have a function for this.
-   rdfTopLevel.append($(annotation.toRDF(docURL, runID)).children());
+   rdfTopLevel.append($(annotation.toRDF(me.docURL, runID)).children());
   });
 
   //return a string because javascrt
   return rdfTopLevel.get(0).outerHTML;
+};
+
+/** Adds a new annotation to this Store based on an RDF export.
+*
+* @param {document} rdf - RDF to read from.
+*
+* @function
+* @instance
+* @name addFromRDF
+* @memberof KAT.storage.Store
+*/
+KAT.storage.Store.prototype.addFromRDF = function(rdf){
+
+  // do some intial parsing.
+  var parsedRDF = new KAT.storage.RDF(rdf);
+
+  console.log(parsedRDF); 
 };
 
 /**

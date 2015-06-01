@@ -38,12 +38,13 @@ KAT.module = {
     var storage_import  = "Import Annotations";
     var storage_export  = "Export Annotations";
 
+
     //the menu to return
     var menu = {};
 
     // Case A: Annotation Mode is disabled
     if (!KAT.sidebar.annotationMode){
-      
+
       //Menu item A.1 : Turn on annotation mode
       menu[annot_modeOn] = function(){
           KAT.sidebar.toggleAnnotationMode();
@@ -51,19 +52,8 @@ KAT.module = {
 
       //Menu item A.2 : Import Annotations
       menu[storage_import] = function(){
-        var json = prompt("Paste the annotations below: ");
-
-        if(json){
-          //parse the json
-          json = JSON.parse(json);
-
-          for(var i=0;i<json.length;i++){
-            //add the new annotation
-            json[i] = me.store.addFromJSON(json[i]);
-            //and draw it.
-            json[i].draw();
-          }
-        }
+        var rdfDoc = prompt("Paste annotations to import here: ");
+        me.store.
       };
 
       //Menu item A.3 : Export Annotations
@@ -83,7 +73,7 @@ KAT.module = {
 
 
       if(!selection || selection.isEmpty){
-        
+
         /* Subcase B1:
           User has not made a selection
           Right click is not on an annotation

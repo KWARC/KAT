@@ -2065,17 +2065,84 @@ KAT.sidebar.animateLength = 100;
 */
 KAT.storage = {};
 
+/**
+  * Resolves a relative url.
+	* @param {string} url	Url to resolve
+	* @param {string} [base = "."]	Optional. Base url to use.
+	* @param {boolean} [isDir = false]	Optional. If set to true, will return a directory name ending with a slash.
+
+  * @returns {string} - An absolute (resolved) url.
+  * @function
+  * @static
+  * @name resolve
+  * @memberof KAT.storage
+  */
+KAT.storage.resolve = function(url, base, isDir){
+
+  // read in parameters
+	var resolveWithBase = false;
+	var baseUrl, oldBase, newBase;
+
+  // do we have a base to resolve first?
+	if(typeof base === "string"){
+		resolveWithBase = true;
+
+    //resolve the <base>
+		baseUrl = arguments.callee(base, true);
+
+		oldBase = jQuery("base").detach();
+		newBase = jQuery("<base>").attr("href", baseUrl).appendTo("head");
+	}
+
+  // create a link with the right url.
+  // TODO: Cleanup this code.
+  var el = document.createElement('div');
+  el.innerHTML = '<a href="'+jQuery('<span/>').text(url).html()+'">x</a>';
+
+  // take the absolute url from the div.
+  var absUrl = el.firstChild.href;
+
+  // remove the base if it was added.
+  if(resolveWithBase){
+  	newBase.remove();
+  	oldBase.appendTo("head");
+  }
+
+  // add a slash to the directory.
+  if( (base === true || isDir === true ) && absUrl[absUrl.length - 1] != "/"){
+    absUrl = absUrl + "/";
+  }
+
+  // return the absolute URL.
+  return absUrl;
+}; 
+
+// Source: src/KAT/storage/rdf.js
+/** Creates a new RDF instance.
+*
+* @param {document} doc - Document to parse RDF from.
+*
+* @name KAT.storage.RDF
+* @this {KAT.storage.RDF}
+* @Alias KAT.storage.RDF
+* @class
+*/
+KAT.storage.RDF = function(doc){
+  this.doc = jQuery(doc); 
+}
+
 // Source: src/KAT/storage/store.js
 /** Creates a new Store instance.
 *
 * @param {KAT.gui} gui - Gui associated to this store.
+* @param {string} docURL - URL of document currently loaded.
 *
 * @name KAT.storage.Store
 * @this {KAT.storage.Store}
 * @Alias KAT.storage.Store
 * @class
 */
-KAT.storage.Store = function(gui){
+KAT.storage.Store = function(gui, docURL){
   /**
   * KAnnSpecCollection this store instance knows.
   *
@@ -2091,6 +2158,14 @@ KAT.storage.Store = function(gui){
   * @name KAT.storage.Store#gui
   */
   this.gui = gui;
+
+  /**
+  * URL of document currently loaded.
+  *
+  * @type {string}
+  * @name KAT.storage.Store#docURL
+  */
+  this.docURL = KAT.storage.resolve(docURL);
 
   /**
   * Stored annotations in this Store.
@@ -2247,18 +2322,15 @@ KAT.storage.Store.prototype.sanityCheck = function(){
 
 /** Exports all the annotations in this store to RDF.
 *
-* @param {string} docURL URL of the current document.
 * @function
 * @instance
 * @name toRDF
 * @memberof KAT.storage.Store
 * @return {document} - returns
 */
-KAT.storage.Store.prototype.toRDF = function(docURL){
+KAT.storage.Store.prototype.toRDF = function(){
   //self-reference
   var me = this;
-
-
 
   // Create the top-level rdf document.
   var rdfTopLevel = $(KAT.rdf.create("rdf:RDF"))
@@ -2347,11 +2419,28 @@ KAT.storage.Store.prototype.toRDF = function(docURL){
 
    // now create a new blank node for the actual annotation.
    // we have a function for this.
-   rdfTopLevel.append($(annotation.toRDF(docURL, runID)).children());
+   rdfTopLevel.append($(annotation.toRDF(me.docURL, runID)).children());
   });
 
   //return a string because javascrt
   return rdfTopLevel.get(0).outerHTML;
+};
+
+/** Adds a new annotation to this Store based on an RDF export.
+*
+* @param {document} rdf - RDF to read from.
+*
+* @function
+* @instance
+* @name addFromRDF
+* @memberof KAT.storage.Store
+*/
+KAT.storage.Store.prototype.addFromRDF = function(rdf){
+
+  // do some intial parsing.
+  var parsedRDF = new KAT.storage.RDF(rdf);
+
+  console.log(parsedRDF); 
 };
 
 /**

@@ -23,6 +23,7 @@ module.exports = function(grunt) {
     'src/KAT/sidebar/index.js',
 
     'src/KAT/storage/index.js',
+    'src/KAT/storage/rdf.js',
     'src/KAT/storage/store.js',
     'src/KAT/storage/annotation.js',
 
@@ -108,7 +109,7 @@ module.exports = function(grunt) {
       keepalive: {
         options: {
           port: 3000,
-          keepalive: true, 
+          keepalive: true,
           hostname: 'localhost',
           base: {
             path: '.'
