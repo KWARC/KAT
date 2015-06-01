@@ -21,9 +21,13 @@ KAT.module = {
     'hasCleanNamespace': false
   },
   init: function(JOBADInstance, annotationStore){
-    this.store = annotationStore;
-    this.gui = this.store.gui;
+    this.store = annotationStore; // KAT.storage.Store
+    this.gui = this.store.gui; // KAT.gui
   },
+  hoverText: function(target, JOBADInstance){
+    // return element to display
+
+  }, 
   contextMenuEntries: function(target, JOBADInstance){
     var me = this;
 
