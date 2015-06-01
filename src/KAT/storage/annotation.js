@@ -258,6 +258,11 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
       "rdf:nodeID",
       concept.KAnnSpec.rdf_nodeid
     ),
+    KAT.rdf.attr(
+      $(KAT.rdf.create('rdf:type')),
+      "rdf:resource",
+      "kat:annotation"
+    ),
     $(KAT.rdf.create('kat:concept')).text(concept.name)
   );
 

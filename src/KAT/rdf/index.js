@@ -94,3 +94,16 @@ KAT.rdf.buildNameSpace = function(uri, xml){
 
   return uri;
 };
+
+/** Creates a new RDF instance.
+*
+* @param {document} doc - Document to parse RDF from.
+*
+* @name KAT.rdf.RDF
+* @this {KAT.rdf.RDF}
+* @Alias KAT.rdf.RDF
+* @class
+*/
+KAT.rdf.RDF = function(doc){
+  this.doc = jQuery(doc);
+}; 

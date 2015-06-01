@@ -120,6 +120,19 @@ KAT.rdf.buildNameSpace = function(uri, xml){
   return uri;
 };
 
+/** Creates a new RDF instance.
+*
+* @param {document} doc - Document to parse RDF from.
+*
+* @name KAT.rdf.RDF
+* @this {KAT.rdf.RDF}
+* @Alias KAT.rdf.RDF
+* @class
+*/
+KAT.rdf.RDF = function(doc){
+  this.doc = jQuery(doc);
+}; 
+
 // Source: src/KAT/model/index.js
 /**
 * Namespace for models used by KAT.
@@ -2117,20 +2130,6 @@ KAT.storage.resolve = function(url, base, isDir){
   return absUrl;
 }; 
 
-// Source: src/KAT/storage/rdf.js
-/** Creates a new RDF instance.
-*
-* @param {document} doc - Document to parse RDF from.
-*
-* @name KAT.storage.RDF
-* @this {KAT.storage.RDF}
-* @Alias KAT.storage.RDF
-* @class
-*/
-KAT.storage.RDF = function(doc){
-  this.doc = jQuery(doc); 
-}
-
 // Source: src/KAT/storage/store.js
 /** Creates a new Store instance.
 *
@@ -2438,9 +2437,9 @@ KAT.storage.Store.prototype.toRDF = function(){
 KAT.storage.Store.prototype.addFromRDF = function(rdf){
 
   // do some intial parsing.
-  var parsedRDF = new KAT.storage.RDF(rdf);
+  var parsedRDF = new KAT.rdf.RDF(rdf);
 
-  console.log(parsedRDF); 
+  console.log(parsedRDF);
 };
 
 /**
@@ -2764,6 +2763,11 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
       "rdf:nodeID",
       concept.KAnnSpec.rdf_nodeid
     ),
+    KAT.rdf.attr(
+      $(KAT.rdf.create('rdf:type')),
+      "rdf:resource",
+      "kat:annotation"
+    ),
     $(KAT.rdf.create('kat:concept')).text(concept.name)
   );
 
@@ -2872,12 +2876,13 @@ KAT.module = {
     var storage_import  = "Import Annotations";
     var storage_export  = "Export Annotations";
 
+
     //the menu to return
     var menu = {};
 
     // Case A: Annotation Mode is disabled
     if (!KAT.sidebar.annotationMode){
-      
+
       //Menu item A.1 : Turn on annotation mode
       menu[annot_modeOn] = function(){
           KAT.sidebar.toggleAnnotationMode();
@@ -2885,19 +2890,8 @@ KAT.module = {
 
       //Menu item A.2 : Import Annotations
       menu[storage_import] = function(){
-        var json = prompt("Paste the annotations below: ");
-
-        if(json){
-          //parse the json
-          json = JSON.parse(json);
-
-          for(var i=0;i<json.length;i++){
-            //add the new annotation
-            json[i] = me.store.addFromJSON(json[i]);
-            //and draw it.
-            json[i].draw();
-          }
-        }
+        var rdfDoc = prompt("Paste annotations to import here: ");
+        me.store.addFromRDF(jQuery(rdfDoc).get(0));
       };
 
       //Menu item A.3 : Export Annotations
@@ -2917,7 +2911,7 @@ KAT.module = {
 
 
       if(!selection || selection.isEmpty){
-        
+
         /* Subcase B1:
           User has not made a selection
           Right click is not on an annotation
@@ -2930,19 +2924,8 @@ KAT.module = {
 
         //Menu item B1.2 : Import Annotations
         menu[storage_import] = function(){
-          var json = prompt("Paste the annotations below: ");
-
-          if(json){
-            //parse the json
-            json = JSON.parse(json);
-
-            for(var i=0;i<json.length;i++){
-              //add the new annotation
-              json[i] = me.store.addFromJSON(json[i]);
-              //and draw it.
-              json[i].draw();
-            }
-          }
+          var rdfDoc = prompt("Paste annotations to import here: ");
+          me.store.addFromRDF(jQuery(rdfDoc).get(0)); 
         };
 
         //Menu item B1.3 : Export Annotations
