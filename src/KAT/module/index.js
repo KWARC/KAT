@@ -53,7 +53,12 @@ KAT.module = {
       //Menu item A.2 : Import Annotations
       menu[storage_import] = function(){
         var rdfDoc = prompt("Paste annotations to import here: ");
-        me.store.addFromRDF(jQuery(rdfDoc).get(0));
+        var annots = me.store.addFromRDF(jQuery(rdfDoc).get(0));
+
+        //and draw them
+        for(var i=0;i<annots.length;i++){
+          annots[i].draw();
+        }
       };
 
       //Menu item A.3 : Export Annotations
@@ -87,7 +92,12 @@ KAT.module = {
         //Menu item B1.2 : Import Annotations
         menu[storage_import] = function(){
           var rdfDoc = prompt("Paste annotations to import here: ");
-          me.store.addFromRDF(jQuery(rdfDoc).get(0)); 
+          var annots = me.store.addFromRDF(jQuery(rdfDoc).get(0));
+
+          //and draw them
+          for(var i=0;i<annots.length;i++){
+            annots[i].draw();
+          }
         };
 
         //Menu item B1.3 : Export Annotations

@@ -42,6 +42,7 @@ KAT.model.KAnnSpecCollection.prototype.addKAnnSpec = function(KAnnSpec){
 /** Creates a new KAnnSpec instance and adds it to this KAnnSpecCollection.
 *
 * @param {document} xml - XML document representing KAnnSpec.
+* @param {string} url - URL of KAnnSpec represented by the XML. 
 *
 * @function
 * @instance
@@ -49,8 +50,8 @@ KAT.model.KAnnSpecCollection.prototype.addKAnnSpec = function(KAnnSpec){
 * @memberof KAT.model.KAnnSpecCollection
 * @return {KAT.model.KAnnSpec|boolean} - newly created KAnnSpec or false in case of errors
 */
-KAT.model.KAnnSpecCollection.prototype.addNewKAnnSpec = function(xml){
-  return this.addKAnnSpec(new KAT.model.KAnnSpec(xml, this));
+KAT.model.KAnnSpecCollection.prototype.addNewKAnnSpec = function(xml, url){
+  return this.addKAnnSpec(new KAT.model.KAnnSpec(xml, url, this));
 };
 
 /** Initialises this KAnnSpecCollection. Should be called once all KAnnSpecs have been added.

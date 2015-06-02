@@ -40,7 +40,7 @@ function getKATStarted(documentURL, KAnnSpecURL){
       var store = window.store = new KAT.storage.Store(gui, documentURL);
 
       //and add a KannSpec, then init
-      var KAnnSpec = window.spec = collection.addNewKAnnSpec(KannSpecXML);
+      var KAnnSpec = window.spec = collection.addNewKAnnSpec(KannSpecXML, KAnnSpecURL);
       collection.init();
 
       //load the KAT element.

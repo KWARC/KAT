@@ -7,7 +7,7 @@
 * @Alias KAT.model.KAnnSpec
 * @class
 */
-KAT.model.KAnnSpec = function(xml, collection){
+KAT.model.KAnnSpec = function(xml, url, collection){
   var me = this;
 
   //parse the XML
@@ -27,6 +27,14 @@ KAT.model.KAnnSpec = function(xml, collection){
   if(this.xml.children().length != 1 || !this.xml.children().eq(0).is("annotation")){
     throw new KAT.model.ParsingError("KAT.model.KAnnSpec: Invalid XML (Expected exactly one top-level <annotation>). ", this.xml);
   }
+
+  /**
+  * URL of the KAnnSpec
+  *
+  * @type {string}
+  * @name KAT.model.KAnnSpec#url
+  */
+  this.url = KAT.storage.resolve(url);
 
   /**
   * Name of this KAnnSpec.

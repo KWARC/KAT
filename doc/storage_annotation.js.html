@@ -32,13 +32,14 @@
 * @param {KAT.gui.selection} selection - The selection this annotation annotates.
 * @param {KAT.model.Concept} concept - concept this annotation represents.
 * @param {object|undefined} values - The values of this annotation. If undefined, sets the default values.
+* @param {string} [id] - Id of annotation. Will be auto generated if it does not exist.
 *
 * @name KAT.storage.Annotation
 * @this {KAT.storage.Annotation}
 * @Alias KAT.storage.Annotation
 * @class
 */
-KAT.storage.Annotation = function(store, selection, concept, values){
+KAT.storage.Annotation = function(store, selection, concept, values, id){
 
   /**
   * The Store this annotation is stored in.
@@ -49,7 +50,7 @@ KAT.storage.Annotation = function(store, selection, concept, values){
   this.store = store;
 
   //generate the UUID from the selection
-  var uuid = KAT.storage.Store.Selection2UUID(selection);
+  var uuid = id || "KAT_"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
 
   //Check if we already have the uuid.
   if(this.store.find(uuid)){
@@ -62,7 +63,7 @@ KAT.storage.Annotation = function(store, selection, concept, values){
   * @type {string}
   * @name KAT.storage.Annotation#uuid
   */
-  this.uuid = "KAT_"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
+  this.uuid = uuid;
 
   /**
   * Selection of this annotation.
@@ -142,6 +143,99 @@ KAT.storage.Annotation.prototype.draw = function(){
   });
 };
 
+/** Creates a new Annotation instance from an RDF node.
+*
+* @param {string} id - Id of annotation to create
+* @param {jQuery} rdf - RDF source to work with.
+* @param {KAT.storage.Store} store - The store associated with this annotation.
+*
+* @returns KAT.storage.Annotation
+*
+* @function
+* @static
+* @name KAT.storage.Annotation.fromRDF
+* @memberof {KAT.storage.Annotation}
+*/
+KAT.storage.Annotation.fromRDF = function(rdf, id, store){
+
+  var $rdf = jQuery(rdf);
+
+  // find the annotation RDF by id.
+  var annotRDF = KAT.rdf.findById($rdf, id);
+
+  // extract the selection.
+  var url = $rdf.find("kat\\:annotates").attr("rdf:resource");
+
+  // and get the selection part of the url
+  var partURL;
+
+  // if we do not start with the right URL, we need to do something else
+  if(!url.startsWith(store.docURL+"#")){
+    if(url.indexOf("#") != -1){
+      console.log("Currently loaded document does not match RDF annotation, loading it anyways ... ");
+      partURL = decodeURLComponent(url.indexOf("#") + 1);
+    } else {
+      throw new Error("Malformed RDF: Unable to parse selection URL. ");
+    }
+  } else {
+    partURL = decodeURLComponent(url.substring(store.docURL.length + 1));
+  }
+
+  // parse the selection.
+  var selection = KAT.storage.Store.UUID2Selection(partURL);
+
+  // get the kann spec element.
+  var kspecElem = KAT.rdf.findById($rdf, $rdf.find("kat\\:kannspec").attr("rdf:nodeID"));
+
+  // check if we have found it
+  if(kspecElem.length !== 1){
+    throw new Error("Malformed RDF: Unable to find KAnnSpec. ");
+  }
+
+  // get the url
+  var kspecURL = kspecElem.find("kat\\:kannspec-uri").text();
+
+  var kSpecName = kspecElem.find("kat\\:kannspec-name").text();
+
+  if(!kSpecName){
+    throw new Error("Malformed RDF: Missing &lt;kat:kannspec-name>");
+  }
+
+  // get the actual KAnnSpec
+  var kspec = store.collection.getKAnnSpec(kSpecName);
+
+  // check if the KAnnSpec exists.
+  if (!kspec){
+    throw new Error("KAnnSpec '"+kSpecName+"' not loaded. ");
+  }
+
+  // The KAnnSpec URL does not match.
+  if (!kspecURL || kSpecURL !== kspec.url){
+    console.warn("Warning: KAnnSpec URL does not match. ");
+  }
+
+  // force the KAnnSpec RDF node id.
+  kspec.rdf_nodeid = $rdf.find("kat\\:kannspec").attr("rdf:nodeID");
+
+
+  // now find the concept
+  var conceptName = annotRDF.find("kat\\:concept").text();
+
+  if (!conceptName){
+    throw new Exception("Malformed RDF: Missing &lt;kat:concept>");
+  }
+
+  // get the concept.
+  var concept = kspec.getConcept(conceptName);
+
+  if(!concept){
+    throw new Exception("Concept '"+conceptName+"' not found inside '"+kSpecName+"'"); 
+  }
+
+  // TODO: Get the values.
+  return new KAT.storage.Annotation(store, selection, concept, {}, id);
+};
+
 /**
 * Flashes an annotation.
 *
@@ -202,28 +296,6 @@ KAT.storage.Annotation.prototype.undraw = function(){
       $me.data("KAT.Annotation.UUID", current);
     }
   });
-};
-
-/**
-* Exports an annotation to JSON.
-*
-* @return KAT.storage.Annotation~JSON
-* @function
-* @name toJSON
-* @memberof KAT.storage.Annotation
-*/
-KAT.storage.Annotation.prototype.toJSON = function(){
-  return {
-    //the UUID of this annotation
-    "uuid": this.uuid,
-
-    //the full name.
-    "concept": this.concept.getFullName(),
-
-    //the values
-    // TODO: Map UUIDs.
-    "values": this.values
-  };
 };
 
 /**
@@ -342,14 +414,6 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
   //get the Dom Node.
   return parent.get(0);
 };
-
-/**
- * A serialised version of KAT.storage.Annotation
- * @typedef {Object} KAT.storage.Annotation~JSON
- * @property {string} uuid - UUID of this annotation.
- * @property {string} concept - (Full) name of the used concept.
- * @property {object} values - Values of the fields of this annotation.
- */
 </code></pre>
         </article>
     </section>
@@ -360,13 +424,13 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="KAT.gui.html">gui</a></li><li><a href="KAT.model.Concept.html">Concept</a></li><li><a href="KAT.model.Field.html">Field</a></li><li><a href="KAT.model.KAnnSpec.html">KAnnSpec</a></li><li><a href="KAT.model.KAnnSpecCollection.html">KAnnSpecCollection</a></li><li><a href="KAT.model.Option.html">Option</a></li><li><a href="KAT.model.ParsingError.html">ParsingError</a></li><li><a href="KAT.rdf.RDF.html">RDF</a></li><li><a href="KAT.storage.Annotation.html">Annotation</a></li><li><a href="KAT.storage.Store.html">Store</a></li></ul><h3>Namespaces</h3><ul><li><a href="KAT.html">KAT</a></li><li><a href="KAT.model.html">model</a></li><li><a href="KAT.module.html">module</a></li><li><a href="KAT.rdf.html">rdf</a></li><li><a href="KAT.sidebar.html">sidebar</a></li><li><a href="KAT.storage.html">storage</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="KAT.gui.html">gui</a></li><li><a href="KAT.model.Concept.html">Concept</a></li><li><a href="KAT.model.Field.html">Field</a></li><li><a href="KAT.model.KAnnSpec.html">KAnnSpec</a></li><li><a href="KAT.model.KAnnSpecCollection.html">KAnnSpecCollection</a></li><li><a href="KAT.model.Option.html">Option</a></li><li><a href="KAT.model.ParsingError.html">ParsingError</a></li><li><a href="KAT.storage.Annotation.html">Annotation</a></li><li><a href="KAT.storage.Store.html">Store</a></li></ul><h3>Namespaces</h3><ul><li><a href="KAT.html">KAT</a></li><li><a href="KAT.model.html">model</a></li><li><a href="KAT.module.html">module</a></li><li><a href="KAT.rdf.html">rdf</a></li><li><a href="KAT.sidebar.html">sidebar</a></li><li><a href="KAT.storage.html">storage</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Tue Jun 02 2015 11:53:46 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Tue Jun 02 2015 17:20:58 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

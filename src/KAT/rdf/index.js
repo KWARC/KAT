@@ -95,48 +95,21 @@ KAT.rdf.buildNameSpace = function(uri, xml){
   return uri;
 };
 
-/** Creates a new RDF instance.
-* An RDF document specifially aimed for importing RDF format used by KAT.
-*
-* @param {jQuery|document} doc - Document to parse RDF from.
-*
-* @name KAT.rdf.RDF
-* @this {KAT.rdf.RDF}
-* @Alias KAT.rdf.RDF
-* @class
-*/
-KAT.rdf.RDF = function(doc){
-  this.doc = jQuery(doc);
-};
-
 /**
 * Finds an rdf:Description by RDF id.
 *
+* @param {jQuery} rdf - RDF element to look inside
 * @param {string} íd - Id to look for.
-* @param {jQuery} [node] - Optional nodes to look inside.
 *
 * @function
-* @instance
-* @name getElementByRDFId
-* @memberof KAT.rdf.RDF
+* @static
+* @name KAT.rdf.findById
+* @memberof KAT.rdf
 * @return {jQuery} - jQuery object representing the given node.
 */
-KAT.rdf.RDF.prototype.getDescriptionByRDFId = function(id){
-  return jQuery('rdf\\:Description', nodes || this.doc)
+KAT.rdf.findById = function(rdf, id){
+  return jQuery('rdf\\:Description', rdf)
   .filter(function(){
     return jQuery(this).attr('rdf:nodeID') === id;
   });
-};
-
-/**
-* Finds an rdf:Description by RDF id.
-*
-* @function
-* @instance
-* @name getElementByRDFId
-* @memberof KAT.rdf.RDF
-* @return {jQuery} - jQuery object representing the given node.
-*/
-KAT.rdf.RDF.prototype.getAnnotations = function(){
-  return jQuery('rdf\\:Description', this.doc).has('kat\\:annotates');
 };

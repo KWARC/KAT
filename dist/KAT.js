@@ -120,50 +120,23 @@ KAT.rdf.buildNameSpace = function(uri, xml){
   return uri;
 };
 
-/** Creates a new RDF instance.
-* An RDF document specifially aimed for importing RDF format used by KAT.
-*
-* @param {jQuery|document} doc - Document to parse RDF from.
-*
-* @name KAT.rdf.RDF
-* @this {KAT.rdf.RDF}
-* @Alias KAT.rdf.RDF
-* @class
-*/
-KAT.rdf.RDF = function(doc){
-  this.doc = jQuery(doc);
-};
-
 /**
 * Finds an rdf:Description by RDF id.
 *
+* @param {jQuery} rdf - RDF element to look inside
 * @param {string} íd - Id to look for.
-* @param {jQuery} [node] - Optional nodes to look inside.
 *
 * @function
-* @instance
-* @name getElementByRDFId
-* @memberof KAT.rdf.RDF
+* @static
+* @name KAT.rdf.findById
+* @memberof KAT.rdf
 * @return {jQuery} - jQuery object representing the given node.
 */
-KAT.rdf.RDF.prototype.getDescriptionByRDFId = function(id){
-  return jQuery('rdf\\:Description', nodes || this.doc)
+KAT.rdf.findById = function(rdf, id){
+  return jQuery('rdf\\:Description', rdf)
   .filter(function(){
     return jQuery(this).attr('rdf:nodeID') === id;
   });
-};
-
-/**
-* Finds an rdf:Description by RDF id.
-*
-* @function
-* @instance
-* @name getElementByRDFId
-* @memberof KAT.rdf.RDF
-* @return {jQuery} - jQuery object representing the given node.
-*/
-KAT.rdf.RDF.prototype.getAnnotations = function(){
-  return jQuery('rdf\\:Description', this.doc).has('kat\\:annotates');
 };
 
 // Source: src/KAT/model/index.js
@@ -320,6 +293,7 @@ KAT.model.KAnnSpecCollection.prototype.addKAnnSpec = function(KAnnSpec){
 /** Creates a new KAnnSpec instance and adds it to this KAnnSpecCollection.
 *
 * @param {document} xml - XML document representing KAnnSpec.
+* @param {string} url - URL of KAnnSpec represented by the XML. 
 *
 * @function
 * @instance
@@ -327,8 +301,8 @@ KAT.model.KAnnSpecCollection.prototype.addKAnnSpec = function(KAnnSpec){
 * @memberof KAT.model.KAnnSpecCollection
 * @return {KAT.model.KAnnSpec|boolean} - newly created KAnnSpec or false in case of errors
 */
-KAT.model.KAnnSpecCollection.prototype.addNewKAnnSpec = function(xml){
-  return this.addKAnnSpec(new KAT.model.KAnnSpec(xml, this));
+KAT.model.KAnnSpecCollection.prototype.addNewKAnnSpec = function(xml, url){
+  return this.addKAnnSpec(new KAT.model.KAnnSpec(xml, url, this));
 };
 
 /** Initialises this KAnnSpecCollection. Should be called once all KAnnSpecs have been added.
@@ -513,7 +487,7 @@ KAT.model.KAnnSpecCollection.prototype.getField = function(name){
 * @Alias KAT.model.KAnnSpec
 * @class
 */
-KAT.model.KAnnSpec = function(xml, collection){
+KAT.model.KAnnSpec = function(xml, url, collection){
   var me = this;
 
   //parse the XML
@@ -533,6 +507,14 @@ KAT.model.KAnnSpec = function(xml, collection){
   if(this.xml.children().length != 1 || !this.xml.children().eq(0).is("annotation")){
     throw new KAT.model.ParsingError("KAT.model.KAnnSpec: Invalid XML (Expected exactly one top-level <annotation>). ", this.xml);
   }
+
+  /**
+  * URL of the KAnnSpec
+  *
+  * @type {string}
+  * @name KAT.model.KAnnSpec#url
+  */
+  this.url = KAT.storage.resolve(url);
 
   /**
   * Name of this KAnnSpec.
@@ -2443,7 +2425,7 @@ KAT.storage.Store.prototype.toRDF = function(){
          KAT.rdf.attr($("<rdf:type>"), "rdf:resource", "kat:kannspec"),
 
          $("<kat:kannspec-name>").text(spec.name),
-         $("<kat:kannspec-URI>").text("about:blank")
+         $("<kat:kannspec-URI>").text(spec.url)
        )
      );
 
@@ -2469,10 +2451,17 @@ KAT.storage.Store.prototype.toRDF = function(){
 */
 KAT.storage.Store.prototype.addFromRDF = function(rdf){
 
-  // do some intial parsing.
-  var parsedRDF = new KAT.rdf.RDF(rdf);
+  var me = this;
 
-  console.log(parsedRDF.getAnnotations());
+  // do some intial parsing.
+  var parsedRDF = jQuery(rdf);
+
+  // find all the annotations.
+  return jQuery('rdf\\:Description', parsedRDF).has('kat\\:annotates').map(function(e){
+    var na = KAT.storage.Annotation.fromRDF(jQuery(this).attr("rdf:nodeId"), parsedRDF, me);
+    me.annotations.push(na);
+    return na;
+  }).toArray();
 };
 
 /**
@@ -2542,13 +2531,14 @@ KAT.storage.Store.UUID2Selection = function(selection){
 * @param {KAT.gui.selection} selection - The selection this annotation annotates.
 * @param {KAT.model.Concept} concept - concept this annotation represents.
 * @param {object|undefined} values - The values of this annotation. If undefined, sets the default values.
+* @param {string} [id] - Id of annotation. Will be auto generated if it does not exist.
 *
 * @name KAT.storage.Annotation
 * @this {KAT.storage.Annotation}
 * @Alias KAT.storage.Annotation
 * @class
 */
-KAT.storage.Annotation = function(store, selection, concept, values){
+KAT.storage.Annotation = function(store, selection, concept, values, id){
 
   /**
   * The Store this annotation is stored in.
@@ -2559,7 +2549,7 @@ KAT.storage.Annotation = function(store, selection, concept, values){
   this.store = store;
 
   //generate the UUID from the selection
-  var uuid = KAT.storage.Store.Selection2UUID(selection);
+  var uuid = id || "KAT_"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
 
   //Check if we already have the uuid.
   if(this.store.find(uuid)){
@@ -2572,7 +2562,7 @@ KAT.storage.Annotation = function(store, selection, concept, values){
   * @type {string}
   * @name KAT.storage.Annotation#uuid
   */
-  this.uuid = "KAT_"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
+  this.uuid = uuid;
 
   /**
   * Selection of this annotation.
@@ -2652,6 +2642,99 @@ KAT.storage.Annotation.prototype.draw = function(){
   });
 };
 
+/** Creates a new Annotation instance from an RDF node.
+*
+* @param {string} id - Id of annotation to create
+* @param {jQuery} rdf - RDF source to work with.
+* @param {KAT.storage.Store} store - The store associated with this annotation.
+*
+* @returns KAT.storage.Annotation
+*
+* @function
+* @static
+* @name KAT.storage.Annotation.fromRDF
+* @memberof {KAT.storage.Annotation}
+*/
+KAT.storage.Annotation.fromRDF = function(rdf, id, store){
+
+  var $rdf = jQuery(rdf);
+
+  // find the annotation RDF by id.
+  var annotRDF = KAT.rdf.findById($rdf, id);
+
+  // extract the selection.
+  var url = $rdf.find("kat\\:annotates").attr("rdf:resource");
+
+  // and get the selection part of the url
+  var partURL;
+
+  // if we do not start with the right URL, we need to do something else
+  if(!url.startsWith(store.docURL+"#")){
+    if(url.indexOf("#") != -1){
+      console.log("Currently loaded document does not match RDF annotation, loading it anyways ... ");
+      partURL = decodeURLComponent(url.indexOf("#") + 1);
+    } else {
+      throw new Error("Malformed RDF: Unable to parse selection URL. ");
+    }
+  } else {
+    partURL = decodeURLComponent(url.substring(store.docURL.length + 1));
+  }
+
+  // parse the selection.
+  var selection = KAT.storage.Store.UUID2Selection(partURL);
+
+  // get the kann spec element.
+  var kspecElem = KAT.rdf.findById($rdf, $rdf.find("kat\\:kannspec").attr("rdf:nodeID"));
+
+  // check if we have found it
+  if(kspecElem.length !== 1){
+    throw new Error("Malformed RDF: Unable to find KAnnSpec. ");
+  }
+
+  // get the url
+  var kspecURL = kspecElem.find("kat\\:kannspec-uri").text();
+
+  var kSpecName = kspecElem.find("kat\\:kannspec-name").text();
+
+  if(!kSpecName){
+    throw new Error("Malformed RDF: Missing <kat:kannspec-name>");
+  }
+
+  // get the actual KAnnSpec
+  var kspec = store.collection.getKAnnSpec(kSpecName);
+
+  // check if the KAnnSpec exists.
+  if (!kspec){
+    throw new Error("KAnnSpec '"+kSpecName+"' not loaded. ");
+  }
+
+  // The KAnnSpec URL does not match.
+  if (!kspecURL || kSpecURL !== kspec.url){
+    console.warn("Warning: KAnnSpec URL does not match. ");
+  }
+
+  // force the KAnnSpec RDF node id.
+  kspec.rdf_nodeid = $rdf.find("kat\\:kannspec").attr("rdf:nodeID");
+
+
+  // now find the concept
+  var conceptName = annotRDF.find("kat\\:concept").text();
+
+  if (!conceptName){
+    throw new Exception("Malformed RDF: Missing <kat:concept>");
+  }
+
+  // get the concept.
+  var concept = kspec.getConcept(conceptName);
+
+  if(!concept){
+    throw new Exception("Concept '"+conceptName+"' not found inside '"+kSpecName+"'"); 
+  }
+
+  // TODO: Get the values.
+  return new KAT.storage.Annotation(store, selection, concept, {}, id);
+};
+
 /**
 * Flashes an annotation.
 *
@@ -2712,28 +2795,6 @@ KAT.storage.Annotation.prototype.undraw = function(){
       $me.data("KAT.Annotation.UUID", current);
     }
   });
-};
-
-/**
-* Exports an annotation to JSON.
-*
-* @return KAT.storage.Annotation~JSON
-* @function
-* @name toJSON
-* @memberof KAT.storage.Annotation
-*/
-KAT.storage.Annotation.prototype.toJSON = function(){
-  return {
-    //the UUID of this annotation
-    "uuid": this.uuid,
-
-    //the full name.
-    "concept": this.concept.getFullName(),
-
-    //the values
-    // TODO: Map UUIDs.
-    "values": this.values
-  };
 };
 
 /**
@@ -2853,14 +2914,6 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
   return parent.get(0);
 };
 
-/**
- * A serialised version of KAT.storage.Annotation
- * @typedef {Object} KAT.storage.Annotation~JSON
- * @property {string} uuid - UUID of this annotation.
- * @property {string} concept - (Full) name of the used concept.
- * @property {object} values - Values of the fields of this annotation.
- */
-
 // Source: src/KAT/module/index.js
 /**
 * Namespace for KAT JOBAD module.
@@ -2917,7 +2970,12 @@ KAT.module = {
       //Menu item A.2 : Import Annotations
       menu[storage_import] = function(){
         var rdfDoc = prompt("Paste annotations to import here: ");
-        me.store.addFromRDF(jQuery(rdfDoc).get(0));
+        var annots = me.store.addFromRDF(jQuery(rdfDoc).get(0));
+
+        //and draw them
+        for(var i=0;i<annots.length;i++){
+          annots[i].draw();
+        }
       };
 
       //Menu item A.3 : Export Annotations
@@ -2951,7 +3009,12 @@ KAT.module = {
         //Menu item B1.2 : Import Annotations
         menu[storage_import] = function(){
           var rdfDoc = prompt("Paste annotations to import here: ");
-          me.store.addFromRDF(jQuery(rdfDoc).get(0)); 
+          var annots = me.store.addFromRDF(jQuery(rdfDoc).get(0));
+
+          //and draw them
+          for(var i=0;i<annots.length;i++){
+            annots[i].draw();
+          }
         };
 
         //Menu item B1.3 : Export Annotations

@@ -277,7 +277,7 @@ KAT.storage.Store.prototype.toRDF = function(){
          KAT.rdf.attr($("<rdf:type>"), "rdf:resource", "kat:kannspec"),
 
          $("<kat:kannspec-name>").text(spec.name),
-         $("<kat:kannspec-URI>").text("about:blank")
+         $("<kat:kannspec-URI>").text(spec.url)
        )
      );
 
@@ -303,10 +303,17 @@ KAT.storage.Store.prototype.toRDF = function(){
 */
 KAT.storage.Store.prototype.addFromRDF = function(rdf){
 
-  // do some intial parsing.
-  var parsedRDF = new KAT.rdf.RDF(rdf);
+  var me = this;
 
-  console.log(parsedRDF.getAnnotations());
+  // do some intial parsing.
+  var parsedRDF = jQuery(rdf);
+
+  // find all the annotations.
+  return jQuery('rdf\\:Description', parsedRDF).has('kat\\:annotates').map(function(e){
+    var na = KAT.storage.Annotation.fromRDF(jQuery(this).attr("rdf:nodeId"), parsedRDF, me);
+    me.annotations.push(na);
+    return na;
+  }).toArray();
 };
 
 /**
