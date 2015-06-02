@@ -34,7 +34,7 @@ KAT.storage.Annotation = function(store, selection, concept, values){
   * @type {string}
   * @name KAT.storage.Annotation#uuid
   */
-  this.uuid = uuid;
+  this.uuid = "KAT_"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
 
   /**
   * Selection of this annotation.
@@ -51,14 +51,6 @@ KAT.storage.Annotation = function(store, selection, concept, values){
   * @name KAT.storage.Annotation#concept
   */
   this.concept = concept;
-
-  /**
-  * Id of this concept for RDF export.
-  *
-  * @type {string}
-  * @name KAT.storage.Annotation#rdf_id
-  */
-  this.rdf_id = "KAT_"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
 
   //Either use existing values or use the default.
   values = (typeof values !== "undefined")?values:concept.getDefault();
@@ -220,57 +212,60 @@ KAT.storage.Annotation.prototype.toJSON = function(){
 KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
 
   var me = this;
+
+  // a few shorthands
   var concept = this.concept;
+  var target = docURL+"#"+encodeURIComponent(KAT.storage.Store.Selection2UUID(this.selection));
 
   //create a parent.
   var parent = $(KAT.rdf.create("rdf:RDF"));
 
-  //create an RDF-description for pointing to the text.
-  var annotDoc =
-  KAT.rdf.attr(
-    $(KAT.rdf.create('rdf:Description')),
-    "rdf:about",
-    docURL+"#"+encodeURIComponent(KAT.storage.Store.Selection2UUID(this.selection))
-  )
-  .appendTo(parent)
-  .append(
-    KAT.rdf.attr(
-      $(KAT.rdf.create('kat:annotation')),
-      "rdf:nodeID",
-      this.rdf_id
-    )
-  );
-
-  //create an ID pointing to the content Description.
   var contentDesc =
+  // create a blank node with the given id.
   KAT.rdf.attr(
     $(KAT.rdf.create('rdf:Description')),
     "rdf:nodeID",
-    this.rdf_id
+    this.uuid
   ).appendTo(parent).append(
+
+    // point to the run
     KAT.rdf.attr(
       $(KAT.rdf.create('kat:run')),
       "rdf:nodeID",
       runID
     ),
+
+    // point to the KAnnSpec
     KAT.rdf.attr(
       $(KAT.rdf.create('kat:kannspec')),
       "rdf:nodeID",
       concept.KAnnSpec.rdf_nodeid
     ),
+
+    // point to the concept
+    $(KAT.rdf.create('kat:concept')).text(concept.name),
+
+    // and the KAT type
     KAT.rdf.attr(
-      $(KAT.rdf.create('rdf:type')),
+      $(KAT.rdf.create('kat:type')),
       "rdf:resource",
-      "kat:annotation"
+      concept.rdf_type
     ),
-    $(KAT.rdf.create('kat:concept')).text(concept.name)
+
+    // and point to the selection.
+    KAT.rdf.attr(
+      $(KAT.rdf.create('kat:annotates')),
+      "rdf:resource",
+      target
+    )
   );
 
 
   jQuery.each(concept.fields, function(i, field){
     var value = me.values[field.value];
 
-    //TODO: Remove this / check if we still need it.
+    // TODO: Remove this line
+    // check if the value is an array.
     var fieldVal = jQuery.isArray(value)?value:[value];
 
     jQuery.each(fieldVal, function(i, value){
@@ -294,14 +289,12 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
             )
           ).appendTo(contentDesc),
           "rdf:nodeID",
-          value.rdf_id
+          value.uuid
         );
 
         console.log(value);
       } else if(field.type == KAT.model.Field.types.select){
         // For a select, use the rdf_obj property
-
-        console.log(value);
 
         KAT.rdf.attr(
           $(

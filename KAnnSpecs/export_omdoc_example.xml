@@ -26,25 +26,19 @@
     <kat:kannspec-URI>http:......</kat:kannspec-URI>
   </rdf:Description>
 
-  <!-- Now the annotation data -->
-
-  <!-- for all the annotations we make a blank node each -->
-  <rdf:Description rdf:about="path-to-fragment-in-doc">
-    <kat:annotation rdf:nodeID="kat_annot_1"/>
-  </rdf:Description>
-<<<<<<< HEAD
-  <!-- and we give the data of the annotation -->
-  <rdf:Description rdf:nodeID="_:a">
-=======
-  <!-- and we give the data of the anntation -->
+  <!-- annotation data -->
   <rdf:Description rdf:nodeID="kat_annot_1">
->>>>>>> b163abbc885369a0ffbd5a975d7b9750321a18ef
+
     <!-- first the metadata -->
     <kat:run rdf:nodeID="kat_run"/>
     <kat:kannspec rdf:nodeID="kat_kannspec_1"/>
     <kat:concept>Symbol</kat:concept>
-    <!-- then the ontology data -->
-    <rdf:type rdf:resource="omdoc:symbol"/>
+
+		<!-- then the location -->
+		<kat:annotates rdf:resource="path-to-fragment-in-doc" />
+
+		<!-- then the ontology data -->
+    <kat:type rdf:resource="http://omdoc.org/ns/symbol"/>
     <omdoc:name>foo</omdoc:name>
     <!-- Other field values here -->
   </rdf:Description>

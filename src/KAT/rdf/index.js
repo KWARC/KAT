@@ -96,8 +96,9 @@ KAT.rdf.buildNameSpace = function(uri, xml){
 };
 
 /** Creates a new RDF instance.
+* An RDF document specifially aimed for importing RDF format used by KAT.
 *
-* @param {document} doc - Document to parse RDF from.
+* @param {jQuery|document} doc - Document to parse RDF from.
 *
 * @name KAT.rdf.RDF
 * @this {KAT.rdf.RDF}
@@ -106,4 +107,39 @@ KAT.rdf.buildNameSpace = function(uri, xml){
 */
 KAT.rdf.RDF = function(doc){
   this.doc = jQuery(doc);
+};
+
+/**
+* Finds an rdf:Description by RDF id.
+*
+* @param {string} íd - Id to look for.
+* @param {jQuery} [node] - Optional nodes to look inside.
+*
+* @function
+* @instance
+* @name getElementByRDFId
+* @memberof KAT.rdf.RDF
+* @return {jQuery} - jQuery object representing the given node.
+*/
+KAT.rdf.RDF.prototype.getDescriptionByRDFId = function(id){
+  return jQuery('rdf\\:Description', nodes || this.doc)
+  .filter(function(){
+    return jQuery(this).attr('rdf:nodeID') === id;
+  });
+};
+
+/**
+* Finds an rdf:Description by RDF id.
+*
+* @function
+* @instance
+* @name getElementByRDFId
+* @memberof KAT.rdf.RDF
+* @return {jQuery} - jQuery object representing the given node.
+*/
+KAT.rdf.RDF.prototype.getAnnotations = function(){
+  return jQuery('rdf\\:Description', this.doc).filter(function(){
+    //check if we have a subnode
+    return true;
+  });
 }; 
