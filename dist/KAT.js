@@ -163,11 +163,8 @@ KAT.rdf.RDF.prototype.getDescriptionByRDFId = function(id){
 * @return {jQuery} - jQuery object representing the given node.
 */
 KAT.rdf.RDF.prototype.getAnnotations = function(){
-  return jQuery('rdf\\:Description', this.doc).filter(function(){
-    //check if we have a subnode
-    return true;
-  });
-}; 
+  return jQuery('rdf\\:Description', this.doc).has('kat\\:annotates');
+};
 
 // Source: src/KAT/model/index.js
 /**
@@ -2475,7 +2472,7 @@ KAT.storage.Store.prototype.addFromRDF = function(rdf){
   // do some intial parsing.
   var parsedRDF = new KAT.rdf.RDF(rdf);
 
-  console.log(parsedRDF);
+  console.log(parsedRDF.getAnnotations());
 };
 
 /**

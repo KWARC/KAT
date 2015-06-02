@@ -306,7 +306,7 @@ KAT.storage.Store.prototype.addFromRDF = function(rdf){
   // do some intial parsing.
   var parsedRDF = new KAT.rdf.RDF(rdf);
 
-  console.log(parsedRDF);
+  console.log(parsedRDF.getAnnotations());
 };
 
 /**

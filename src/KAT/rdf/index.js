@@ -138,8 +138,5 @@ KAT.rdf.RDF.prototype.getDescriptionByRDFId = function(id){
 * @return {jQuery} - jQuery object representing the given node.
 */
 KAT.rdf.RDF.prototype.getAnnotations = function(){
-  return jQuery('rdf\\:Description', this.doc).filter(function(){
-    //check if we have a subnode
-    return true;
-  });
-}; 
+  return jQuery('rdf\\:Description', this.doc).has('kat\\:annotates');
+};
