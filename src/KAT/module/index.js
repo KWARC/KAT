@@ -25,9 +25,10 @@ KAT.module = {
     this.gui = this.store.gui;
   },
   contextMenuEntries: function(target, JOBADInstance){
+    // reference to self
     var me = this;
 
-    //texts
+    // Lots of Text
     var text_new        = "Add new Annotation";
     var text_remove     = "Delete Annotation";
     var text_highlight  = "Highlight Annotation";
@@ -38,8 +39,9 @@ KAT.module = {
     var storage_import  = "Import Annotations";
     var storage_export  = "Export Annotations";
 
+    // TODO: Callbacks.
 
-    //the menu to return
+    // the menu to return
     var menu = {};
 
     // Case A: Annotation Mode is disabled
@@ -47,8 +49,8 @@ KAT.module = {
 
       //Menu item A.1 : Turn on annotation mode
       menu[annot_modeOn] = function(){
-          KAT.sidebar.toggleAnnotationMode();
-        };
+        KAT.sidebar.toggleAnnotationMode();
+      };
 
       //Menu item A.2 : Import Annotations
       menu[storage_import] = function(){
@@ -72,6 +74,7 @@ KAT.module = {
     else {
 
       var selection;
+
       try{
         selection = this.gui.getSelection();
       } catch(e){}
@@ -135,7 +138,7 @@ KAT.module = {
 
             //Menu item B2.3 : Edit annotation
             menu[text_edit][annotation.uuid] = function(){
-              KAT.sidebar.generateAnnotationForm(me,annotation.edit,annotation,annotation.selection,annotation.concept);
+              annotation.edit(me);
             };
           });
         }
@@ -148,8 +151,14 @@ KAT.module = {
           //Menu item B3.n : Add annotation with nth concept found in Kannspec
           $.each(this.gui.collection.findConcepts(), function(index, concept){
             menu[concept.getFullName()] = function(){
-              //load new Annotation form
-              var values = KAT.sidebar.generateAnnotationForm(me,me.store.addNew.bind(me.store),0,selection,concept);
+              // create a new annotation form.
+              KAT.sidebar.generateAnnotationForm(
+                me,
+                me.store.addNew.bind(me.store),
+                undefined,
+                selection,
+                concept
+              );
             };
           });
         }

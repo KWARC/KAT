@@ -5,6 +5,18 @@
 */
 KAT.rdf = {};
 
+/** XML Namespace for KAT.
+* @name KAT.rdf.kat_namespace
+* @type {string}
+*/
+KAT.rdf.kat_namespace = "https://github.com/KWARC/KAT/";
+
+/** XML Namespace for RDF.
+* @name KAT.rdf.kat_namespace
+* @type {string}
+*/
+KAT.rdf.rdf_namespace = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+
 /** Creates an RDF element.
 *
 * @param {string} name - Name of element to create.
@@ -15,7 +27,7 @@ KAT.rdf = {};
 KAT.rdf.create = function(name){
   // create a namespaced attribute
   // so that we keep the capitalisation.
-  return document.createElementNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", name);
+  return document.createElementNS(KAT.rdf.rdf_namespace, name);
 };
 
 /** Sets an RDF attribute.
@@ -68,8 +80,8 @@ KAT.rdf.resolveWithNameSpace = function(uri, xml){
 */
 KAT.rdf.buildNameSpace = function(uri, xml){
 
-  // find the annotation element.
-  var annEl = $(xml).find("annotation").get(0);
+  // find the annotation element, fallback to just the element itself. 
+  var annEl = $(xml).find("annotation").get(0) || $(xml).get(0);
   var attr, name, suffix;
 
   // iterate through the attributes

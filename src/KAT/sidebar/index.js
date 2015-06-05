@@ -161,6 +161,7 @@ KAT.sidebar.toggleAnnotationMode = function(){
 * Set up and insert Annotation Toolkit sidemenu
 *
 * @param {JOBAD.modules.loadedModule} env - JOBAD loaded Module instance
+* @param {function} callback - Callback that is called once the form is closed. Should return an annotation.
 * @param {KAT.gui.selection} selection - The selection to create an annotation for.
 * @param {KAT.model.Concept} concept - Concept to generate annotation for.
 * @function
@@ -172,26 +173,32 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
   // TODO complete documentation comment above.
   // TODO: Work on a stored annotation, so values can be pre-filled.
 
+  // make sure the sidebar is extended.
   if(!KAT.sidebar.extended){
     KAT.sidebar.toggleSidebar();
   }
 
+
   var values;
   var task;
-  if (annotation === 0){
+
+  // get the task name based on if the annotation is defined or not.
+  if (typeof annotation === "undefined"){
     task = "Enter";
-  }else{
+  } else {
     task = "Edit";
     values = annotation.values;
   }
 
   // create a new element to add to the sidebar.
   // TODO: Have the .KATMenuItems in a variable from the init function.
+  // TODO: XSS vulnerable.
   var newAnnotation = $("<li>").addClass("currentForm").append(
     "<b> "+task+" Annotation Details</b><br>"
   ).appendTo(".KATMenuItems");
 
   var inputFields = jQuery.map(concept.fields, function(current){
+
     // a new input element we will create
     var newField;
 
@@ -201,7 +208,6 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     // grab the value of the field and add it to the sidebar
     var value = current.value;
     newAnnotation.append(jQuery("<span>").html("<br>"+value+": "));
-    //TODO: Implement repeat of fields.
 
     var prevValue;
 
@@ -213,7 +219,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       .addClass("tfield")
       .appendTo(newAnnotation);
 
-      if (annotation !== 0){
+      if (typeof annotation !== "undefined"){
         prevValue = values[value];
         newField.val(prevValue[0]);
       }
@@ -226,7 +232,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       newField = jQuery("<select>")
       .addClass("tfield")
       .appendTo(newAnnotation);
-      if (annotation !== 0){
+      if (typeof annotation !== "undefined"){
         prevValue = values[value];
         jQuery("<option>")
         .text(prevValue[0].value)

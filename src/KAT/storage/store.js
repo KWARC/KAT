@@ -173,17 +173,35 @@ KAT.storage.Store.prototype.findfromElement = function(element){
 };
 
 
-/** Performs a sanity check.
+/** Updates all references.
 *
 * @function
 * @instance
-* @name sanityCheck
+* @name updateReferences
 * @memberof KAT.storage.Store
-* @return {string|boolean} - returns false of an error message
 */
-KAT.storage.Store.prototype.sanityCheck = function(){
-  //TODO: Implement me.
-  return true;
+KAT.storage.Store.prototype.updateReferences = function(){
+
+  // have a reference to me.
+  var me = this;
+
+  //go over all the annotations.
+  jQuery.map(this.annotations, function(annot){
+
+    //and their fields
+    jQuery.map(annot.concept.fields, function(field){
+
+      //and check the references.
+      if(field.type === KAT.model.Field.types.reference){
+        jQuery.map(annot.values[field.value], function(e, i){
+          // if it is a string, set the reference properly.
+          if(typeof e === "string"){
+            annot.values[field.value][i] = me.find(e);
+          }
+        }); 
+      }
+    });
+  });
 };
 
 /** Exports all the annotations in this store to RDF.
@@ -200,8 +218,8 @@ KAT.storage.Store.prototype.toRDF = function(){
 
   // Create the top-level rdf document.
   var rdfTopLevel = $(KAT.rdf.create("rdf:RDF"))
-  .attr("xmlns:kat", "https://github.com/KWARC/KAT/")
-  .attr("xmlns:rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+  .attr("xmlns:kat", KAT.rdf.kat_namespace)
+  .attr("xmlns:rdf", KAT.rdf.rdf_namespace);
 
   // Create a run element.
   // TODO: Read this when importing and store this?
@@ -309,11 +327,17 @@ KAT.storage.Store.prototype.addFromRDF = function(rdf){
   var parsedRDF = jQuery(rdf);
 
   // find all the annotations.
-  return jQuery('rdf\\:Description', parsedRDF).has('kat\\:annotates').map(function(e){
-    var na = KAT.storage.Annotation.fromRDF(jQuery(this).attr("rdf:nodeId"), parsedRDF, me);
+  var added = jQuery('rdf\\:Description', parsedRDF).has('kat\\:annotates').map(function(e){
+    var na = KAT.storage.Annotation.fromRDF(parsedRDF, jQuery(this).attr("rdf:nodeId"), me);
     me.annotations.push(na);
     return na;
   }).toArray();
+
+
+  // update references.
+  this.updateReferences();
+
+  return added;
 };
 
 /**

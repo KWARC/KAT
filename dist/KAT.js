@@ -30,6 +30,18 @@ var KAT = {};
 */
 KAT.rdf = {};
 
+/** XML Namespace for KAT.
+* @name KAT.rdf.kat_namespace
+* @type {string}
+*/
+KAT.rdf.kat_namespace = "https://github.com/KWARC/KAT/";
+
+/** XML Namespace for RDF.
+* @name KAT.rdf.kat_namespace
+* @type {string}
+*/
+KAT.rdf.rdf_namespace = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+
 /** Creates an RDF element.
 *
 * @param {string} name - Name of element to create.
@@ -40,7 +52,7 @@ KAT.rdf = {};
 KAT.rdf.create = function(name){
   // create a namespaced attribute
   // so that we keep the capitalisation.
-  return document.createElementNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", name);
+  return document.createElementNS(KAT.rdf.rdf_namespace, name);
 };
 
 /** Sets an RDF attribute.
@@ -93,8 +105,8 @@ KAT.rdf.resolveWithNameSpace = function(uri, xml){
 */
 KAT.rdf.buildNameSpace = function(uri, xml){
 
-  // find the annotation element.
-  var annEl = $(xml).find("annotation").get(0);
+  // find the annotation element, fallback to just the element itself. 
+  var annEl = $(xml).find("annotation").get(0) || $(xml).get(0);
   var attr, name, suffix;
 
   // iterate through the attributes
@@ -1878,6 +1890,7 @@ KAT.sidebar.toggleAnnotationMode = function(){
 * Set up and insert Annotation Toolkit sidemenu
 *
 * @param {JOBAD.modules.loadedModule} env - JOBAD loaded Module instance
+* @param {function} callback - Callback that is called once the form is closed. Should return an annotation.
 * @param {KAT.gui.selection} selection - The selection to create an annotation for.
 * @param {KAT.model.Concept} concept - Concept to generate annotation for.
 * @function
@@ -1889,26 +1902,32 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
   // TODO complete documentation comment above.
   // TODO: Work on a stored annotation, so values can be pre-filled.
 
+  // make sure the sidebar is extended.
   if(!KAT.sidebar.extended){
     KAT.sidebar.toggleSidebar();
   }
 
+
   var values;
   var task;
-  if (annotation === 0){
+
+  // get the task name based on if the annotation is defined or not.
+  if (typeof annotation === "undefined"){
     task = "Enter";
-  }else{
+  } else {
     task = "Edit";
     values = annotation.values;
   }
 
   // create a new element to add to the sidebar.
   // TODO: Have the .KATMenuItems in a variable from the init function.
+  // TODO: XSS vulnerable.
   var newAnnotation = $("<li>").addClass("currentForm").append(
     "<b> "+task+" Annotation Details</b><br>"
   ).appendTo(".KATMenuItems");
 
   var inputFields = jQuery.map(concept.fields, function(current){
+
     // a new input element we will create
     var newField;
 
@@ -1918,7 +1937,6 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     // grab the value of the field and add it to the sidebar
     var value = current.value;
     newAnnotation.append(jQuery("<span>").html("<br>"+value+": "));
-    //TODO: Implement repeat of fields.
 
     var prevValue;
 
@@ -1930,7 +1948,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       .addClass("tfield")
       .appendTo(newAnnotation);
 
-      if (annotation !== 0){
+      if (typeof annotation !== "undefined"){
         prevValue = values[value];
         newField.val(prevValue[0]);
       }
@@ -1943,7 +1961,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       newField = jQuery("<select>")
       .addClass("tfield")
       .appendTo(newAnnotation);
-      if (annotation !== 0){
+      if (typeof annotation !== "undefined"){
         prevValue = values[value];
         jQuery("<option>")
         .text(prevValue[0].value)
@@ -2321,17 +2339,35 @@ KAT.storage.Store.prototype.findfromElement = function(element){
 };
 
 
-/** Performs a sanity check.
+/** Updates all references.
 *
 * @function
 * @instance
-* @name sanityCheck
+* @name updateReferences
 * @memberof KAT.storage.Store
-* @return {string|boolean} - returns false of an error message
 */
-KAT.storage.Store.prototype.sanityCheck = function(){
-  //TODO: Implement me.
-  return true;
+KAT.storage.Store.prototype.updateReferences = function(){
+
+  // have a reference to me.
+  var me = this;
+
+  //go over all the annotations.
+  jQuery.map(this.annotations, function(annot){
+
+    //and their fields
+    jQuery.map(annot.concept.fields, function(field){
+
+      //and check the references.
+      if(field.type === KAT.model.Field.types.reference){
+        jQuery.map(annot.values[field.value], function(e, i){
+          // if it is a string, set the reference properly.
+          if(typeof e === "string"){
+            annot.values[field.value][i] = me.find(e);
+          }
+        }); 
+      }
+    });
+  });
 };
 
 /** Exports all the annotations in this store to RDF.
@@ -2348,8 +2384,8 @@ KAT.storage.Store.prototype.toRDF = function(){
 
   // Create the top-level rdf document.
   var rdfTopLevel = $(KAT.rdf.create("rdf:RDF"))
-  .attr("xmlns:kat", "https://github.com/KWARC/KAT/")
-  .attr("xmlns:rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+  .attr("xmlns:kat", KAT.rdf.kat_namespace)
+  .attr("xmlns:rdf", KAT.rdf.rdf_namespace);
 
   // Create a run element.
   // TODO: Read this when importing and store this?
@@ -2457,11 +2493,17 @@ KAT.storage.Store.prototype.addFromRDF = function(rdf){
   var parsedRDF = jQuery(rdf);
 
   // find all the annotations.
-  return jQuery('rdf\\:Description', parsedRDF).has('kat\\:annotates').map(function(e){
-    var na = KAT.storage.Annotation.fromRDF(jQuery(this).attr("rdf:nodeId"), parsedRDF, me);
+  var added = jQuery('rdf\\:Description', parsedRDF).has('kat\\:annotates').map(function(e){
+    var na = KAT.storage.Annotation.fromRDF(parsedRDF, jQuery(this).attr("rdf:nodeId"), me);
     me.annotations.push(na);
     return na;
   }).toArray();
+
+
+  // update references.
+  this.updateReferences();
+
+  return added;
 };
 
 /**
@@ -2611,9 +2653,6 @@ KAT.storage.Annotation.prototype.delete = function(){
       break;
     }
   }
-
-  //and re-run the sanity check.
-  this.store.sanityCheck();
 };
 
 /**
@@ -2657,7 +2696,18 @@ KAT.storage.Annotation.prototype.draw = function(){
 */
 KAT.storage.Annotation.fromRDF = function(rdf, id, store){
 
+  // parse the rdf.
   var $rdf = jQuery(rdf);
+
+  // helper function to make a namespaced tag.
+  var makeNSTag = function(code, escaped){
+    console.log(code, $rdf.get(0));
+
+    var tag = KAT.rdf.buildNameSpace(code, $rdf.get(0));
+    console.log("post");
+
+    return escaped?(tag.replace(new RegExp(':', 'g'), '\\:')):tag;
+  };
 
   // find the annotation RDF by id.
   var annotRDF = KAT.rdf.findById($rdf, id);
@@ -2669,15 +2719,15 @@ KAT.storage.Annotation.fromRDF = function(rdf, id, store){
   var partURL;
 
   // if we do not start with the right URL, we need to do something else
-  if(!url.startsWith(store.docURL+"#")){
+  if(url.substring(0, store.docURL.length + 1) != store.docURL+"#"){
     if(url.indexOf("#") != -1){
       console.log("Currently loaded document does not match RDF annotation, loading it anyways ... ");
-      partURL = decodeURLComponent(url.indexOf("#") + 1);
+      partURL = decodeURIComponent(url.indexOf("#") + 1);
     } else {
       throw new Error("Malformed RDF: Unable to parse selection URL. ");
     }
   } else {
-    partURL = decodeURLComponent(url.substring(store.docURL.length + 1));
+    partURL = decodeURIComponent(url.substring(store.docURL.length + 1));
   }
 
   // parse the selection.
@@ -2709,7 +2759,7 @@ KAT.storage.Annotation.fromRDF = function(rdf, id, store){
   }
 
   // The KAnnSpec URL does not match.
-  if (!kspecURL || kSpecURL !== kspec.url){
+  if (!kspecURL || kspecURL !== kspec.url){
     console.warn("Warning: KAnnSpec URL does not match. ");
   }
 
@@ -2728,11 +2778,37 @@ KAT.storage.Annotation.fromRDF = function(rdf, id, store){
   var concept = kspec.getConcept(conceptName);
 
   if(!concept){
-    throw new Exception("Concept '"+conceptName+"' not found inside '"+kSpecName+"'"); 
+    throw new Exception("Concept '"+conceptName+"' not found inside '"+kSpecName+"'");
   }
 
-  // TODO: Get the values.
-  return new KAT.storage.Annotation(store, selection, concept, {}, id);
+  // array for values to read.
+  var values = {};
+
+  // iterate over all the fields.
+  jQuery.each(concept.fields, function(_, field){
+
+    var fieldValues = [];
+
+    if(field.type == KAT.model.Field.types.text){
+      // find all the tags and get the text.
+      $rdf.find(makeNSTag(field.rdf_pred, true)).each(function(){
+        fieldValues.push(jQuery(this).text());
+      });
+
+    } else if(field.type == KAT.model.Field.types.reference){
+
+
+    } else if(field.type == KAT.model.Field.types.select){
+
+    }
+
+    // store the field values.
+    // if they are missing it is just an empty array.
+    values[field.value] = fieldValues;
+  });
+
+  console.log(values);
+  return new KAT.storage.Annotation(store, selection, concept, values, id);
 };
 
 /**
@@ -2752,17 +2828,35 @@ KAT.storage.Annotation.prototype.flash = function(){
 };
 
 /**
-* Shows an edit form for an annotation.
+* Shows an edit form for the annotation.
 *
 * @function
 * @name edit
 * @memberof KAT.storage.Annotation
 */
-KAT.storage.Annotation.prototype.edit = function(selection, concept, valuesJSON,annotation){
-  annotation.values = valuesJSON;
-  annotation.undraw();
-  annotation.draw();
-  annotation.flash();
+KAT.storage.Annotation.prototype.edit = function(env){
+
+  // TODO: Parse the env. 
+  KAT.sidebar.generateAnnotationForm(
+    env,
+    function(selection, concept, valuesJSON, annotation){
+      // update the values.
+      annotation.values = valuesJSON;
+
+      // re-draw the annotation.
+      annotation.undraw();
+      annotation.draw();
+
+      //flash it.
+      annotation.flash();
+
+
+      return annotation;
+    },
+    annotation,
+    annotation.selection,
+    annotation.concept
+  );
 };
 
 /**
@@ -2942,9 +3036,10 @@ KAT.module = {
     this.gui = this.store.gui;
   },
   contextMenuEntries: function(target, JOBADInstance){
+    // reference to self
     var me = this;
 
-    //texts
+    // Lots of Text
     var text_new        = "Add new Annotation";
     var text_remove     = "Delete Annotation";
     var text_highlight  = "Highlight Annotation";
@@ -2955,8 +3050,9 @@ KAT.module = {
     var storage_import  = "Import Annotations";
     var storage_export  = "Export Annotations";
 
+    // TODO: Callbacks.
 
-    //the menu to return
+    // the menu to return
     var menu = {};
 
     // Case A: Annotation Mode is disabled
@@ -2964,8 +3060,8 @@ KAT.module = {
 
       //Menu item A.1 : Turn on annotation mode
       menu[annot_modeOn] = function(){
-          KAT.sidebar.toggleAnnotationMode();
-        };
+        KAT.sidebar.toggleAnnotationMode();
+      };
 
       //Menu item A.2 : Import Annotations
       menu[storage_import] = function(){
@@ -2989,6 +3085,7 @@ KAT.module = {
     else {
 
       var selection;
+
       try{
         selection = this.gui.getSelection();
       } catch(e){}
@@ -3052,7 +3149,7 @@ KAT.module = {
 
             //Menu item B2.3 : Edit annotation
             menu[text_edit][annotation.uuid] = function(){
-              KAT.sidebar.generateAnnotationForm(me,annotation.edit,annotation,annotation.selection,annotation.concept);
+              annotation.edit(me);
             };
           });
         }
@@ -3065,8 +3162,14 @@ KAT.module = {
           //Menu item B3.n : Add annotation with nth concept found in Kannspec
           $.each(this.gui.collection.findConcepts(), function(index, concept){
             menu[concept.getFullName()] = function(){
-              //load new Annotation form
-              var values = KAT.sidebar.generateAnnotationForm(me,me.store.addNew.bind(me.store),0,selection,concept);
+              // create a new annotation form.
+              KAT.sidebar.generateAnnotationForm(
+                me,
+                me.store.addNew.bind(me.store),
+                undefined,
+                selection,
+                concept
+              );
             };
           });
         }
