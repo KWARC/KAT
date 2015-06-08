@@ -1961,28 +1961,25 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       newField = jQuery("<select>")
       .addClass("tfield")
       .appendTo(newAnnotation);
+
+      // add all the values
+      $.each(options, function(j, opt){
+        jQuery("<option>")
+        .text(opt.value)
+        .val(j)
+        .appendTo(newField);
+      });
+
+      // TODO: Implement multiple values.
+      // if applicable, find the previous value
       if (typeof annotation !== "undefined"){
         prevValue = values[value];
-        jQuery("<option>")
-        .text(prevValue[0].value)
-        .val(prevValue[0])
-        .appendTo(newField);
 
-        $.each(options, function(j, opt){
-          if (opt.value != prevValue[0].value){
-            jQuery("<option>")
-            .text(opt.value)
-            .val(j)
-            .appendTo(newField);
+        for(var i=0;i<options.length;i++){
+          if(options[i].value === prevValue[0].value){
+            newField.val(i);
           }
-      });
-      } else {
-        $.each(options, function(j, opt){
-          jQuery("<option>")
-            .text(opt.value)
-            .val(j)
-            .appendTo(newField);
-        });
+        }
       }
     }
 
@@ -1997,12 +1994,10 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
       // for each
       jQuery.each(allowedAnnotations, function(index, annot){
-
         $("<option>")
         .text(annot.uuid)
         .val(annot.uuid)
         .appendTo(newField);
-
       });
 
       if(values){
@@ -2717,7 +2712,7 @@ KAT.storage.Annotation.fromRDF = function(rdf, id, store){
   var url = annotRDF.find("kat\\:annotates").attr("rdf:resource");
 
   // and get the selection part of the url
-  var partURL; 
+  var partURL;
 
   // if we do not start with the right URL, we need to do something else
   if(url.substring(0, store.docURL.length + 1) != store.docURL+"#"){
@@ -2867,7 +2862,6 @@ KAT.storage.Annotation.prototype.edit = function(env){
       //flash it.
       annotation.flash();
 
-
       return annotation;
     },
     this,
@@ -2991,7 +2985,6 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
 
       if(field.type == KAT.model.Field.types.text){
         // for a text field, simply store the value.
-
         rdfElement.text(value);
       } else if(field.type == KAT.model.Field.types.reference){
         // for a reference, point to the RDF id.

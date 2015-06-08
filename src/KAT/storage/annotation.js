@@ -143,7 +143,7 @@ KAT.storage.Annotation.fromRDF = function(rdf, id, store){
   var url = annotRDF.find("kat\\:annotates").attr("rdf:resource");
 
   // and get the selection part of the url
-  var partURL; 
+  var partURL;
 
   // if we do not start with the right URL, we need to do something else
   if(url.substring(0, store.docURL.length + 1) != store.docURL+"#"){
@@ -293,7 +293,6 @@ KAT.storage.Annotation.prototype.edit = function(env){
       //flash it.
       annotation.flash();
 
-
       return annotation;
     },
     this,
@@ -417,7 +416,6 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
 
       if(field.type == KAT.model.Field.types.text){
         // for a text field, simply store the value.
-
         rdfElement.text(value);
       } else if(field.type == KAT.model.Field.types.reference){
         // for a reference, point to the RDF id.
