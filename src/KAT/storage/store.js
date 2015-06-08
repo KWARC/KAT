@@ -198,7 +198,7 @@ KAT.storage.Store.prototype.updateReferences = function(){
           if(typeof e === "string"){
             annot.values[field.value][i] = me.find(e);
           }
-        }); 
+        });
       }
     });
   });
@@ -306,8 +306,13 @@ KAT.storage.Store.prototype.toRDF = function(){
    rdfTopLevel.append($(annotation.toRDF(me.docURL, runID)).children());
   });
 
-  //return a string because javascrt
-  return rdfTopLevel.get(0).outerHTML;
+  // get an rdf string
+  var rdfString = rdfTopLevel.get(0).outerHTML;
+
+  // TODO: Remove this
+  console.log(rdfString);
+
+  return rdfString;
 };
 
 /** Adds a new annotation to this Store based on an RDF export.

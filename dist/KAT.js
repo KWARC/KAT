@@ -2364,7 +2364,7 @@ KAT.storage.Store.prototype.updateReferences = function(){
           if(typeof e === "string"){
             annot.values[field.value][i] = me.find(e);
           }
-        }); 
+        });
       }
     });
   });
@@ -2472,8 +2472,13 @@ KAT.storage.Store.prototype.toRDF = function(){
    rdfTopLevel.append($(annotation.toRDF(me.docURL, runID)).children());
   });
 
-  //return a string because javascrt
-  return rdfTopLevel.get(0).outerHTML;
+  // get an rdf string
+  var rdfString = rdfTopLevel.get(0).outerHTML;
+
+  // TODO: Remove this
+  console.log(rdfString);
+
+  return rdfString;
 };
 
 /** Adds a new annotation to this Store based on an RDF export.
@@ -2701,11 +2706,7 @@ KAT.storage.Annotation.fromRDF = function(rdf, id, store){
 
   // helper function to make a namespaced tag.
   var makeNSTag = function(code, escaped){
-    console.log(code, $rdf.get(0));
-
     var tag = KAT.rdf.buildNameSpace(code, $rdf.get(0));
-    console.log("post");
-
     return escaped?(tag.replace(new RegExp(':', 'g'), '\\:')):tag;
   };
 
@@ -2713,10 +2714,10 @@ KAT.storage.Annotation.fromRDF = function(rdf, id, store){
   var annotRDF = KAT.rdf.findById($rdf, id);
 
   // extract the selection.
-  var url = $rdf.find("kat\\:annotates").attr("rdf:resource");
+  var url = annotRDF.find("kat\\:annotates").attr("rdf:resource");
 
   // and get the selection part of the url
-  var partURL;
+  var partURL; 
 
   // if we do not start with the right URL, we need to do something else
   if(url.substring(0, store.docURL.length + 1) != store.docURL+"#"){
@@ -2734,7 +2735,7 @@ KAT.storage.Annotation.fromRDF = function(rdf, id, store){
   var selection = KAT.storage.Store.UUID2Selection(partURL);
 
   // get the kann spec element.
-  var kspecElem = KAT.rdf.findById($rdf, $rdf.find("kat\\:kannspec").attr("rdf:nodeID"));
+  var kspecElem = KAT.rdf.findById($rdf, annotRDF.find("kat\\:kannspec").attr("rdf:nodeID"));
 
   // check if we have found it
   if(kspecElem.length !== 1){
@@ -2764,7 +2765,7 @@ KAT.storage.Annotation.fromRDF = function(rdf, id, store){
   }
 
   // force the KAnnSpec RDF node id.
-  kspec.rdf_nodeid = $rdf.find("kat\\:kannspec").attr("rdf:nodeID");
+  kspec.rdf_nodeid = annotRDF.find("kat\\:kannspec").attr("rdf:nodeID");
 
 
   // now find the concept
@@ -2778,7 +2779,7 @@ KAT.storage.Annotation.fromRDF = function(rdf, id, store){
   var concept = kspec.getConcept(conceptName);
 
   if(!concept){
-    throw new Exception("Concept '"+conceptName+"' not found inside '"+kSpecName+"'");
+    throw new Error("Concept '"+conceptName+"' not found inside '"+kSpecName+"'");
   }
 
   // array for values to read.
@@ -2791,15 +2792,30 @@ KAT.storage.Annotation.fromRDF = function(rdf, id, store){
 
     if(field.type == KAT.model.Field.types.text){
       // find all the tags and get the text.
-      $rdf.find(makeNSTag(field.rdf_pred, true)).each(function(){
+      annotRDF.find(makeNSTag(field.rdf_pred, true)).each(function(){
         fieldValues.push(jQuery(this).text());
       });
 
     } else if(field.type == KAT.model.Field.types.reference){
-
-
+      annotRDF.find(makeNSTag(field.rdf_pred, true)).each(function(){
+        fieldValues.push(jQuery(this).attr("rdf:nodeID"));
+      });
     } else if(field.type == KAT.model.Field.types.select){
+      annotRDF.find(makeNSTag(field.rdf_pred, true)).each(function(){
+        var optionSpec = jQuery(this).attr("rdf:resource");
 
+        // go over the options
+        for(var i=0;i<field.validation.length; i++){
+
+          // and find the right one.
+          if(field.validation[i].rdf_obj === optionSpec || field.validation[i].value === optionSpec){
+            fieldValues.push(field.validation[i]);
+            return;
+          }
+        }
+
+        throw new Error("Option '"+optionSpec+"' not found inside '"+kSpecName+"'");
+      });
     }
 
     // store the field values.
@@ -2807,8 +2823,9 @@ KAT.storage.Annotation.fromRDF = function(rdf, id, store){
     values[field.value] = fieldValues;
   });
 
-  console.log(values);
-  return new KAT.storage.Annotation(store, selection, concept, values, id);
+  var newAnnot = new KAT.storage.Annotation(store, selection, concept, values, id);
+
+  return newAnnot;
 };
 
 /**
@@ -2836,7 +2853,7 @@ KAT.storage.Annotation.prototype.flash = function(){
 */
 KAT.storage.Annotation.prototype.edit = function(env){
 
-  // TODO: Parse the env. 
+  // TODO: Parse the env.
   KAT.sidebar.generateAnnotationForm(
     env,
     function(selection, concept, valuesJSON, annotation){
@@ -2853,9 +2870,9 @@ KAT.storage.Annotation.prototype.edit = function(env){
 
       return annotation;
     },
-    annotation,
-    annotation.selection,
-    annotation.concept
+    this,
+    this.selection,
+    this.concept
   );
 };
 
@@ -2962,43 +2979,35 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
     var fieldVal = jQuery.isArray(value)?value:[value];
 
     jQuery.each(fieldVal, function(i, value){
-      //TODO: Generate individual values.
+
+
+      // create an element to add to the RDF
+      var rdfElement = $(
+        KAT.rdf.create(
+          KAT.rdf.buildNameSpace(field.rdf_pred, concept.KAnnSpec.xml)
+        )
+      ).appendTo(contentDesc);
+
 
       if(field.type == KAT.model.Field.types.text){
         // for a text field, simply store the value.
-        $(
-          KAT.rdf.create(
-            KAT.rdf.buildNameSpace(field.rdf_pred, concept.KAnnSpec.xml)
-          )
-        )
-        .text(value).appendTo(contentDesc);
 
+        rdfElement.text(value);
       } else if(field.type == KAT.model.Field.types.reference){
         // for a reference, point to the RDF id.
         KAT.rdf.attr(
-          $(
-            KAT.rdf.create(
-              KAT.rdf.buildNameSpace(field.rdf_pred, concept.KAnnSpec.xml)
-            )
-          ).appendTo(contentDesc),
+          rdfElement,
           "rdf:nodeID",
           value.uuid
         );
 
-        console.log(value);
       } else if(field.type == KAT.model.Field.types.select){
         // For a select, use the rdf_obj property
-
         KAT.rdf.attr(
-          $(
-            KAT.rdf.create(
-              KAT.rdf.buildNameSpace(field.rdf_pred, concept.KAnnSpec.xml)
-            )
-          ).appendTo(contentDesc),
+          rdfElement,
           "rdf:resource",
           value.rdf_obj?value.rdf_obj:(value.value)
         );
-
       }
 
     });
