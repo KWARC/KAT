@@ -103,23 +103,84 @@ KAT.storage.Annotation.prototype.delete = function(){
 * @name draw
 * @memberof KAT.storage.Annotation
 */
-KAT.storage.Annotation.prototype.draw = function(){
+
+KAT.storage.Annotation.prototype.draw = function(concept, valuesJSON, annotation){
+
   //this is me.
   var me = this;
 
   //find the elements in the selection.
   var range = this.store.gui.getRange(this.selection);
 
+
+  function getWordsBetweenCurlies(str) {
+    var results = [], re = /{([^}]+)}/g, text;
+
+    while(text = re.exec(str)) {
+      results.push(text[1]);
+    }
+
+  return results;
+  }
+
   //add a class for the selection.
   range.addClass("KAT-selection").each(function(){
-    var $me = $(this);
+    var $me = $(this); //creates jQuery object
 
     var current = $me.data("KAT.Annotation.UUID") || [];
     current.push(me.uuid);
 
+    //find the values to be inserted for {x}
+    var m = getWordsBetweenCurlies(concept.display);
+
+    var tmp = document.createElement("div");
+    tmp.innerHTML = concept.display;
+    var hovertext = tmp.textContent || tmp.innerText || "";
+
+    var capitalize = function(string) {
+
+      return string[0].toUpperCase() + string.slice(1).toLowerCase();
+    
+    };
+
+    var getJSONValue;
+    $.each(m, function(j, key) {
+
+      //check 'type' of the field
+
+    //   if(field.type == KAT.model.Field.types.reference){
+    //     // for references, find the actual UUID.
+    //     valuesJSON[field.value] = [env.store.find(infield.val())];
+    //   } else if(valuesJSON[key].type == KAT.model.Field.types.select){
+    //     // for option, store the selected option.
+    //     valuesJSON[field.value] = [field.validation[infield.val()]];
+    //   } else {
+    //     // for text, just store the text.
+    //     // valuesJSON[field.value] = [infield.val()];
+    //   }
+
+
+      getJSONValue = valuesJSON[key] || valuesJSON[capitalize(key)] || "";
+      hovertext = hovertext.replace("{"+m[j]+"}", getJSONValue);
+
+    });
+
+    // console.log(m);
+
+    $me.attr("title", hovertext);
+
     //write it back
     $me.data("KAT.Annotation.UUID", current);
   });
+
+ // console.log("annotation created");
+
+  $.each(concept.fields, function(i, field) {console.log(field.value);});
+
+  console.log(concept);
+
+  $(document).tooltip(); //here the magic of the tooltip displaying happens
+
 };
 
 /**
@@ -129,6 +190,8 @@ KAT.storage.Annotation.prototype.draw = function(){
 * @name flash
 * @memberof KAT.storage.Annotation
 */
+
+//called in rightclick: highlight annotation
 KAT.storage.Annotation.prototype.flash = function(){
   //get the range.
   this.store.gui
@@ -137,6 +200,8 @@ KAT.storage.Annotation.prototype.flash = function(){
     $(this).css("background-color", "");
   });
 };
+
+
 
 /**
 * Shows an edit form for an annotation.
