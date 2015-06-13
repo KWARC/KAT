@@ -11,6 +11,7 @@
 * @Alias KAT.storage.Annotation
 * @class
 */
+
 KAT.storage.Annotation = function(store, selection, concept, values, id){
 
   /**
@@ -136,25 +137,23 @@ KAT.storage.Annotation.prototype.draw = function(){
     $.each(m, function(j, key) {
 
       //check 'type' of the field
+      switch(me.concept.fields[j].type) {
 
-    //   if(field.type == KAT.model.Field.types.reference){
-    //     // for references, find the actual UUID.
-    //     valuesJSON[field.value] = [env.store.find(infield.val())];
-    //   } else if(valuesJSON[key].type == KAT.model.Field.types.select){
-    //     // for option, store the selected option.
-    //     valuesJSON[field.value] = [field.validation[infield.val()]];
-    //   } else {
-    //     // for text, just store the text.
-    //     // valuesJSON[field.value] = [infield.val()];
-    //   }
+        case KAT.model.Field.types.reference:
+          console.log("reference: ");
+          break;
 
+        case KAT.model.Field.types.select:
+          getJSONValue = me.values[key][0].value || "";
+          hovertext = hovertext.replace("{"+m[j]+"}", getJSONValue);
+          break;
 
-      getJSONValue = me.values[key] || me.values[capitalize(key)] || "";
-      hovertext = hovertext.replace("{"+m[j]+"}", getJSONValue);
+        default: //text; just print the text.
+          getJSONValue = me.values[key] || me.values[capitalize(key)] || "";
+          hovertext = hovertext.replace("{"+m[j]+"}", getJSONValue);
+      }
 
     });
-
-    // console.log(m);
 
     $me.attr("title", hovertext);
 
@@ -162,7 +161,7 @@ KAT.storage.Annotation.prototype.draw = function(){
     $me.data("KAT.Annotation.UUID", current);
   });
 
-  $.each(me.concept.fields, function(i, field) {console.log(field.value);});
+  $.each(me.concept.fields, function(i, field) {console.log(field.value); console.log(field.type)});
 
   $(document).tooltip(); //here the magic of the tooltip displaying happens
 
