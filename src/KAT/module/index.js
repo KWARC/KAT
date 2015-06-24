@@ -3,6 +3,7 @@
 * @namespace
 * @alias KAT.module
 */
+
 KAT.module = {
   /* Module Info / Meta Data */
   info:{
@@ -28,6 +29,7 @@ KAT.module = {
     // return element to display
 
   }, 
+
   contextMenuEntries: function(target, JOBADInstance){
     // reference to self
     var me = this;
@@ -48,16 +50,10 @@ KAT.module = {
     // the menu to return
     var menu = {};
 
-    // Case A: Annotation Mode is disabled
-    if (!KAT.sidebar.annotationMode){
+    var initializeMenuBar = function(annotationModeBool) {
 
-      //Menu item A.1 : Turn on annotation mode
-      menu[annot_modeOn] = function(){
-        KAT.sidebar.toggleAnnotationMode();
-      };
+      var importAnnotations = function(){
 
-      //Menu item A.2 : Import Annotations
-      menu[storage_import] = function(){
         var rdfDoc = prompt("Paste annotations to import here: ");
         var annots = me.store.addFromRDF(jQuery(rdfDoc).get(0));
 
@@ -65,13 +61,41 @@ KAT.module = {
         for(var i=0;i<annots.length;i++){
           annots[i].draw();
         }
+
       };
 
-      //Menu item A.3 : Export Annotations
-      menu[storage_export] = function(){
-        var rdfDoc = me.store.toRDF();
-        prompt("Press CTRL+C to export annotations: ", rdfDoc);
+      var exportAnnotations = function() {
+
+          var rdfDoc = me.store.toRDF();
+          var dialog = KAT.gui.dialog("Export Annotation", rdfDoc, ["OK"], function(){this.close();});
+
       };
+
+      //Menu item 1 : Toggle annotation mode
+      
+      if(annotationModeBool) {
+        menu[annot_modeOff] = function(){
+          KAT.sidebar.toggleAnnotationMode();
+        };
+      } else {
+        menu[annot_modeOn] = function(){
+          KAT.sidebar.toggleAnnotationMode();
+        };
+      }
+
+      //Menu item 2
+      menu[storage_import] = importAnnotations;
+
+      //Menu item 3
+      menu[storage_export] = exportAnnotations;
+
+  };
+
+    // Case A: Annotation Mode is disabled
+    if (!KAT.sidebar.annotationMode){
+
+      initializeMenuBar(false);
+
     }
 
     // Case B: Annotation Mode is enabled
@@ -91,32 +115,7 @@ KAT.module = {
           Right click is not on an annotation
         */
 
-        //Menu item B1.1 : Turn off annotation mode
-        menu[annot_modeOff] = function(){
-            KAT.sidebar.toggleAnnotationMode();
-        };
-
-        //Menu item B1.2 : Import Annotations
-        menu[storage_import] = function(){
-          var rdfDoc = prompt("Paste annotations to import here: ");
-          var annots = me.store.addFromRDF(jQuery(rdfDoc).get(0));
-
-          //and draw them
-          for(var i=0;i<annots.length;i++){
-            annots[i].draw();
-          }
-        };
-
-        //Menu item B1.3 : Export Annotations
-        menu[storage_export] = function(){
-          var rdfDoc = me.store.toRDF();
-          prompt("Press CTRL+C to export annotations: ", rdfDoc);
-        };
-
-        /* Subcase B2:
-          User has not made a selection
-          Right click is on an annotation
-        */
+        initializeMenuBar(true);
 
         //find all the annotations.
         var annots = this.store.findfromElement(target);
@@ -173,5 +172,6 @@ KAT.module = {
     return menu;
   }
 };
+
 
 JOBAD.modules.register(KAT.module); //register the module.
