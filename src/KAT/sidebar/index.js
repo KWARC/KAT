@@ -211,48 +211,17 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
     var prevValue;
 
-    // for text fields, we just have a text field.
     // TODO: Implement validation of text fields.
     if(current.type === KAT.model.Field.types.text){
-      newField =
-      jQuery("<input type='text'>")
-      .addClass("tfield")
-      .appendTo(newAnnotation);
+      
+      newField = createTextfield(newAnnotation, values, value);
 
-      if (typeof annotation !== "undefined"){
-        prevValue = values[value];
-        newField.val(prevValue[0]);
-      }
+    } else if(current.type === KAT.model.Field.types.select){
+      
+      newField = createDropdown(newAnnotation, options);
+
     }
 
-    // for select fields, create a dropdown
-    // TODO: Possibly use a styled dropbown from Bootstrap
-    if(current.type === KAT.model.Field.types.select){
-      // Create a select element.
-      newField = jQuery("<select>")
-      .addClass("tfield")
-      .appendTo(newAnnotation);
-
-      // add all the values
-      $.each(options, function(j, opt){
-        jQuery("<option>")
-        .text(opt.value)
-        .val(j)
-        .appendTo(newField);
-      });
-
-      // TODO: Implement multiple values.
-      // if applicable, find the previous value
-      if (typeof annotation !== "undefined"){
-        prevValue = values[value];
-
-        for(var i=0;i<options.length;i++){
-          if(options[i].value === prevValue[0].value){
-            newField.val(i);
-          }
-        }
-      }
-    }
 
     // for a reference list possible annotations.
     if(current.type === KAT.model.Field.types.reference){
@@ -276,8 +245,6 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
         newField.val(prevValue[0].uuid);
       }
     }
-
-
 
     return newField;
   });
@@ -322,17 +289,71 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     theannotation.draw();
   });
 
-    // Create a button
+  
   //TODO: Make this more general.
   // Also do not use type='submit' here, as clicking that would reload page
   // if you are in a <form> tag, unless you cancel explititly
-  $("<input type='button'>")
-  .val("Cancel")
-  .appendTo(newAnnotation)
-  .click(function(){
-    // remove the entire form
-    newAnnotation.remove();
-  });
+  makeButton(newAnnotation);
+  
+  function makeButton(parent) {
+
+    $("<input type='button'>")
+      .val("Cancel")
+      .appendTo(newAnnotation)
+      .click(function(){
+        // remove the entire form
+        newAnnotation.remove();
+      });
+
+  }
+
+  function createTextfield(parent, values, value) {
+
+    var newField =
+      jQuery("<input type='text'>")
+      .addClass("tfield")
+      .appendTo(parent);
+
+      if (typeof annotation !== "undefined"){
+        var prevValue = values[value];
+        newField.val(prevValue[0]);
+      }
+
+    return newField;
+
+  }
+
+  // TODO: Possibly use a styled dropbown from Bootstrap
+  function createDropdown(parent, options) {
+
+    // Create a select element.
+    var newField = jQuery("<select>")
+    .addClass("tfield")
+    .appendTo(parent);
+
+    // add all the values
+    $.each(options, function(j, opt){
+      jQuery("<option>")
+      .text(opt.value)
+      .val(j)
+      .appendTo(newField);
+    });
+
+    // TODO: Implement multiple values.
+    // if applicable, find the previous value
+    if (typeof annotation !== "undefined"){
+      var prevValue = values[value];
+
+      for(var i=0;i<options.length;i++){
+        if(options[i].value === prevValue[0].value){
+          newField.val(i);
+        }
+      }
+    }
+
+    return newField;
+
+  }
 };
 
 /**

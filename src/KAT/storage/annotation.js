@@ -161,8 +161,6 @@ KAT.storage.Annotation.prototype.draw = function(){
     $me.data("KAT.Annotation.UUID", current);
   });
 
-  $.each(me.concept.fields, function(i, field) {console.log(field.value); console.log(field.type)});
-
   $(document).tooltip(); //here the magic of the tooltip displaying happens
 
 };
@@ -322,7 +320,7 @@ KAT.storage.Annotation.prototype.flash = function(){
   //get the range.
   this.store.gui
   .getRange(this.selection).stop()
-	.animate({ backgroundColor: "red"}, 1500, function(){
+  .animate({ backgroundColor: "red"}, 1500, function(){
     $(this).css("background-color", "");
   });
 };
