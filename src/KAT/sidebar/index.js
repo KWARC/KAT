@@ -207,14 +207,13 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
     // grab the value of the field and add it to the sidebar
     var value = current.value;
-    newAnnotation.append(jQuery("<span>").html("<br>"+value+": "));
+    newAnnotation.append("<br>").append(jQuery("<label>").text(value));
 
     var prevValue;
 
-    // TODO: Implement validation of text fields.
     if(current.type === KAT.model.Field.types.text){
       
-      newField = createTextfield(newAnnotation, values, value);
+      newField = createTextfield(newAnnotation, values, value, current);
 
     } else if(current.type === KAT.model.Field.types.select){
       
@@ -253,10 +252,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
   //TODO: Make this more general.
   // Also do not use type='submit' here, as clicking that would reload page
   // if you are in a <form> tag, unless you cancel explititly
-  $("<input type='button'>")
-  .val("Save")
-  .appendTo(newAnnotation)
-  .click(function(){
+  makeButton(newAnnotation, "Save",function(){
 
     // The result JSON
     var valuesJSON = {};
@@ -287,32 +283,33 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     // callback
     var theannotation = callback(selection, concept, valuesJSON, annotation);
     theannotation.draw();
-  });
+  }).addClass("save");
 
   
   //TODO: Make this more general.
   // Also do not use type='submit' here, as clicking that would reload page
   // if you are in a <form> tag, unless you cancel explititly
-  makeButton(newAnnotation);
-  
-  function makeButton(parent) {
-
-    $("<input type='button'>")
-      .val("Cancel")
-      .appendTo(newAnnotation)
-      .click(function(){
-        // remove the entire form
-        newAnnotation.remove();
+  makeButton(newAnnotation, "Cancel", function(){
+        newAnnotation.remove(); // remove the entire form
       });
+  
+  function makeButton(parent, text, func) {
 
+    return $("<button type='button'>")
+      .text(text)
+      .addClass("formButton")
+      .appendTo(newAnnotation)
+      .click(func);
   }
 
-  function createTextfield(parent, values, value) {
+  function createTextfield(parent, values, value, current) {
 
     var newField =
       jQuery("<input type='text'>")
       .addClass("tfield")
-      .appendTo(parent);
+      .addClass("form-control")
+      .appendTo(parent)
+      .keyup(validation);
 
       if (typeof annotation !== "undefined"){
         var prevValue = values[value];
@@ -320,6 +317,23 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       }
 
     return newField;
+
+    function validation() {
+
+      var RegExpression = current.validation;
+
+      $(".currentForm").removeClass("has-success has-error");
+      $(".save").removeAttr("disabled");
+
+      console.log(newField.val());
+       if(RegExpression.test(newField.val())) {
+         $(".currentForm").addClass("has-success");
+       } else {
+         $(".currentForm").addClass("has-error");
+         $(".save").attr("disabled", "disabled");
+       }
+
+    }
 
   }
 

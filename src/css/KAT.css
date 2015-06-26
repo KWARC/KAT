@@ -21,6 +21,7 @@ div.scrollingDiv{
 }
 
 .tfield{
+  float: right;
   width: 120px;
 }
 
@@ -78,4 +79,14 @@ div.scrollingDiv{
   overflow: auto;
   border : 1px solid black;
   font: 14px Arial, Helvetica, sans-serif;
+}
+
+.formButton {
+  height: 20px;
+  width: 80px;
+  margin-bottom: 0px;
+}
+
+label {
+  font-size: 10px;
 }
