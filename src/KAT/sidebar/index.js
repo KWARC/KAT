@@ -219,30 +219,10 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       
       newField = createDropdown(newAnnotation, options);
 
-    }
+    } if(current.type === KAT.model.Field.types.reference){ // for a reference list possible annotations.
 
+      newField = createReferenceSpinner(newAnnotation, env, annot, values, value);
 
-    // for a reference list possible annotations.
-    if(current.type === KAT.model.Field.types.reference){
-
-      // create a new field.
-      newField = jQuery("<select>").addClass("tfield").appendTo(newAnnotation);
-
-      // Find all the allowed concepts
-      var allowedAnnotations = env.store.filterByConcept.apply(env.store, options);
-
-      // for each
-      jQuery.each(allowedAnnotations, function(index, annot){
-        $("<option>")
-        .text(annot.uuid)
-        .val(annot.uuid)
-        .appendTo(newField);
-      });
-
-      if(values){
-        prevValue = values[value];
-        newField.val(prevValue[0].uuid);
-      }
     }
 
     return newField;
@@ -283,7 +263,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     // callback
     var theannotation = callback(selection, concept, valuesJSON, annotation);
     theannotation.draw();
-  }).addClass("save");
+  }).addClass("save").attr("disabled", "disabled");
 
   
   //TODO: Make this more general.
@@ -346,7 +326,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     .appendTo(parent);
 
     // add all the values
-    $.each(options, function(j, opt){
+    jQuery.each(options, function(j, opt){
       jQuery("<option>")
       .text(opt.value)
       .val(j)
@@ -366,6 +346,31 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     }
 
     return newField;
+
+  }
+
+  function createReferenceSpinner(parent, env, annot, values, value) {
+
+    // create a new field.
+    var newField = jQuery("<select>")
+    .addClass("tfield")
+    .appendTo(parent);
+
+    // Find all the allowed concepts
+    var allowedAnnotations = env.store.filterByConcept.apply(env.store, options);
+
+    // for each
+    jQuery.each(allowedAnnotations, function(index, annot){
+      jQuery("<option>")
+      .text(annot.uuid)
+      .val(annot.uuid)
+      .appendTo(newField);
+    });
+
+    if(values){
+      prevValue = values[value];
+      newField.val(prevValue[0].uuid);
+    }
 
   }
 };
