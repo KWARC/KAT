@@ -21,13 +21,35 @@ KAT.module = {
     'async': false,
     'hasCleanNamespace': false
   },
-  init: function(JOBADInstance, annotationStore){
-    this.store = annotationStore; // KAT.storage.Store
-    this.gui = this.store.gui; // KAT.gui
-  },
-  hoverText: function(target, JOBADInstance){
-    // return element to display
+  init: function(JOBADInstance, collection_or_kannspec_and_url, documentURL){
 
+    // first of all create a collection
+    var collection;
+
+    // if a collection has been parsed, we have it already.
+    if(collection_or_kannspec_and_url instanceof KAT.model.KAnnSpecCollection){
+      collection = collection_or_kannspec_and_url;
+    } else {
+      // if not, we still need to create that.
+      collection = new KAT.model.KAnnSpecCollection();
+      collection.addNewKAnnSpec(collection_or_kannspec_and_url[0], collection_or_kannspec_and_url[1]);
+    }
+
+    // create a new gui bound to the right element.
+    this.gui = new KAT.gui(JOBADInstance.element, collection);
+
+    //create a store with the right documentURL
+    this.store = new KAT.storage.Store(this.gui, documentURL);
+
+    // initialise the tooltip libarary
+    JOBADInstance.element.tooltip();
+
+    // initialise the gui
+    KAT.sidebar.init(this.gui);
+
+    //initialise gui collection
+    collection.init();
+    collection.assignDisplayColour();
   },
 
   contextMenuEntries: function(target, JOBADInstance){

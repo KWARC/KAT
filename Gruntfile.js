@@ -46,11 +46,8 @@ module.exports = function(grunt) {
       options: {
         sourceMap: true,
         stripBanners: true,
-        banner: Banner,
-        process: function(src, filepath) {
-          return '// Source: ' + filepath + '\n' +
-            src.replace(/(^|\n)[ \t]*('use strict'|'use strict');?\s*/g, '$1');
-        },
+        banner: Banner+'\n\n(function(exports,global){global["KAT"]=exports;\n',
+        footer: "\n})({},function(){return this}());"
       },
       dist: {
         src: source_files,
@@ -86,7 +83,8 @@ module.exports = function(grunt) {
     uglify: {
       options: {
         sourceMap: true,
-        banner: Banner
+        banner: Banner,
+        wrap: "KAT",
       },
       build: {
         src: source_files,

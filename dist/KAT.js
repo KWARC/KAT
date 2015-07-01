@@ -14,20 +14,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with KAT.  If not, see <http://www.gnu.org/licenses/>
 */
-// Source: src/KAT/index.js
-/**
-* Namespace everything used by KAT
-* @namespace
-* @alias KAT
-*/
-var KAT = {};
 
-// Source: src/KAT/rdf/index.js
-/**
-* Namespace for RDF functionality used by KAT.
-* @namespace
-* @alias KAT.rdf
-*/
+
+(function(exports,global){global["KAT"]=exports;
+// define the global KAT object we will export.
+var KAT = exports;
+
+// make sure $ is available as jQuery.
+var $ = global.jQuery;
+
 KAT.rdf = {};
 
 /** XML Namespace for KAT.
@@ -151,12 +146,6 @@ KAT.rdf.findById = function(rdf, id){
   });
 };
 
-// Source: src/KAT/model/index.js
-/**
-* Namespace for models used by KAT.
-* @namespace
-* @alias KAT.model
-*/
 KAT.model = {};
 
 /**
@@ -260,14 +249,6 @@ KAT.model.ParsingError = function (message, xml_element) {
   KAT.model.ParsingError.prototype = new IntermediateInheritor();
 })();
 
-// Source: src/KAT/model/KAnnSpecCollection.js
-/** Creates a new KAnnSpecCollection instance.
-*
-* @name KAT.model.KAnnSpecCollection
-* @this {KAT.model.KAnnSpecCollection}
-* @Alias KAT.model.KAnnSpecCollection
-* @class
-*/
 KAT.model.KAnnSpecCollection = function(){
   /**
   * KAnnSpecs stored in this KAnnSpecCollection
@@ -444,7 +425,7 @@ KAT.model.KAnnSpecCollection.prototype.findConcepts = function(){
     for(var j=0;j<this.KAnnSpecs[i].concepts.length;j++){
       concepts.push(this.KAnnSpecs[i].concepts[j]);
     }
-  }
+  } 
 
   return concepts;
 };
@@ -489,16 +470,86 @@ KAT.model.KAnnSpecCollection.prototype.getField = function(name){
   return concept.getField(name[3]);
 };
 
-// Source: src/KAT/model/KAnnSpec.js
-/** Creates a new KAnnSpec instance.
+/**
+* Assigns colours to each concept in this KAnnSpecCollection
 *
-* @param {document} xml - XML document representing KAnnSpec.
-* @param {KAT.model.KAnnSpecCollection} collection - KAnnSpec collection this KAnnSpec is declared in.
-* @name KAT.model.KAnnSpec
-* @this {KAT.model.KAnnSpec}
-* @Alias KAT.model.KAnnSpec
-* @class
+*
+* @function
+* @instance
+* @name assignDisplayColour
+* @memberof KAT.model.KAnnSpecCollection
 */
+KAT.model.KAnnSpecCollection.prototype.assignDisplayColour = function(){
+  
+  //byte2Hex and RGB2Color are used to convert from RGB to hex.
+  var byte2Hex = function(n) {
+    var nybHexString = "0123456789ABCDEF";
+    return String(nybHexString.substr((n >> 4) & 0x0F, 1)) + nybHexString.substr(n & 0x0F, 1);
+  };
+
+  var RGB2Color = function(r, g, b) {
+      return '#' + byte2Hex(r) + byte2Hex(g) + byte2Hex(b);
+  };
+
+  //This function give a palette of 56 colours going accross the rainbow
+  var makeColorGradient = function(frequency, phase1, phase2, phase3) {
+    var center = 128;
+    var width = 127;
+    var len = 56;
+
+    var colourValues = [];
+
+    for (var i = 0; i < len; ++i) {
+        var red = Math.sin(frequency * i + phase1) * width + center;
+        var grn = Math.sin(frequency * i + phase2) * width + center;
+        var blu = Math.sin(frequency * i + phase3) * width + center;
+        colourValues.push(RGB2Color(red, grn, blu));
+    }
+    return colourValues;
+  };
+
+  //This function returns equidistant array indices
+  var evenlySplitPalette = function(colorsNeeded, maxVal) {
+    var diff = Math.floor(maxVal / colorsNeeded);
+    var values = [];
+    var nextVal = diff;
+    while (nextVal <= maxVal) {
+        values.push(nextVal);
+        nextVal = diff + values[values.length - 1];
+    }
+    var expectedMidVal = Math.floor(maxVal / 2);
+    var currentMidVal = values[Math.floor(values.length / 2)];
+    var deviation = currentMidVal - expectedMidVal;
+    if (values.length % 2 === 0) {
+        deviation = Math.floor(deviation / 2);
+    }
+    values.forEach(function (entry, index) {
+        values[index] = entry - deviation;
+    });
+    return values;
+  };
+
+  //Here we use the equidistant indices to access equidistant colours from the colour palette
+  var colours = function(colorsNeeded) {
+    var range = makeColorGradient(0.1, 0, 2, 4);
+    var indices = evenlySplitPalette(colorsNeeded, range.length);
+    var result = [];
+    for (i = 0; i < indices.length; i++) {
+        result.push(range[indices[i]]);
+    }
+    return result;
+  };
+
+  //concepts in current KAnnSpecCollection
+  var concepts = this.findConcepts();
+  var numberOfConcepts = concepts.length;
+
+  //We get colours for each concept, and assign it to a concept
+  var coloursSelected = colours(numberOfConcepts);
+  for (i = 0; i < numberOfConcepts; i++) {
+    concepts[i].displayColour = coloursSelected[i];
+  }
+};
 KAT.model.KAnnSpec = function(xml, url, collection){
   var me = this;
 
@@ -670,16 +721,6 @@ KAT.model.KAnnSpec.prototype.getField = function(name){
   return concept.getField(name[2]);
 };
 
-// Source: src/KAT/model/Concept.js
-/** Creates a new Concept instance.
-*
-* @param {document} xml - XML document representing the concept.
-* @param {KAT.model.KAnnSpec} KAnnSpec - KAnnSpec this concept was declared in.
-* @name KAT.model.Concept
-* @this {KAT.model.Concept}
-* @Alias KAT.model.Concept
-* @class
-*/
 KAT.model.Concept = function(xml, KAnnSpec){
   var me = this;
 
@@ -760,6 +801,14 @@ KAT.model.Concept = function(xml, KAnnSpec){
   * @name KAT.model.Concept#fields
   */
   this.fields = [];
+
+  /**
+  * Hex code for colour used to draw an annotation of this concept.
+  *
+  * @type {string}
+  * @name KAT.model.Concept#displayColour
+  */
+  this.displayColour = "";
 
   /**
   * Display to generate for this element.
@@ -906,16 +955,6 @@ KAT.model.Concept.prototype.getField = function(name){
   return false;
 };
 
-// Source: src/KAT/model/Field.js
-/** Creates a new Field instance.
-*
-* @param {document} xml - XML document representing the field.
-* @param {KAT.model.KAnnSpec} concept - concept this field was declared in.
-* @name KAT.model.Field
-* @this {KAT.model.Field}
-* @Alias KAT.model.Field
-* @class
-*/
 KAT.model.Field = function(xml, concept){
   var me = this;
 
@@ -1190,16 +1229,6 @@ KAT.model.Field.types = {
   "text": "text"
 };
 
-// Source: src/KAT/model/Option.js
-/** Creates a new Option instance.
-*
-* @param {document} xml - XML document representing the option.
-* @param {KAT.model.Field} field - field this option was declared in.
-* @name KAT.model.Option
-* @this {KAT.model.Option}
-* @Alias KAT.model.Option
-* @class
-*/
 KAT.model.Option = function(xml, field){
   //parse the XML
   try{
@@ -1276,15 +1305,6 @@ KAT.model.Option = function(xml, field){
 
 };
 
-// Source: src/KAT/gui/index.js
-/** Creates a new Editor instance.
-*
-* @param {jQuery} element - The element this editor is bound to.
-* @param {KAT.model.KAnnSpecCollection} KAnnSpecCollection - The KAnnSpecCollection this editor can annotate.
-*
-* @Alias KAT.gui
-* @class
-*/
 KAT.gui = function(element, KAnnSpecCollection){
 
   //intialise and make sure everything is set up
@@ -1718,12 +1738,6 @@ KAT.gui.selectDialog = function(title, query, options, descriptions, callback){
 * @param {number} selectedIndex - Index of option clicked or -1.
 */
 
-// Source: src/KAT/sidebar/index.js
-/**
-* Namespace for the sidebar
-* @namespace
-* @alias KAT.sidebar
-*/
 KAT.sidebar = {};
 
 /**
@@ -2254,12 +2268,6 @@ KAT.sidebar.modeToggleButton = undefined;
 */
 KAT.sidebar.modeToggleButton = undefined;
 
-// Source: src/KAT/storage/index.js
-/**
-* Namespace for storage used by KAT.
-* @namespace
-* @alias KAT.storage
-*/
 KAT.storage = {};
 
 /**
@@ -2314,17 +2322,6 @@ KAT.storage.resolve = function(url, base, isDir){
   return absUrl;
 }; 
 
-// Source: src/KAT/storage/store.js
-/** Creates a new Store instance.
-*
-* @param {KAT.gui} gui - Gui associated to this store.
-* @param {string} docURL - URL of document currently loaded.
-*
-* @name KAT.storage.Store
-* @this {KAT.storage.Store}
-* @Alias KAT.storage.Store
-* @class
-*/
 KAT.storage.Store = function(gui, docURL){
   /**
   * KAnnSpecCollection this store instance knows.
@@ -2783,21 +2780,6 @@ KAT.storage.Store.UUID2Selection = function(selection){
   };
 };
 
-// Source: src/KAT/storage/annotation.js
-/** Creates a new Annotation instance.
-*
-* @param {KAT.storage.Store} store - The store associated with this annotation.
-* @param {KAT.gui.selection} selection - The selection this annotation annotates.
-* @param {KAT.model.Concept} concept - concept this annotation represents.
-* @param {object|undefined} values - The values of this annotation. If undefined, sets the default values.
-* @param {string} [id] - Id of annotation. Will be auto generated if it does not exist.
-*
-* @name KAT.storage.Annotation
-* @this {KAT.storage.Annotation}
-* @Alias KAT.storage.Annotation
-* @class
-*/
-
 KAT.storage.Annotation = function(store, selection, concept, values, id){
 
   /**
@@ -2889,22 +2871,21 @@ KAT.storage.Annotation.prototype.draw = function(){
   //find the elements in the selection.
   var range = this.store.gui.getRange(this.selection);
 
-  function getWordsBetweenCurlies(str) {
-    var results = [], re = /{([^}]+)}/g, text;
-
-    while((text = re.exec(str))?true:false) {
-      results.push(text[1]);
-    }
-
-    return results;
-  }
-
   //add a class for the selection.
-  range.addClass("KAT-selection").each(function(){
+  var className = this.concept.name;
+  range.addClass(className).css('background-color', this.concept.displayColour).each(function(){
     var $me = $(this); //creates jQuery object
 
     var current = $me.data("KAT.Annotation.UUID") || [];
     current.push(me.uuid);
+
+  function getWordsBetweenCurlies(str) {
+    var results = [], re = /{([^}]+)}/g, text;
+    while((text = re.exec(str))?true:false) {
+      results.push(text[1]);
+    }
+    return results;
+  }
 
     //find the values to be inserted for {x}
     var m = getWordsBetweenCurlies(me.concept.display);
@@ -2946,9 +2927,6 @@ KAT.storage.Annotation.prototype.draw = function(){
     //write it back
     $me.data("KAT.Annotation.UUID", current);
   });
-
-  $(document).tooltip(); //here the magic of the tooltip displaying happens
-
 };
 
 /** Creates a new Annotation instance from an RDF node.
@@ -3283,13 +3261,6 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
   return parent.get(0);
 };
 
-// Source: src/KAT/module/index.js
-/**
-* Namespace for KAT JOBAD module.
-* @namespace
-* @alias KAT.module
-*/
-
 KAT.module = {
   /* Module Info / Meta Data */
   info:{
@@ -3307,13 +3278,35 @@ KAT.module = {
     'async': false,
     'hasCleanNamespace': false
   },
-  init: function(JOBADInstance, annotationStore){
-    this.store = annotationStore; // KAT.storage.Store
-    this.gui = this.store.gui; // KAT.gui
-  },
-  hoverText: function(target, JOBADInstance){
-    // return element to display
+  init: function(JOBADInstance, collection_or_kannspec_and_url, documentURL){
 
+    // first of all create a collection
+    var collection;
+
+    // if a collection has been parsed, we have it already.
+    if(collection_or_kannspec_and_url instanceof KAT.model.KAnnSpecCollection){
+      collection = collection_or_kannspec_and_url;
+    } else {
+      // if not, we still need to create that.
+      collection = new KAT.model.KAnnSpecCollection();
+      collection.addNewKAnnSpec(collection_or_kannspec_and_url[0], collection_or_kannspec_and_url[1]);
+    }
+
+    // create a new gui bound to the right element.
+    this.gui = new KAT.gui(JOBADInstance.element, collection);
+
+    //create a store with the right documentURL
+    this.store = new KAT.storage.Store(this.gui, documentURL);
+
+    // initialise the tooltip libarary
+    JOBADInstance.element.tooltip();
+
+    // initialise the gui
+    KAT.sidebar.init(this.gui);
+
+    //initialise gui collection
+    collection.init();
+    collection.assignDisplayColour();
   },
 
   contextMenuEntries: function(target, JOBADInstance){
@@ -3442,4 +3435,5 @@ KAT.module = {
 
 JOBAD.modules.register(KAT.module); //register the module.
 
+})({},function(){return this}());
 //# sourceMappingURL=KAT.js.map

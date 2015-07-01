@@ -159,11 +159,6 @@ KAT.storage.Annotation.prototype.draw = function(){
     //write it back
     $me.data("KAT.Annotation.UUID", current);
   });
-
-  $.each(me.concept.fields, function(i, field) {console.log(field.value); console.log(field.type);});
-
-  $(document).tooltip(); //here the magic of the tooltip displaying happens
-
 };
 
 /** Creates a new Annotation instance from an RDF node.
