@@ -20,16 +20,11 @@ div.scrollingDiv{
   width:200px;
 }
 
-.tfield{
-  float: right;
-  width: 120px;
-}
-
 .collapsible {
     background-color: rgba(235,235,235,0.75);
     border: 1px solid #CCCCCC;
     padding: 2px;
-    width: 250px;
+    width: 500px;
     font: 12px Arial, Helvetica, sans-serif;
     color: #333333;
     z-index: 2;
@@ -81,18 +76,9 @@ div.scrollingDiv{
   font: 14px Arial, Helvetica, sans-serif;
 }
 
-.formButton {
-  height: 20px;
-  width: 80px;
-  margin-bottom: 0px;
-}
-
-label {
-  font-size: 10px;
-}
-
-/* Submenu support */
-
+/*
+* Submenu support
+*/
 .dropdown-submenu {
     position:relative;
 }
