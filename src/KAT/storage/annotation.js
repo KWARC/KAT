@@ -321,7 +321,7 @@ KAT.storage.Annotation.prototype.flash = function(){
   //get the range.
   this.store.gui
   .getRange(this.selection).stop()
-	.animate({ backgroundColor: "red"}, 1500, function(){
+  .animate({ backgroundColor: "red"}, 1500, function(){
     $(this).css("background-color", "");
   });
 };
@@ -457,7 +457,6 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
   jQuery.each(concept.fields, function(i, field){
     var value = me.values[field.value];
 
-    // TODO: Remove this line
     // check if the value is an array.
     var fieldVal = jQuery.isArray(value)?value:[value];
 

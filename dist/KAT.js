@@ -1554,7 +1554,7 @@ KAT.gui.dialog = function(title, content, buttons, on_button){
   var $content = $("<p>").text(content);
 
   //Create the element.
-  var $dialog = $('<div class="modal hide large">')
+  var $dialog = $('<div class="modal fade">')
   .append(
     $('<div class="modal-dialog">').append(
       $('<div class="modal-content">')
@@ -1574,16 +1574,8 @@ KAT.gui.dialog = function(title, content, buttons, on_button){
 
   //append the dialog
   $dialog.appendTo(
-    $("<div>").BS().appendTo("body")
-  ).modal()
-  .on("hidden", function(){
-    //BS Cleanup
-    JOBAD.UI.BSStyle();
-  });
-
-  //Some bootstrap magic
-  //to show the dialog properly.
-  JOBAD.UI.BSStyle();
+    $("<div>").appendTo("body")
+  ).modal();
 
   $self = {
     "$dialog": $dialog, //the dialog element
@@ -1744,62 +1736,73 @@ KAT.sidebar = {};
 */
 KAT.sidebar.init = function(){
 
-  // GENERAL COMMENT: Use jQuery's chaining functionality more.
-  // I added it whenever possible
-  // TODO: Finish documentation of function
-  // TODO: Remove all the TODO comments once they have been dealt with.
-
-  // TODO: Check HERE if the sidebar was already intialised
-  // and if so, just return.
-
-  var winHeight = jQuery(window).height();
-
+  //mode of the sidebar.
   var mode;
+
+  //which is either Reading or Annotation.
   if (KAT.sidebar.annotationMode){ mode = "Reading"; } else { mode = "Annotation"; }
 
-  //create collapsible sidemenu & define properties
-  var collapsibleMenu = jQuery('<div>')
-  .addClass("collapsible")
-  .append($("<div>").addClass("KATTitle").html("<h3>KWARC Annotation Tool</h3>"))
-  .append($("<div>").addClass("KATSidebarButtons")
+  //get the height of the window.
+  var winHeight = jQuery(window).height();
+
+  //create a button to toggle annotations
+  KAT.sidebar.modeToggleButton = $("<button>")
+    .text("Enable " +mode+ " Mode")
+    .addClass("annotationToggle")
+    .addClass("btn btn-default").BS()
+    .click(function(){
+      KAT.sidebar.toggleAnnotationMode();
+    });
+
+  //create collapsible sidebar
+  var collapsibleMenu = jQuery('<div>').addClass("collapsible")
+
+  .append(
+    //add a heading
+    $("<div>").addClass("KATTitle").html("<h3>KWARC Annotation Tool</h3>"),
+
+    // and a lot of buttons
+    $("<div>").addClass("KATSidebarButtons")
     .append(
-      $("<button>")
-        .text("Enable " +mode+ " Mode")
-        .addClass("annotationToggle")
-        .click(function(){
-          KAT.sidebar.toggleAnnotationMode();
-        })
-    )
-    .append(
+      //to toggle the mode
+      KAT.sidebar.modeToggleButton,
+      "<br/>",
+
+      //to import annotations
       $("<button>")
         .text("Import Annotations")
         .addClass("helpButton")
+        .addClass("btn btn-default")
         .click(function(){
-          KAT.sidebar.toggleAnnotationMode();
-        })
-    )
-    .append(
+          //TODO: Toggle Import annotations
+          alert("TODO: Import annotations binding!");
+        }),
+      "<br/>",
+
+      // to export annotations
       $("<button>")
         .text("Export Annotations")
         .addClass("helpButton")
+        .addClass("btn btn-default")
         .click(function(){
-          KAT.sidebar.toggleAnnotationMode();
+          //TODO: Toggle Export annotations
+          alert("TODO: Export annotations binding!");
+        }),
+      "<br/>",
 
-        })
-    )
-    .append(
+      //to help
       $("<button>")
         .append(
           $("<span>").addClass("glyphicon glyphicon-info-sign")
           .text("Help")
         )
         .addClass("helpButton")
+        .addClass("btn btn-default")
         .click(function(){
-          alert("Unimplemented!");
+          //TODO: Toggle Help
+          alert("TODO: Help!");
         })
-    )
-  )
-  .append(
+    ),
     $("<ul>").addClass("KATMenuItems")
   )
   .css({
@@ -1809,20 +1812,16 @@ KAT.sidebar.init = function(){
   }).prependTo("body");
 
   // create button to toggle collapse and resurection of sidemenu and define properties
-
   var collapsibleToggle = $("<button>")
   .text("«")
   .addClass("collapseToggle")
   .css({'height': winHeight-10})
   .click(KAT.sidebar.toggleSidebar).prependTo(collapsibleMenu); //adapted from init function below
 
-  //Makes sidebar is open on load
+  //Make sure to shwo the sidebar
   KAT.sidebar.showSidebar();
 
-  //HACK! Remove this please, as this interferes with global styling.
-  //jQuery("body").css({'width': jQuery(window).width()-50});
-
-  //define changes to sidemenu when page is resized
+  // define changes to sidemenu when page is resized
   // this seems hacky, try to make it all relative with global CSS
   jQuery( window ).resize(function() {
     winHeight = jQuery(window).height();
@@ -1836,33 +1835,49 @@ KAT.sidebar.init = function(){
     collapsibleToggle.css({
       'height': winHeight-10
     });
-
-    //HACK! Remove this please, as this interferes with global styling.
-    //jQuery("body").css({'width': jQuery(window).width()-50});
   });
 };
 
+/**
+* Shows the sidebar.
+*
+* @function
+* @static
+* @name hideSidebar
+* @memberof KAT.sidebar
+*/
 KAT.sidebar.showSidebar = function(){
     KAT.sidebar.extended = true;
 
     jQuery(".collapseToggle")
-    .text("»")  // Change text of button.
+    .text("»")
     .parent().animate({right: "0"}, KAT.sidebar.animateLength );
-
-    //jQuery("body").css({'width': jQuery(window).width()-260}); //HACK! Remove this please, as this interferes with global styling.
 };
 
+/**
+* Hides the sidebar.
+*
+* @function
+* @static
+* @name hideSidebar
+* @memberof KAT.sidebar
+*/
 KAT.sidebar.hideSidebar = function(){
     KAT.sidebar.extended = false;
 
     jQuery(".collapseToggle")
     .text("«") // Change text of button.
-    .parent().animate({right: KAT.sidebar.hideWidth}, KAT.sidebar.animateLength );
-
-    //jQuery("body").css({'width': jQuery(window).width()-50}); //HACK! Remove this please, as this interferes with global styling.
+    .parent().animate({right: KAT.sidebar.hideWidth}, KAT.sidebar.animateLength);
 };
 
-
+/**
+* Toggles the state of the sidebar.
+*
+* @function
+* @static
+* @name toggleSidebar
+* @memberof KAT.sidebar
+*/
 KAT.sidebar.toggleSidebar = function(){
     if (KAT.sidebar.extended){
       //we are now hidden
@@ -1873,6 +1888,14 @@ KAT.sidebar.toggleSidebar = function(){
     }
   };
 
+/**
+* Toggles the annotation mode of KAT.
+*
+* @function
+* @static
+* @name toggleAnnotationMode
+* @memberof KAT.sidebar
+*/
 KAT.sidebar.toggleAnnotationMode = function(){
   KAT.sidebar.annotationMode = !KAT.sidebar.annotationMode;
 
@@ -1883,7 +1906,7 @@ KAT.sidebar.toggleAnnotationMode = function(){
   } else {
     mode = "Annotation";
   }
-  $(".annotationToggle").text("Enable " +mode+ " Mode");
+  KAT.sidebar.modeToggleButton.text("Enable " +mode+ " Mode");
 };
 
 /**
@@ -1936,89 +1959,29 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
     // grab the value of the field and add it to the sidebar
     var value = current.value;
-    newAnnotation.append(jQuery("<span>").html("<br>"+value+": "));
+    newAnnotation.append("<br>").append(jQuery("<label>").text(value));
 
     var prevValue;
 
-    // for text fields, we just have a text field.
-    // TODO: Implement validation of text fields.
     if(current.type === KAT.model.Field.types.text){
-      newField =
-      jQuery("<input type='text'>")
-      .addClass("tfield")
-      .appendTo(newAnnotation);
 
-      if (typeof annotation !== "undefined"){
-        prevValue = values[value];
-        newField.val(prevValue[0]);
-      }
+      newField = createTextfield(newAnnotation, values, value, current);
+
+    } else if(current.type === KAT.model.Field.types.select){
+
+      newField = createDropdown(newAnnotation, options);
+
+    } if(current.type === KAT.model.Field.types.reference){ // for a reference list possible annotations.
+
+      newField = createReferenceSpinner(newAnnotation, env, annot, values, value);
+
     }
-
-    // for select fields, create a dropdown
-    // TODO: Possibly use a styled dropbown from Bootstrap
-    if(current.type === KAT.model.Field.types.select){
-      // Create a select element.
-      newField = jQuery("<select>")
-      .addClass("tfield")
-      .appendTo(newAnnotation);
-
-      // add all the values
-      $.each(options, function(j, opt){
-        jQuery("<option>")
-        .text(opt.value)
-        .val(j)
-        .appendTo(newField);
-      });
-
-      // TODO: Implement multiple values.
-      // if applicable, find the previous value
-      if (typeof annotation !== "undefined"){
-        prevValue = values[value];
-
-        for(var i=0;i<options.length;i++){
-          if(options[i].value === prevValue[0].value){
-            newField.val(i);
-          }
-        }
-      }
-    }
-
-    // for a reference list possible annotations.
-    if(current.type === KAT.model.Field.types.reference){
-
-      // create a new field.
-      newField = jQuery("<select>").addClass("tfield").appendTo(newAnnotation);
-
-      // Find all the allowed concepts
-      var allowedAnnotations = env.store.filterByConcept.apply(env.store, options);
-
-      // for each
-      jQuery.each(allowedAnnotations, function(index, annot){
-        $("<option>")
-        .text(annot.uuid)
-        .val(annot.uuid)
-        .appendTo(newField);
-      });
-
-      if(values){
-        prevValue = values[value];
-        newField.val(prevValue[0].uuid);
-      }
-    }
-
-
 
     return newField;
   });
 
   // Create a button
-  //TODO: Make this more general.
-  // Also do not use type='submit' here, as clicking that would reload page
-  // if you are in a <form> tag, unless you cancel explititly
-  $("<input type='button'>")
-  .val("Save")
-  .appendTo(newAnnotation)
-  .click(function(){
+  var saveButton = makeButton(newAnnotation, "Save",function(){
 
     // The result JSON
     var valuesJSON = {};
@@ -2049,23 +2012,118 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     // callback
     var theannotation = callback(selection, concept, valuesJSON, annotation);
     theannotation.draw();
-  });
+  }).addClass("save").attr("disabled", "disabled");
 
-    // Create a button
+
   //TODO: Make this more general.
   // Also do not use type='submit' here, as clicking that would reload page
   // if you are in a <form> tag, unless you cancel explititly
-  $("<input type='button'>")
-  .val("Cancel")
-  .appendTo(newAnnotation)
-  .click(function(){
-    // remove the entire form
-    newAnnotation.remove();
-  });
+  makeButton(newAnnotation, "Cancel", function(){
+        newAnnotation.remove(); // remove the entire form
+      });
+
+  function makeButton(parent, text, func) {
+
+    return $("<button type='button'>")
+      .text(text)
+      .addClass("formButton")
+      .appendTo(newAnnotation)
+      .click(func);
+  }
+
+  function createTextfield(parent, values, value, current) {
+
+    var newField =
+    jQuery("<input type='text'>")
+      .addClass("tfield")
+      .addClass("form-control")
+      .appendTo(parent)
+      .keyup(function(){
+
+        var RegExpression = current.validation;
+
+        $(".currentForm").removeClass("has-success has-error");
+        saveButton.removeAttr("disabled");
+
+        if(RegExpression.test(newField.val())) {
+          $(".currentForm").addClass("has-success");
+        } else {
+          $(".currentForm").addClass("has-error");
+          saveButton.attr("disabled", "disabled");
+        }
+      });
+
+    if (typeof annotation !== "undefined"){
+      var prevValue = values[value];
+      newField.val(prevValue[0]);
+    }
+    window.setTimeout(function(){
+      newField.keyup();
+    }, 100);
+    return newField;
+
+  }
+
+  // TODO: Possibly use a styled dropbown from Bootstrap
+  function createDropdown(parent, options) {
+
+    // Create a select element.
+    var newField = jQuery("<select>")
+    .addClass("tfield")
+    .appendTo(parent);
+
+    // add all the values
+    jQuery.each(options, function(j, opt){
+      jQuery("<option>")
+      .text(opt.value)
+      .val(j)
+      .appendTo(newField);
+    });
+
+    // TODO: Implement multiple values.
+    // if applicable, find the previous value
+    if (typeof annotation !== "undefined"){
+      var prevValue = values[value];
+
+      for(var i=0;i<options.length;i++){
+        if(options[i].value === prevValue[0].value){
+          newField.val(i);
+        }
+      }
+    }
+
+    return newField;
+
+  }
+
+  function createReferenceSpinner(parent, env, annot, values, value) {
+
+    // create a new field.
+    var newField = jQuery("<select>")
+    .addClass("tfield")
+    .appendTo(parent);
+
+    // Find all the allowed concepts
+    var allowedAnnotations = env.store.filterByConcept.apply(env.store, options);
+
+    // for each
+    jQuery.each(allowedAnnotations, function(index, annot){
+      jQuery("<option>")
+      .text(annot.uuid)
+      .val(annot.uuid)
+      .appendTo(newField);
+    });
+
+    if(values){
+      prevValue = values[value];
+      newField.val(prevValue[0].uuid);
+    }
+  }
 };
 
 /**
-* Is the sidebar extended?
+* Stores if the sidebar is extended.
+* Should be read-only.
 *
 * @type {boolean}
 * @name KAT.sidebar.extended
@@ -2073,7 +2131,8 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 KAT.sidebar.extended = false;
 
 /**
-* Is Annotation Mode active
+* Stores if KAT is in annotation Mode.
+* Should be readonly.
 *
 * @type {boolean}
 * @name KAT.sidebar.annotationMode
@@ -2097,6 +2156,14 @@ KAT.sidebar.hideWidth = -230;
 * @name KAT.sidebar.animateLength
 */
 KAT.sidebar.animateLength = 100;
+
+/**
+* Contains a reference to the mode toggle button in the sidebar.
+*
+* @type {jQuery}
+* @name KAT.sidebar.modeToggleButton
+*/
+KAT.sidebar.modeToggleButton = undefined;
 
 // Source: src/KAT/storage/index.js
 /**
@@ -2506,6 +2573,67 @@ KAT.storage.Store.prototype.addFromRDF = function(rdf){
   return added;
 };
 
+/** Shows an export dialog.
+*
+* @function
+* @instance
+* @name showExportDialog
+* @memberof KAT.storage.Store
+*/
+KAT.storage.Store.prototype.showExportDialog = function(){
+
+  //generate the document to export
+  var rdfDoc = this.toRDF();
+
+  //and a textarea with it.
+  var textarea = $("<textarea rows='20' readonly='readonly'>").addClass("form-control").text(rdfDoc); 
+
+  // make a dialog
+  var dialog = KAT.gui.dialog("Export Annotations", "", ["OK"], function(){this.close();});
+
+
+  // and add the document
+  dialog.$content.append(
+    $("<form>").addClass("form").append(textarea)
+  );
+
+  //add some magic focusing code.
+  textarea.focus(function() {
+    textarea
+    .select()
+    .mouseup(function(){
+      textarea.unbind("mouseup");
+      return false;
+    });
+  });
+
+  // and make it focus on click.
+  textarea.click(function(){
+    textarea.focus();
+  }).click();
+};
+
+/** Shows an import dialog.
+*
+* @function
+* @instance
+* @name showImportDialog
+* @memberof KAT.storage.Store
+*/
+KAT.storage.Store.prototype.showImportDialog = function(){
+
+  // have a prompt
+  var rdfDoc = prompt("Paste annotations to import here: ");
+
+  // parse the annotations
+  var annots = this.addFromRDF(jQuery(rdfDoc).get(0));
+
+  //and draw them
+  for(var i=0;i<annots.length;i++){
+    annots[i].draw();
+  }
+};
+
 /**
 * Generates a UUID from a selection.
 *
@@ -2580,6 +2708,7 @@ KAT.storage.Store.UUID2Selection = function(selection){
 * @Alias KAT.storage.Annotation
 * @class
 */
+
 KAT.storage.Annotation = function(store, selection, concept, values, id){
 
   /**
@@ -2705,33 +2834,29 @@ KAT.storage.Annotation.prototype.draw = function(){
     $.each(m, function(j, key) {
 
       //check 'type' of the field
+      switch(me.concept.fields[j].type) {
 
-    //   if(field.type == KAT.model.Field.types.reference){
-    //     // for references, find the actual UUID.
-    //     valuesJSON[field.value] = [env.store.find(infield.val())];
-    //   } else if(valuesJSON[key].type == KAT.model.Field.types.select){
-    //     // for option, store the selected option.
-    //     valuesJSON[field.value] = [field.validation[infield.val()]];
-    //   } else {
-    //     // for text, just store the text.
-    //     // valuesJSON[field.value] = [infield.val()];
-    //   }
+        case KAT.model.Field.types.reference:
+          console.log("reference: ");
+          break;
 
+        case KAT.model.Field.types.select:
+          getJSONValue = me.values[key][0].value || "";
+          hovertext = hovertext.replace("{"+m[j]+"}", getJSONValue);
+          break;
 
-      getJSONValue = me.values[key] || me.values[capitalize(key)] || "";
-      hovertext = hovertext.replace("{"+m[j]+"}", getJSONValue);
+        default: //text; just print the text.
+          getJSONValue = me.values[key] || me.values[capitalize(key)] || "";
+          hovertext = hovertext.replace("{"+m[j]+"}", getJSONValue);
+      }
 
     });
-
-    // console.log(m);
 
     $me.attr("title", hovertext);
 
     //write it back
     $me.data("KAT.Annotation.UUID", current);
   });
-
-  $.each(me.concept.fields, function(i, field) {console.log(field.value);});
 
   $(document).tooltip(); //here the magic of the tooltip displaying happens
 
@@ -2892,7 +3017,7 @@ KAT.storage.Annotation.prototype.flash = function(){
   //get the range.
   this.store.gui
   .getRange(this.selection).stop()
-	.animate({ backgroundColor: "red"}, 1500, function(){
+  .animate({ backgroundColor: "red"}, 1500, function(){
     $(this).css("background-color", "");
   });
 };
@@ -3028,7 +3153,6 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
   jQuery.each(concept.fields, function(i, field){
     var value = me.values[field.value];
 
-    // TODO: Remove this line
     // check if the value is an array.
     var fieldVal = jQuery.isArray(value)?value:[value];
 
@@ -3076,6 +3200,7 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
 * @namespace
 * @alias KAT.module
 */
+
 KAT.module = {
   /* Module Info / Meta Data */
   info:{
@@ -3100,7 +3225,8 @@ KAT.module = {
   hoverText: function(target, JOBADInstance){
     // return element to display
 
-  }, 
+  },
+
   contextMenuEntries: function(target, JOBADInstance){
     // reference to self
     var me = this;
@@ -3121,30 +3247,32 @@ KAT.module = {
     // the menu to return
     var menu = {};
 
+    var initializeMenuBar = function(annotationModeBool) {
+
+      //Menu item 1 : Toggle annotation mode
+      if(annotationModeBool) {
+        menu[annot_modeOff] = function(){
+          KAT.sidebar.toggleAnnotationMode();
+        };
+      } else {
+        menu[annot_modeOn] = function(){
+          KAT.sidebar.toggleAnnotationMode();
+        };
+      }
+
+      //Menu item 2
+      menu[storage_import] = me.store.showImportDialog.bind(me.store);
+
+      //Menu item 3
+      menu[storage_export] = me.store.showExportDialog.bind(me.store);
+
+  };
+
     // Case A: Annotation Mode is disabled
     if (!KAT.sidebar.annotationMode){
 
-      //Menu item A.1 : Turn on annotation mode
-      menu[annot_modeOn] = function(){
-        KAT.sidebar.toggleAnnotationMode();
-      };
+      initializeMenuBar(false);
 
-      //Menu item A.2 : Import Annotations
-      menu[storage_import] = function(){
-        var rdfDoc = prompt("Paste annotations to import here: ");
-        var annots = me.store.addFromRDF(jQuery(rdfDoc).get(0));
-
-        //and draw them
-        for(var i=0;i<annots.length;i++){
-          annots[i].draw();
-        }
-      };
-
-      //Menu item A.3 : Export Annotations
-      menu[storage_export] = function(){
-        var rdfDoc = me.store.toRDF();
-        prompt("Press CTRL+C to export annotations: ", rdfDoc);
-      };
     }
 
     // Case B: Annotation Mode is enabled
@@ -3164,32 +3292,7 @@ KAT.module = {
           Right click is not on an annotation
         */
 
-        //Menu item B1.1 : Turn off annotation mode
-        menu[annot_modeOff] = function(){
-            KAT.sidebar.toggleAnnotationMode();
-        };
-
-        //Menu item B1.2 : Import Annotations
-        menu[storage_import] = function(){
-          var rdfDoc = prompt("Paste annotations to import here: ");
-          var annots = me.store.addFromRDF(jQuery(rdfDoc).get(0));
-
-          //and draw them
-          for(var i=0;i<annots.length;i++){
-            annots[i].draw();
-          }
-        };
-
-        //Menu item B1.3 : Export Annotations
-        menu[storage_export] = function(){
-          var rdfDoc = me.store.toRDF();
-          prompt("Press CTRL+C to export annotations: ", rdfDoc);
-        };
-
-        /* Subcase B2:
-          User has not made a selection
-          Right click is on an annotation
-        */
+        initializeMenuBar(true);
 
         //find all the annotations.
         var annots = this.store.findfromElement(target);
@@ -3246,6 +3349,7 @@ KAT.module = {
     return menu;
   }
 };
+
 
 JOBAD.modules.register(KAT.module); //register the module.
 

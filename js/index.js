@@ -7,12 +7,6 @@ $(function(){
 
 function getKATStarted(documentURL, KAnnSpecURL){
 
-  //set up bootstrap
-  JOBAD.config.BootstrapScope = "bootstrap";
-
-  //Create the sidebar.
-  KAT.sidebar.init();
-
   //load the document
   $.get(documentURL, function(documentData){
 
@@ -35,6 +29,9 @@ function getKATStarted(documentURL, KAnnSpecURL){
 
       //now create a gui
       var gui = window.gui = new KAT.gui(data, collection);
+
+      //Create the sidebar.
+      KAT.sidebar.init(gui);
 
       //and a store for the gui.
       var store = window.store = new KAT.storage.Store(gui, documentURL);
