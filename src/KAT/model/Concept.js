@@ -89,6 +89,14 @@ KAT.model.Concept = function(xml, KAnnSpec){
   this.fields = [];
 
   /**
+  * Hex code for colour used to draw an annotation of this concept.
+  *
+  * @type {string}
+  * @name KAT.model.Concept#displayColour
+  */
+  this.displayColour = "";
+
+  /**
   * Display to generate for this element.
   *
   * @type {string}

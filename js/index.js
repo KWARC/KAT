@@ -39,6 +39,8 @@ function getKATStarted(documentURL, KAnnSpecURL){
       //and add a KannSpec, then init
       var KAnnSpec = window.spec = collection.addNewKAnnSpec(KannSpecXML, KAnnSpecURL);
       collection.init();
+      collection.assignDisplayColour();
+
 
       //load the KAT element.
       myJOBADInstance.modules.load('KAT.module', [store], function(){
@@ -46,7 +48,4 @@ function getKATStarted(documentURL, KAnnSpecURL){
       });
     });
   });
-
-
-
 };
