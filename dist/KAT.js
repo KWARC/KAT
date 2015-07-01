@@ -2043,7 +2043,6 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
           // create a new text field
           newField = $("<input type='text'>")
           .attr("id", id)
-          .addClass("tfield")
           .addClass("form-control")
 
           // append it to the wrapper
@@ -2077,6 +2076,13 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
             }
           });
 
+          // a validation function
+          // that makes little sense here.
+          validations.push(function(){
+            wrapper.addClass("has-success");
+            return true;
+          });
+
           // set the previous value
           // of the annotation
           // if available.
@@ -2088,9 +2094,69 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
         })();
 
       } else if(current.type === KAT.model.Field.types.select){
-        //newField = createDropdown(newAnnotation,  current.validation);
+        (function() {
+
+          // create a new select field
+          newField = jQuery("<select>")
+          .attr("id", id)
+          .addClass("form-control")
+          .appendTo(wrapper);
+
+          // add all the values
+          jQuery.each(current.validation, function(j, opt){
+            jQuery("<option>")
+            .text(opt.value)
+            .val(j)
+            .appendTo(newField);
+          });
+
+
+          //TODO: Do proper validation here
+          // and automatically add new annotations if they become available.
+          validations.push(function(){
+            wrapper.addClass("has-success");
+            return true;
+          });
+
+          // if we have a previous value
+          // set that up properly
+          if (typeof annotation !== "undefined"){
+            var prevValue = values[value];
+
+            for(var i=0;i<current.validation.length;i++){
+              if(current.validation[i].value === prevValue[0].value){
+                newField.val(i);
+              }
+            }
+          }
+        })();
+
       } if(current.type === KAT.model.Field.types.reference){ // for a reference list possible annotations.
-        //newField = createReferenceSpinner(newAnnotation, env, values, current.value);
+        (function() {
+
+          // create a new select
+          newField = jQuery("<select>")
+          .attr("id", id)
+          .addClass("form-control")
+          .appendTo(wrapper);
+
+          // Find all the allowed concepts
+          var allowedAnnotations = env.store.filterByConcept.apply(env.store, current.validation);
+
+          // filter the allowed annotations
+          jQuery.each(allowedAnnotations, function(index, annot){
+            jQuery("<option>")
+            .text(annot.uuid)
+            .val(annot.uuid)
+            .appendTo(newField);
+          });
+
+          // if applicable, load previous values.
+          if(values){
+            var prevValue = values[value];
+            newField.val(prevValue[0].uuid);
+          }
+        })();
       }
     });
 
@@ -2158,62 +2224,6 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
   // and re-validate the form
   revalidate();
-
-  // TODO: Possibly use a styled dropbown from Bootstrap
-  function createDropdown(parent, options) {
-
-    // Create a select element.
-    var newField = jQuery("<select>")
-    .addClass("tfield")
-    .appendTo(parent);
-
-    // add all the values
-    jQuery.each(options, function(j, opt){
-      jQuery("<option>")
-      .text(opt.value)
-      .val(j)
-      .appendTo(newField);
-    });
-
-    // TODO: Implement multiple values.
-    // if applicable, find the previous value
-    if (typeof annotation !== "undefined"){
-      var prevValue = values[value];
-
-      for(var i=0;i<options.length;i++){
-        if(options[i].value === prevValue[0].value){
-          newField.val(i);
-        }
-      }
-    }
-
-    return newField;
-
-  }
-
-  function createReferenceSpinner(parent, env, values, value) {
-
-    // create a new field.
-    var newField = jQuery("<select>")
-    .addClass("tfield")
-    .appendTo(parent);
-
-    // Find all the allowed concepts
-    var allowedAnnotations = env.store.filterByConcept.apply(env.store, options);
-
-    // for each
-    jQuery.each(allowedAnnotations, function(index, annot){
-      jQuery("<option>")
-      .text(annot.uuid)
-      .val(annot.uuid)
-      .appendTo(newField);
-    });
-
-    if(values){
-      prevValue = values[value];
-      newField.val(prevValue[0].uuid);
-    }
-  }
 };
 
 /**
@@ -2907,7 +2917,6 @@ KAT.storage.Annotation.prototype.draw = function(){
       switch(me.concept.fields[j].type) {
 
         case KAT.model.Field.types.reference:
-          console.log("reference: ");
           break;
 
         case KAT.model.Field.types.select:

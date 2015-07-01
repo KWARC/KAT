@@ -139,7 +139,6 @@ KAT.storage.Annotation.prototype.draw = function(){
       switch(me.concept.fields[j].type) {
 
         case KAT.model.Field.types.reference:
-          console.log("reference: ");
           break;
 
         case KAT.model.Field.types.select:
