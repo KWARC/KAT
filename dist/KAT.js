@@ -1554,7 +1554,7 @@ KAT.gui.dialog = function(title, content, buttons, on_button){
   var $content = $("<p>").text(content);
 
   //Create the element.
-  var $dialog = $('<div class="modal hide large">')
+  var $dialog = $('<div class="modal fade">')
   .append(
     $('<div class="modal-dialog">').append(
       $('<div class="modal-content">')
@@ -1574,16 +1574,8 @@ KAT.gui.dialog = function(title, content, buttons, on_button){
 
   //append the dialog
   $dialog.appendTo(
-    $("<div>").BS().appendTo("body")
-  ).modal()
-  .on("hidden", function(){
-    //BS Cleanup
-    JOBAD.UI.BSStyle();
-  });
-
-  //Some bootstrap magic
-  //to show the dialog properly.
-  JOBAD.UI.BSStyle();
+    $("<div>").appendTo("body")
+  ).modal();
 
   $self = {
     "$dialog": $dialog, //the dialog element
@@ -1780,7 +1772,7 @@ KAT.sidebar.init = function(){
       $("<button>")
         .text("Import Annotations")
         .addClass("helpButton")
-        .addClass("btn btn-default").BS()
+        .addClass("btn btn-default")
         .click(function(){
           //TODO: Toggle Import annotations
           alert("TODO: Import annotations binding!");
@@ -1791,7 +1783,7 @@ KAT.sidebar.init = function(){
       $("<button>")
         .text("Export Annotations")
         .addClass("helpButton")
-        .addClass("btn btn-default").BS()
+        .addClass("btn btn-default")
         .click(function(){
           //TODO: Toggle Export annotations
           alert("TODO: Export annotations binding!");
@@ -1805,7 +1797,7 @@ KAT.sidebar.init = function(){
           .text("Help")
         )
         .addClass("helpButton")
-        .addClass("btn btn-default").BS()
+        .addClass("btn btn-default")
         .click(function(){
           //TODO: Toggle Help
           alert("TODO: Help!");
@@ -2581,6 +2573,67 @@ KAT.storage.Store.prototype.addFromRDF = function(rdf){
   return added;
 };
 
+/** Shows an export dialog.
+*
+* @function
+* @instance
+* @name showExportDialog
+* @memberof KAT.storage.Store
+*/
+KAT.storage.Store.prototype.showExportDialog = function(){
+
+  //generate the document to export
+  var rdfDoc = this.toRDF();
+
+  //and a textarea with it.
+  var textarea = $("<textarea rows='20' readonly='readonly'>").addClass("form-control").text(rdfDoc); 
+
+  // make a dialog
+  var dialog = KAT.gui.dialog("Export Annotations", "", ["OK"], function(){this.close();});
+
+
+  // and add the document
+  dialog.$content.append(
+    $("<form>").addClass("form").append(textarea)
+  );
+
+  //add some magic focusing code.
+  textarea.focus(function() {
+    textarea
+    .select()
+    .mouseup(function(){
+      textarea.unbind("mouseup");
+      return false;
+    });
+  });
+
+  // and make it focus on click.
+  textarea.click(function(){
+    textarea.focus();
+  }).click();
+};
+
+/** Shows an import dialog.
+*
+* @function
+* @instance
+* @name showImportDialog
+* @memberof KAT.storage.Store
+*/
+KAT.storage.Store.prototype.showImportDialog = function(){
+
+  // have a prompt
+  var rdfDoc = prompt("Paste annotations to import here: ");
+
+  // parse the annotations
+  var annots = this.addFromRDF(jQuery(rdfDoc).get(0));
+
+  //and draw them
+  for(var i=0;i<annots.length;i++){
+    annots[i].draw();
+  }
+};
+
 /**
 * Generates a UUID from a selection.
 *
@@ -3100,7 +3153,6 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
   jQuery.each(concept.fields, function(i, field){
     var value = me.values[field.value];
 
-    // TODO: Remove this line
     // check if the value is an array.
     var fieldVal = jQuery.isArray(value)?value:[value];
 
@@ -3141,6 +3193,7 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
   //get the Dom Node.
   return parent.get(0);
 };
+
 // Source: src/KAT/module/index.js
 /**
 * Namespace for KAT JOBAD module.
@@ -3172,7 +3225,7 @@ KAT.module = {
   hoverText: function(target, JOBADInstance){
     // return element to display
 
-  }, 
+  },
 
   contextMenuEntries: function(target, JOBADInstance){
     // reference to self
@@ -3196,27 +3249,7 @@ KAT.module = {
 
     var initializeMenuBar = function(annotationModeBool) {
 
-      var importAnnotations = function(){
-
-        var rdfDoc = prompt("Paste annotations to import here: ");
-        var annots = me.store.addFromRDF(jQuery(rdfDoc).get(0));
-
-        //and draw them
-        for(var i=0;i<annots.length;i++){
-          annots[i].draw();
-        }
-
-      };
-
-      var exportAnnotations = function() {
-
-          var rdfDoc = me.store.toRDF();
-          var dialog = KAT.gui.dialog("Export Annotation", rdfDoc, ["OK"], function(){this.close();});
-
-      };
-
       //Menu item 1 : Toggle annotation mode
-      
       if(annotationModeBool) {
         menu[annot_modeOff] = function(){
           KAT.sidebar.toggleAnnotationMode();
@@ -3228,10 +3261,10 @@ KAT.module = {
       }
 
       //Menu item 2
-      menu[storage_import] = importAnnotations;
+      menu[storage_import] = me.store.showImportDialog.bind(me.store);
 
       //Menu item 3
-      menu[storage_export] = exportAnnotations;
+      menu[storage_export] = me.store.showExportDialog.bind(me.store);
 
   };
 

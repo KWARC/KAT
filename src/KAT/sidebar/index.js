@@ -51,7 +51,7 @@ KAT.sidebar.init = function(){
       $("<button>")
         .text("Import Annotations")
         .addClass("helpButton")
-        .addClass("btn btn-default").BS()
+        .addClass("btn btn-default")
         .click(function(){
           //TODO: Toggle Import annotations
           alert("TODO: Import annotations binding!");
@@ -62,7 +62,7 @@ KAT.sidebar.init = function(){
       $("<button>")
         .text("Export Annotations")
         .addClass("helpButton")
-        .addClass("btn btn-default").BS()
+        .addClass("btn btn-default")
         .click(function(){
           //TODO: Toggle Export annotations
           alert("TODO: Export annotations binding!");
@@ -76,7 +76,7 @@ KAT.sidebar.init = function(){
           .text("Help")
         )
         .addClass("helpButton")
-        .addClass("btn btn-default").BS()
+        .addClass("btn btn-default")
         .click(function(){
           //TODO: Toggle Help
           alert("TODO: Help!");
