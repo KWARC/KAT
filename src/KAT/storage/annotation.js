@@ -103,22 +103,21 @@ KAT.storage.Annotation.prototype.draw = function(){
   //find the elements in the selection.
   var range = this.store.gui.getRange(this.selection);
 
-  function getWordsBetweenCurlies(str) {
-    var results = [], re = /{([^}]+)}/g, text;
-
-    while((text = re.exec(str))?true:false) {
-      results.push(text[1]);
-    }
-
-    return results;
-  }
-
   //add a class for the selection.
-  range.addClass("KAT-selection").each(function(){
+  var className = this.concept.name;
+  range.addClass(className).css('background-color', this.concept.displayColour).each(function(){
     var $me = $(this); //creates jQuery object
 
     var current = $me.data("KAT.Annotation.UUID") || [];
     current.push(me.uuid);
+
+  function getWordsBetweenCurlies(str) {
+    var results = [], re = /{([^}]+)}/g, text;
+    while((text = re.exec(str))?true:false) {
+      results.push(text[1]);
+    }
+    return results;
+  }
 
     //find the values to be inserted for {x}
     var m = getWordsBetweenCurlies(me.concept.display);
