@@ -46,6 +46,7 @@ KAT.sidebar.init = function(){
       //to toggle the mode
       KAT.sidebar.modeToggleButton,
       "<br/>",
+      "<br/>",
 
       //to import annotations
       $("<button>")
@@ -57,6 +58,7 @@ KAT.sidebar.init = function(){
           alert("TODO: Import annotations binding!");
         }),
       "<br/>",
+      "<br/>",
 
       // to export annotations
       $("<button>")
@@ -67,6 +69,7 @@ KAT.sidebar.init = function(){
           //TODO: Toggle Export annotations
           alert("TODO: Export annotations binding!");
         }),
+      "<br/>",
       "<br/>",
 
       //to help
@@ -80,7 +83,11 @@ KAT.sidebar.init = function(){
         .click(function(){
           //TODO: Toggle Help
           alert("TODO: Help!");
-        })
+        }),
+
+        "<br/>",
+        "<br/>",
+        "<br/>"
     ),
     $("<ul>").addClass("KATMenuItems")
   )
@@ -222,54 +229,167 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
   }
 
   // create a new element to add to the sidebar.
-  // TODO: Have the .KATMenuItems in a variable from the init function.
-  // TODO: XSS vulnerable.
-  var newAnnotation = $("<li>").addClass("currentForm").append(
-    "<b> "+task+" Annotation Details</b><br>"
+  var newAnnotation = $("<li>").append(
+    "<h4> "+task+" Annotation Details</h4>"
   ).appendTo(".KATMenuItems");
 
-  var inputFields = jQuery.map(concept.fields, function(current){
+  // a list of validation functions to run.
+  var validations = [];
 
-    // a new input element we will create
+  // only if all of them return true,
+  // we enable the save button.
+  var revalidate = function(){
+    var result = true;
+
+    // loop over the validations.
+    jQuery.each(validations, function(i, validate){
+      result = result && validate();
+    });
+
+    // if all of the validations are OK,
+    // we can unlock the 'save' button
+    if(result){
+      saveButton.removeAttr("disabled");
+    } else {
+      // else we need to disable it.
+      saveButton.attr("disabled", "disabled");
+    }
+
+    return result;
+  };
+
+  // add a new form
+  var newForm = $("<form>").addClass("form-inline").appendTo(newAnnotation).on("submit", function(e){
+
+    // prevent form submission
+    e.preventDefault();
+
+    // click the save button
+    saveButton.click();
+
+    return false;
+  });
+
+  // map over the input fields
+  var inputFieldGroups = jQuery.map(concept.fields, function(current){
+
+    // create a new group
+    // to append to the <form>
+    var fieldGroup = $("<div>").appendTo(newForm);
+
+
+    // the new field to return for now.
     var newField;
 
-    // The current validation.
-    var options = current.validation;
+    // TODO: for each of the values do this
+    jQuery.map([0], function(i){
 
-    // grab the value of the field and add it to the sidebar
-    var value = current.value;
-    newAnnotation.append("<br>").append(jQuery("<label>").text(value));
+      // create a wrapper element.
+      var wrapper = $("<div>").addClass("form-group").appendTo(fieldGroup);
 
-    var prevValue;
+      // create an id for the form element.
+      var id =  "KAT_form_"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
 
-    if(current.type === KAT.model.Field.types.text){
+      // grab the name of the field.
+      var value = current.value;
 
-      newField = createTextfield(newAnnotation, values, value, current);
+      // create a label
+      // and add it to the form.
+      $("<label>").addClass("control-label").attr("for", id).text(value).appendTo(wrapper);
 
-    } else if(current.type === KAT.model.Field.types.select){
+      // add some spacing.
+      wrapper.append("&nbsp;");
 
-      newField = createDropdown(newAnnotation, options);
 
-    } if(current.type === KAT.model.Field.types.reference){ // for a reference list possible annotations.
+      // differentiate between the type of field
+      if(current.type === KAT.model.Field.types.text){
+        (function(){
 
-      newField = createReferenceSpinner(newAnnotation, env, annot, values, value);
+          // create a new text field
+          newField = $("<input type='text'>")
+          .attr("id", id)
+          .addClass("tfield")
+          .addClass("form-control")
 
-    }
+          // append it to the wrapper
+          .appendTo(wrapper)
+
+          // and revalidate upon changing something.
+          .keyup(function(){
+            revalidate();
+          });
+
+          // parse the RegEx we want to valiate against.
+          var RegExpression = current.validation;
+
+          // add our validation function.
+          validations.push(function(){
+
+            // remove the wrapper class
+            wrapper.removeClass("has-success has-error");
+
+            // if we pass validation
+            if(RegExpression.test(newField.val())) {
+
+              // add a success class
+              wrapper.addClass("has-success");
+              return true;
+            } else {
+
+              // else add an error class
+              wrapper.addClass("has-error");
+              return false;
+            }
+          });
+
+          // set the previous value
+          // of the annotation
+          // if available.
+
+          if (typeof annotation !== "undefined"){
+            var prevValue = values[value];
+            newField.val(prevValue[0]);
+          }
+        })();
+
+      } else if(current.type === KAT.model.Field.types.select){
+        //newField = createDropdown(newAnnotation,  current.validation);
+      } if(current.type === KAT.model.Field.types.reference){ // for a reference list possible annotations.
+        //newField = createReferenceSpinner(newAnnotation, env, values, current.value);
+      }
+    });
 
     return newField;
   });
 
-  // Create a button
-  var saveButton = makeButton(newAnnotation, "Save",function(){
+  // add a bit of space
+  newForm.append("<br />");
+
+  // create a submit control group for the form
+  var submitGroup = $("<div>").addClass("btn-group").appendTo(newForm);
+
+  // create a save button
+  // so we can submit the form.
+  var saveButton = $("<button type='submit'>").addClass("btn btn-primary").text("Save").click(function(e){
+
+    // prevent form submission
+    e.preventDefault();
+
+    // if we can not validate the form,
+    // just return.
+    if(!revalidate()){
+      return;
+    }
 
     // The result JSON
+    // TODO: Make this smarter.
     var valuesJSON = {};
 
     // go over the input fields and gather the values.
     $.each(concept.fields, function(i, field){
 
       //also get the current input field.
-      var infield = inputFields[i];
+      var infield = inputFieldGroups[i];
 
       // store the value in the valueJSON as an array
       // TODO: Handle multiple fields here.
@@ -291,57 +411,18 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     // callback
     var theannotation = callback(selection, concept, valuesJSON, annotation);
     theannotation.draw();
-  }).addClass("save").attr("disabled", "disabled");
 
+    return false;
+  }).appendTo(submitGroup);
 
-  //TODO: Make this more general.
-  // Also do not use type='submit' here, as clicking that would reload page
-  // if you are in a <form> tag, unless you cancel explititly
-  makeButton(newAnnotation, "Cancel", function(){
-        newAnnotation.remove(); // remove the entire form
-      });
+  // create a cancel button
+  // to cancel editing when needed
+  var cancelButton = $("<button type='button'>").addClass("btn btn-danger").text("Cancel").click(function(){
+    newAnnotation.remove(); // remove the entire form
+  }).appendTo(submitGroup);
 
-  function makeButton(parent, text, func) {
-
-    return $("<button type='button'>")
-      .text(text)
-      .addClass("formButton")
-      .appendTo(newAnnotation)
-      .click(func);
-  }
-
-  function createTextfield(parent, values, value, current) {
-
-    var newField =
-    jQuery("<input type='text'>")
-      .addClass("tfield")
-      .addClass("form-control")
-      .appendTo(parent)
-      .keyup(function(){
-
-        var RegExpression = current.validation;
-
-        $(".currentForm").removeClass("has-success has-error");
-        saveButton.removeAttr("disabled");
-
-        if(RegExpression.test(newField.val())) {
-          $(".currentForm").addClass("has-success");
-        } else {
-          $(".currentForm").addClass("has-error");
-          saveButton.attr("disabled", "disabled");
-        }
-      });
-
-    if (typeof annotation !== "undefined"){
-      var prevValue = values[value];
-      newField.val(prevValue[0]);
-    }
-    window.setTimeout(function(){
-      newField.keyup();
-    }, 100);
-    return newField;
-
-  }
+  // and re-validate the form
+  revalidate();
 
   // TODO: Possibly use a styled dropbown from Bootstrap
   function createDropdown(parent, options) {
@@ -375,7 +456,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
   }
 
-  function createReferenceSpinner(parent, env, annot, values, value) {
+  function createReferenceSpinner(parent, env, values, value) {
 
     // create a new field.
     var newField = jQuery("<select>")
@@ -422,10 +503,10 @@ KAT.sidebar.annotationMode = false;
 * Width of the sidebar that will be hidden
 *
 * @type {integer}
-* @default -230
+* @default -480
 * @name KAT.sidebar.hideWidth
 */
-KAT.sidebar.hideWidth = -230;
+KAT.sidebar.hideWidth = -480;
 
 /**
 * Duration of animation
@@ -435,6 +516,14 @@ KAT.sidebar.hideWidth = -230;
 * @name KAT.sidebar.animateLength
 */
 KAT.sidebar.animateLength = 100;
+
+/**
+* Contains a reference to the mode toggle button in the sidebar.
+*
+* @type {jQuery}
+* @name KAT.sidebar.modeToggleButton
+*/
+KAT.sidebar.modeToggleButton = undefined;
 
 /**
 * Contains a reference to the mode toggle button in the sidebar.

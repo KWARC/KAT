@@ -14,20 +14,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with KAT.  If not, see <http://www.gnu.org/licenses/>
 */
-// Source: src/KAT/index.js
-/**
-* Namespace everything used by KAT
-* @namespace
-* @alias KAT
-*/
-var KAT = {};
 
-// Source: src/KAT/rdf/index.js
-/**
-* Namespace for RDF functionality used by KAT.
-* @namespace
-* @alias KAT.rdf
-*/
+
+(function(exports,global){global["KAT"]=exports;
+// define the global KAT object we will export.
+var KAT = exports;
+
+// make sure $ is available as jQuery.
+var $ = global.jQuery;
+
 KAT.rdf = {};
 
 /** XML Namespace for KAT.
@@ -151,12 +146,6 @@ KAT.rdf.findById = function(rdf, id){
   });
 };
 
-// Source: src/KAT/model/index.js
-/**
-* Namespace for models used by KAT.
-* @namespace
-* @alias KAT.model
-*/
 KAT.model = {};
 
 /**
@@ -260,14 +249,6 @@ KAT.model.ParsingError = function (message, xml_element) {
   KAT.model.ParsingError.prototype = new IntermediateInheritor();
 })();
 
-// Source: src/KAT/model/KAnnSpecCollection.js
-/** Creates a new KAnnSpecCollection instance.
-*
-* @name KAT.model.KAnnSpecCollection
-* @this {KAT.model.KAnnSpecCollection}
-* @Alias KAT.model.KAnnSpecCollection
-* @class
-*/
 KAT.model.KAnnSpecCollection = function(){
   /**
   * KAnnSpecs stored in this KAnnSpecCollection
@@ -444,7 +425,7 @@ KAT.model.KAnnSpecCollection.prototype.findConcepts = function(){
     for(var j=0;j<this.KAnnSpecs[i].concepts.length;j++){
       concepts.push(this.KAnnSpecs[i].concepts[j]);
     }
-  }
+  } 
 
   return concepts;
 };
@@ -489,16 +470,86 @@ KAT.model.KAnnSpecCollection.prototype.getField = function(name){
   return concept.getField(name[3]);
 };
 
-// Source: src/KAT/model/KAnnSpec.js
-/** Creates a new KAnnSpec instance.
+/**
+* Assigns colours to each concept in this KAnnSpecCollection
 *
-* @param {document} xml - XML document representing KAnnSpec.
-* @param {KAT.model.KAnnSpecCollection} collection - KAnnSpec collection this KAnnSpec is declared in.
-* @name KAT.model.KAnnSpec
-* @this {KAT.model.KAnnSpec}
-* @Alias KAT.model.KAnnSpec
-* @class
+*
+* @function
+* @instance
+* @name assignDisplayColour
+* @memberof KAT.model.KAnnSpecCollection
 */
+KAT.model.KAnnSpecCollection.prototype.assignDisplayColour = function(){
+  
+  //byte2Hex and RGB2Color are used to convert from RGB to hex.
+  var byte2Hex = function(n) {
+    var nybHexString = "0123456789ABCDEF";
+    return String(nybHexString.substr((n >> 4) & 0x0F, 1)) + nybHexString.substr(n & 0x0F, 1);
+  };
+
+  var RGB2Color = function(r, g, b) {
+      return '#' + byte2Hex(r) + byte2Hex(g) + byte2Hex(b);
+  };
+
+  //This function give a palette of 56 colours going accross the rainbow
+  var makeColorGradient = function(frequency, phase1, phase2, phase3) {
+    var center = 128;
+    var width = 127;
+    var len = 56;
+
+    var colourValues = [];
+
+    for (var i = 0; i < len; ++i) {
+        var red = Math.sin(frequency * i + phase1) * width + center;
+        var grn = Math.sin(frequency * i + phase2) * width + center;
+        var blu = Math.sin(frequency * i + phase3) * width + center;
+        colourValues.push(RGB2Color(red, grn, blu));
+    }
+    return colourValues;
+  };
+
+  //This function returns equidistant array indices
+  var evenlySplitPalette = function(colorsNeeded, maxVal) {
+    var diff = Math.floor(maxVal / colorsNeeded);
+    var values = [];
+    var nextVal = diff;
+    while (nextVal <= maxVal) {
+        values.push(nextVal);
+        nextVal = diff + values[values.length - 1];
+    }
+    var expectedMidVal = Math.floor(maxVal / 2);
+    var currentMidVal = values[Math.floor(values.length / 2)];
+    var deviation = currentMidVal - expectedMidVal;
+    if (values.length % 2 === 0) {
+        deviation = Math.floor(deviation / 2);
+    }
+    values.forEach(function (entry, index) {
+        values[index] = entry - deviation;
+    });
+    return values;
+  };
+
+  //Here we use the equidistant indices to access equidistant colours from the colour palette
+  var colours = function(colorsNeeded) {
+    var range = makeColorGradient(0.1, 0, 2, 4);
+    var indices = evenlySplitPalette(colorsNeeded, range.length);
+    var result = [];
+    for (i = 0; i < indices.length; i++) {
+        result.push(range[indices[i]]);
+    }
+    return result;
+  };
+
+  //concepts in current KAnnSpecCollection
+  var concepts = this.findConcepts();
+  var numberOfConcepts = concepts.length;
+
+  //We get colours for each concept, and assign it to a concept
+  var coloursSelected = colours(numberOfConcepts);
+  for (i = 0; i < numberOfConcepts; i++) {
+    concepts[i].displayColour = coloursSelected[i];
+  }
+};
 KAT.model.KAnnSpec = function(xml, url, collection){
   var me = this;
 
@@ -670,16 +721,6 @@ KAT.model.KAnnSpec.prototype.getField = function(name){
   return concept.getField(name[2]);
 };
 
-// Source: src/KAT/model/Concept.js
-/** Creates a new Concept instance.
-*
-* @param {document} xml - XML document representing the concept.
-* @param {KAT.model.KAnnSpec} KAnnSpec - KAnnSpec this concept was declared in.
-* @name KAT.model.Concept
-* @this {KAT.model.Concept}
-* @Alias KAT.model.Concept
-* @class
-*/
 KAT.model.Concept = function(xml, KAnnSpec){
   var me = this;
 
@@ -760,6 +801,14 @@ KAT.model.Concept = function(xml, KAnnSpec){
   * @name KAT.model.Concept#fields
   */
   this.fields = [];
+
+  /**
+  * Hex code for colour used to draw an annotation of this concept.
+  *
+  * @type {string}
+  * @name KAT.model.Concept#displayColour
+  */
+  this.displayColour = "";
 
   /**
   * Display to generate for this element.
@@ -906,16 +955,6 @@ KAT.model.Concept.prototype.getField = function(name){
   return false;
 };
 
-// Source: src/KAT/model/Field.js
-/** Creates a new Field instance.
-*
-* @param {document} xml - XML document representing the field.
-* @param {KAT.model.KAnnSpec} concept - concept this field was declared in.
-* @name KAT.model.Field
-* @this {KAT.model.Field}
-* @Alias KAT.model.Field
-* @class
-*/
 KAT.model.Field = function(xml, concept){
   var me = this;
 
@@ -1190,16 +1229,6 @@ KAT.model.Field.types = {
   "text": "text"
 };
 
-// Source: src/KAT/model/Option.js
-/** Creates a new Option instance.
-*
-* @param {document} xml - XML document representing the option.
-* @param {KAT.model.Field} field - field this option was declared in.
-* @name KAT.model.Option
-* @this {KAT.model.Option}
-* @Alias KAT.model.Option
-* @class
-*/
 KAT.model.Option = function(xml, field){
   //parse the XML
   try{
@@ -1276,15 +1305,6 @@ KAT.model.Option = function(xml, field){
 
 };
 
-// Source: src/KAT/gui/index.js
-/** Creates a new Editor instance.
-*
-* @param {jQuery} element - The element this editor is bound to.
-* @param {KAT.model.KAnnSpecCollection} KAnnSpecCollection - The KAnnSpecCollection this editor can annotate.
-*
-* @Alias KAT.gui
-* @class
-*/
 KAT.gui = function(element, KAnnSpecCollection){
 
   //intialise and make sure everything is set up
@@ -1718,12 +1738,6 @@ KAT.gui.selectDialog = function(title, query, options, descriptions, callback){
 * @param {number} selectedIndex - Index of option clicked or -1.
 */
 
-// Source: src/KAT/sidebar/index.js
-/**
-* Namespace for the sidebar
-* @namespace
-* @alias KAT.sidebar
-*/
 KAT.sidebar = {};
 
 /**
@@ -1767,6 +1781,7 @@ KAT.sidebar.init = function(){
       //to toggle the mode
       KAT.sidebar.modeToggleButton,
       "<br/>",
+      "<br/>",
 
       //to import annotations
       $("<button>")
@@ -1778,6 +1793,7 @@ KAT.sidebar.init = function(){
           alert("TODO: Import annotations binding!");
         }),
       "<br/>",
+      "<br/>",
 
       // to export annotations
       $("<button>")
@@ -1788,6 +1804,7 @@ KAT.sidebar.init = function(){
           //TODO: Toggle Export annotations
           alert("TODO: Export annotations binding!");
         }),
+      "<br/>",
       "<br/>",
 
       //to help
@@ -1801,7 +1818,11 @@ KAT.sidebar.init = function(){
         .click(function(){
           //TODO: Toggle Help
           alert("TODO: Help!");
-        })
+        }),
+
+        "<br/>",
+        "<br/>",
+        "<br/>"
     ),
     $("<ul>").addClass("KATMenuItems")
   )
@@ -1943,54 +1964,167 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
   }
 
   // create a new element to add to the sidebar.
-  // TODO: Have the .KATMenuItems in a variable from the init function.
-  // TODO: XSS vulnerable.
-  var newAnnotation = $("<li>").addClass("currentForm").append(
-    "<b> "+task+" Annotation Details</b><br>"
+  var newAnnotation = $("<li>").append(
+    "<h4> "+task+" Annotation Details</h4>"
   ).appendTo(".KATMenuItems");
 
-  var inputFields = jQuery.map(concept.fields, function(current){
+  // a list of validation functions to run.
+  var validations = [];
 
-    // a new input element we will create
+  // only if all of them return true,
+  // we enable the save button.
+  var revalidate = function(){
+    var result = true;
+
+    // loop over the validations.
+    jQuery.each(validations, function(i, validate){
+      result = result && validate();
+    });
+
+    // if all of the validations are OK,
+    // we can unlock the 'save' button
+    if(result){
+      saveButton.removeAttr("disabled");
+    } else {
+      // else we need to disable it.
+      saveButton.attr("disabled", "disabled");
+    }
+
+    return result;
+  };
+
+  // add a new form
+  var newForm = $("<form>").addClass("form-inline").appendTo(newAnnotation).on("submit", function(e){
+
+    // prevent form submission
+    e.preventDefault();
+
+    // click the save button
+    saveButton.click();
+
+    return false;
+  });
+
+  // map over the input fields
+  var inputFieldGroups = jQuery.map(concept.fields, function(current){
+
+    // create a new group
+    // to append to the <form>
+    var fieldGroup = $("<div>").appendTo(newForm);
+
+
+    // the new field to return for now.
     var newField;
 
-    // The current validation.
-    var options = current.validation;
+    // TODO: for each of the values do this
+    jQuery.map([0], function(i){
 
-    // grab the value of the field and add it to the sidebar
-    var value = current.value;
-    newAnnotation.append("<br>").append(jQuery("<label>").text(value));
+      // create a wrapper element.
+      var wrapper = $("<div>").addClass("form-group").appendTo(fieldGroup);
 
-    var prevValue;
+      // create an id for the form element.
+      var id =  "KAT_form_"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
 
-    if(current.type === KAT.model.Field.types.text){
+      // grab the name of the field.
+      var value = current.value;
 
-      newField = createTextfield(newAnnotation, values, value, current);
+      // create a label
+      // and add it to the form.
+      $("<label>").addClass("control-label").attr("for", id).text(value).appendTo(wrapper);
 
-    } else if(current.type === KAT.model.Field.types.select){
+      // add some spacing.
+      wrapper.append("&nbsp;");
 
-      newField = createDropdown(newAnnotation, options);
 
-    } if(current.type === KAT.model.Field.types.reference){ // for a reference list possible annotations.
+      // differentiate between the type of field
+      if(current.type === KAT.model.Field.types.text){
+        (function(){
 
-      newField = createReferenceSpinner(newAnnotation, env, annot, values, value);
+          // create a new text field
+          newField = $("<input type='text'>")
+          .attr("id", id)
+          .addClass("tfield")
+          .addClass("form-control")
 
-    }
+          // append it to the wrapper
+          .appendTo(wrapper)
+
+          // and revalidate upon changing something.
+          .keyup(function(){
+            revalidate();
+          });
+
+          // parse the RegEx we want to valiate against.
+          var RegExpression = current.validation;
+
+          // add our validation function.
+          validations.push(function(){
+
+            // remove the wrapper class
+            wrapper.removeClass("has-success has-error");
+
+            // if we pass validation
+            if(RegExpression.test(newField.val())) {
+
+              // add a success class
+              wrapper.addClass("has-success");
+              return true;
+            } else {
+
+              // else add an error class
+              wrapper.addClass("has-error");
+              return false;
+            }
+          });
+
+          // set the previous value
+          // of the annotation
+          // if available.
+
+          if (typeof annotation !== "undefined"){
+            var prevValue = values[value];
+            newField.val(prevValue[0]);
+          }
+        })();
+
+      } else if(current.type === KAT.model.Field.types.select){
+        //newField = createDropdown(newAnnotation,  current.validation);
+      } if(current.type === KAT.model.Field.types.reference){ // for a reference list possible annotations.
+        //newField = createReferenceSpinner(newAnnotation, env, values, current.value);
+      }
+    });
 
     return newField;
   });
 
-  // Create a button
-  var saveButton = makeButton(newAnnotation, "Save",function(){
+  // add a bit of space
+  newForm.append("<br />");
+
+  // create a submit control group for the form
+  var submitGroup = $("<div>").addClass("btn-group").appendTo(newForm);
+
+  // create a save button
+  // so we can submit the form.
+  var saveButton = $("<button type='submit'>").addClass("btn btn-primary").text("Save").click(function(e){
+
+    // prevent form submission
+    e.preventDefault();
+
+    // if we can not validate the form,
+    // just return.
+    if(!revalidate()){
+      return;
+    }
 
     // The result JSON
+    // TODO: Make this smarter.
     var valuesJSON = {};
 
     // go over the input fields and gather the values.
     $.each(concept.fields, function(i, field){
 
       //also get the current input field.
-      var infield = inputFields[i];
+      var infield = inputFieldGroups[i];
 
       // store the value in the valueJSON as an array
       // TODO: Handle multiple fields here.
@@ -2012,57 +2146,18 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     // callback
     var theannotation = callback(selection, concept, valuesJSON, annotation);
     theannotation.draw();
-  }).addClass("save").attr("disabled", "disabled");
 
+    return false;
+  }).appendTo(submitGroup);
 
-  //TODO: Make this more general.
-  // Also do not use type='submit' here, as clicking that would reload page
-  // if you are in a <form> tag, unless you cancel explititly
-  makeButton(newAnnotation, "Cancel", function(){
-        newAnnotation.remove(); // remove the entire form
-      });
+  // create a cancel button
+  // to cancel editing when needed
+  var cancelButton = $("<button type='button'>").addClass("btn btn-danger").text("Cancel").click(function(){
+    newAnnotation.remove(); // remove the entire form
+  }).appendTo(submitGroup);
 
-  function makeButton(parent, text, func) {
-
-    return $("<button type='button'>")
-      .text(text)
-      .addClass("formButton")
-      .appendTo(newAnnotation)
-      .click(func);
-  }
-
-  function createTextfield(parent, values, value, current) {
-
-    var newField =
-    jQuery("<input type='text'>")
-      .addClass("tfield")
-      .addClass("form-control")
-      .appendTo(parent)
-      .keyup(function(){
-
-        var RegExpression = current.validation;
-
-        $(".currentForm").removeClass("has-success has-error");
-        saveButton.removeAttr("disabled");
-
-        if(RegExpression.test(newField.val())) {
-          $(".currentForm").addClass("has-success");
-        } else {
-          $(".currentForm").addClass("has-error");
-          saveButton.attr("disabled", "disabled");
-        }
-      });
-
-    if (typeof annotation !== "undefined"){
-      var prevValue = values[value];
-      newField.val(prevValue[0]);
-    }
-    window.setTimeout(function(){
-      newField.keyup();
-    }, 100);
-    return newField;
-
-  }
+  // and re-validate the form
+  revalidate();
 
   // TODO: Possibly use a styled dropbown from Bootstrap
   function createDropdown(parent, options) {
@@ -2096,7 +2191,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
   }
 
-  function createReferenceSpinner(parent, env, annot, values, value) {
+  function createReferenceSpinner(parent, env, values, value) {
 
     // create a new field.
     var newField = jQuery("<select>")
@@ -2143,10 +2238,10 @@ KAT.sidebar.annotationMode = false;
 * Width of the sidebar that will be hidden
 *
 * @type {integer}
-* @default -230
+* @default -480
 * @name KAT.sidebar.hideWidth
 */
-KAT.sidebar.hideWidth = -230;
+KAT.sidebar.hideWidth = -480;
 
 /**
 * Duration of animation
@@ -2165,12 +2260,14 @@ KAT.sidebar.animateLength = 100;
 */
 KAT.sidebar.modeToggleButton = undefined;
 
-// Source: src/KAT/storage/index.js
 /**
-* Namespace for storage used by KAT.
-* @namespace
-* @alias KAT.storage
+* Contains a reference to the mode toggle button in the sidebar.
+*
+* @type {jQuery}
+* @name KAT.sidebar.modeToggleButton
 */
+KAT.sidebar.modeToggleButton = undefined;
+
 KAT.storage = {};
 
 /**
@@ -2225,17 +2322,6 @@ KAT.storage.resolve = function(url, base, isDir){
   return absUrl;
 }; 
 
-// Source: src/KAT/storage/store.js
-/** Creates a new Store instance.
-*
-* @param {KAT.gui} gui - Gui associated to this store.
-* @param {string} docURL - URL of document currently loaded.
-*
-* @name KAT.storage.Store
-* @this {KAT.storage.Store}
-* @Alias KAT.storage.Store
-* @class
-*/
 KAT.storage.Store = function(gui, docURL){
   /**
   * KAnnSpecCollection this store instance knows.
@@ -2694,21 +2780,6 @@ KAT.storage.Store.UUID2Selection = function(selection){
   };
 };
 
-// Source: src/KAT/storage/annotation.js
-/** Creates a new Annotation instance.
-*
-* @param {KAT.storage.Store} store - The store associated with this annotation.
-* @param {KAT.gui.selection} selection - The selection this annotation annotates.
-* @param {KAT.model.Concept} concept - concept this annotation represents.
-* @param {object|undefined} values - The values of this annotation. If undefined, sets the default values.
-* @param {string} [id] - Id of annotation. Will be auto generated if it does not exist.
-*
-* @name KAT.storage.Annotation
-* @this {KAT.storage.Annotation}
-* @Alias KAT.storage.Annotation
-* @class
-*/
-
 KAT.storage.Annotation = function(store, selection, concept, values, id){
 
   /**
@@ -2800,22 +2871,21 @@ KAT.storage.Annotation.prototype.draw = function(){
   //find the elements in the selection.
   var range = this.store.gui.getRange(this.selection);
 
-  function getWordsBetweenCurlies(str) {
-    var results = [], re = /{([^}]+)}/g, text;
-
-    while((text = re.exec(str))?true:false) {
-      results.push(text[1]);
-    }
-
-    return results;
-  }
-
   //add a class for the selection.
-  range.addClass("KAT-selection").each(function(){
+  var className = this.concept.name;
+  range.addClass(className).css('background-color', this.concept.displayColour).each(function(){
     var $me = $(this); //creates jQuery object
 
     var current = $me.data("KAT.Annotation.UUID") || [];
     current.push(me.uuid);
+
+  function getWordsBetweenCurlies(str) {
+    var results = [], re = /{([^}]+)}/g, text;
+    while((text = re.exec(str))?true:false) {
+      results.push(text[1]);
+    }
+    return results;
+  }
 
     //find the values to be inserted for {x}
     var m = getWordsBetweenCurlies(me.concept.display);
@@ -2857,9 +2927,6 @@ KAT.storage.Annotation.prototype.draw = function(){
     //write it back
     $me.data("KAT.Annotation.UUID", current);
   });
-
-  $(document).tooltip(); //here the magic of the tooltip displaying happens
-
 };
 
 /** Creates a new Annotation instance from an RDF node.
@@ -3194,13 +3261,6 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
   return parent.get(0);
 };
 
-// Source: src/KAT/module/index.js
-/**
-* Namespace for KAT JOBAD module.
-* @namespace
-* @alias KAT.module
-*/
-
 KAT.module = {
   /* Module Info / Meta Data */
   info:{
@@ -3218,13 +3278,35 @@ KAT.module = {
     'async': false,
     'hasCleanNamespace': false
   },
-  init: function(JOBADInstance, annotationStore){
-    this.store = annotationStore; // KAT.storage.Store
-    this.gui = this.store.gui; // KAT.gui
-  },
-  hoverText: function(target, JOBADInstance){
-    // return element to display
+  init: function(JOBADInstance, collection_or_kannspec_and_url, documentURL){
 
+    // first of all create a collection
+    var collection;
+
+    // if a collection has been parsed, we have it already.
+    if(collection_or_kannspec_and_url instanceof KAT.model.KAnnSpecCollection){
+      collection = collection_or_kannspec_and_url;
+    } else {
+      // if not, we still need to create that.
+      collection = new KAT.model.KAnnSpecCollection();
+      collection.addNewKAnnSpec(collection_or_kannspec_and_url[0], collection_or_kannspec_and_url[1]);
+    }
+
+    // create a new gui bound to the right element.
+    this.gui = new KAT.gui(JOBADInstance.element, collection);
+
+    //create a store with the right documentURL
+    this.store = new KAT.storage.Store(this.gui, documentURL);
+
+    // initialise the tooltip libarary
+    JOBADInstance.element.tooltip();
+
+    // initialise the gui
+    KAT.sidebar.init(this.gui);
+
+    //initialise gui collection
+    collection.init();
+    collection.assignDisplayColour();
   },
 
   contextMenuEntries: function(target, JOBADInstance){
@@ -3353,4 +3435,5 @@ KAT.module = {
 
 JOBAD.modules.register(KAT.module); //register the module.
 
+})({},function(){return this}());
 //# sourceMappingURL=KAT.js.map
