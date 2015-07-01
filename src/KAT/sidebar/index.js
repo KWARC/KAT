@@ -15,49 +15,61 @@ KAT.sidebar = {};
 */
 KAT.sidebar.init = function(){
 
-  // GENERAL COMMENT: Use jQuery's chaining functionality more.
-  // I added it whenever possible
-  // TODO: Finish documentation of function
-  // TODO: Remove all the TODO comments once they have been dealt with.
-
-  // TODO: Check HERE if the sidebar was already intialised
-  // and if so, just return.
-
-  var winHeight = jQuery(window).height();
-
+  //mode of the sidebar.
   var mode;
+
+  //which is either Reading or Annotation.
   if (KAT.sidebar.annotationMode){ mode = "Reading"; } else { mode = "Annotation"; }
 
-  //create collapsible sidemenu & define properties
-  var collapsibleMenu = jQuery('<div>')
-  .addClass("collapsible")
-  .append($("<div>").addClass("KATTitle").html("<h3>KWARC Annotation Tool</h3>"))
-  .append($("<div>").addClass("KATSidebarButtons")
+  //get the height of the window.
+  var winHeight = jQuery(window).height();
+
+  //create a button to toggle annotations
+  KAT.sidebar.modeToggleButton = $("<button>")
+    .text("Enable " +mode+ " Mode")
+    .addClass("annotationToggle")
+    .addClass("btn btn-default").BS()
+    .click(function(){
+      KAT.sidebar.toggleAnnotationMode();
+    });
+
+  //create collapsible sidebar
+  var collapsibleMenu = jQuery('<div>').addClass("collapsible")
+
+  .append(
+    //add a heading
+    $("<div>").addClass("KATTitle").html("<h3>KWARC Annotation Tool</h3>"),
+
+    // and a lot of buttons
+    $("<div>").addClass("KATSidebarButtons")
     .append(
-      $("<button>")
-        .text("Enable " +mode+ " Mode")
-        .addClass("annotationToggle")
-        .addClass("btn btn-default").BS()
-        .click(function(){
-          KAT.sidebar.toggleAnnotationMode();
-        }),
+      //to toggle the mode
+      KAT.sidebar.modeToggleButton,
       "<br/>",
+
+      //to import annotations
       $("<button>")
         .text("Import Annotations")
         .addClass("helpButton")
         .addClass("btn btn-default").BS()
         .click(function(){
-          KAT.sidebar.toggleAnnotationMode();
+          //TODO: Toggle Import annotations
+          alert("TODO: Import annotations binding!");
         }),
       "<br/>",
+
+      // to export annotations
       $("<button>")
         .text("Export Annotations")
         .addClass("helpButton")
         .addClass("btn btn-default").BS()
         .click(function(){
-          KAT.sidebar.toggleAnnotationMode();
+          //TODO: Toggle Export annotations
+          alert("TODO: Export annotations binding!");
         }),
       "<br/>",
+
+      //to help
       $("<button>")
         .append(
           $("<span>").addClass("glyphicon glyphicon-info-sign")
@@ -66,11 +78,10 @@ KAT.sidebar.init = function(){
         .addClass("helpButton")
         .addClass("btn btn-default").BS()
         .click(function(){
-          alert("Unimplemented!");
+          //TODO: Toggle Help
+          alert("TODO: Help!");
         })
-    )
-  )
-  .append(
+    ),
     $("<ul>").addClass("KATMenuItems")
   )
   .css({
@@ -80,20 +91,16 @@ KAT.sidebar.init = function(){
   }).prependTo("body");
 
   // create button to toggle collapse and resurection of sidemenu and define properties
-
   var collapsibleToggle = $("<button>")
   .text("«")
   .addClass("collapseToggle")
   .css({'height': winHeight-10})
   .click(KAT.sidebar.toggleSidebar).prependTo(collapsibleMenu); //adapted from init function below
 
-  //Makes sidebar is open on load
+  //Make sure to shwo the sidebar
   KAT.sidebar.showSidebar();
 
-  //HACK! Remove this please, as this interferes with global styling.
-  //jQuery("body").css({'width': jQuery(window).width()-50});
-
-  //define changes to sidemenu when page is resized
+  // define changes to sidemenu when page is resized
   // this seems hacky, try to make it all relative with global CSS
   jQuery( window ).resize(function() {
     winHeight = jQuery(window).height();
@@ -107,33 +114,49 @@ KAT.sidebar.init = function(){
     collapsibleToggle.css({
       'height': winHeight-10
     });
-
-    //HACK! Remove this please, as this interferes with global styling.
-    //jQuery("body").css({'width': jQuery(window).width()-50});
   });
 };
 
+/**
+* Shows the sidebar.
+*
+* @function
+* @static
+* @name hideSidebar
+* @memberof KAT.sidebar
+*/
 KAT.sidebar.showSidebar = function(){
     KAT.sidebar.extended = true;
 
     jQuery(".collapseToggle")
-    .text("»")  // Change text of button.
+    .text("»")
     .parent().animate({right: "0"}, KAT.sidebar.animateLength );
-
-    //jQuery("body").css({'width': jQuery(window).width()-260}); //HACK! Remove this please, as this interferes with global styling.
 };
 
+/**
+* Hides the sidebar.
+*
+* @function
+* @static
+* @name hideSidebar
+* @memberof KAT.sidebar
+*/
 KAT.sidebar.hideSidebar = function(){
     KAT.sidebar.extended = false;
 
     jQuery(".collapseToggle")
     .text("«") // Change text of button.
-    .parent().animate({right: KAT.sidebar.hideWidth}, KAT.sidebar.animateLength );
-
-    //jQuery("body").css({'width': jQuery(window).width()-50}); //HACK! Remove this please, as this interferes with global styling.
+    .parent().animate({right: KAT.sidebar.hideWidth}, KAT.sidebar.animateLength);
 };
 
-
+/**
+* Toggles the state of the sidebar.
+*
+* @function
+* @static
+* @name toggleSidebar
+* @memberof KAT.sidebar
+*/
 KAT.sidebar.toggleSidebar = function(){
     if (KAT.sidebar.extended){
       //we are now hidden
@@ -144,6 +167,14 @@ KAT.sidebar.toggleSidebar = function(){
     }
   };
 
+/**
+* Toggles the annotation mode of KAT.
+*
+* @function
+* @static
+* @name toggleAnnotationMode
+* @memberof KAT.sidebar
+*/
 KAT.sidebar.toggleAnnotationMode = function(){
   KAT.sidebar.annotationMode = !KAT.sidebar.annotationMode;
 
@@ -154,7 +185,7 @@ KAT.sidebar.toggleAnnotationMode = function(){
   } else {
     mode = "Annotation";
   }
-  $(".annotationToggle").text("Enable " +mode+ " Mode");
+  KAT.sidebar.modeToggleButton.text("Enable " +mode+ " Mode");
 };
 
 /**
@@ -366,12 +397,12 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       prevValue = values[value];
       newField.val(prevValue[0].uuid);
     }
-
   }
 };
 
 /**
-* Is the sidebar extended?
+* Stores if the sidebar is extended.
+* Should be read-only.
 *
 * @type {boolean}
 * @name KAT.sidebar.extended
@@ -379,7 +410,8 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 KAT.sidebar.extended = false;
 
 /**
-* Is Annotation Mode active
+* Stores if KAT is in annotation Mode.
+* Should be readonly.
 *
 * @type {boolean}
 * @name KAT.sidebar.annotationMode
@@ -403,3 +435,11 @@ KAT.sidebar.hideWidth = -230;
 * @name KAT.sidebar.animateLength
 */
 KAT.sidebar.animateLength = 100;
+
+/**
+* Contains a reference to the mode toggle button in the sidebar.
+*
+* @type {jQuery}
+* @name KAT.sidebar.modeToggleButton
+*/
+KAT.sidebar.modeToggleButton = undefined;
