@@ -28,7 +28,7 @@ KAT.module = {
   hoverText: function(target, JOBADInstance){
     // return element to display
 
-  }, 
+  },
 
   contextMenuEntries: function(target, JOBADInstance){
     // reference to self
@@ -52,27 +52,7 @@ KAT.module = {
 
     var initializeMenuBar = function(annotationModeBool) {
 
-      var importAnnotations = function(){
-
-        var rdfDoc = prompt("Paste annotations to import here: ");
-        var annots = me.store.addFromRDF(jQuery(rdfDoc).get(0));
-
-        //and draw them
-        for(var i=0;i<annots.length;i++){
-          annots[i].draw();
-        }
-
-      };
-
-      var exportAnnotations = function() {
-
-          var rdfDoc = me.store.toRDF();
-          var dialog = KAT.gui.dialog("Export Annotation", rdfDoc, ["OK"], function(){this.close();});
-
-      };
-
       //Menu item 1 : Toggle annotation mode
-      
       if(annotationModeBool) {
         menu[annot_modeOff] = function(){
           KAT.sidebar.toggleAnnotationMode();
@@ -84,10 +64,10 @@ KAT.module = {
       }
 
       //Menu item 2
-      menu[storage_import] = importAnnotations;
+      menu[storage_import] = me.store.showImportDialog.bind(me.store);
 
       //Menu item 3
-      menu[storage_export] = exportAnnotations;
+      menu[storage_export] = me.store.showExportDialog.bind(me.store);
 
   };
 
