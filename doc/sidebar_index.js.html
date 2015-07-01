@@ -65,34 +65,34 @@ KAT.sidebar.init = function(){
       $("&lt;button>")
         .text("Enable " +mode+ " Mode")
         .addClass("annotationToggle")
+        .addClass("btn btn-default").BS()
         .click(function(){
           KAT.sidebar.toggleAnnotationMode();
-        })
-    )
-    .append(
+        }),
+      "&lt;br/>",
       $("&lt;button>")
         .text("Import Annotations")
         .addClass("helpButton")
+        .addClass("btn btn-default").BS()
         .click(function(){
           KAT.sidebar.toggleAnnotationMode();
-        })
-    )
-    .append(
+        }),
+      "&lt;br/>",
       $("&lt;button>")
         .text("Export Annotations")
         .addClass("helpButton")
+        .addClass("btn btn-default").BS()
         .click(function(){
           KAT.sidebar.toggleAnnotationMode();
-
-        })
-    )
-    .append(
+        }),
+      "&lt;br/>",
       $("&lt;button>")
         .append(
           $("&lt;span>").addClass("glyphicon glyphicon-info-sign")
           .text("Help")
         )
         .addClass("helpButton")
+        .addClass("btn btn-default").BS()
         .click(function(){
           alert("Unimplemented!");
         })
@@ -235,53 +235,29 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
     // grab the value of the field and add it to the sidebar
     var value = current.value;
-    newAnnotation.append(jQuery("&lt;span>").html("&lt;br>"+value+": "));
+    newAnnotation.append("&lt;br>").append(jQuery("&lt;label>").text(value));
 
     var prevValue;
 
-    // TODO: Implement validation of text fields.
     if(current.type === KAT.model.Field.types.text){
-      
+
       newField = createTextfield(newAnnotation, values, value, current);
 
     } else if(current.type === KAT.model.Field.types.select){
-      
+
       newField = createDropdown(newAnnotation, options);
 
-    }
+    } if(current.type === KAT.model.Field.types.reference){ // for a reference list possible annotations.
 
+      newField = createReferenceSpinner(newAnnotation, env, annot, values, value);
 
-    // for a reference list possible annotations.
-    if(current.type === KAT.model.Field.types.reference){
-
-      // create a new field.
-      newField = jQuery("&lt;select>").addClass("tfield").appendTo(newAnnotation);
-
-      // Find all the allowed concepts
-      var allowedAnnotations = env.store.filterByConcept.apply(env.store, options);
-
-      // for each
-      jQuery.each(allowedAnnotations, function(index, annot){
-        $("&lt;option>")
-        .text(annot.uuid)
-        .val(annot.uuid)
-        .appendTo(newField);
-      });
-
-      if(values){
-        prevValue = values[value];
-        newField.val(prevValue[0].uuid);
-      }
     }
 
     return newField;
   });
 
   // Create a button
-  //TODO: Make this more general.
-  // Also do not use type='submit' here, as clicking that would reload page
-  // if you are in a &lt;form> tag, unless you cancel explititly
-  makeButton(newAnnotation, "Save",function(){
+  var saveButton = makeButton(newAnnotation, "Save",function(){
 
     // The result JSON
     var valuesJSON = {};
@@ -312,20 +288,20 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     // callback
     var theannotation = callback(selection, concept, valuesJSON, annotation);
     theannotation.draw();
-  });
+  }).addClass("save").attr("disabled", "disabled");
 
-  
+
   //TODO: Make this more general.
   // Also do not use type='submit' here, as clicking that would reload page
   // if you are in a &lt;form> tag, unless you cancel explititly
   makeButton(newAnnotation, "Cancel", function(){
         newAnnotation.remove(); // remove the entire form
       });
-  
+
   function makeButton(parent, text, func) {
 
     return $("&lt;button type='button'>")
-      .val(text)
+      .text(text)
       .addClass("formButton")
       .appendTo(newAnnotation)
       .click(func);
@@ -334,35 +310,33 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
   function createTextfield(parent, values, value, current) {
 
     var newField =
-      jQuery("&lt;input type='text'>")
+    jQuery("&lt;input type='text'>")
       .addClass("tfield")
       .addClass("form-control")
       .appendTo(parent)
-      .keypress(validation);
+      .keyup(function(){
 
-      if (typeof annotation !== "undefined"){
-        var prevValue = values[value];
-        newField.val(prevValue[0]);
-      }
+        var RegExpression = current.validation;
 
-    return newField;
+        $(".currentForm").removeClass("has-success has-error");
+        saveButton.removeAttr("disabled");
 
-    function validation() {
+        if(RegExpression.test(newField.val())) {
+          $(".currentForm").addClass("has-success");
+        } else {
+          $(".currentForm").addClass("has-error");
+          saveButton.attr("disabled", "disabled");
+        }
+      });
 
-      var RegExpression = current.validation;
-      console.log(current.validation);
-
-      $(".currentForm").removeClass("has-success has-error");
-      //$(".save").removeClass("disabled");
-
-       if(RegExpression.test(newField.val())) {
-         $(".currentForm").addClass("has-success");
-       } else {
-         $(".currentForm").addClass("has-error");
-        // $(".save").addClass("disabled");
-       }
-
+    if (typeof annotation !== "undefined"){
+      var prevValue = values[value];
+      newField.val(prevValue[0]);
     }
+    window.setTimeout(function(){
+      newField.keyup();
+    }, 100);
+    return newField;
 
   }
 
@@ -375,7 +349,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     .appendTo(parent);
 
     // add all the values
-    $.each(options, function(j, opt){
+    jQuery.each(options, function(j, opt){
       jQuery("&lt;option>")
       .text(opt.value)
       .val(j)
@@ -395,6 +369,31 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     }
 
     return newField;
+
+  }
+
+  function createReferenceSpinner(parent, env, annot, values, value) {
+
+    // create a new field.
+    var newField = jQuery("&lt;select>")
+    .addClass("tfield")
+    .appendTo(parent);
+
+    // Find all the allowed concepts
+    var allowedAnnotations = env.store.filterByConcept.apply(env.store, options);
+
+    // for each
+    jQuery.each(allowedAnnotations, function(index, annot){
+      jQuery("&lt;option>")
+      .text(annot.uuid)
+      .val(annot.uuid)
+      .appendTo(newField);
+    });
+
+    if(values){
+      prevValue = values[value];
+      newField.val(prevValue[0].uuid);
+    }
 
   }
 };
@@ -448,7 +447,7 @@ KAT.sidebar.animateLength = 100;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Fri Jun 26 2015 17:45:57 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Wed Jul 01 2015 10:31:24 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

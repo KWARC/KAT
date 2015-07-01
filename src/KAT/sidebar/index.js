@@ -37,34 +37,34 @@ KAT.sidebar.init = function(){
       $("<button>")
         .text("Enable " +mode+ " Mode")
         .addClass("annotationToggle")
+        .addClass("btn btn-default").BS()
         .click(function(){
           KAT.sidebar.toggleAnnotationMode();
-        })
-    )
-    .append(
+        }),
+      "<br/>",
       $("<button>")
         .text("Import Annotations")
         .addClass("helpButton")
+        .addClass("btn btn-default").BS()
         .click(function(){
           KAT.sidebar.toggleAnnotationMode();
-        })
-    )
-    .append(
+        }),
+      "<br/>",
       $("<button>")
         .text("Export Annotations")
         .addClass("helpButton")
+        .addClass("btn btn-default").BS()
         .click(function(){
           KAT.sidebar.toggleAnnotationMode();
-
-        })
-    )
-    .append(
+        }),
+      "<br/>",
       $("<button>")
         .append(
           $("<span>").addClass("glyphicon glyphicon-info-sign")
           .text("Help")
         )
         .addClass("helpButton")
+        .addClass("btn btn-default").BS()
         .click(function(){
           alert("Unimplemented!");
         })
@@ -212,11 +212,11 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     var prevValue;
 
     if(current.type === KAT.model.Field.types.text){
-      
+
       newField = createTextfield(newAnnotation, values, value, current);
 
     } else if(current.type === KAT.model.Field.types.select){
-      
+
       newField = createDropdown(newAnnotation, options);
 
     } if(current.type === KAT.model.Field.types.reference){ // for a reference list possible annotations.
@@ -229,10 +229,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
   });
 
   // Create a button
-  //TODO: Make this more general.
-  // Also do not use type='submit' here, as clicking that would reload page
-  // if you are in a <form> tag, unless you cancel explititly
-  makeButton(newAnnotation, "Save",function(){
+  var saveButton = makeButton(newAnnotation, "Save",function(){
 
     // The result JSON
     var valuesJSON = {};
@@ -265,14 +262,14 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     theannotation.draw();
   }).addClass("save").attr("disabled", "disabled");
 
-  
+
   //TODO: Make this more general.
   // Also do not use type='submit' here, as clicking that would reload page
   // if you are in a <form> tag, unless you cancel explititly
   makeButton(newAnnotation, "Cancel", function(){
         newAnnotation.remove(); // remove the entire form
       });
-  
+
   function makeButton(parent, text, func) {
 
     return $("<button type='button'>")
@@ -285,35 +282,33 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
   function createTextfield(parent, values, value, current) {
 
     var newField =
-      jQuery("<input type='text'>")
+    jQuery("<input type='text'>")
       .addClass("tfield")
       .addClass("form-control")
       .appendTo(parent)
-      .keyup(validation);
+      .keyup(function(){
 
-      if (typeof annotation !== "undefined"){
-        var prevValue = values[value];
-        newField.val(prevValue[0]);
-      }
+        var RegExpression = current.validation;
 
-    return newField;
+        $(".currentForm").removeClass("has-success has-error");
+        saveButton.removeAttr("disabled");
 
-    function validation() {
+        if(RegExpression.test(newField.val())) {
+          $(".currentForm").addClass("has-success");
+        } else {
+          $(".currentForm").addClass("has-error");
+          saveButton.attr("disabled", "disabled");
+        }
+      });
 
-      var RegExpression = current.validation;
-
-      $(".currentForm").removeClass("has-success has-error");
-      $(".save").removeAttr("disabled");
-
-      console.log(newField.val());
-       if(RegExpression.test(newField.val())) {
-         $(".currentForm").addClass("has-success");
-       } else {
-         $(".currentForm").addClass("has-error");
-         $(".save").attr("disabled", "disabled");
-       }
-
+    if (typeof annotation !== "undefined"){
+      var prevValue = values[value];
+      newField.val(prevValue[0]);
     }
+    window.setTimeout(function(){
+      newField.keyup();
+    }, 100);
+    return newField;
 
   }
 
