@@ -1761,12 +1761,12 @@ KAT.sidebar.init = function(){
 
   //create a button to toggle annotations
   KAT.sidebar.modeToggleButton = $("<button>")
-    .text("Enable " +mode+ " Mode")
-    .addClass("annotationToggle")
-    .addClass("btn btn-default").BS()
-    .click(function(){
-      KAT.sidebar.toggleAnnotationMode();
-    });
+  .text("Enable " +mode+ " Mode")
+  .addClass("annotationToggle")
+  .addClass("btn btn-default").BS()
+  .click(function(){
+    KAT.sidebar.toggleAnnotationMode();
+  });
 
   //create collapsible sidebar
   var collapsibleMenu = jQuery('<div>').addClass("collapsible")
@@ -1785,44 +1785,44 @@ KAT.sidebar.init = function(){
 
       //to import annotations
       $("<button>")
-        .text("Import Annotations")
-        .addClass("helpButton")
-        .addClass("btn btn-default")
-        .click(function(){
-          //TODO: Toggle Import annotations
-          alert("TODO: Import annotations binding!");
-        }),
+      .text("Import Annotations")
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+        //TODO: Toggle Import annotations
+        alert("TODO: Import annotations binding!");
+      }),
       "<br/>",
       "<br/>",
 
       // to export annotations
       $("<button>")
-        .text("Export Annotations")
-        .addClass("helpButton")
-        .addClass("btn btn-default")
-        .click(function(){
-          //TODO: Toggle Export annotations
-          alert("TODO: Export annotations binding!");
-        }),
+      .text("Export Annotations")
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+        //TODO: Toggle Export annotations
+        alert("TODO: Export annotations binding!");
+      }),
       "<br/>",
       "<br/>",
 
       //to help
       $("<button>")
-        .append(
-          $("<span>").addClass("glyphicon glyphicon-info-sign")
-          .text("Help")
-        )
-        .addClass("helpButton")
-        .addClass("btn btn-default")
-        .click(function(){
-          //TODO: Toggle Help
-          alert("TODO: Help!");
-        }),
+      .append(
+        $("<span>").addClass("glyphicon glyphicon-info-sign")
+        .text("Help")
+      )
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+        //TODO: Toggle Help
+        alert("TODO: Help!");
+      }),
 
-        "<br/>",
-        "<br/>",
-        "<br/>"
+      "<br/>",
+      "<br/>",
+      "<br/>"
     ),
     $("<ul>").addClass("KATMenuItems")
   )
@@ -1868,11 +1868,11 @@ KAT.sidebar.init = function(){
 * @memberof KAT.sidebar
 */
 KAT.sidebar.showSidebar = function(){
-    KAT.sidebar.extended = true;
+  KAT.sidebar.extended = true;
 
-    jQuery(".collapseToggle")
-    .text("»")
-    .parent().animate({right: "0"}, KAT.sidebar.animateLength );
+  jQuery(".collapseToggle")
+  .text("»")
+  .parent().animate({right: "0"}, KAT.sidebar.animateLength );
 };
 
 /**
@@ -1884,11 +1884,11 @@ KAT.sidebar.showSidebar = function(){
 * @memberof KAT.sidebar
 */
 KAT.sidebar.hideSidebar = function(){
-    KAT.sidebar.extended = false;
+  KAT.sidebar.extended = false;
 
-    jQuery(".collapseToggle")
-    .text("«") // Change text of button.
-    .parent().animate({right: KAT.sidebar.hideWidth}, KAT.sidebar.animateLength);
+  jQuery(".collapseToggle")
+  .text("«") // Change text of button.
+  .parent().animate({right: KAT.sidebar.hideWidth}, KAT.sidebar.animateLength);
 };
 
 /**
@@ -1900,14 +1900,14 @@ KAT.sidebar.hideSidebar = function(){
 * @memberof KAT.sidebar
 */
 KAT.sidebar.toggleSidebar = function(){
-    if (KAT.sidebar.extended){
-      //we are now hidden
-      KAT.sidebar.hideSidebar();
-    } else {
-      //we are now visible
-      KAT.sidebar.showSidebar();
-    }
-  };
+  if (KAT.sidebar.extended){
+    //we are now hidden
+    KAT.sidebar.hideSidebar();
+  } else {
+    //we are now visible
+    KAT.sidebar.showSidebar();
+  }
+};
 
 /**
 * Toggles the annotation mode of KAT.
@@ -1965,7 +1965,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
   // create a new element to add to the sidebar.
   var newAnnotation = $("<li>").append(
-    "<h4> "+concept["name"]+" - "+task+" Annotation Details</h4>"
+    "<h4> "+concept.name+" - "+task+" Annotation Details</h4>"
   ).appendTo(".KATMenuItems");
 
   // a list of validation functions to run.
@@ -2088,9 +2088,69 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
         })();
 
       } else if(current.type === KAT.model.Field.types.select){
-          //newField = createDropdown(newAnnotation,  current.validation);
+        (function() {
+
+          // create a new select field
+          newField = jQuery("<select>")
+          .attr("id", id)
+          .addClass("form-control")
+          .appendTo(wrapper);
+
+          // add all the values
+          jQuery.each(current.validation, function(j, opt){
+            jQuery("<option>")
+            .text(opt.value)
+            .val(j)
+            .appendTo(newField);
+          });
+
+
+          //TODO: Do proper validation here
+          // and automatically add new annotations if they become available.
+          validations.push(function(){
+            wrapper.addClass("has-success");
+            return true;
+          });
+
+          // if we have a previous value
+          // set that up properly
+          if (typeof annotation !== "undefined"){
+            var prevValue = values[value];
+
+            for(var i=0;i<current.validation.length;i++){
+              if(current.validation[i].value === prevValue[0].value){
+                newField.val(i);
+              }
+            }
+          }
+        })();
       } if(current.type === KAT.model.Field.types.reference){ // for a reference list possible annotations.
-          //newField = createReferenceSpinner(newAnnotation, env, values, current.value);
+
+        (function() {
+
+          // create a new select
+          newField = jQuery("<select>")
+          .attr("id", id)
+          .addClass("form-control")
+          .appendTo(wrapper);
+
+          // Find all the allowed concepts
+          var allowedAnnotations = env.store.filterByConcept.apply(env.store, current.validation);
+
+          // filter the allowed annotations
+          jQuery.each(allowedAnnotations, function(index, annot){
+            jQuery("<option>")
+            .text(annot.uuid)
+            .val(annot.uuid)
+            .appendTo(newField);
+          });
+
+          // if applicable, load previous values.
+          if(values){
+            var prevValue = values[value];
+            newField.val(prevValue[0].uuid);
+          }
+        })();
       }
     });
 
@@ -2158,62 +2218,6 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
   // and re-validate the form
   revalidate();
-
-  // TODO: Possibly use a styled dropbown from Bootstrap
-  function createDropdown(parent, options) {
-
-    // Create a select element.
-    var newField = jQuery("<select>")
-    .addClass("tfield")
-    .appendTo(parent);
-
-    // add all the values
-    jQuery.each(options, function(j, opt){
-      jQuery("<option>")
-      .text(opt.value)
-      .val(j)
-      .appendTo(newField);
-    });
-
-    // TODO: Implement multiple values.
-    // if applicable, find the previous value
-    if (typeof annotation !== "undefined"){
-      var prevValue = values[value];
-
-      for(var i=0;i<options.length;i++){
-        if(options[i].value === prevValue[0].value){
-          newField.val(i);
-        }
-      }
-    }
-
-    return newField;
-
-  }
-
-  function createReferenceSpinner(parent, env, values, value) {
-
-    // create a new field.
-    var newField = jQuery("<select>")
-    .addClass("tfield")
-    .appendTo(parent);
-
-    // Find all the allowed concepts
-    var allowedAnnotations = env.store.filterByConcept.apply(env.store, options);
-
-    // for each
-    jQuery.each(allowedAnnotations, function(index, annot){
-      jQuery("<option>")
-      .text(annot.uuid)
-      .val(annot.uuid)
-      .appendTo(newField);
-    });
-
-    if(values){
-      prevValue = values[value];
-      newField.val(prevValue[0].uuid);
-    }
-  }
 };
 
 /**

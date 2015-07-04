@@ -54,12 +54,12 @@ KAT.sidebar.init = function(){
 
   //create a button to toggle annotations
   KAT.sidebar.modeToggleButton = $("&lt;button>")
-    .text("Enable " +mode+ " Mode")
-    .addClass("annotationToggle")
-    .addClass("btn btn-default").BS()
-    .click(function(){
-      KAT.sidebar.toggleAnnotationMode();
-    });
+  .text("Enable " +mode+ " Mode")
+  .addClass("annotationToggle")
+  .addClass("btn btn-default").BS()
+  .click(function(){
+    KAT.sidebar.toggleAnnotationMode();
+  });
 
   //create collapsible sidebar
   var collapsibleMenu = jQuery('&lt;div>').addClass("collapsible")
@@ -78,44 +78,44 @@ KAT.sidebar.init = function(){
 
       //to import annotations
       $("&lt;button>")
-        .text("Import Annotations")
-        .addClass("helpButton")
-        .addClass("btn btn-default")
-        .click(function(){
-          //TODO: Toggle Import annotations
-          alert("TODO: Import annotations binding!");
-        }),
+      .text("Import Annotations")
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+        //TODO: Toggle Import annotations
+        alert("TODO: Import annotations binding!");
+      }),
       "&lt;br/>",
       "&lt;br/>",
 
       // to export annotations
       $("&lt;button>")
-        .text("Export Annotations")
-        .addClass("helpButton")
-        .addClass("btn btn-default")
-        .click(function(){
-          //TODO: Toggle Export annotations
-          alert("TODO: Export annotations binding!");
-        }),
+      .text("Export Annotations")
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+        //TODO: Toggle Export annotations
+        alert("TODO: Export annotations binding!");
+      }),
       "&lt;br/>",
       "&lt;br/>",
 
       //to help
       $("&lt;button>")
-        .append(
-          $("&lt;span>").addClass("glyphicon glyphicon-info-sign")
-          .text("Help")
-        )
-        .addClass("helpButton")
-        .addClass("btn btn-default")
-        .click(function(){
-          //TODO: Toggle Help
-          alert("TODO: Help!");
-        }),
+      .append(
+        $("&lt;span>").addClass("glyphicon glyphicon-info-sign")
+        .text("Help")
+      )
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+        //TODO: Toggle Help
+        alert("TODO: Help!");
+      }),
 
-        "&lt;br/>",
-        "&lt;br/>",
-        "&lt;br/>"
+      "&lt;br/>",
+      "&lt;br/>",
+      "&lt;br/>"
     ),
     $("&lt;ul>").addClass("KATMenuItems")
   )
@@ -161,11 +161,11 @@ KAT.sidebar.init = function(){
 * @memberof KAT.sidebar
 */
 KAT.sidebar.showSidebar = function(){
-    KAT.sidebar.extended = true;
+  KAT.sidebar.extended = true;
 
-    jQuery(".collapseToggle")
-    .text("»")
-    .parent().animate({right: "0"}, KAT.sidebar.animateLength );
+  jQuery(".collapseToggle")
+  .text("»")
+  .parent().animate({right: "0"}, KAT.sidebar.animateLength );
 };
 
 /**
@@ -177,11 +177,11 @@ KAT.sidebar.showSidebar = function(){
 * @memberof KAT.sidebar
 */
 KAT.sidebar.hideSidebar = function(){
-    KAT.sidebar.extended = false;
+  KAT.sidebar.extended = false;
 
-    jQuery(".collapseToggle")
-    .text("«") // Change text of button.
-    .parent().animate({right: KAT.sidebar.hideWidth}, KAT.sidebar.animateLength);
+  jQuery(".collapseToggle")
+  .text("«") // Change text of button.
+  .parent().animate({right: KAT.sidebar.hideWidth}, KAT.sidebar.animateLength);
 };
 
 /**
@@ -193,14 +193,14 @@ KAT.sidebar.hideSidebar = function(){
 * @memberof KAT.sidebar
 */
 KAT.sidebar.toggleSidebar = function(){
-    if (KAT.sidebar.extended){
-      //we are now hidden
-      KAT.sidebar.hideSidebar();
-    } else {
-      //we are now visible
-      KAT.sidebar.showSidebar();
-    }
-  };
+  if (KAT.sidebar.extended){
+    //we are now hidden
+    KAT.sidebar.hideSidebar();
+  } else {
+    //we are now visible
+    KAT.sidebar.showSidebar();
+  }
+};
 
 /**
 * Toggles the annotation mode of KAT.
@@ -258,7 +258,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
   // create a new element to add to the sidebar.
   var newAnnotation = $("&lt;li>").append(
-    "&lt;h4> "+task+" Annotation Details&lt;/h4>"
+    "&lt;h4> "+concept.name+" - "+task+" Annotation Details&lt;/h4>"
   ).appendTo(".KATMenuItems");
 
   // a list of validation functions to run.
@@ -336,6 +336,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
           // create a new text field
           newField = $("&lt;input type='text'>")
           .attr("id", id)
+          .addClass("tfield")
           .addClass("form-control")
 
           // append it to the wrapper
@@ -367,13 +368,6 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
               wrapper.addClass("has-error");
               return false;
             }
-          });
-
-          // a validation function
-          // that makes little sense here.
-          validations.push(function(){
-            wrapper.addClass("has-success");
-            return true;
           });
 
           // set the previous value
@@ -423,8 +417,8 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
             }
           }
         })();
-
       } if(current.type === KAT.model.Field.types.reference){ // for a reference list possible annotations.
+
         (function() {
 
           // create a new select
@@ -586,7 +580,7 @@ KAT.sidebar.modeToggleButton = undefined;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Fri Jul 03 2015 08:40:55 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sat Jul 04 2015 17:56:35 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
