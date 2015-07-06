@@ -1340,7 +1340,9 @@ KAT.gui.prototype.getSelection = function(){
   var selection = window.getSelection().getRangeAt(0);
   var theElement = this.element;
 
-  var container = KAT.gui.getXPath(theElement, selection.commonAncestorContainer);
+  console.log(selection);
+
+  var container = KAT.gui.getXPath(theElement, selection.commonAncestorContainer.parentElement);
   var start = KAT.gui.getXPath(theElement, selection.startContainer.parentElement);
   var end = KAT.gui.getXPath(theElement, selection.endContainer.parentElement);
 
@@ -1377,6 +1379,9 @@ KAT.gui.getXPath = function(from, to){
   //the elements we start and end at.
   var element = $(to).get(0);
   var base = $(from).get(0);
+
+  console.log("from", from, base);
+  console.log("to", to, element);
 
   // check if have an id
   // return the id expression
@@ -3373,8 +3378,7 @@ KAT.module = {
 
       try{
         selection = this.gui.getSelection();
-      } catch(e){}
-
+      } catch(e){console.warn(e); }
 
       if(!selection || selection.isEmpty){
 

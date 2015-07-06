@@ -41,7 +41,7 @@ KAT.gui.prototype.getSelection = function(){
   var selection = window.getSelection().getRangeAt(0);
   var theElement = this.element;
 
-  var container = KAT.gui.getXPath(theElement, selection.commonAncestorContainer);
+  var container = KAT.gui.getXPath(theElement, selection.commonAncestorContainer.parentElement);
   var start = KAT.gui.getXPath(theElement, selection.startContainer.parentElement);
   var end = KAT.gui.getXPath(theElement, selection.endContainer.parentElement);
 
