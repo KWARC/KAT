@@ -1340,8 +1340,6 @@ KAT.gui.prototype.getSelection = function(){
   var selection = window.getSelection().getRangeAt(0);
   var theElement = this.element;
 
-  console.log(selection);
-
   var container = KAT.gui.getXPath(theElement, selection.commonAncestorContainer.parentElement);
   var start = KAT.gui.getXPath(theElement, selection.startContainer.parentElement);
   var end = KAT.gui.getXPath(theElement, selection.endContainer.parentElement);
@@ -1379,9 +1377,6 @@ KAT.gui.getXPath = function(from, to){
   //the elements we start and end at.
   var element = $(to).get(0);
   var base = $(from).get(0);
-
-  console.log("from", from, base);
-  console.log("to", to, element);
 
   // check if have an id
   // return the id expression
@@ -1766,12 +1761,12 @@ KAT.sidebar.init = function(){
 
   //create a button to toggle annotations
   KAT.sidebar.modeToggleButton = $("<button>")
-    .text("Enable " +mode+ " Mode")
-    .addClass("annotationToggle")
-    .addClass("btn btn-default").BS()
-    .click(function(){
-      KAT.sidebar.toggleAnnotationMode();
-    });
+  .text("Enable " +mode+ " Mode")
+  .addClass("annotationToggle")
+  .addClass("btn btn-default").BS()
+  .click(function(){
+    KAT.sidebar.toggleAnnotationMode();
+  });
 
   //create collapsible sidebar
   var collapsibleMenu = jQuery('<div>').addClass("collapsible")
@@ -1790,44 +1785,44 @@ KAT.sidebar.init = function(){
 
       //to import annotations
       $("<button>")
-        .text("Import Annotations")
-        .addClass("helpButton")
-        .addClass("btn btn-default")
-        .click(function(){
-          //TODO: Toggle Import annotations
-          alert("TODO: Import annotations binding!");
-        }),
+      .text("Import Annotations")
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+        //TODO: Toggle Import annotations
+        alert("TODO: Import annotations binding!");
+      }),
       "<br/>",
       "<br/>",
 
       // to export annotations
       $("<button>")
-        .text("Export Annotations")
-        .addClass("helpButton")
-        .addClass("btn btn-default")
-        .click(function(){
-          //TODO: Toggle Export annotations
-          alert("TODO: Export annotations binding!");
-        }),
+      .text("Export Annotations")
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+        //TODO: Toggle Export annotations
+        alert("TODO: Export annotations binding!");
+      }),
       "<br/>",
       "<br/>",
 
       //to help
       $("<button>")
-        .append(
-          $("<span>").addClass("glyphicon glyphicon-info-sign")
-          .text("Help")
-        )
-        .addClass("helpButton")
-        .addClass("btn btn-default")
-        .click(function(){
-          //TODO: Toggle Help
-          alert("TODO: Help!");
-        }),
+      .append(
+        $("<span>").addClass("glyphicon glyphicon-info-sign")
+        .text("Help")
+      )
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+        //TODO: Toggle Help
+        alert("TODO: Help!");
+      }),
 
-        "<br/>",
-        "<br/>",
-        "<br/>"
+      "<br/>",
+      "<br/>",
+      "<br/>"
     ),
     $("<ul>").addClass("KATMenuItems")
   )
@@ -1873,11 +1868,11 @@ KAT.sidebar.init = function(){
 * @memberof KAT.sidebar
 */
 KAT.sidebar.showSidebar = function(){
-    KAT.sidebar.extended = true;
+  KAT.sidebar.extended = true;
 
-    jQuery(".collapseToggle")
-    .text("»")
-    .parent().animate({right: "0"}, KAT.sidebar.animateLength );
+  jQuery(".collapseToggle")
+  .text("»")
+  .parent().animate({right: "0"}, KAT.sidebar.animateLength );
 };
 
 /**
@@ -1889,11 +1884,11 @@ KAT.sidebar.showSidebar = function(){
 * @memberof KAT.sidebar
 */
 KAT.sidebar.hideSidebar = function(){
-    KAT.sidebar.extended = false;
+  KAT.sidebar.extended = false;
 
-    jQuery(".collapseToggle")
-    .text("«") // Change text of button.
-    .parent().animate({right: KAT.sidebar.hideWidth}, KAT.sidebar.animateLength);
+  jQuery(".collapseToggle")
+  .text("«") // Change text of button.
+  .parent().animate({right: KAT.sidebar.hideWidth}, KAT.sidebar.animateLength);
 };
 
 /**
@@ -1905,14 +1900,14 @@ KAT.sidebar.hideSidebar = function(){
 * @memberof KAT.sidebar
 */
 KAT.sidebar.toggleSidebar = function(){
-    if (KAT.sidebar.extended){
-      //we are now hidden
-      KAT.sidebar.hideSidebar();
-    } else {
-      //we are now visible
-      KAT.sidebar.showSidebar();
-    }
-  };
+  if (KAT.sidebar.extended){
+    //we are now hidden
+    KAT.sidebar.hideSidebar();
+  } else {
+    //we are now visible
+    KAT.sidebar.showSidebar();
+  }
+};
 
 /**
 * Toggles the annotation mode of KAT.
@@ -1970,7 +1965,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
   // create a new element to add to the sidebar.
   var newAnnotation = $("<li>").append(
-    "<h4> "+task+" Annotation Details</h4>"
+    "<h4> "+concept.name+" - "+task+" Annotation Details</h4>"
   ).appendTo(".KATMenuItems");
 
   // a list of validation functions to run.
@@ -2045,21 +2040,46 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       if(current.type === KAT.model.Field.types.text){
         (function(){
 
+          var inputGroup = $("<div>")
+            .addClass("input-group")
+            .appendTo(wrapper);
+
           // create a new text field
           newField = $("<input type='text'>")
           .attr("id", id)
+          .addClass("tfield")
           .addClass("form-control")
 
           // append it to the wrapper
-          .appendTo(wrapper)
+          .appendTo(inputGroup)
 
           // and revalidate upon changing something.
           .keyup(function(){
             revalidate();
           });
 
+
           // parse the RegEx we want to valiate against.
           var RegExpression = current.validation;
+
+          //info addon to textfield with expected RegExp
+          var addon = $("<div>")
+            .addClass("input-group-addon")
+            .appendTo(inputGroup);
+
+          var info = "<p>"+current.documentation + "</p><p>" + 
+            "You are expected to match the following Regular Expression: </br>" +RegExpression +"</p>";
+
+          var popover = $("<a href='#'>")
+          .attr("data-container", "body")
+          .attr("data-toggle", "popover")
+          .attr("data-placement", "top")
+          .attr("title","Information")
+          .attr("data-content", info)
+          .text("?")
+          .appendTo(addon)
+          .popover({html:true});
+
 
           // add our validation function.
           validations.push(function(){
@@ -2079,13 +2099,6 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
               wrapper.addClass("has-error");
               return false;
             }
-          });
-
-          // a validation function
-          // that makes little sense here.
-          validations.push(function(){
-            wrapper.addClass("has-success");
-            return true;
           });
 
           // set the previous value
@@ -2135,8 +2148,8 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
             }
           }
         })();
-
       } if(current.type === KAT.model.Field.types.reference){ // for a reference list possible annotations.
+
         (function() {
 
           // create a new select
@@ -3378,7 +3391,8 @@ KAT.module = {
 
       try{
         selection = this.gui.getSelection();
-      } catch(e){console.warn(e); }
+      } catch(e){}
+
 
       if(!selection || selection.isEmpty){
 
