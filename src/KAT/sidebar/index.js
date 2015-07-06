@@ -305,6 +305,10 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       if(current.type === KAT.model.Field.types.text){
         (function(){
 
+          var inputGroup = $("<div>")
+            .addClass("input-group")
+            .appendTo(wrapper);
+
           // create a new text field
           newField = $("<input type='text'>")
           .attr("id", id)
@@ -312,15 +316,35 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
           .addClass("form-control")
 
           // append it to the wrapper
-          .appendTo(wrapper)
+          .appendTo(inputGroup)
 
           // and revalidate upon changing something.
           .keyup(function(){
             revalidate();
           });
 
+
           // parse the RegEx we want to valiate against.
           var RegExpression = current.validation;
+
+          //info addon to textfield with expected RegExp
+          var addon = $("<div>")
+            .addClass("input-group-addon")
+            .appendTo(inputGroup);
+
+          var info = "<p>"+current.documentation + "</p><p>" + 
+            "You are expected to match the following Regular Expression: </br>" +RegExpression +"</p>";
+
+          var popover = $("<a href='#'>")
+          .attr("data-container", "body")
+          .attr("data-toggle", "popover")
+          .attr("data-placement", "top")
+          .attr("title","Information")
+          .attr("data-content", info)
+          .text("?")
+          .appendTo(addon)
+          .popover({html:true});
+
 
           // add our validation function.
           validations.push(function(){
