@@ -41,9 +41,20 @@ KAT.gui.prototype.getSelection = function(){
   var selection = window.getSelection().getRangeAt(0);
   var theElement = this.element;
 
-  var container = KAT.gui.getXPath(theElement, selection.commonAncestorContainer);
-  var start = KAT.gui.getXPath(theElement, selection.startContainer.parentElement);
-  var end = KAT.gui.getXPath(theElement, selection.endContainer.parentElement);
+  var getNode = function(node){
+    if(node.nodeType == 3){
+      // if it is a text node,
+      // return the parent.
+      return node.parentElement;
+    } else {
+      // else return the node itself
+      return node;
+    }
+  }; 
+
+  var container = KAT.gui.getXPath(theElement, getNode(selection.commonAncestorContainer));
+  var start = KAT.gui.getXPath(theElement, getNode(selection.startContainer));
+  var end = KAT.gui.getXPath(theElement, getNode(selection.endContainer));
 
   var sel = {
     "container": container,
