@@ -1166,8 +1166,22 @@ KAT.model.Field = function(xml, concept){
 
       //no, so we can store it
       hasValidation = true;
+
+      // store the validation
+      this.validation = e.text();
+
+      // make sure we have a start marker
+      if(this.validation[0] != "^"){
+        this.validation = "^"+this.validation;
+      }
+
+      // make sure we have an end marker
+      if(this.validation[this.validation.length - 1] != "$"){
+        this.validation = this.validation+"$";
+      }
+
       try{
-        this.validation = new RegExp(e.text());
+        this.validation = new RegExp(this.validation);
       } catch(f){
         throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Unregonised regular expression). ", e);
       }
