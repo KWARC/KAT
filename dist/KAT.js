@@ -1166,8 +1166,22 @@ KAT.model.Field = function(xml, concept){
 
       //no, so we can store it
       hasValidation = true;
+
+      // store the validation
+      this.validation = e.text();
+
+      // make sure we have a start marker
+      if(this.validation[0] != "^"){
+        this.validation = "^"+this.validation;
+      }
+
+      // make sure we have an end marker
+      if(this.validation[this.validation.length - 1] != "$"){
+        this.validation = this.validation+"$";
+      }
+
       try{
-        this.validation = new RegExp(e.text());
+        this.validation = new RegExp(this.validation);
       } catch(f){
         throw new KAT.model.ParsingError("KAT.model.Field: Invalid XML for field '"+this.getFullName()+"' (Unregonised regular expression). ", e);
       }
@@ -1754,12 +1768,14 @@ KAT.sidebar = {};
 /**
 * Set up and insert Annotation Toolkit sidemenu
 *
+* @param {KAT.Storage.Store} store - Annotation Store to bind to.
+*
 * @function
 * @static
 * @name init
 * @memberof KAT.sidebar
 */
-KAT.sidebar.init = function(){
+KAT.sidebar.init = function(store){
 
   //mode of the sidebar.
   var mode;
@@ -1800,8 +1816,7 @@ KAT.sidebar.init = function(){
       .addClass("helpButton")
       .addClass("btn btn-default")
       .click(function(){
-        //TODO: Toggle Import annotations
-        alert("TODO: Import annotations binding!");
+        store.showImportDialog();
       }),
       "<br/>",
       "<br/>",
@@ -1812,13 +1827,12 @@ KAT.sidebar.init = function(){
       .addClass("helpButton")
       .addClass("btn btn-default")
       .click(function(){
-        //TODO: Toggle Export annotations
-        alert("TODO: Export annotations binding!");
+        store.showExportDialog();
       }),
+      /*
       "<br/>",
       "<br/>",
 
-      //to help
       $("<button>")
       .append(
         $("<span>").addClass("glyphicon glyphicon-info-sign")
@@ -1830,7 +1844,7 @@ KAT.sidebar.init = function(){
         //TODO: Toggle Help
         alert("TODO: Help!");
       }),
-
+      */
       "<br/>",
       "<br/>",
       "<br/>"
@@ -1954,14 +1968,10 @@ KAT.sidebar.toggleAnnotationMode = function(){
 * @memberof KAT.sidebar
 */
 KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selection, concept){
-  // TODO complete documentation comment above.
-  // TODO: Work on a stored annotation, so values can be pre-filled.
-
   // make sure the sidebar is extended.
   if(!KAT.sidebar.extended){
     KAT.sidebar.toggleSidebar();
   }
-
 
   var values;
   var task;
@@ -2078,7 +2088,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
             .addClass("input-group-addon")
             .appendTo(inputGroup);
 
-          var info = "<p>"+current.documentation + "</p><p>" + 
+          var info = "<p>"+current.documentation + "</p><p>" +
             "You are expected to match the following Regular Expression: </br>" +RegExpression +"</p>";
 
           //TODO: use button instead of link
@@ -2321,6 +2331,9 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       }
     });
 
+    //close all popovers
+    $('.popover').popover('destroy').remove();
+
     // remove the entire form
     newAnnotation.remove();
 
@@ -2334,7 +2347,11 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
   // create a cancel button
   // to cancel editing when needed
   var cancelButton = $("<button type='button'>").addClass("btn btn-danger").text("Cancel").click(function(){
-    newAnnotation.remove(); // remove the entire form
+    //close all popovers
+    $('.popover').popover('destroy').remove();
+    
+    // remove the entire form
+    newAnnotation.remove();
   }).appendTo(submitGroup);
 
   // and re-validate the form
@@ -3426,7 +3443,7 @@ KAT.module = {
     JOBADInstance.element.tooltip();
 
     // initialise the gui
-    KAT.sidebar.init(this.gui);
+    KAT.sidebar.init(this.store);
 
     //initialise gui collection
     collection.init();
