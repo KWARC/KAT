@@ -45,7 +45,7 @@ KAT.module = {
     JOBADInstance.element.tooltip();
 
     // initialise the gui
-    KAT.sidebar.init(this.gui);
+    KAT.sidebar.init(this.store);
 
     //initialise gui collection
     collection.init();

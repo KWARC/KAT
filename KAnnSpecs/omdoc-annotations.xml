@@ -17,7 +17,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 			<documentation>The name of the symbol defines it in a theory</documentation>
 			<value>Name</value>
 			<default>Symbol</default>
-			<validation>[A-Z][a-z]*</validation>
+			<validation>[A-Z][A-Za-z]*</validation>
 			<number atleast="1" atmost="1"/>
 		</field>
 		<display>
@@ -172,7 +172,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 			<field name="name" type="text" rdfpred="o:proofname">
 				<value>Name</value>
 				<default>Proof</default>
-				<validation>[A-Z][a-z]*</validation>
+				<validation>[A-Z][A-Za-z]*</validation>
 				<number atleast="1" atmost="1"/>
 			</field>
 			<field name="for" type="reference" rdfpred="o:proves">
@@ -192,7 +192,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 			<field name="name" type="text" rdfpred="o:name">
 				<value>Name</value>
 				<default>Proof</default>
-				<validation>[A-Z][a-z]*</validation>
+				<validation>[A-Z][A-Za-z]*</validation>
 				<number atleast="1" atmost="1"/>
 			</field>
 			<!-- **** this is not clear yet, imports can be outside as well **** -->
@@ -210,7 +210,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 		<concept name="view" rdftype="o:View">
 			<field name="name" type="text" rdfpred="o:name">
 				<value>Name</value>
-				<validation>[A-Z][a-z]*</validation>
+				<validation>[A-Z][A-Za-z]*</validation>
 				<number atleast="1" atmost="1"/>
 			</field>
 			<field name="from" type="reference" rdfpred="o:source">
