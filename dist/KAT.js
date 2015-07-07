@@ -1968,14 +1968,10 @@ KAT.sidebar.toggleAnnotationMode = function(){
 * @memberof KAT.sidebar
 */
 KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selection, concept){
-  // TODO complete documentation comment above.
-  // TODO: Work on a stored annotation, so values can be pre-filled.
-
   // make sure the sidebar is extended.
   if(!KAT.sidebar.extended){
     KAT.sidebar.toggleSidebar();
   }
-
 
   var values;
   var task;
@@ -2249,6 +2245,9 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       }
     });
 
+    //close all popovers
+    $('.popover').popover('destroy').remove();
+
     // remove the entire form
     newAnnotation.remove();
 
@@ -2262,7 +2261,11 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
   // create a cancel button
   // to cancel editing when needed
   var cancelButton = $("<button type='button'>").addClass("btn btn-danger").text("Cancel").click(function(){
-    newAnnotation.remove(); // remove the entire form
+    //close all popovers
+    $('.popover').popover('destroy').remove();
+    
+    // remove the entire form
+    newAnnotation.remove();
   }).appendTo(submitGroup);
 
   // and re-validate the form
