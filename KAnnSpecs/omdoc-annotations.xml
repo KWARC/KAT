@@ -125,7 +125,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 			<field name="restriction" type="reference" rdfpred="o:restriction">
 				<documentation>The property assumed for the identifiers declared</documentation>
 				<value>Restriction</value>
-				<number atleast="1" atmost="1"/>
+				<number atleast="1" atmost="4"/>
 			</field>
 			<display>
 				<template><bf>Declaration</bf> of {identifier} with restriction {restriction}</template>
