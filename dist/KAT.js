@@ -1768,12 +1768,14 @@ KAT.sidebar = {};
 /**
 * Set up and insert Annotation Toolkit sidemenu
 *
+* @param {KAT.Storage.Store} store - Annotation Store to bind to.
+*
 * @function
 * @static
 * @name init
 * @memberof KAT.sidebar
 */
-KAT.sidebar.init = function(){
+KAT.sidebar.init = function(store){
 
   //mode of the sidebar.
   var mode;
@@ -1814,8 +1816,7 @@ KAT.sidebar.init = function(){
       .addClass("helpButton")
       .addClass("btn btn-default")
       .click(function(){
-        //TODO: Toggle Import annotations
-        alert("TODO: Import annotations binding!");
+        store.showImportDialog();
       }),
       "<br/>",
       "<br/>",
@@ -1826,13 +1827,12 @@ KAT.sidebar.init = function(){
       .addClass("helpButton")
       .addClass("btn btn-default")
       .click(function(){
-        //TODO: Toggle Export annotations
-        alert("TODO: Export annotations binding!");
+        store.showExportDialog();
       }),
+      /*
       "<br/>",
       "<br/>",
 
-      //to help
       $("<button>")
       .append(
         $("<span>").addClass("glyphicon glyphicon-info-sign")
@@ -1844,7 +1844,7 @@ KAT.sidebar.init = function(){
         //TODO: Toggle Help
         alert("TODO: Help!");
       }),
-
+      */
       "<br/>",
       "<br/>",
       "<br/>"
@@ -2092,7 +2092,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
             .addClass("input-group-addon")
             .appendTo(inputGroup);
 
-          var info = "<p>"+current.documentation + "</p><p>" + 
+          var info = "<p>"+current.documentation + "</p><p>" +
             "You are expected to match the following Regular Expression: </br>" +RegExpression +"</p>";
 
           var popover = $("<a href='#'>")
@@ -3354,7 +3354,7 @@ KAT.module = {
     JOBADInstance.element.tooltip();
 
     // initialise the gui
-    KAT.sidebar.init(this.gui);
+    KAT.sidebar.init(this.store);
 
     //initialise gui collection
     collection.init();
