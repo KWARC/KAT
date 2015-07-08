@@ -31,7 +31,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 		<field name="for" type="reference" rdfpred="o:defines">
 			<value>For</value>
 			<referencedType>Symbol</referencedType>
-			<number atleast="1"/>
+			<number atleast="1" atmost="10"/>
 		</field>
 		<field name="type" type="select" rdfpred="o:definitiontype">
 			<defaultoption rdfobj="o:simpledef">
