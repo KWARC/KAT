@@ -2091,6 +2091,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
           var info = "<p>"+current.documentation + "</p><p>" +
             "You are expected to match the following Regular Expression: </br>" +RegExpression +"</p>";
 
+          //TODO: use button instead of link
           var popover = $("<a href='#'>")
           .attr("data-container", "body")
           .attr("data-toggle", "popover")
