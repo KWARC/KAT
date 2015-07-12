@@ -3013,10 +3013,26 @@ KAT.storage.Annotation.prototype.draw = function(){
   //find the elements in the selection.
   var range = this.store.gui.getRange(this.selection);
 
+  // the color we need to apply
+  var color = this.concept.displayColour;
+
+
   //add a class for the selection.
   var className = this.concept.name;
-  range.addClass(className).css('background-color', this.concept.displayColour).each(function(){
-    var $me = $(this); //creates jQuery object
+  range.addClass(className)
+  .each(function(){
+    // set the background color
+    if(this.namespaceURI.indexOf("MathML") != -1){
+      // for MathML we need to set the math background
+      $(this).attr("mathbackground", color);
+    } else {
+      // otherwise we just set the background color
+      $(this).css('background-color', color);
+    }
+  })
+
+  .each(function(){
+    var $me = $(this);
 
     var current = $me.data("KAT.Annotation.UUID") || [];
     current.push(me.uuid);
