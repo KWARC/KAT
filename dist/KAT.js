@@ -2056,6 +2056,118 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       // add some spacing.
       wrapper.append("&nbsp;");
 
+      //variables for field repetition
+      var container = $("<div>")
+          .appendTo(wrapper);
+
+      var selectGroup;
+
+      var atleast = current.minimum || 1;
+      var atmost = current.maximum || atleast;
+
+      var numOfReferences = 0;
+
+      function makePlusClickHandler(event){
+            event.preventDefault();  //prevents window from being closed
+            createSelect(true);
+      }
+
+      function createSelect(addMinusButtonBool) {
+
+        //NOTE: you need functions here because you can't make them within the loop
+
+        function insertAllowedAnnotations(index, annot){
+          jQuery("<option>")
+          .text(annot.uuid)
+          .val(annot.uuid)
+          .appendTo(newField);
+        }
+
+        function makeMinusClickHandler(event){
+
+          var buttonGroup = $(event.target).parent();
+
+          buttonGroup.prev("br").remove(); //remove leading <br>
+          buttonGroup.remove(); //remove buttonGroup
+          event.preventDefault();
+
+          numOfReferences--;
+
+          //enable plus buttons again
+          $.each($(".plusButton."+current.name), function(index, button){
+            $(button).removeAttr("disabled");
+          });
+        }
+
+        var prevValue;
+
+        if(numOfReferences < atmost) {
+          addMinusButtonBool = addMinusButtonBool || false;
+
+          selectGroup = $("<div class='btn-group' role='group'>")
+            .appendTo(container);
+
+          // create a new select
+          newField = jQuery("<select>")
+          .attr("id", id)
+          .addClass("form-control")
+          .appendTo(selectGroup);
+
+          if(current.type === KAT.model.Field.types.select) {
+            // add all the values
+            jQuery.each(current.validation, function(j, opt){
+              jQuery("<option>")
+              .text(opt.value)
+              .val(j)
+              .appendTo(newField);
+            });
+
+          // if we have a previous value
+          // set that up properly
+          if (typeof annotation !== "undefined"){
+            prevValue = values[value];
+
+            for(var i=0;i<current.validation.length;i++){
+              if(current.validation[i].value === prevValue[0].value){
+                newField.val(i);
+              }
+            }
+          }
+
+          } else { //reference
+
+            //Find all the allowed concepts
+            var allowedAnnotations = env.store.filterByConcept.apply(env.store, current.validation);
+
+            // filter the allowed annotations
+            jQuery.each(allowedAnnotations, insertAllowedAnnotations);
+
+            // if applicable, load previous values.
+            if(values){
+              prevValue = values[value];
+              newField.val(prevValue[0].uuid);
+            }
+          }
+
+          $("<br>").appendTo(container);
+
+          if(addMinusButtonBool) {
+            var minusButton = $("<button class='btn btn-default minusButton " + current.name + "' >")
+              .on("click", makeMinusClickHandler)
+              .text("-")
+              .appendTo(selectGroup);
+          }
+          numOfReferences++;
+
+          //disable plus buttons
+          if(numOfReferences == atmost) {
+            $.each($(".plusButton."+current.name), function(index, button){
+              $(button).attr("disabled", "true");
+            });
+          }
+
+        }
+      }
 
       // differentiate between the type of field
       if(current.type === KAT.model.Field.types.text){
@@ -2136,20 +2248,19 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       } else if(current.type === KAT.model.Field.types.select){
         (function() {
 
-          // create a new select field
-          newField = jQuery("<select>")
-          .attr("id", id)
-          .addClass("form-control")
-          .appendTo(wrapper);
+          while(numOfReferences < atleast) {
 
-          // add all the values
-          jQuery.each(current.validation, function(j, opt){
-            jQuery("<option>")
-            .text(opt.value)
-            .val(j)
-            .appendTo(newField);
-          });
+            createSelect();
 
+            //add plus buttons
+            if(i < atleast && atmost > 1) {
+              var plusButton = $("<button class='btn btn-default plusButton " + current.name + "' >")
+                .on("click", makePlusClickHandler)
+                .text("+")
+                .appendTo(selectGroup);
+            }
+
+          }
 
           //TODO: Do proper validation here
           // and automatically add new annotations if they become available.
@@ -2158,122 +2269,19 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
             return true;
           });
 
-          // if we have a previous value
-          // set that up properly
-          if (typeof annotation !== "undefined"){
-            var prevValue = values[value];
-
-            for(var i=0;i<current.validation.length;i++){
-              if(current.validation[i].value === prevValue[0].value){
-                newField.val(i);
-              }
-            }
-          }
+         
         })();
       } if(current.type === KAT.model.Field.types.reference){ // for a reference list possible annotations.
 
-        var container = $("<div>")
-          .appendTo(wrapper);
-
-        var selectGroup;
-
         (function() {
-
-          var atleast = current.minimum || 1;
-          var atmost = current.maximum || atleast;
-
-          var numOfReferences = 0;
-
-          function insertAllowedAnnotations(index, annot){
-              jQuery("<option>")
-              .text(annot.uuid)
-              .val(annot.uuid)
-              .appendTo(newField);
-          }
-
-          function makePlusClickHandler(event){
-                  console.log("+ Button pushed");
-                  event.preventDefault();  //prevents window from being closed
-                  createSelect(true);
-          }
-
-          function makeMinusClickHandler(event){
-                  console.log("- Button pushed");
-                  console.log(this);
-                  console.log(event);
-
-                  var buttonGroup = $(event.target).parent();
-
-                  buttonGroup.prev("br").remove(); //remove leading <br>
-                  buttonGroup.remove(); //remove buttonGroup
-                  event.preventDefault();
-
-                  numOfReferences--;
-
-                  //enable plus buttons again
-                  $.each($(".plusButton"), function(index, button){
-                    $(button).removeAttr("disabled");
-                  });
-          }
-
-          //NOTE: you need functions here because you can't make them within the loop
-          function createSelect(addMinusButtonBool) {
-
-            if(numOfReferences < atmost) {
-              addMinusButtonBool = addMinusButtonBool || false;
-
-              selectGroup = $("<div class='btn-group' role='group'>")
-                .appendTo(container);
-
-              // create a new select
-              newField = jQuery("<select>")
-              .attr("id", id)
-              .addClass("form-control")
-              .appendTo(selectGroup);
-
-              // Find all the allowed concepts
-              var allowedAnnotations = env.store.filterByConcept.apply(env.store, current.validation);
-
-              // filter the allowed annotations
-              jQuery.each(allowedAnnotations, insertAllowedAnnotations);
-
-              // if applicable, load previous values.
-              if(values){
-                var prevValue = values[value];
-                newField.val(prevValue[0].uuid);
-              }
-
-              $("<br>").appendTo(container);
-
-              if(addMinusButtonBool) {
-                var minusButton = $("<button class='btn btn-default minusButton'> ")
-                  .on("click", makeMinusClickHandler)
-                  .text("-")
-                  .appendTo(selectGroup);
-
-                  console.log("Minus appended");
-              }
-              numOfReferences++;
-
-              //disable plus buttons
-              if(numOfReferences == atmost) {
-                $.each($(".plusButton"), function(index, button){
-                  $(button).attr("disabled", "true");
-                });
-              }
-
-            }
-          }
 
           while(numOfReferences < atleast) {
 
             createSelect();
 
-            console.log(i);
-
             //add plus buttons
             if(i < atleast && atmost > 1) {
-              var plusButton = $("<button class='btn btn-default plusButton'>")
+              var plusButton = $("<button class='btn btn-default plusButton " + current.name + "' >")
                 .on("click", makePlusClickHandler)
                 .text("+")
                 .appendTo(selectGroup);

@@ -116,6 +116,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 					<value>existential variable</value>
 					<documentation>An existential variable, which introduces a name for an object that is claimed to exist.</documentation>
 				</option>
+				<number atleast="1" atmost="5" />
 			</field>
 			<field name="identifier" type="reference" rdfpred="o:identifier">
 				<documentation>The identifiers introduced by this declaration</documentation>
