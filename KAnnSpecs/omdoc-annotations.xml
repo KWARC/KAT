@@ -18,7 +18,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 			<value>Name</value>
 			<default>Symbol</default>
 			<validation>[A-Z][A-Za-z]*</validation>
-			<number atleast="1" atmost="1"/>
+			<number atleast="1" atmost="3"/>
 		</field>
 		<display>
 			<template>

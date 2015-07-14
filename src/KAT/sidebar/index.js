@@ -151,6 +151,9 @@ KAT.sidebar.showSidebar = function(){
 KAT.sidebar.hideSidebar = function(){
   KAT.sidebar.extended = false;
 
+  //close all popovers
+  $('.popover').popover('destroy').remove();
+
   jQuery(".collapseToggle")
   .text("«") // Change text of button.
   .parent().animate({right: KAT.sidebar.hideWidth}, KAT.sidebar.animateLength);
@@ -301,6 +304,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
           .appendTo(wrapper);
 
       var selectGroup;
+      var inputGroup;
 
       var atleast = current.minimum || 1;
       var atmost = current.maximum || atleast;
@@ -310,6 +314,45 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
       function makePlusClickHandler(event){
             event.preventDefault();  //prevents window from being closed
             createSelect(true);
+      }
+
+      function makeTextPlusClickHandler(event){
+            event.preventDefault();  //prevents window from being closed
+            createTextField(true);
+      }
+
+      function makeMinusClickHandler(event){
+
+        var buttonGroup = $(event.target).parent();
+
+        buttonGroup.prev("br").remove(); //remove leading <br>
+        buttonGroup.remove(); //remove buttonGroup
+        event.preventDefault();
+
+        numOfReferences--;
+
+        //enable plus buttons again
+        $.each($(".plusButton."+current.name), function(index, button){
+          $(button).removeAttr("disabled");
+        });
+
+      }
+
+      function makeTextMinusClickHandler(event){
+
+        var buttonGroup = $(event.target).parent().parent();
+
+        buttonGroup.prev("br").remove(); //remove leading <br>
+        buttonGroup.remove(); //remove buttonGroup
+        event.preventDefault();
+
+        numOfReferences--;
+
+        //enable plus buttons again
+        $.each($(".plusButton."+current.name), function(index, button){
+          $(button).removeAttr("disabled");
+        });
+
       }
 
       function createSelect(addMinusButtonBool) {
@@ -323,21 +366,6 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
           .appendTo(newField);
         }
 
-        function makeMinusClickHandler(event){
-
-          var buttonGroup = $(event.target).parent();
-
-          buttonGroup.prev("br").remove(); //remove leading <br>
-          buttonGroup.remove(); //remove buttonGroup
-          event.preventDefault();
-
-          numOfReferences--;
-
-          //enable plus buttons again
-          $.each($(".plusButton."+current.name), function(index, button){
-            $(button).removeAttr("disabled");
-          });
-        }
 
         var prevValue;
 
@@ -409,13 +437,14 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
         }
       }
 
-      // differentiate between the type of field
-      if(current.type === KAT.model.Field.types.text){
-        (function(){
+      function createTextField(addMinusButtonBool) {
 
-          var inputGroup = $("<div>")
+        if(numOfReferences < atmost) {
+          addMinusButtonBool = addMinusButtonBool || false;
+
+          inputGroup = $("<div>") //equivalent to select group / change name??
             .addClass("input-group")
-            .appendTo(wrapper);
+            .appendTo(container);
 
           // create a new text field
           newField = $("<input type='text'>")
@@ -423,7 +452,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
           .addClass("tfield")
           .addClass("form-control")
 
-          // append it to the wrapper
+          // append it to the inputGroup
           .appendTo(inputGroup)
 
           // and revalidate upon changing something.
@@ -431,20 +460,19 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
             revalidate();
           });
 
-
           // parse the RegEx we want to valiate against.
           var RegExpression = current.validation;
 
           //info addon to textfield with expected RegExp
-          var addon = $("<div>")
-            .addClass("input-group-addon")
+          var addon = $("<span>")
+            .addClass("input-group-btn")
             .appendTo(inputGroup);
 
           var info = "<p>"+current.documentation + "</p><p>" +
             "You are expected to match the following Regular Expression: </br>" +RegExpression +"</p>";
 
           //TODO: use button instead of link
-          var popover = $("<a href='#'>")
+          var popover = $("<button class='btn btn-default'>")
           .attr("data-container", "body")
           .attr("data-toggle", "popover")
           .attr("data-placement", "top")
@@ -453,7 +481,6 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
           .text("?")
           .appendTo(addon)
           .popover({html:true});
-
 
           // add our validation function.
           validations.push(function(){
@@ -475,14 +502,59 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
             }
           });
 
+          $("<br>").appendTo(container);
+
+          if(addMinusButtonBool) {
+            var span = $("<span class='input-group-btn'>")
+                .prependTo(inputGroup);
+
+            var minusButton = $("<button class='btn btn-default minusButton " + current.name + "' >")
+              .on("click", makeTextMinusClickHandler)
+              .text("-")
+              .appendTo(span);
+          }
+          numOfReferences++;
+
+          //disable plus buttons
+          if(numOfReferences == atmost) {
+            $.each($(".plusButton."+current.name), function(index, button){
+              $(button).attr("disabled", "true");
+            });
+          }
+
+        }
+
+      }
+
+      // differentiate between the type of field
+      if(current.type === KAT.model.Field.types.text){
+        (function(){
+
+          while(numOfReferences < atleast) {
+
+            createTextField();
+
+            //add plus buttons
+            if(i < atleast && atmost > 1) {
+              var span = $("<span class='input-group-btn'>")
+                .prependTo(inputGroup);
+
+              var plusButton = $("<button class='btn btn-default plusButton " + current.name + "' >")
+                .on("click", makeTextPlusClickHandler)
+                .text("+")
+                .appendTo(span);
+            }
+
+          }
+
           // set the previous value
           // of the annotation
           // if available.
 
-          if (typeof annotation !== "undefined"){
-            var prevValue = values[value];
-            newField.val(prevValue[0]);
-          }
+          // if (typeof annotation !== "undefined"){
+          //   var prevValue = values[value];
+          //   newField.val(prevValue[0]);
+          // }
         })();
 
       } else if(current.type === KAT.model.Field.types.select){
