@@ -104,7 +104,7 @@ KAT.sidebar.init = function(store){
   .css({'height': winHeight-10})
   .click(KAT.sidebar.toggleSidebar).prependTo(collapsibleMenu); //adapted from init function below
 
-  //Make sure to shwo the sidebar
+  //Make sure to show the sidebar
   KAT.sidebar.showSidebar();
 
   // define changes to sidemenu when page is resized
@@ -228,9 +228,8 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
   }
 
   // create a new element to add to the sidebar.
-  var newAnnotation = $("<li>").append(
-    "<h4> "+concept.name+" - "+task+" Annotation Details</h4>"
-  ).appendTo(".KATMenuItems");
+  var newAnnotation = $("<li>").append("<h4> "+concept.name+" - "+task+" Annotation Details</h4>")
+    .appendTo(".KATMenuItems");
 
   // a list of validation functions to run.
   var validations = [];
@@ -284,7 +283,10 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     jQuery.map([0], function(i){
 
       // create a wrapper element.
-      var wrapper = $("<div>").addClass("form-group").appendTo(fieldGroup);
+      var wrapper = $("<div id='test'>")
+        .addClass("form-group")
+        .appendTo(fieldGroup)
+        .css({'overflow':'visible'});
 
       // create an id for the form element.
       var id =  "KAT_form_"+(new Date().getTime())+"_"+(Math.floor(Math.random()*10000));
@@ -471,16 +473,13 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
           var info = "<p>"+current.documentation + "</p><p>" +
             "You are expected to match the following Regular Expression: </br>" +RegExpression +"</p>";
 
-          //TODO: use button instead of link
-          var popover = $("<button class='btn btn-default'>")
-          .attr("data-container", "body")
-          .attr("data-toggle", "popover")
-          .attr("data-placement", "top")
+          var popover = $("<button type='button' class='btn btn-default'>")
+          .attr("data-container", "#test")
           .attr("title","Information")
           .attr("data-content", info)
           .text("?")
-          .appendTo(addon)
-          .popover({html:true});
+          .popover({html:true, toggle:"popover", placement:"top"})
+          .appendTo(addon);
 
           // add our validation function.
           validations.push(function(){
