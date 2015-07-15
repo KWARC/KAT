@@ -151,9 +151,6 @@ KAT.sidebar.showSidebar = function(){
 KAT.sidebar.hideSidebar = function(){
   KAT.sidebar.extended = false;
 
-  //close all popovers
-  $('.popover').popover('destroy').remove();
-
   jQuery(".collapseToggle")
   .text("«") // Change text of button.
   .parent().animate({right: KAT.sidebar.hideWidth}, KAT.sidebar.animateLength);
@@ -283,7 +280,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     jQuery.map([0], function(i){
 
       // create a wrapper element.
-      var wrapper = $("<div id='test'>")
+      var wrapper = $("<div id='" + current.name + random() + "'>")
         .addClass("form-group")
         .appendTo(fieldGroup)
         .css({'overflow':'visible'});
@@ -474,7 +471,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
             "You are expected to match the following Regular Expression: </br>" +RegExpression +"</p>";
 
           var popover = $("<button type='button' class='btn btn-default'>")
-          .attr("data-container", "#test")
+          .attr("data-container", "#"+current.name)
           .attr("title","Information")
           .attr("data-content", info)
           .text("?")
