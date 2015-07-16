@@ -66,116 +66,6 @@ KAT.storage.Annotation = function(store, selection, concept, values, id){
   this.values = values;
 };
 
-/**
-* Deletes an annotation
-*
-* @function
-* @name delete
-* @memberof KAT.storage.Annotation
-*/
-KAT.storage.Annotation.prototype.delete = function(){
-
-  //undraw me.
-  this.undraw();
-
-  //look for this annotation by id and remove it.
-  for(var i=0;i<this.store.annotations.length;i++){
-    if(this.store.annotations[i].uuid == this.uuid){
-      this.store.annotations.splice(i, 1);
-      break;
-    }
-  }
-};
-
-/**
-* Draws an annotation to the text.
-*
-* @function
-* @name draw
-* @memberof KAT.storage.Annotation
-*/
-
-KAT.storage.Annotation.prototype.draw = function(){
-
-  //this is me.
-  var me = this;
-
-  //find the elements in the selection.
-  var range = this.store.gui.getRange(this.selection);
-
-  // the color we need to apply
-  var color = this.concept.displayColour;
-
-
-  //add a class for the selection.
-  var className = this.concept.name;
-  range.addClass(className)
-  .each(function(){
-    // set the background color
-    if(this.namespaceURI.indexOf("MathML") != -1){
-      // for MathML we need to set the math background
-      $(this).attr("mathbackground", color);
-    } else {
-      // otherwise we just set the background color
-      $(this).css('background-color', color);
-    }
-  })
-
-  .each(function(){
-    var $me = $(this);
-
-    var current = $me.data("KAT.Annotation.UUID") || [];
-    current.push(me.uuid);
-
-  function getWordsBetweenCurlies(str) {
-    var results = [], re = /{([^}]+)}/g, text;
-    while((text = re.exec(str))?true:false) {
-      results.push(text[1]);
-    }
-    return results;
-  }
-
-    //find the values to be inserted for {x}
-    var m = getWordsBetweenCurlies(me.concept.display);
-
-    var tmp = document.createElement("div");
-    tmp.innerHTML = me.concept.display;
-    var hovertext = tmp.textContent || tmp.innerText || "";
-
-    var capitalize = function(string) {
-
-      return string[0].toUpperCase() + string.slice(1).toLowerCase();
-
-    };
-
-    var getJSONValue;
-    $.each(m, function(j, key) {
-
-      //check 'type' of the field
-      switch(me.concept.fields[j].type) {
-
-        case KAT.model.Field.types.reference:
-          break;
-
-        case KAT.model.Field.types.select:
-          getJSONValue = me.values[key][0].value || "";
-          hovertext = hovertext.replace("{"+m[j]+"}", getJSONValue);
-          break;
-
-        default: //text; just print the text.
-          getJSONValue = me.values[key] || me.values[capitalize(key)] || "";
-          hovertext = hovertext.replace("{"+m[j]+"}", getJSONValue);
-      }
-
-    });
-
-    $me.attr("title", hovertext);
-
-    //write it back
-    $me.data("KAT.Annotation.UUID", current);
-  });
-};
-
 /** Creates a new Annotation instance from an RDF node.
 *
 * @param {string} id - Id of annotation to create
@@ -319,89 +209,6 @@ KAT.storage.Annotation.fromRDF = function(rdf, id, store){
 };
 
 /**
-* Flashes an annotation.
-*
-* @function
-* @name flash
-* @memberof KAT.storage.Annotation
-*/
-
-//called in rightclick: highlight annotation
-KAT.storage.Annotation.prototype.flash = function(){
-  //get the range.
-  this.store.gui
-  .getRange(this.selection).stop()
-  .animate({ backgroundColor: "red"}, 1500, function(){
-    $(this).css("background-color", "");
-  });
-};
-
-
-
-/**
-* Shows an edit form for the annotation.
-*
-* @function
-* @name edit
-* @memberof KAT.storage.Annotation
-*/
-KAT.storage.Annotation.prototype.edit = function(env){
-
-  // TODO: Parse the env.
-  KAT.sidebar.generateAnnotationForm(
-    env,
-    function(selection, concept, valuesJSON, annotation){
-      // update the values.
-      annotation.values = valuesJSON;
-
-      // re-draw the annotation.
-      annotation.undraw();
-      annotation.draw();
-
-      //flash it.
-      annotation.flash();
-
-      return annotation;
-    },
-    this,
-    this.selection,
-    this.concept
-  );
-};
-
-/**
-* Un-draws an annotation to the text.
-*
-* @function
-* @name undraw
-* @memberof KAT.storage.Annotation
-*/
-KAT.storage.Annotation.prototype.undraw = function(){
-  //this is me
-  var me = this;
-
-  //find the elements in the selection.
-  var range = this.store.gui.getRange(this.selection);
-
-  //remove the class and data
-  range.removeClass("KAT-selection").each(function(){
-    var $me = $(this);
-
-    //the current data
-    var current = $(this).data("KAT.Annotation.UUID") || [];
-
-    //find the current index and remove it.
-    var index = current.indexOf(me.uuid);
-
-    //if we have the right index, remove an element.
-    if(~index){
-      current.splice(index, 1);
-      $me.data("KAT.Annotation.UUID", current);
-    }
-  });
-};
-
-/**
 * Exports an annotation to RDF.
 *
 * @param {string} docURL - The URL of the document currently opened
@@ -506,4 +313,309 @@ KAT.storage.Annotation.prototype.toRDF = function(docURL, runID){
 
   //get the Dom Node.
   return parent.get(0);
+};
+
+//===
+//edit & delete
+//===
+
+/**
+* Shows an edit form for the annotation.
+*
+* @function
+* @name edit
+* @memberof KAT.storage.Annotation
+*/
+KAT.storage.Annotation.prototype.edit = function(env){
+
+  KAT.sidebar.generateAnnotationForm(
+    env,
+    function(selection, concept, valuesJSON, annotation){
+      // update the values.
+      annotation.values = valuesJSON;
+
+      // re-draw the annotation.
+      annotation.undraw();
+      annotation.draw();
+
+      //flash it.
+      annotation.flash();
+
+      return annotation;
+    },
+    this,
+    this.selection,
+    this.concept
+  );
+};
+
+/**
+* Deletes an annotation
+*
+* @function
+* @name delete
+* @memberof KAT.storage.Annotation
+*/
+KAT.storage.Annotation.prototype.delete = function(){
+
+  //undraw me.
+  this.undraw();
+
+  //look for this annotation by id and remove it.
+  for(var i=0;i<this.store.annotations.length;i++){
+    if(this.store.annotations[i].uuid == this.uuid){
+      this.store.annotations.splice(i, 1);
+      break;
+    }
+  }
+};
+
+//=======
+//Drawing & Highlighting
+//=======
+
+/**
+* Draws an annotation to the text.
+*
+* @function
+* @name draw
+* @memberof KAT.storage.Annotation
+*/
+
+KAT.storage.Annotation.prototype.draw = function(){
+
+  //this is me.
+  var me = this;
+
+  // find the elements in the selection.
+  this.store.gui.getRange(this.selection)
+
+  // and iteratate over them
+  .each(function(){
+    var $me = $(this);
+
+    // store the id of this annotation on the element itself
+    // however some other annotations might already be registered to this element.
+
+    // get current annotations and store them somewhere
+    var current = $me.data("KAT.Annotation.UUID") || [];
+    var before = current.slice();
+
+    // add this annotation and push it to the UUIDs
+    current.push(me.uuid);
+    $me.data("KAT.Annotation.UUID", current);
+  });
+
+  // and re-draw
+  this.updateDrawing();
+};
+
+/**
+* Updates the rendering of all elements in the current selection.
+* Incorperates overlapping annotations.
+*
+* @function
+* @name updateDrawing
+* @memberof KAT.storage.Annotation
+*/
+KAT.storage.Annotation.prototype.updateDrawing = function(){
+
+  // get a refernce to the store to find other annotations.
+  var store = this.store;
+
+
+  // find the elements in the selection.
+  this.store.gui.getRange(this.selection)
+
+  // and iteratate over them
+  .each(function(){
+
+    var $me = $(this);
+
+    // get all the annotations linked to the given selection.
+    var annotations = $me.data("KAT.Annotation.UUID") || [];
+
+
+    if(annotations.length === 0){
+      // no annotations are linked to this element anymore
+      // so remove all the magic.
+
+      // remove the background color
+      // again we need to differentiate the MathML and non-mathml cases
+      if(this.namespaceURI.indexOf("MathML") != -1){
+        $me.removeAttr("mathbackground") // remove the MathBackground
+        .attr("mathbackground", $me.data("KAT.Annotation.orgBackgroundAttr")) // set it to the original value
+        .removeData("KAT.Annotation.orgBackgroundAttr"); // and discard the stored value.
+      } else {
+        $me.css('background-color', '') // reset the css background color.
+        .css("background-color", $me.data("KAT.Annotation.orgBackgroundAttr")) // set it to the original value
+        .removeData("KAT.Annotation.orgBackgroundAttr"); // and discard the stored value.
+      }
+
+      // and the Background cache is gone.
+      $me.removeData("KAT.Annotation.hasBGCache");
+
+      // remove the title attribute.
+      $me.removeAttr("title")
+      .attr("title", $me.data("KAT.Annotation.orgTitleAttr")) // and set it back to what it was before.
+      .removeData("KAT.Annotation.orgTitleAttr")
+      .removeData("KAT.Annotation.hasTCache");
+
+    } else {
+      // we have some annotation bound to this element.
+      // so we need to work with that annotation.
+
+
+      // for now, just take the first annotation that is bound to the element.
+      // TODO: What do we do if there are multiple annotations?
+      var me = store.find(annotations[annotations.length - 1]);
+
+      // set the background color to this one
+      var color = me.concept.displayColour;
+
+      // we need to differentiate between MathML and non-mathml nodes here
+      if(this.namespaceURI.indexOf("MathML") != -1){
+
+        // if we do not have a cache, we need to store the old color
+        if($me.data("KAT.Annotation.hasBGCache") !== true){
+          $me
+          .data("KAT.Annotation.hasBGCache", true)
+          .data("KAT.Annotation.orgBackgroundAttr", $me.attr("mathbackground"));
+        }
+
+        $me.attr("mathbackground", color); // and set the new display color
+      } else {
+
+        // if we do not have a cache, we need to store the old color
+        if($me.data("KAT.Annotation.hasBGCache") !== true){
+          $me
+          .data("KAT.Annotation.hasBGCache", true)
+          .data("KAT.Annotation.orgBackgroundAttr", $me.css('background-color'));
+        }
+
+        $me.css('background-color', color); // and set the new display color
+      }
+
+      // we need to recompute the tooltip
+      // and need to take care of overlapping annotations
+
+      // store the original title attribute if available
+      if($me.data("KAT.Annotation.hasTCache") !== true){
+        $me
+        .data("KAT.Annotation.hasTCache", true)
+        .data("KAT.Annotation.orgTitleAttr", $me.attr("title"));
+      }
+
+      // and recompute the tooltip.
+      $me.attr("title", me.recomputeTooltip());
+    }
+
+  });
+};
+
+/**
+* Un-draws an annotation to the text.
+*
+* @function
+* @name undraw
+* @memberof KAT.storage.Annotation
+*/
+KAT.storage.Annotation.prototype.undraw = function(){
+  //this is me
+  var me = this;
+
+  //find the elements in the selection.
+  var range = this.store.gui.getRange(this.selection);
+
+  //remove the class and data
+  range.each(function(){
+    var $me = $(this);
+
+    //the current data
+    var current = $(this).data("KAT.Annotation.UUID") || [];
+
+    //find the current index and remove it.
+    var index = current.indexOf(me.uuid);
+
+    //if we have the right index, remove an element.
+    if(~index){
+      current.splice(index, 1);
+      $me.data("KAT.Annotation.UUID", current);
+    }
+  });
+
+  // and re-draw
+  this.updateDrawing();
+};
+
+/**
+* Computes the tooltip of an element.
+*
+* @function
+* @returns {string}
+* @memberof KAT.storage.Annotation
+*/
+KAT.storage.Annotation.prototype.recomputeTooltip = function(){
+
+  var me = this;
+
+  function getWordsBetweenCurlies(str) {
+    var results = [], re = /{([^}]+)}/g, text;
+    while((text = re.exec(str))?true:false) {
+      results.push(text[1]);
+    }
+    return results;
+  }
+
+  //find the values to be inserted for {x}
+  var m = getWordsBetweenCurlies(me.concept.display);
+
+  var tmp = document.createElement("div");
+  tmp.innerHTML = me.concept.display;
+  var hovertext = tmp.textContent || tmp.innerText || "";
+
+  var capitalize = function(string) {
+    return string[0].toUpperCase() + string.slice(1).toLowerCase();
+  };
+
+  var getJSONValue;
+  $.each(m, function(j, key) {
+
+    //check 'type' of the field
+    switch(me.concept.fields[j].type) {
+
+      case KAT.model.Field.types.reference:
+        break;
+
+      case KAT.model.Field.types.select:
+        getJSONValue = me.values[key][0].value || "";
+        hovertext = hovertext.replace("{"+m[j]+"}", getJSONValue);
+        break;
+
+      default: //text; just print the text.
+        getJSONValue = me.values[key] || me.values[capitalize(key)] || "";
+        hovertext = hovertext.replace("{"+m[j]+"}", getJSONValue);
+    }
+
+  });
+
+  return hovertext;
+};
+
+/**
+* Flashes an annotation.
+*
+* @function
+* @name flash
+* @memberof KAT.storage.Annotation
+*/
+
+//called in rightclick: highlight annotation
+KAT.storage.Annotation.prototype.flash = function(){
+  //get the range.
+  this.store.gui
+  .getRange(this.selection).stop()
+  .animate({ backgroundColor: "red"}, 1500, function(){
+    $(this).css("background-color", "");
+  });
 };
