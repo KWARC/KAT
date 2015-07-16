@@ -2040,7 +2040,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
     jQuery.map([0], function(i){
 
       // create a wrapper element.
-      var wrapper = $("<div id='" + current.name + random() + "'>")
+      var wrapper = $("<div id='" + current.name + "'>")
         .addClass("form-group")
         .appendTo(fieldGroup)
         .css({'overflow':'visible'});
@@ -2091,9 +2091,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
         numOfReferences--;
 
         //enable plus buttons again
-        $.each($(".plusButton."+current.name), function(index, button){
-          $(button).removeAttr("disabled");
-        });
+        wrapper.find(".plusButton."+current.name).removeAttr("disabled");
 
       }
 
@@ -2108,9 +2106,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
         numOfReferences--;
 
         //enable plus buttons again
-        $.each($(".plusButton."+current.name), function(index, button){
-          $(button).removeAttr("disabled");
-        });
+        wrapper.find(".plusButton."+current.name).removeAttr("disabled");
 
       }
 
@@ -2188,9 +2184,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
           //disable plus buttons
           if(numOfReferences == atmost) {
-            $.each($(".plusButton."+current.name), function(index, button){
-              $(button).attr("disabled", "true");
-            });
+            wrapper.find(".plusButton."+current.name).attr("disabled", "true");
           }
 
         }
@@ -2231,11 +2225,9 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
             "You are expected to match the following Regular Expression: </br>" +RegExpression +"</p>";
 
           var popover = $("<button type='button' class='btn btn-default'>")
-          .attr("data-container", "#"+current.name)
           .attr("title","Information")
-          .attr("data-content", info)
           .text("?")
-          .popover({html:true, toggle:"popover", placement:"top"})
+          .popover({html:true, toggle:"popover", placement:"top", content:info, container: "#"+current.name})
           .appendTo(addon);
 
           // add our validation function.
@@ -2273,9 +2265,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
 
           //disable plus buttons
           if(numOfReferences == atmost) {
-            $.each($(".plusButton."+current.name), function(index, button){
-              $(button).attr("disabled", "true");
-            });
+            wrapper.find(".plusButton."+current.name).attr("disabled", "true");
           }
 
         }
