@@ -612,10 +612,13 @@ KAT.storage.Annotation.prototype.recomputeTooltip = function(){
 
 //called in rightclick: highlight annotation
 KAT.storage.Annotation.prototype.flash = function(){
+
+  var me = this;
+
   //get the range.
   this.store.gui
   .getRange(this.selection).stop()
   .animate({ backgroundColor: "red"}, 1500, function(){
-    $(this).css("background-color", "");
+    me.updateDrawing();
   });
 };

@@ -174,6 +174,9 @@ KAT.model.Field = function(xml, concept){
       //ok, now store it
       hasNumber = true;
 
+
+      // TODO: Ensure min and max are sane. 
+
       //minimum
       if(typeof e.attr("atleast")){
         try{

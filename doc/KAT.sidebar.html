@@ -166,7 +166,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line694">line 694</a>
+        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line209">line 209</a>
     </li></ul></dd>
     
 
@@ -239,7 +239,7 @@ Should be readonly.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line676">line 676</a>
+        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line191">line 191</a>
     </li></ul></dd>
     
 
@@ -312,7 +312,7 @@ Should be read-only.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line667">line 667</a>
+        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line182">line 182</a>
     </li></ul></dd>
     
 
@@ -389,7 +389,7 @@ Should be read-only.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line685">line 685</a>
+        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line200">line 200</a>
     </li></ul></dd>
     
 
@@ -461,7 +461,7 @@ Should be read-only.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line703">line 703</a>
+        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line218">line 218</a>
     </li></ul></dd>
     
 
@@ -533,7 +533,7 @@ Should be read-only.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line711">line 711</a>
+        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line226">line 226</a>
     </li></ul></dd>
     
 
@@ -560,7 +560,699 @@ Should be read-only.
 
     
 
-    <h4 class="name" id=".genNewAnnotationForm"><span class="type-signature">(static) </span>genNewAnnotationForm<span class="signature">(env, callback, selection, concept)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".generateAnnotationReferenceField"><span class="type-signature">(static) </span>generateAnnotationReferenceField<span class="signature">(current, env, wrapper, annotation, validations, revalidate)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    generates a new reference field in the annotation form.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>current</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="KAT.model.Field.html">KAT.model.Field</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Field to generate.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>env</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">KAT.modules.loadModule</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Current KAT module</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wrapper</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">jQuery</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Wrapper element to append the text field to.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>annotation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">KAT.Store.annotation</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Annotation currently being edited (if available).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>validations</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;function()></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Validation function array</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>revalidate</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Function to call when revalidating.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="sidebar_editor.js.html">sidebar/editor.js</a>, <a href="sidebar_editor.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".generateAnnotationSelectField"><span class="type-signature">(static) </span>generateAnnotationSelectField<span class="signature">(current, wrapper, annotation, validations, revalidate)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    generates a new select field in the annotation form.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>current</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="KAT.model.Field.html">KAT.model.Field</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Field to generate.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wrapper</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">jQuery</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Wrapper element to append the text field to.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>annotation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">KAT.Store.annotation</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Annotation currently being edited (if available).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>validations</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;function()></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Validation function array</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>revalidate</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Function to call when revalidating.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="sidebar_editor.js.html">sidebar/editor.js</a>, <a href="sidebar_editor.js.html#line157">line 157</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".generateAnnotationTextField"><span class="type-signature">(static) </span>generateAnnotationTextField<span class="signature">(current, wrapper, annotation, validations, revalidate)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    generates a new text field in the annotation form.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>current</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="KAT.model.Field.html">KAT.model.Field</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Field to generate.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wrapper</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">jQuery</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Wrapper element to append the text field to.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>annotation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">KAT.Store.annotation</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Annotation currently being edited (if available).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>validations</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;function()></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Validation function array</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>revalidate</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Function to call when revalidating.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="sidebar_editor.js.html">sidebar/editor.js</a>, <a href="sidebar_editor.js.html#line313">line 313</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".genNewAnnotationForm"><span class="type-signature">(static) </span>genNewAnnotationForm<span class="signature">(env, callback, annotation, selection, concept)</span><span class="type-signature"></span></h4>
 
     
 
@@ -649,6 +1341,29 @@ Should be read-only.
 
         <tr>
             
+                <td class="name"><code>annotation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">KAT.Store.annotation</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Annotation currently being edited (if available).</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>selection</code></td>
             
 
@@ -729,7 +1444,7 @@ Should be read-only.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line198">line 198</a>
+        <a href="sidebar_editor.js.html">sidebar/editor.js</a>, <a href="sidebar_editor.js.html#line517">line 517</a>
     </li></ul></dd>
     
 
@@ -811,7 +1526,7 @@ Should be read-only.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line143">line 143</a>
+        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line127">line 127</a>
     </li></ul></dd>
     
 
@@ -893,7 +1608,7 @@ Should be read-only.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line127">line 127</a>
+        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line111">line 111</a>
     </li></ul></dd>
     
 
@@ -1106,7 +1821,7 @@ Should be read-only.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line177">line 177</a>
+        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line161">line 161</a>
     </li></ul></dd>
     
 
@@ -1188,7 +1903,7 @@ Should be read-only.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line159">line 159</a>
+        <a href="sidebar_index.js.html">sidebar/index.js</a>, <a href="sidebar_index.js.html#line143">line 143</a>
     </li></ul></dd>
     
 
@@ -1236,7 +1951,7 @@ Should be read-only.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Thu Jul 16 2015 15:50:37 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Fri Jul 17 2015 14:22:50 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
