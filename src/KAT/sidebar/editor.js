@@ -33,7 +33,7 @@ KAT.sidebar.generateAnnotationReferenceField = function(current, env, wrapper, a
   // a group for selects
   var selectGroup;
 
-  function createSelect(addMinusButtonBool) {
+  function createReference(addMinusButtonBool) {
 
     // we want to add another field
     // but only if we do not have the max already.
@@ -109,7 +109,7 @@ KAT.sidebar.generateAnnotationReferenceField = function(current, env, wrapper, a
   // create the initial fields
   // until we have the minimum number of fields
   while(numFields < atleast) {
-    createSelect(); // create a select field
+    createReference(); // create a select field
   }
 
   // add a plus button to the first field
@@ -118,7 +118,7 @@ KAT.sidebar.generateAnnotationReferenceField = function(current, env, wrapper, a
     $("<button class='btn btn-default plusButton " + current.name + "' >")
     .on("click", function(e){
       e.preventDefault();
-      createSelect(true);
+      createReference(true);
     })
     .text("+")
     .prependTo(selectGroup);
@@ -144,7 +144,7 @@ KAT.sidebar.generateAnnotationReferenceField = function(current, env, wrapper, a
 
       // if we do not yet have a
       if(container.find('select').length < count){
-        createTextField(true);
+        createReference(true);
       }
 
       // and the set the right value for the select field
@@ -220,6 +220,7 @@ KAT.sidebar.generateAnnotationSelectField = function(current, wrapper, annotatio
 
       // do we have to add a minus button?
       if(addMinusButtonBool) {
+
         // create a minus button register a handler for it.
         var minusButton = $("<button class='btn btn-default minusButton " + current.name + "' >")
         .on("click", function(event){ // called to remove field
@@ -241,7 +242,7 @@ KAT.sidebar.generateAnnotationSelectField = function(current, wrapper, annotatio
           revalidate();
         })
         .text("-")
-        .prependTo(inputGroup);
+        .prependTo(selectGroup);
       }
 
       // and increase the counter for the fields.
@@ -294,7 +295,7 @@ KAT.sidebar.generateAnnotationSelectField = function(current, wrapper, annotatio
 
       // if we do not yet have a
       if(container.find('select').length < count){
-        createTextField(true);
+        createSelect(true);
       }
 
       // and the set the right value for the select field
