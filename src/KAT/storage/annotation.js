@@ -457,11 +457,10 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
 
       // remove the title attribute.
       $me.removeAttr("title")
-      .tooltip('destroy')
-      .removeAttr('data-toggle')
-      .removeAttr('data-html')
       .attr("title", $me.data("KAT.Annotation.orgTitleAttr")) // and set it back to what it was before.
       .removeData("KAT.Annotation.orgTitleAttr")
+      .removeData("KAT.Annotation.hasTitle")
+      .removeData("KAT.Annotation.content")
       .removeData("KAT.Annotation.hasTCache");
 
     } else {
@@ -511,12 +510,9 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
 
       // and recompute the tooltip.
       $me
-      .attr("title", me.recomputeTooltip())
-      .tooltip('destroy')
-      .attr({
-        'data-toggle': 'tooltip',
-        'data-html': true
-      }).tooltip();
+      .data("KAT.Annotation.hasTitle", true)
+      .removeAttr("title")
+      .data("KAT.Annotation.content", me.recomputeTooltip());
     }
 
   });

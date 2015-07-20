@@ -51,7 +51,11 @@ KAT.module = {
     collection.init();
     collection.assignDisplayColour();
   },
-
+  hoverText: function(target){
+    if(target.data("KAT.Annotation.hasTitle")){
+      return $("<div>").html(target.data("KAT.Annotation.content"));
+    }
+  },
   contextMenuEntries: function(target, JOBADInstance){
     // reference to self
     var me = this;
