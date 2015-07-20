@@ -42,7 +42,7 @@ KAT.module = {
     this.store = new KAT.storage.Store(this.gui, documentURL);
 
     // initialise the tooltip libarary
-    JOBADInstance.element.tooltip();
+    // JOBADInstance.element.tooltip({html:true});
 
     // initialise the gui
     KAT.sidebar.init(this.store);

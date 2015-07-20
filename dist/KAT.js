@@ -3629,6 +3629,9 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
 
       // remove the title attribute.
       $me.removeAttr("title")
+      .tooltip('destroy')
+      .removeAttr('data-toggle')
+      .removeAttr('data-html')
       .attr("title", $me.data("KAT.Annotation.orgTitleAttr")) // and set it back to what it was before.
       .removeData("KAT.Annotation.orgTitleAttr")
       .removeData("KAT.Annotation.hasTCache");
@@ -3679,7 +3682,13 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
       }
 
       // and recompute the tooltip.
-      $me.attr("title", me.recomputeTooltip());
+      $me
+      .attr("title", me.recomputeTooltip())
+      .tooltip('destroy')
+      .attr({
+        'data-toggle': 'tooltip',
+        'data-html': true
+      }).tooltip();
     }
 
   });
@@ -3731,47 +3740,70 @@ KAT.storage.Annotation.prototype.recomputeTooltip = function(){
 
   var me = this;
 
-  function getWordsBetweenCurlies(str) {
-    var results = [], re = /{([^}]+)}/g, text;
-    while((text = re.exec(str))?true:false) {
-      results.push(text[1]);
-    }
-    return results;
-  }
+  // the display we will fill with doT.js
+  var display = me.concept.display;
 
-  //find the values to be inserted for {x}
-  var m = getWordsBetweenCurlies(me.concept.display);
-
-  var tmp = document.createElement("div");
-  tmp.innerHTML = me.concept.display;
-  var hovertext = tmp.textContent || tmp.innerText || "";
-
-  var capitalize = function(string) {
-    return string[0].toUpperCase() + string.slice(1).toLowerCase();
+  // a replacer function for backward compatibility.
+  var replacer = function(name){
+    return "{{= "+name+".map(function(val){return val.toString()}).join() }}";
   };
 
-  var getJSONValue;
-  $.each(m, function(j, key) {
+  var keys = [];
 
-    //check 'type' of the field
-    switch(me.concept.fields[j].type) {
+  for(var key in me.values){
+    if(me.values.hasOwnProperty(key)){
 
-      case KAT.model.Field.types.reference:
-        break;
+      // backward compaitbilise the old display tag.
+      display = display
+      .replace("{"+key+"}", replacer(key))
+      .replace("{"+key.toLowerCase()+"}", replacer(key));
 
-      case KAT.model.Field.types.select:
-        getJSONValue = me.values[key][0].value || "";
-        hovertext = hovertext.replace("{"+m[j]+"}", getJSONValue);
-        break;
-
-      default: //text; just print the text.
-        getJSONValue = me.values[key] || me.values[capitalize(key)] || "";
-        hovertext = hovertext.replace("{"+m[j]+"}", getJSONValue);
+      //add the key to the variables
+      keys.push(key);
     }
+  }
 
-  });
+  var mapAnnotationObject = function(annot){
+    // an object of parameters.
+    var valObject = {};
 
-  return hovertext;
+    $.each(annot.concept.fields, function(i, field) {
+      if(field.type === KAT.model.Field.types.reference){
+        valObject[field.value] = annot.values[field.value].map(mapAnnotationObject);
+      } else {
+        valObject[field.value] = annot.values[field.value].slice();
+      }
+    });
+
+    return valObject;
+  };
+
+  // get a nice json object.
+  var myObj = mapAnnotationObject(me);
+
+  // and build a template.
+  var fn = doT.template(
+    display,
+    {
+      evaluate:    /\{\{([\s\S]+?(\}?)+)\}\}/g,
+			interpolate: /\{\{=([\s\S]+?)\}\}/g,
+			encode:      /\{\{!([\s\S]+?)\}\}/g,
+			use:         /\{\{#([\s\S]+?)\}\}/g,
+			useParams:   /(^|[^\w$])def(?:\.|\[[\'\"])([\w$\.]+)(?:[\'\"]\])?\s*\:\s*([\w$\.]+|\"[^\"]+\"|\'[^\']+\'|\{[^\}]+\})/g,
+			define:      /\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,
+			defineParams:/^\s*([\w$]+):([\s\S]+)/,
+			conditional: /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
+			iterate:     /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
+			varname: keys.join(","),
+			strip:		true,
+			append:		true,
+			selfcontained: false,
+			doNotSkipEncoded: false
+    }
+  );
+
+  // and fill in the function.
+  return fn.apply(this, keys.map(function(k, i){return myObj[k]; }));
 };
 
 /**
@@ -3833,7 +3865,7 @@ KAT.module = {
     this.store = new KAT.storage.Store(this.gui, documentURL);
 
     // initialise the tooltip libarary
-    JOBADInstance.element.tooltip();
+    // JOBADInstance.element.tooltip({html:true});
 
     // initialise the gui
     KAT.sidebar.init(this.store);
@@ -3968,6 +4000,147 @@ KAT.module = {
 
 
 JOBAD.modules.register(KAT.module); //register the module.
+
+// doT.js
+// 2011-2014, Laura Doktorova, https://github.com/olado/doT
+// Licensed under the MIT license.
+
+(function() {
+	"use strict";
+
+	var doT = {
+		version: "1.0.3",
+		templateSettings: {
+			evaluate:    /\{\{([\s\S]+?(\}?)+)\}\}/g,
+			interpolate: /\{\{=([\s\S]+?)\}\}/g,
+			encode:      /\{\{!([\s\S]+?)\}\}/g,
+			use:         /\{\{#([\s\S]+?)\}\}/g,
+			useParams:   /(^|[^\w$])def(?:\.|\[[\'\"])([\w$\.]+)(?:[\'\"]\])?\s*\:\s*([\w$\.]+|\"[^\"]+\"|\'[^\']+\'|\{[^\}]+\})/g,
+			define:      /\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,
+			defineParams:/^\s*([\w$]+):([\s\S]+)/,
+			conditional: /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
+			iterate:     /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
+			varname:	"it",
+			strip:		true,
+			append:		true,
+			selfcontained: false,
+			doNotSkipEncoded: false
+		},
+		template: undefined, //fn, compile template
+		compile:  undefined  //fn, for express
+	}, _globals;
+
+	doT.encodeHTMLSource = function(doNotSkipEncoded) {
+		var encodeHTMLRules = { "&": "&#38;", "<": "&#60;", ">": "&#62;", '"': "&#34;", "'": "&#39;", "/": "&#47;" },
+			matchHTML = doNotSkipEncoded ? /[&<>"'\/]/g : /&(?!#?\w+;)|<|>|"|'|\//g;
+		return function(code) {
+			return code ? code.toString().replace(matchHTML, function(m) {return encodeHTMLRules[m] || m;}) : "";
+		};
+	};
+
+	_globals = (function(){ return this || (0,eval)("this"); }());
+
+	if (typeof module !== "undefined" && module.exports) {
+		module.exports = doT;
+	} else if (typeof define === "function" && define.amd) {
+		define(function(){return doT;});
+	} else {
+		_globals.doT = doT;
+	}
+
+	var startend = {
+		append: { start: "'+(",      end: ")+'",      startencode: "'+encodeHTML(" },
+		split:  { start: "';out+=(", end: ");out+='", startencode: "';out+=encodeHTML(" }
+	}, skip = /$^/;
+
+	function resolveDefs(c, block, def) {
+		return ((typeof block === "string") ? block : block.toString())
+		.replace(c.define || skip, function(m, code, assign, value) {
+			if (code.indexOf("def.") === 0) {
+				code = code.substring(4);
+			}
+			if (!(code in def)) {
+				if (assign === ":") {
+					if (c.defineParams) value.replace(c.defineParams, function(m, param, v) {
+						def[code] = {arg: param, text: v};
+					});
+					if (!(code in def)) def[code]= value;
+				} else {
+					new Function("def", "def['"+code+"']=" + value)(def);
+				}
+			}
+			return "";
+		})
+		.replace(c.use || skip, function(m, code) {
+			if (c.useParams) code = code.replace(c.useParams, function(m, s, d, param) {
+				if (def[d] && def[d].arg && param) {
+					var rw = (d+":"+param).replace(/'|\\/g, "_");
+					def.__exp = def.__exp || {};
+					def.__exp[rw] = def[d].text.replace(new RegExp("(^|[^\\w$])" + def[d].arg + "([^\\w$])", "g"), "$1" + param + "$2");
+					return s + "def.__exp['"+rw+"']";
+				}
+			});
+			var v = new Function("def", "return " + code)(def);
+			return v ? resolveDefs(c, v, def) : v;
+		});
+	}
+
+	function unescape(code) {
+		return code.replace(/\\('|\\)/g, "$1").replace(/[\r\t\n]/g, " ");
+	}
+
+	doT.template = function(tmpl, c, def) {
+		c = c || doT.templateSettings;
+		var cse = c.append ? startend.append : startend.split, needhtmlencode, sid = 0, indv,
+			str  = (c.use || c.define) ? resolveDefs(c, tmpl, def || {}) : tmpl;
+
+		str = ("var out='" + (c.strip ? str.replace(/(^|\r|\n)\t* +| +\t*(\r|\n|$)/g," ")
+					.replace(/\r|\n|\t|\/\*[\s\S]*?\*\//g,""): str)
+			.replace(/'|\\/g, "\\$&")
+			.replace(c.interpolate || skip, function(m, code) {
+				return cse.start + unescape(code) + cse.end;
+			})
+			.replace(c.encode || skip, function(m, code) {
+				needhtmlencode = true;
+				return cse.startencode + unescape(code) + cse.end;
+			})
+			.replace(c.conditional || skip, function(m, elsecase, code) {
+				return elsecase ?
+					(code ? "';}else if(" + unescape(code) + "){out+='" : "';}else{out+='") :
+					(code ? "';if(" + unescape(code) + "){out+='" : "';}out+='");
+			})
+			.replace(c.iterate || skip, function(m, iterate, vname, iname) {
+				if (!iterate) return "';} } out+='";
+				sid+=1; indv=iname || "i"+sid; iterate=unescape(iterate);
+				return "';var arr"+sid+"="+iterate+";if(arr"+sid+"){var "+vname+","+indv+"=-1,l"+sid+"=arr"+sid+".length-1;while("+indv+"<l"+sid+"){"
+					+vname+"=arr"+sid+"["+indv+"+=1];out+='";
+			})
+			.replace(c.evaluate || skip, function(m, code) {
+				return "';" + unescape(code) + "out+='";
+			})
+			+ "';return out;")
+			.replace(/\n/g, "\\n").replace(/\t/g, '\\t').replace(/\r/g, "\\r")
+			.replace(/(\s|;|\}|^|\{)out\+='';/g, '$1').replace(/\+''/g, "");
+			//.replace(/(\s|;|\}|^|\{)out\+=''\+/g,'$1out+=');
+
+		if (needhtmlencode) {
+			if (!c.selfcontained && _globals && !_globals._encodeHTML) _globals._encodeHTML = doT.encodeHTMLSource(c.doNotSkipEncoded);
+			str = "var encodeHTML = typeof _encodeHTML !== 'undefined' ? _encodeHTML : ("
+				+ doT.encodeHTMLSource.toString() + "(" + (c.doNotSkipEncoded || '') + "));"
+				+ str;
+		}
+		try {
+			return new Function(c.varname, str);
+		} catch (e) {
+			if (typeof console !== "undefined") console.log("Could not create a template function: " + str);
+			throw e;
+		}
+	};
+
+	doT.compile = function(tmpl, def) {
+		return doT.template(tmpl, null, def);
+	};
+}());
 
 })({},function(){return this}());
 //# sourceMappingURL=KAT.js.map

@@ -52,6 +52,7 @@ The documentation will also be served by `grunt serve`. You can access it by goi
 * [JOBAD](https://github.com/KWARC/jobad)
   * which depends on [Bootstrap](https://github.com/twbs/bootstrap)
 * [jQuery](https://github.com/jquery/jquery)
+* [doT](http://olado.github.io/doT/index.html) for templating of \<display> elements. 
 * [Grunt](http://gruntjs.com/) - for the development part.
 
 ## Compatibility

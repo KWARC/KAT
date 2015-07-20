@@ -457,6 +457,9 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
 
       // remove the title attribute.
       $me.removeAttr("title")
+      .tooltip('destroy')
+      .removeAttr('data-toggle')
+      .removeAttr('data-html')
       .attr("title", $me.data("KAT.Annotation.orgTitleAttr")) // and set it back to what it was before.
       .removeData("KAT.Annotation.orgTitleAttr")
       .removeData("KAT.Annotation.hasTCache");
@@ -507,7 +510,13 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
       }
 
       // and recompute the tooltip.
-      $me.attr("title", me.recomputeTooltip());
+      $me
+      .attr("title", me.recomputeTooltip())
+      .tooltip('destroy')
+      .attr({
+        'data-toggle': 'tooltip',
+        'data-html': true
+      }).tooltip();
     }
 
   });
@@ -559,47 +568,70 @@ KAT.storage.Annotation.prototype.recomputeTooltip = function(){
 
   var me = this;
 
-  function getWordsBetweenCurlies(str) {
-    var results = [], re = /{([^}]+)}/g, text;
-    while((text = re.exec(str))?true:false) {
-      results.push(text[1]);
-    }
-    return results;
-  }
+  // the display we will fill with doT.js
+  var display = me.concept.display;
 
-  //find the values to be inserted for {x}
-  var m = getWordsBetweenCurlies(me.concept.display);
-
-  var tmp = document.createElement("div");
-  tmp.innerHTML = me.concept.display;
-  var hovertext = tmp.textContent || tmp.innerText || "";
-
-  var capitalize = function(string) {
-    return string[0].toUpperCase() + string.slice(1).toLowerCase();
+  // a replacer function for backward compatibility.
+  var replacer = function(name){
+    return "{{= "+name+".map(function(val){return val.toString()}).join() }}";
   };
 
-  var getJSONValue;
-  $.each(m, function(j, key) {
+  var keys = [];
 
-    //check 'type' of the field
-    switch(me.concept.fields[j].type) {
+  for(var key in me.values){
+    if(me.values.hasOwnProperty(key)){
 
-      case KAT.model.Field.types.reference:
-        break;
+      // backward compaitbilise the old display tag.
+      display = display
+      .replace("{"+key+"}", replacer(key))
+      .replace("{"+key.toLowerCase()+"}", replacer(key));
 
-      case KAT.model.Field.types.select:
-        getJSONValue = me.values[key][0].value || "";
-        hovertext = hovertext.replace("{"+m[j]+"}", getJSONValue);
-        break;
-
-      default: //text; just print the text.
-        getJSONValue = me.values[key] || me.values[capitalize(key)] || "";
-        hovertext = hovertext.replace("{"+m[j]+"}", getJSONValue);
+      //add the key to the variables
+      keys.push(key);
     }
+  }
 
-  });
+  var mapAnnotationObject = function(annot){
+    // an object of parameters.
+    var valObject = {};
 
-  return hovertext;
+    $.each(annot.concept.fields, function(i, field) {
+      if(field.type === KAT.model.Field.types.reference){
+        valObject[field.value] = annot.values[field.value].map(mapAnnotationObject);
+      } else {
+        valObject[field.value] = annot.values[field.value].slice();
+      }
+    });
+
+    return valObject;
+  };
+
+  // get a nice json object.
+  var myObj = mapAnnotationObject(me);
+
+  // and build a template.
+  var fn = doT.template(
+    display,
+    {
+      evaluate:    /\{\{([\s\S]+?(\}?)+)\}\}/g,
+			interpolate: /\{\{=([\s\S]+?)\}\}/g,
+			encode:      /\{\{!([\s\S]+?)\}\}/g,
+			use:         /\{\{#([\s\S]+?)\}\}/g,
+			useParams:   /(^|[^\w$])def(?:\.|\[[\'\"])([\w$\.]+)(?:[\'\"]\])?\s*\:\s*([\w$\.]+|\"[^\"]+\"|\'[^\']+\'|\{[^\}]+\})/g,
+			define:      /\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,
+			defineParams:/^\s*([\w$]+):([\s\S]+)/,
+			conditional: /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
+			iterate:     /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
+			varname: keys.join(","),
+			strip:		true,
+			append:		true,
+			selfcontained: false,
+			doNotSkipEncoded: false
+    }
+  );
+
+  // and fill in the function.
+  return fn.apply(this, keys.map(function(k, i){return myObj[k]; }));
 };
 
 /**
