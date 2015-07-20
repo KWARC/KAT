@@ -2006,10 +2006,15 @@ KAT.sidebar.generateAnnotationReferenceField = function(current, env, wrapper, a
   .appendTo(wrapper);
 
   validations.push(function(){
-    // TODO: validate properly.
-    // for now everything is just fine.
-    wrapper.addClass("has-success");
-    return true;
+    // remove all error classes
+    wrapper.removeClass("has-success has-error");
+
+    // validate if we can reference a field.
+    var validates = wrapper.find("select").eq(0).find("option").length > 0; 
+
+    wrapper.addClass(validates?"has-success":"has-error");
+
+    return validates;
   });
 
   // a group for selects
@@ -3631,7 +3636,6 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
       $me.removeAttr("title")
       .attr("title", $me.data("KAT.Annotation.orgTitleAttr")) // and set it back to what it was before.
       .removeData("KAT.Annotation.orgTitleAttr")
-      .removeData("KAT.Annotation.hasTitle")
       .removeData("KAT.Annotation.content")
       .removeData("KAT.Annotation.hasTCache");
 
@@ -3682,7 +3686,6 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
 
       // and recompute the tooltip.
       $me
-      .data("KAT.Annotation.hasTitle", true)
       .removeAttr("title")
       .data("KAT.Annotation.content", me.recomputeTooltip());
     }
@@ -3766,10 +3769,14 @@ KAT.storage.Annotation.prototype.recomputeTooltip = function(){
     $.each(annot.concept.fields, function(i, field) {
       if(field.type === KAT.model.Field.types.reference){
         valObject[field.value] = annot.values[field.value].map(mapAnnotationObject);
+      } else if(field.type === KAT.model.Field.types.select) {
+        valObject[field.value] = annot.values[field.value].map(function(field){return field.name || field.value; });
       } else {
         valObject[field.value] = annot.values[field.value].slice();
       }
     });
+
+    valObject._ = annot;
 
     return valObject;
   };
@@ -3790,7 +3797,7 @@ KAT.storage.Annotation.prototype.recomputeTooltip = function(){
 			defineParams:/^\s*([\w$]+):([\s\S]+)/,
 			conditional: /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
 			iterate:     /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
-			varname: keys.join(","),
+			varname: "_,"+keys.join(","),
 			strip:		true,
 			append:		true,
 			selfcontained: false,
@@ -3798,8 +3805,10 @@ KAT.storage.Annotation.prototype.recomputeTooltip = function(){
     }
   );
 
+  var args = [myObj].concat(keys.map(function(k, i){return myObj[k]; }));
+
   // and fill in the function.
-  return fn.apply(this, keys.map(function(k, i){return myObj[k]; }));
+  return fn.apply(this, args);
 };
 
 /**
@@ -3871,8 +3880,9 @@ KAT.module = {
     collection.assignDisplayColour();
   },
   hoverText: function(target){
-    if(target.data("KAT.Annotation.hasTitle")){
-      return $("<div>").html(target.data("KAT.Annotation.content"));
+    var content = target.data("KAT.Annotation.content");
+    if(content){
+      return $("<div>").html(content);
     }
   },
   contextMenuEntries: function(target, JOBADInstance){

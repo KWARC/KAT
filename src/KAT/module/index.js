@@ -52,8 +52,9 @@ KAT.module = {
     collection.assignDisplayColour();
   },
   hoverText: function(target){
-    if(target.data("KAT.Annotation.hasTitle")){
-      return $("<div>").html(target.data("KAT.Annotation.content"));
+    var content = target.data("KAT.Annotation.content");
+    if(content){
+      return $("<div>").html(content);
     }
   },
   contextMenuEntries: function(target, JOBADInstance){
