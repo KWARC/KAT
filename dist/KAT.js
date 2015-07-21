@@ -3576,6 +3576,7 @@ KAT.storage.Annotation.prototype.draw = function(){
 
     // get current annotations and store them somewhere
     var current = $me.data("KAT.Annotation.UUID") || [];
+
     var before = current.slice();
 
     // add this annotation and push it to the UUIDs
@@ -3646,9 +3647,12 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
 
       // for now, just take the first annotation that is bound to the element.
       // TODO: What do we do if there are multiple annotations?
-      var me = store.find(annotations[annotations.length - 1]);
+
+      //for the coloring, just use the last one until we figure things out with the canvas
+      var me = store.find(annotations[annotations.length-1]);
 
       // set the background color to this one
+      // TODO: I think this is where the canvas that Kohlhase mentioned comes into play
       var color = me.concept.displayColour;
 
       // we need to differentiate between MathML and non-mathml nodes here
@@ -3684,10 +3688,18 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
         .data("KAT.Annotation.orgTitleAttr", $me.attr("title"));
       }
 
-      // and recompute the tooltip.
+
+      //just compute the tooltip for each element and add all of them into a single annotation
+      var computedTooltip = "";
+      $(annotations).each(function(i, annot){
+        computedTooltip += "<p>"+store.find(annot).recomputeTooltip()+"</p>";
+      });
+
+      // and insert the result
       $me
       .removeAttr("title")
-      .data("KAT.Annotation.content", me.recomputeTooltip());
+      .data("KAT.Annotation.content", computedTooltip);
+
     }
 
   });
@@ -3752,10 +3764,10 @@ KAT.storage.Annotation.prototype.recomputeTooltip = function(){
   for(var key in me.values){
     if(me.values.hasOwnProperty(key)){
 
-      // backward compaitbilise the old display tag.
+      // backward compatibilize the old display tag.
       display = display
-      .replace("{"+key+"}", replacer(key))
-      .replace("{"+key.toLowerCase()+"}", replacer(key));
+        .replace("{"+key+"}", replacer(key))
+        .replace("{"+key.toLowerCase()+"}", replacer(key));
 
       //add the key to the variables
       keys.push(key);
