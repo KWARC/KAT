@@ -52,7 +52,6 @@ KAT.sidebar.generateAnnotationReferenceField = function(current, env, wrapper, a
       .appendTo(container);
 
       // create a new select to add the options to
-      // TODO: Make it bootstrap
       newField = jQuery("<select>")
       .addClass("form-control")
       .appendTo(selectGroup);
@@ -207,7 +206,6 @@ KAT.sidebar.generateAnnotationSelectField = function(current, wrapper, annotatio
       .appendTo(container);
 
       // create a new select to add the options to
-      // TODO: Make it bootstrap
       newField = jQuery("<select>")
       .addClass("form-control")
       .appendTo(selectGroup);

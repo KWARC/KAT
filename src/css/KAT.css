@@ -124,8 +124,22 @@ div.scrollingDiv{
 
 /* styling select-dropdown */
 
-select{
+select {
+    padding: 5px 8px;
+    width: 130%;
+    border: none;
+    box-shadow: none;
+    background: white;
+    background-image: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
 
-  border: 1px solid gray;
 
+/* only for IE */
+@media screen and (min-width: 0\0) {
+  select {
+    background: none;
+  }
 }
