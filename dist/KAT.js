@@ -1848,7 +1848,8 @@ KAT.sidebar.init = function(store){
   var collapsibleToggle = $("<button>")
   .text("«")
   .addClass("collapseToggle")
-  .css({'height': winHeight-10})
+  .css({'height': winHeight-10, 
+        'z-index': 100})
   .click(KAT.sidebar.toggleSidebar).prependTo(collapsibleMenu); //adapted from init function below
 
   //Make sure to show the sidebar
