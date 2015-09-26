@@ -1783,20 +1783,51 @@ KAT.sidebar.init = function(store){
   //mode of the sidebar.
   var mode;
 
-  //which is either Reading or Annotation.
-  if (KAT.sidebar.annotationMode){ mode = "Reading"; } else { mode = "Annotation"; }
+  switch(KAT.sidebar.annotationMode) {
+    
+    case "Review":
+      mode = "Review";
+      break;
+
+    case "Annotation":
+      mode = "Annotation";
+      break;
+
+    case "Reading":
+    default:
+      mode = "Reading";
+  }
 
   //get the height of the window.
   var winHeight = jQuery(window).height();
 
   //create a button to toggle annotations
-  KAT.sidebar.modeToggleButton = $("<button>")
-  .text("Enable " +mode+ " Mode")
-  .addClass("annotationToggle")
-  .addClass("btn btn-default").BS()
-  .click(function(){
-    KAT.sidebar.toggleAnnotationMode();
-  });
+  KAT.sidebar.modeButtonGroup = $("<div>")
+    .addClass("btn-group")
+    .attr("role", "group");
+   //.BS();
+
+  //add Button for each option
+  ["Reading", "Annotation", "Review"].map( function(label) {
+
+    //set some button initially active
+    var isActive = "";
+    if(label == mode) 
+      isActive = "active";
+
+    $("<button>")
+      .attr("type", "button")
+      .attr("mode", label)
+      .addClass("btn btn-default")
+      .addClass(isActive)
+      .text(label)
+      .click(function(){
+        KAT.sidebar.toggleAnnotationMode(label);
+      })
+      .appendTo(KAT.sidebar.modeButtonGroup);
+
+  } );
+
 
   //create collapsible sidebar
   var collapsibleMenu = jQuery('<div>').addClass("collapsible")
@@ -1809,7 +1840,7 @@ KAT.sidebar.init = function(store){
     $("<div>").addClass("KATSidebarButtons")
     .append(
       //to toggle the mode
-      KAT.sidebar.modeToggleButton,
+      KAT.sidebar.modeButtonGroup,
       "<br/>",
       "<br/>",
 
@@ -1930,17 +1961,12 @@ KAT.sidebar.toggleSidebar = function(){
 * @name toggleAnnotationMode
 * @memberof KAT.sidebar
 */
-KAT.sidebar.toggleAnnotationMode = function(){
-  KAT.sidebar.annotationMode = !KAT.sidebar.annotationMode;
+KAT.sidebar.toggleAnnotationMode = function(label){
 
-  var mode;
-  if (KAT.sidebar.annotationMode){
-    mode = "Reading";
-    KAT.sidebar.showSidebar();
-  } else {
-    mode = "Annotation";
-  }
-  KAT.sidebar.modeToggleButton.text("Enable " +mode+ " Mode");
+  KAT.sidebar.annotationMode = label;
+  KAT.sidebar.modeButtonGroup.find(".active").removeClass("active");
+  KAT.sidebar.modeButtonGroup.find("[mode='"+label+"']").addClass("active");;
+
 };
 
 /**
@@ -1983,17 +2009,10 @@ KAT.sidebar.animateLength = 100;
 * Contains a reference to the mode toggle button in the sidebar.
 *
 * @type {jQuery}
-* @name KAT.sidebar.modeToggleButton
+* @name KAT.sidebar.modeButtonGroup
 */
-KAT.sidebar.modeToggleButton = undefined;
+KAT.sidebar.modeButtonGroup = undefined;
 
-/**
-* Contains a reference to the mode toggle button in the sidebar.
-*
-* @type {jQuery}
-* @name KAT.sidebar.modeToggleButton
-*/
-KAT.sidebar.modeToggleButton = undefined;
 
 KAT.sidebar.generateAnnotationReferenceField = function(current, env, wrapper, annotation, validations, revalidate){
 
@@ -3933,103 +3952,93 @@ KAT.module = {
     // the menu to return
     var menu = {};
 
-    var initializeMenuBar = function(annotationModeBool) {
+    var initializeMenuBar = function() {
 
-      //Menu item 1 : Toggle annotation mode
-      if(annotationModeBool) {
-        menu[annot_modeOff] = function(){
-          KAT.sidebar.toggleAnnotationMode();
-        };
-      } else {
-        menu[annot_modeOn] = function(){
-          KAT.sidebar.toggleAnnotationMode();
-        };
-      }
-
-      //Menu item 2
+      //Menu item 1
       menu[storage_import] = me.store.showImportDialog.bind(me.store);
 
-      //Menu item 3
+      //Menu item 2
       menu[storage_export] = me.store.showExportDialog.bind(me.store);
 
   };
 
-    // Case A: Annotation Mode is disabled
-    if (!KAT.sidebar.annotationMode){
+    
+    switch(KAT.sidebar.annotationMode) {
 
-      initializeMenuBar(false);
+      case "Annotation":
 
-    }
+        var selection;
 
-    // Case B: Annotation Mode is enabled
-    else {
-
-      var selection;
-
-      try{
-        selection = this.gui.getSelection();
-      } catch(e){}
+        try{
+          selection = this.gui.getSelection();
+        } catch(e){}
 
 
-      if(!selection || selection.isEmpty){
+        if(!selection || selection.isEmpty){
 
-        /* Subcase B1:
-          User has not made a selection
-          Right click is not on an annotation
-        */
+          /* Subcase B1:
+            User has not made a selection
+            Right click is not on an annotation
+          */
+          initializeMenuBar();
 
-        initializeMenuBar(true);
+          //find all the annotations.
+          var annots = this.store.findfromElement(target);
 
-        //find all the annotations.
-        var annots = this.store.findfromElement(target);
+          if(annots.length !== 0){
+            menu = {};
+            menu[text_remove] = {};
+            menu[text_highlight] = {};
+            menu[text_edit] = {};
 
-        if(annots.length !== 0){
-          menu = {};
-          menu[text_remove] = {};
-          menu[text_highlight] = {};
-          menu[text_edit] = {};
+            //iterate over all the annotations.
+            $.each(annots, function(i, annotation){
 
-          //iterate over all the annotations.
-          $.each(annots, function(i, annotation){
+              //Menu item B2.1 : Delete annotation
+              menu[text_remove][annotation.uuid] = function(){
+                annotation.delete();
+              };
 
-            //Menu item B2.1 : Delete annotation
-            menu[text_remove][annotation.uuid] = function(){
-              annotation.delete();
-            };
+              //Menu item B2.2 : Highlight annotation
+              menu[text_highlight][annotation.uuid] = function(){
+                annotation.flash();
+              };
 
-            //Menu item B2.2 : Highlight annotation
-            menu[text_highlight][annotation.uuid] = function(){
-              annotation.flash();
-            };
+              //Menu item B2.3 : Edit annotation
+              menu[text_edit][annotation.uuid] = function(){
+                annotation.edit(me);
+              };
+            });
+          }
+        } else {
+          /* Subcase B3:
+            User has made a selection
+          */
+           if(!(selection.start == selection.end && selection.startOffset == selection.endOffset)){
 
-            //Menu item B2.3 : Edit annotation
-            menu[text_edit][annotation.uuid] = function(){
-              annotation.edit(me);
-            };
-          });
+            //Menu item B3.n : Add annotation with nth concept found in Kannspec
+            $.each(this.gui.collection.findConcepts(), function(index, concept){
+              menu[concept.getFullName()] = function(){
+                // create a new annotation form.
+                KAT.sidebar.generateAnnotationForm(
+                  me,
+                  me.store.addNew.bind(me.store),
+                  undefined,
+                  selection,
+                  concept
+                );
+              };
+            });
+          }
         }
-      } else {
-        /* Subcase B3:
-          User has made a selection
-        */
-         if(!(selection.start == selection.end && selection.startOffset == selection.endOffset)){
+      break; // end case Annotation; refactor code!!!
 
-          //Menu item B3.n : Add annotation with nth concept found in Kannspec
-          $.each(this.gui.collection.findConcepts(), function(index, concept){
-            menu[concept.getFullName()] = function(){
-              // create a new annotation form.
-              KAT.sidebar.generateAnnotationForm(
-                me,
-                me.store.addNew.bind(me.store),
-                undefined,
-                selection,
-                concept
-              );
-            };
-          });
-        }
+      case "Review":
+      case "Reading": 
+      default:
+        initializeMenuBar();
+
       }
-    }
 
     //return the menu.
     return menu;
