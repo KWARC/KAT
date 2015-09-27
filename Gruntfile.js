@@ -22,6 +22,7 @@ module.exports = function(grunt) {
 
     'src/KAT/sidebar/index.js',
     'src/KAT/sidebar/editor.js',
+    'src/KAT/sidebar/review.js',
 
     'src/KAT/storage/index.js',
     'src/KAT/storage/store.js',

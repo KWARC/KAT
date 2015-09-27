@@ -159,7 +159,16 @@ KAT.module = {
       break; // end case Annotation; refactor code!!!
 
       case "Review":
-      case "Reading": 
+        initializeMenuBar();
+
+        var annotations = this.store.findfromElement(target);
+
+        if(annotations.length > 0) {
+          annotations[0].focus();
+        }
+
+        break;
+
       default:
         initializeMenuBar();
 

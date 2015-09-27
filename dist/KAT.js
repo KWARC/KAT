@@ -1793,7 +1793,6 @@ KAT.sidebar.init = function(store){
       mode = "Annotation";
       break;
 
-    case "Reading":
     default:
       mode = "Reading";
   }
@@ -1965,7 +1964,8 @@ KAT.sidebar.toggleAnnotationMode = function(label){
 
   KAT.sidebar.annotationMode = label;
   KAT.sidebar.modeButtonGroup.find(".active").removeClass("active");
-  KAT.sidebar.modeButtonGroup.find("[mode='"+label+"']").addClass("active");;
+  KAT.sidebar.modeButtonGroup.find("[mode='"+label+"']").addClass("active");
+  KAT.storage.Annotation.prototype.unfocus();
 
 };
 
@@ -2694,6 +2694,7 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
   // and re-validate the form
   revalidate();
 };
+
 
 KAT.storage = {};
 
@@ -3879,6 +3880,58 @@ KAT.storage.Annotation.prototype.flash = function(){
   });
 };
 
+/**
+* Brings an annotation into focus.
+*
+* @function
+* @name focus
+* @memberof KAT.storage.Annotation
+*/
+
+KAT.storage.Annotation.prototype.focus = function() {
+
+  //idea: create 2 divs, one which covers annotation and another one that covers all of screen
+
+  var selection = this.store.gui
+   .getRange(this.selection).stop();
+  
+  selection.css({ "position": "relative",
+                  "z-index": 2
+                });
+
+  var div = $("<div>")
+    .addClass("focus")
+    .css({"width": "100%",
+          "height": "100%",
+          "background": "#000",
+          "opacity": 1,
+          "top": 0,
+          "left": 0,
+          "position": "fixed",
+          "z-index": 1
+    })
+    .appendTo("body");
+
+  KAT.storage.Annotation.prototype.unfocus = function(){
+    div.remove();
+    selection.css({ "position": "",
+                    "z-index": 0
+                  });
+    KAT.storage.Annotation.prototype.unfocus = function(){};
+  };
+
+};
+
+/**
+* Reverts the changes of KAT.storage.Annotation.prototype.focus
+*
+* @function
+* @name unfocus
+* @memberof KAT.storage.Annotation
+*/
+
+KAT.storage.Annotation.prototype.unfocus = function(){};
+
 KAT.module = {
   /* Module Info / Meta Data */
   info:{
@@ -4034,7 +4087,16 @@ KAT.module = {
       break; // end case Annotation; refactor code!!!
 
       case "Review":
-      case "Reading": 
+        initializeMenuBar();
+
+        var annotations = this.store.findfromElement(target);
+
+        if(annotations.length > 0) {
+          annotations[0].focus();
+        }
+
+        break;
+
       default:
         initializeMenuBar();
 

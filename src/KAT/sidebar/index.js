@@ -30,7 +30,6 @@ KAT.sidebar.init = function(store){
       mode = "Annotation";
       break;
 
-    case "Reading":
     default:
       mode = "Reading";
   }
@@ -202,7 +201,8 @@ KAT.sidebar.toggleAnnotationMode = function(label){
 
   KAT.sidebar.annotationMode = label;
   KAT.sidebar.modeButtonGroup.find(".active").removeClass("active");
-  KAT.sidebar.modeButtonGroup.find("[mode='"+label+"']").addClass("active");;
+  KAT.sidebar.modeButtonGroup.find("[mode='"+label+"']").addClass("active");
+  KAT.storage.Annotation.prototype.unfocus();
 
 };
 

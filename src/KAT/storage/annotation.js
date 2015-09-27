@@ -12,6 +12,7 @@
 * @class
 */
 
+
 KAT.storage.Annotation = function(store, selection, concept, values, id){
 
   /**
@@ -683,3 +684,55 @@ KAT.storage.Annotation.prototype.flash = function(){
     me.updateDrawing();
   });
 };
+
+/**
+* Brings an annotation into focus.
+*
+* @function
+* @name focus
+* @memberof KAT.storage.Annotation
+*/
+
+KAT.storage.Annotation.prototype.focus = function() {
+
+  //idea: create 2 divs, one which covers annotation and another one that covers all of screen
+
+  var selection = this.store.gui
+   .getRange(this.selection).stop();
+  
+  selection.css({ "position": "relative",
+                  "z-index": 2
+                });
+
+  var div = $("<div>")
+    .addClass("focus")
+    .css({"width": "100%",
+          "height": "100%",
+          "background": "#000",
+          "opacity": 1,
+          "top": 0,
+          "left": 0,
+          "position": "fixed",
+          "z-index": 1
+    })
+    .appendTo("body");
+
+  KAT.storage.Annotation.prototype.unfocus = function(){
+    div.remove();
+    selection.css({ "position": "",
+                    "z-index": 0
+                  });
+    KAT.storage.Annotation.prototype.unfocus = function(){};
+  };
+
+};
+
+/**
+* Reverts the changes of KAT.storage.Annotation.prototype.focus
+*
+* @function
+* @name unfocus
+* @memberof KAT.storage.Annotation
+*/
+
+KAT.storage.Annotation.prototype.unfocus = function(){};
