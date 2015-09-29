@@ -17,6 +17,8 @@ KAT.sidebar = {};
 */
 KAT.sidebar.init = function(store){
 
+  this.store = store;
+
   //mode of the sidebar.
   var mode;
 
@@ -199,10 +201,20 @@ KAT.sidebar.toggleSidebar = function(){
 */
 KAT.sidebar.toggleAnnotationMode = function(label){
 
+  if(KAT.sidebar.annotationMode == "Review") {
+    //remove specific menu
+    KAT.storage.Annotation.prototype.unfocus();
+    KAT.sidebar.removeReviewForm();
+
+  }
+
   KAT.sidebar.annotationMode = label;
   KAT.sidebar.modeButtonGroup.find(".active").removeClass("active");
   KAT.sidebar.modeButtonGroup.find("[mode='"+label+"']").addClass("active");
-  KAT.storage.Annotation.prototype.unfocus();
+
+  if(label == "Review")
+    KAT.sidebar.generateReviewForm(this.store);
+
 
 };
 

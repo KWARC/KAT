@@ -27,7 +27,7 @@ div.scrollingDiv{
     width: 500px;
     font: 12px Arial, Helvetica, sans-serif;
     color: #333333;
-    z-index: 2;
+    z-index: 3;
     overflow: scroll;
     text-align: center;
 }
@@ -55,7 +55,7 @@ div.scrollingDiv{
     background: #999999;
     color: #CECECE;
     margin-left: 2px;
-    z-index: 3;
+    z-index: 4;
 }
 .collapseToggle:hover {
     background: #EEBB00;

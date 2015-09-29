@@ -1780,6 +1780,8 @@ KAT.sidebar = {};
 */
 KAT.sidebar.init = function(store){
 
+  this.store = store;
+
   //mode of the sidebar.
   var mode;
 
@@ -1962,10 +1964,20 @@ KAT.sidebar.toggleSidebar = function(){
 */
 KAT.sidebar.toggleAnnotationMode = function(label){
 
+  if(KAT.sidebar.annotationMode == "Review") {
+    //remove specific menu
+    KAT.storage.Annotation.prototype.unfocus();
+    KAT.sidebar.removeReviewForm();
+
+  }
+
   KAT.sidebar.annotationMode = label;
   KAT.sidebar.modeButtonGroup.find(".active").removeClass("active");
   KAT.sidebar.modeButtonGroup.find("[mode='"+label+"']").addClass("active");
-  KAT.storage.Annotation.prototype.unfocus();
+
+  if(label == "Review")
+    KAT.sidebar.generateReviewForm(this.store);
+
 
 };
 
@@ -2695,7 +2707,57 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
   revalidate();
 };
 
+KAT.sidebar.generateReviewForm = function(store) {
 
+	var annotationPointer = -1;
+	var annots = store.annotations;
+
+	if(annots.length === 0)
+		return;
+
+	var next = function() {
+		var x = annots[0].unfocus() || undefined;
+		annots[++annotationPointer % annots.length].focus();
+	};
+
+	var prev = function() {
+		var x = annots[0].unfocus() || undefined;
+
+		if(annotationPointer <= 0) {
+			annotationPointer+= annots.length;
+		}
+
+		annots[--annotationPointer % annots.length].focus();
+	};
+
+	var navigation = $("<li>")
+	.addClass("review navigation")
+	.append("Navigate")
+  	.appendTo(".KATMenuItems");
+
+  	var nextButton = $("<button>")
+  	.text("Next")
+  	.click(function() { next(); })
+  	.appendTo(navigation);
+
+  	var previousButton = $("<button>")
+  	.text("Previous")
+  	.click(function() { prev(); })
+  	.appendTo(navigation);
+
+
+  	//initialize with focus on first annotation
+  	next();
+};
+
+KAT.sidebar.removeReviewForm = function() {
+
+	var navigation = $(".review.navigation");
+
+	if(navigation)
+		navigation.remove();
+
+};
 KAT.storage = {};
 
 /**
@@ -3904,7 +3966,7 @@ KAT.storage.Annotation.prototype.focus = function() {
     .css({"width": "100%",
           "height": "100%",
           "background": "#000",
-          "opacity": 1,
+          "opacity": 0.4,
           "top": 0,
           "left": 0,
           "position": "fixed",
@@ -3931,6 +3993,7 @@ KAT.storage.Annotation.prototype.focus = function() {
 */
 
 KAT.storage.Annotation.prototype.unfocus = function(){};
+
 
 KAT.module = {
   /* Module Info / Meta Data */
