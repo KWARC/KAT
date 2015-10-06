@@ -2750,6 +2750,14 @@ KAT.sidebar.generateReviewForm = function(store) {
   	next();
 };
 
+/**
+* Closes Form in the sidebar for Review Mode
+*
+* @function
+* @name removeReviewForm
+* @memberof KAT.sidebar
+*/
+
 KAT.sidebar.removeReviewForm = function() {
 
 	var navigation = $(".review.navigation");
@@ -4151,12 +4159,6 @@ KAT.module = {
 
       case "Review":
         initializeMenuBar();
-
-        var annotations = this.store.findfromElement(target);
-
-        if(annotations.length > 0) {
-          annotations[0].focus();
-        }
 
         break;
 

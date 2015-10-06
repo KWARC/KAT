@@ -161,12 +161,6 @@ KAT.module = {
       case "Review":
         initializeMenuBar();
 
-        var annotations = this.store.findfromElement(target);
-
-        if(annotations.length > 0) {
-          annotations[0].focus();
-        }
-
         break;
 
       default:

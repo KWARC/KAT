@@ -1,3 +1,13 @@
+
+/**
+* Opens Form in the sidebar for Review Mode
+*
+* @param {KAT.Storage.store} storage to retrieve annotations from
+* @function
+* @name generateReviewForm
+* @memberof KAT.sidebar
+*/
+
 KAT.sidebar.generateReviewForm = function(store) {
 
 	var annotationPointer = -1;
@@ -40,6 +50,14 @@ KAT.sidebar.generateReviewForm = function(store) {
   	//initialize with focus on first annotation
   	next();
 };
+
+/**
+* Closes Form in the sidebar for Review Mode
+*
+* @function
+* @name removeReviewForm
+* @memberof KAT.sidebar
+*/
 
 KAT.sidebar.removeReviewForm = function() {
 
