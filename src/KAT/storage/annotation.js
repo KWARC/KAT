@@ -12,6 +12,7 @@
 * @class
 */
 
+
 KAT.storage.Annotation = function(store, selection, concept, values, id){
 
   /**
@@ -399,6 +400,7 @@ KAT.storage.Annotation.prototype.draw = function(){
 
     // get current annotations and store them somewhere
     var current = $me.data("KAT.Annotation.UUID") || [];
+
     var before = current.slice();
 
     // add this annotation and push it to the UUIDs
@@ -459,6 +461,7 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
       $me.removeAttr("title")
       .attr("title", $me.data("KAT.Annotation.orgTitleAttr")) // and set it back to what it was before.
       .removeData("KAT.Annotation.orgTitleAttr")
+      .removeData("KAT.Annotation.content")
       .removeData("KAT.Annotation.hasTCache");
 
     } else {
@@ -468,9 +471,12 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
 
       // for now, just take the first annotation that is bound to the element.
       // TODO: What do we do if there are multiple annotations?
-      var me = store.find(annotations[annotations.length - 1]);
+
+      //for the coloring, just use the last one until we figure things out with the canvas
+      var me = store.find(annotations[annotations.length-1]);
 
       // set the background color to this one
+      // TODO: I think this is where the canvas that Kohlhase mentioned comes into play
       var color = me.concept.displayColour;
 
       // we need to differentiate between MathML and non-mathml nodes here
@@ -506,8 +512,18 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
         .data("KAT.Annotation.orgTitleAttr", $me.attr("title"));
       }
 
-      // and recompute the tooltip.
-      $me.attr("title", me.recomputeTooltip());
+
+      //just compute the tooltip for each element and add all of them into a single annotation
+      var computedTooltip = "";
+      $(annotations).each(function(i, annot){
+        computedTooltip += "<p>"+store.find(annot).recomputeTooltip()+"</p>";
+      });
+
+      // and insert the result
+      $me
+      .removeAttr("title")
+      .data("KAT.Annotation.content", computedTooltip);
+
     }
 
   });
@@ -559,47 +575,93 @@ KAT.storage.Annotation.prototype.recomputeTooltip = function(){
 
   var me = this;
 
-  function getWordsBetweenCurlies(str) {
-    var results = [], re = /{([^}]+)}/g, text;
-    while((text = re.exec(str))?true:false) {
-      results.push(text[1]);
-    }
-    return results;
-  }
+  // the display we will fill with doT.js
+  var display = me.concept.display;
 
-  //find the values to be inserted for {x}
-  var m = getWordsBetweenCurlies(me.concept.display);
-
-  var tmp = document.createElement("div");
-  tmp.innerHTML = me.concept.display;
-  var hovertext = tmp.textContent || tmp.innerText || "";
-
-  var capitalize = function(string) {
-    return string[0].toUpperCase() + string.slice(1).toLowerCase();
+  // a replacer function for backward compatibility.
+  var replacer = function(name){
+    return "{{= "+name+".map(function(val){return val.toString()}).join() }}";
   };
 
-  var getJSONValue;
-  $.each(m, function(j, key) {
+  var keys = [];
 
-    //check 'type' of the field
-    switch(me.concept.fields[j].type) {
+  for(var key in me.values){
+    if(me.values.hasOwnProperty(key)){
 
-      case KAT.model.Field.types.reference:
-        break;
+      // backward compatibilize the old display tag.
+      display = display
+        .replace("{"+key+"}", replacer(key))
+        .replace("{"+key.toLowerCase()+"}", replacer(key));
 
-      case KAT.model.Field.types.select:
-        getJSONValue = me.values[key][0].value || "";
-        hovertext = hovertext.replace("{"+m[j]+"}", getJSONValue);
-        break;
+      //add the key to the variables
+      keys.push(key);
+    }
+  }
 
-      default: //text; just print the text.
-        getJSONValue = me.values[key] || me.values[capitalize(key)] || "";
-        hovertext = hovertext.replace("{"+m[j]+"}", getJSONValue);
+  // a cache for annotation objects.
+  var annotationCache = {};
+
+
+  var mapAnnotationObject = function(annot){
+
+    // if we have already mapped this, return it form the cache.
+    // this will prevent bugs with circular annotations.
+    if(annotationCache.hasOwnProperty(annot.uuid)){
+      return annotationCache[annot.uuid];
     }
 
-  });
+    // an object of parameters we store in the cache.
+    var valObject = annotationCache[annot.uuid] = {};
 
-  return hovertext;
+    // map each of the fields.
+    $.each(annot.concept.fields, function(i, field) {
+      if(field.type === KAT.model.Field.types.reference){
+        // for references, point to the sub object.
+        valObject[field.value] = annot.values[field.value].map(mapAnnotationObject);
+      } else if(field.type === KAT.model.Field.types.select) {
+        // for selects, use the name (or value if it is missing)
+        valObject[field.value] = annot.values[field.value].map(function(field){return field.name || field.value; });
+      } else {
+        // for texts, simply make a copy of the strings.
+        valObject[field.value] = annot.values[field.value].slice();
+      }
+    });
+
+    // and store the self reference as an "_"
+    valObject._ = annot;
+
+    // now return the object. 
+    return valObject;
+  };
+
+  // get a nice json object.
+  var myObj = mapAnnotationObject(me);
+
+  // and build a template.
+  var fn = doT.template(
+    display,
+    {
+      evaluate:    /\{\{([\s\S]+?(\}?)+)\}\}/g,
+			interpolate: /\{\{=([\s\S]+?)\}\}/g,
+			encode:      /\{\{!([\s\S]+?)\}\}/g,
+			use:         /\{\{#([\s\S]+?)\}\}/g,
+			useParams:   /(^|[^\w$])def(?:\.|\[[\'\"])([\w$\.]+)(?:[\'\"]\])?\s*\:\s*([\w$\.]+|\"[^\"]+\"|\'[^\']+\'|\{[^\}]+\})/g,
+			define:      /\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,
+			defineParams:/^\s*([\w$]+):([\s\S]+)/,
+			conditional: /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
+			iterate:     /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
+			varname: "_,"+keys.join(","),
+			strip:		true,
+			append:		true,
+			selfcontained: false,
+			doNotSkipEncoded: false
+    }
+  );
+
+  var args = [myObj].concat(keys.map(function(k, i){return myObj[k]; }));
+
+  // and fill in the function.
+  return fn.apply(this, args);
 };
 
 /**
@@ -622,3 +684,56 @@ KAT.storage.Annotation.prototype.flash = function(){
     me.updateDrawing();
   });
 };
+
+/**
+* Brings an annotation into focus.
+*
+* @function
+* @name focus
+* @memberof KAT.storage.Annotation
+*/
+
+KAT.storage.Annotation.prototype.focus = function() {
+
+  //idea: create 2 divs, one which covers annotation and another one that covers all of screen
+
+  var selection = this.store.gui
+   .getRange(this.selection).stop();
+  
+  selection.css({ "position": "relative",
+                  "z-index": 2
+                });
+
+  var div = $("<div>")
+    .addClass("focus")
+    .css({"width": "100%",
+          "height": "100%",
+          "background": "#000",
+          "opacity": 0.4,
+          "top": 0,
+          "left": 0,
+          "position": "fixed",
+          "z-index": 1
+    })
+    .appendTo("body");
+
+  KAT.storage.Annotation.prototype.unfocus = function(){
+    div.remove();
+    selection.css({ "position": "",
+                    "z-index": 0
+                  });
+    KAT.storage.Annotation.prototype.unfocus = function(){};
+  };
+
+};
+
+/**
+* Reverts the changes of KAT.storage.Annotation.prototype.focus
+*
+* @function
+* @name unfocus
+* @memberof KAT.storage.Annotation
+*/
+
+KAT.storage.Annotation.prototype.unfocus = function(){};
+

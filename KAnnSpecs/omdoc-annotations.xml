@@ -22,13 +22,13 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 		</field>
 		<display>
 			<template>
-				<b>Symbol:</b> <br/> {name}
+				<b>Symbol</b> with name '{{=Name}}'
 			</template>
 		</display>
 	</concept>
 
 	<concept name="Definition" rdftype="o:GeneralDefinition">
-		<field name="for" type="reference" rdfpred="o:defines">
+		<field name="For" type="reference" rdfpred="o:defines">
 			<value>For</value>
 			<referencedType>Symbol</referencedType>
 			<number atleast="1" atmost="10"/>
@@ -53,7 +53,7 @@ $HeadURL: https://svn.kwarc.info/repos/lamapun/projects/kat/omdoc-annotations.xm
 		</field>
 		<display>
 			<template>
-				<b>Definition</b> <br/> {for} <br/> {type}
+				<b>Definition</b> for symbol '{{=For[0].Name}}' of type {{=type[0]}}
 			</template>
 		</display>
 	</concept>

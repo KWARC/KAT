@@ -27,7 +27,7 @@ div.scrollingDiv{
     width: 500px;
     font: 12px Arial, Helvetica, sans-serif;
     color: #333333;
-    z-index: 2;
+    z-index: 3;
     overflow: scroll;
     text-align: center;
 }
@@ -49,12 +49,13 @@ div.scrollingDiv{
 }
 
 .collapseToggle {
+    position: relative;
     float: left;
     border: 1px solid #999999;
     background: #999999;
     color: #CECECE;
     margin-left: 2px;
-    z-index: 3;
+    z-index: 4;
 }
 .collapseToggle:hover {
     background: #EEBB00;
@@ -119,4 +120,26 @@ div.scrollingDiv{
     -webkit-border-radius:6px 0 6px 6px;
     -moz-border-radius:6px 0 6px 6px;
     border-radius:6px 0 6px 6px;
+}
+
+/* styling select-dropdown */
+
+select {
+    padding: 5px 8px;
+    width: 130%;
+    border: none;
+    box-shadow: none;
+    background: white;
+    background-image: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+
+/* only for IE */
+@media screen and (min-width: 0\0) {
+  select {
+    background: none;
+  }
 }

@@ -13,9 +13,9 @@ src.att = attribute src {xsd:anyURI}
 ## URIs.
 ## the class of the annotated objects
 rdftype.att = attribute rdftype {xsd:QName}
-## the predicate 
+## the predicate
 rdfpred.att = attribute rdfpred {xsd:QName}
-## and the object (only for 
+## and the object (only for
 rdfobj.att = attribute rdfobj {xsd:QName}
 
 ## an annotation KAnnSpec for mathematical documents.
@@ -61,7 +61,7 @@ referencedType = element referencedType {text}
 ## an option in a selection field, it is characterized by a value and its documentation
 ## (which can be shown to the annotator in the dialogue)
 ## One of the options is made the default option, by a default attribute
-option.model = rdfobj.att? & value & documentation? 
+option.model = rdfobj.att? & value & documentation?
 option = element option {option.model}
 defaultoption = element defaultoption {option.model}
 
@@ -72,7 +72,7 @@ atl.att = attribute atleast {xsd:nonNegativeInteger}
 atm.att = attribute atmost {xsd:nonNegativeInteger}
 number = element number {atl.att?&atm.att?}
 
-## the display specifies the how to show annotations.
+## the display specifies the how to show annotations. 
 display = element display {template & css? & javascript?}
 
 ## a HTML5 template for displaying the field in a display. {foo} is instantiated

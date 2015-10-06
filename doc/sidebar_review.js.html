@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: index.js</title>
+    <title>JSDoc: Source: sidebar/review.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: index.js</h1>
+    <h1 class="page-title">Source: sidebar/review.js</h1>
 
     
 
@@ -26,18 +26,75 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
-* Namespace everything used by KAT
-* @namespace
-* @alias KAT
+            <pre class="prettyprint source linenums"><code>
+/**
+* Opens Form in the sidebar for Review Mode
+*
+* @param {KAT.Storage.store} storage to retrieve annotations from
+* @function
+* @name generateReviewForm
+* @memberof KAT.sidebar
 */
 
-// define the global KAT object we will export.
-var KAT = exports;
+KAT.sidebar.generateReviewForm = function(store) {
 
-// make sure $ is available as jQuery.
-var $ = global.jQuery;
-</code></pre>
+	var annotationPointer = -1;
+	var annots = store.annotations;
+
+	if(annots.length === 0)
+		return;
+
+	var next = function() {
+		var x = annots[0].unfocus() || undefined;
+		annots[++annotationPointer % annots.length].focus();
+	};
+
+	var prev = function() {
+		var x = annots[0].unfocus() || undefined;
+
+		if(annotationPointer &lt;= 0) {
+			annotationPointer+= annots.length;
+		}
+
+		annots[--annotationPointer % annots.length].focus();
+	};
+
+	var navigation = $("&lt;li>")
+	.addClass("review navigation")
+	.append("Navigate")
+  	.appendTo(".KATMenuItems");
+
+  	var nextButton = $("&lt;button>")
+  	.text("Next")
+  	.click(function() { next(); })
+  	.appendTo(navigation);
+
+  	var previousButton = $("&lt;button>")
+  	.text("Previous")
+  	.click(function() { prev(); })
+  	.appendTo(navigation);
+
+
+  	//initialize with focus on first annotation
+  	next();
+};
+
+/**
+* Closes Form in the sidebar for Review Mode
+*
+* @function
+* @name removeReviewForm
+* @memberof KAT.sidebar
+*/
+
+KAT.sidebar.removeReviewForm = function() {
+
+	var navigation = $(".review.navigation");
+
+	if(navigation)
+		navigation.remove();
+
+};</code></pre>
         </article>
     </section>
 

@@ -24,10 +24,15 @@ KAT.sidebar.generateAnnotationReferenceField = function(current, env, wrapper, a
   .appendTo(wrapper);
 
   validations.push(function(){
-    // TODO: validate properly.
-    // for now everything is just fine.
-    wrapper.addClass("has-success");
-    return true;
+    // remove all error classes
+    wrapper.removeClass("has-success has-error");
+
+    // validate if we can reference a field.
+    var validates = wrapper.find("select").eq(0).find("option").length > 0; 
+
+    wrapper.addClass(validates?"has-success":"has-error");
+
+    return validates;
   });
 
   // a group for selects
@@ -47,7 +52,6 @@ KAT.sidebar.generateAnnotationReferenceField = function(current, env, wrapper, a
       .appendTo(container);
 
       // create a new select to add the options to
-      // TODO: Make it bootstrap
       newField = jQuery("<select>")
       .addClass("form-control")
       .appendTo(selectGroup);
@@ -202,7 +206,6 @@ KAT.sidebar.generateAnnotationSelectField = function(current, wrapper, annotatio
       .appendTo(container);
 
       // create a new select to add the options to
-      // TODO: Make it bootstrap
       newField = jQuery("<select>")
       .addClass("form-control")
       .appendTo(selectGroup);

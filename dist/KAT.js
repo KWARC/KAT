@@ -1780,23 +1780,55 @@ KAT.sidebar = {};
 */
 KAT.sidebar.init = function(store){
 
+  this.store = store;
+
   //mode of the sidebar.
   var mode;
 
-  //which is either Reading or Annotation.
-  if (KAT.sidebar.annotationMode){ mode = "Reading"; } else { mode = "Annotation"; }
+  switch(KAT.sidebar.annotationMode) {
+    
+    case "Review":
+      mode = "Review";
+      break;
+
+    case "Annotation":
+      mode = "Annotation";
+      break;
+
+    default:
+      mode = "Reading";
+  }
 
   //get the height of the window.
   var winHeight = jQuery(window).height();
 
   //create a button to toggle annotations
-  KAT.sidebar.modeToggleButton = $("<button>")
-  .text("Enable " +mode+ " Mode")
-  .addClass("annotationToggle")
-  .addClass("btn btn-default").BS()
-  .click(function(){
-    KAT.sidebar.toggleAnnotationMode();
-  });
+  KAT.sidebar.modeButtonGroup = $("<div>")
+    .addClass("btn-group")
+    .attr("role", "group");
+   //.BS();
+
+  //add Button for each option
+  ["Reading", "Annotation", "Review"].map( function(label) {
+
+    //set some button initially active
+    var isActive = "";
+    if(label == mode) 
+      isActive = "active";
+
+    $("<button>")
+      .attr("type", "button")
+      .attr("mode", label)
+      .addClass("btn btn-default")
+      .addClass(isActive)
+      .text(label)
+      .click(function(){
+        KAT.sidebar.toggleAnnotationMode(label);
+      })
+      .appendTo(KAT.sidebar.modeButtonGroup);
+
+  } );
+
 
   //create collapsible sidebar
   var collapsibleMenu = jQuery('<div>').addClass("collapsible")
@@ -1809,7 +1841,7 @@ KAT.sidebar.init = function(store){
     $("<div>").addClass("KATSidebarButtons")
     .append(
       //to toggle the mode
-      KAT.sidebar.modeToggleButton,
+      KAT.sidebar.modeButtonGroup,
       "<br/>",
       "<br/>",
 
@@ -1848,7 +1880,8 @@ KAT.sidebar.init = function(store){
   var collapsibleToggle = $("<button>")
   .text("«")
   .addClass("collapseToggle")
-  .css({'height': winHeight-10})
+  .css({'height': winHeight-10, 
+        'z-index': 100})
   .click(KAT.sidebar.toggleSidebar).prependTo(collapsibleMenu); //adapted from init function below
 
   //Make sure to show the sidebar
@@ -1929,17 +1962,23 @@ KAT.sidebar.toggleSidebar = function(){
 * @name toggleAnnotationMode
 * @memberof KAT.sidebar
 */
-KAT.sidebar.toggleAnnotationMode = function(){
-  KAT.sidebar.annotationMode = !KAT.sidebar.annotationMode;
+KAT.sidebar.toggleAnnotationMode = function(label){
 
-  var mode;
-  if (KAT.sidebar.annotationMode){
-    mode = "Reading";
-    KAT.sidebar.showSidebar();
-  } else {
-    mode = "Annotation";
+  if(KAT.sidebar.annotationMode == "Review") {
+    //remove specific menu
+    KAT.storage.Annotation.prototype.unfocus();
+    KAT.sidebar.removeReviewForm();
+
   }
-  KAT.sidebar.modeToggleButton.text("Enable " +mode+ " Mode");
+
+  KAT.sidebar.annotationMode = label;
+  KAT.sidebar.modeButtonGroup.find(".active").removeClass("active");
+  KAT.sidebar.modeButtonGroup.find("[mode='"+label+"']").addClass("active");
+
+  if(label == "Review")
+    KAT.sidebar.generateReviewForm(this.store);
+
+
 };
 
 /**
@@ -1982,17 +2021,10 @@ KAT.sidebar.animateLength = 100;
 * Contains a reference to the mode toggle button in the sidebar.
 *
 * @type {jQuery}
-* @name KAT.sidebar.modeToggleButton
+* @name KAT.sidebar.modeButtonGroup
 */
-KAT.sidebar.modeToggleButton = undefined;
+KAT.sidebar.modeButtonGroup = undefined;
 
-/**
-* Contains a reference to the mode toggle button in the sidebar.
-*
-* @type {jQuery}
-* @name KAT.sidebar.modeToggleButton
-*/
-KAT.sidebar.modeToggleButton = undefined;
 
 KAT.sidebar.generateAnnotationReferenceField = function(current, env, wrapper, annotation, validations, revalidate){
 
@@ -2006,10 +2038,15 @@ KAT.sidebar.generateAnnotationReferenceField = function(current, env, wrapper, a
   .appendTo(wrapper);
 
   validations.push(function(){
-    // TODO: validate properly.
-    // for now everything is just fine.
-    wrapper.addClass("has-success");
-    return true;
+    // remove all error classes
+    wrapper.removeClass("has-success has-error");
+
+    // validate if we can reference a field.
+    var validates = wrapper.find("select").eq(0).find("option").length > 0; 
+
+    wrapper.addClass(validates?"has-success":"has-error");
+
+    return validates;
   });
 
   // a group for selects
@@ -2029,7 +2066,6 @@ KAT.sidebar.generateAnnotationReferenceField = function(current, env, wrapper, a
       .appendTo(container);
 
       // create a new select to add the options to
-      // TODO: Make it bootstrap
       newField = jQuery("<select>")
       .addClass("form-control")
       .appendTo(selectGroup);
@@ -2184,7 +2220,6 @@ KAT.sidebar.generateAnnotationSelectField = function(current, wrapper, annotatio
       .appendTo(container);
 
       // create a new select to add the options to
-      // TODO: Make it bootstrap
       newField = jQuery("<select>")
       .addClass("form-control")
       .appendTo(selectGroup);
@@ -2672,6 +2707,65 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
   revalidate();
 };
 
+KAT.sidebar.generateReviewForm = function(store) {
+
+	var annotationPointer = -1;
+	var annots = store.annotations;
+
+	if(annots.length === 0)
+		return;
+
+	var next = function() {
+		var x = annots[0].unfocus() || undefined;
+		annots[++annotationPointer % annots.length].focus();
+	};
+
+	var prev = function() {
+		var x = annots[0].unfocus() || undefined;
+
+		if(annotationPointer <= 0) {
+			annotationPointer+= annots.length;
+		}
+
+		annots[--annotationPointer % annots.length].focus();
+	};
+
+	var navigation = $("<li>")
+	.addClass("review navigation")
+	.append("Navigate")
+  	.appendTo(".KATMenuItems");
+
+  	var nextButton = $("<button>")
+  	.text("Next")
+  	.click(function() { next(); })
+  	.appendTo(navigation);
+
+  	var previousButton = $("<button>")
+  	.text("Previous")
+  	.click(function() { prev(); })
+  	.appendTo(navigation);
+
+
+  	//initialize with focus on first annotation
+  	next();
+};
+
+/**
+* Closes Form in the sidebar for Review Mode
+*
+* @function
+* @name removeReviewForm
+* @memberof KAT.sidebar
+*/
+
+KAT.sidebar.removeReviewForm = function() {
+
+	var navigation = $(".review.navigation");
+
+	if(navigation)
+		navigation.remove();
+
+};
 KAT.storage = {};
 
 /**
@@ -3571,6 +3665,7 @@ KAT.storage.Annotation.prototype.draw = function(){
 
     // get current annotations and store them somewhere
     var current = $me.data("KAT.Annotation.UUID") || [];
+
     var before = current.slice();
 
     // add this annotation and push it to the UUIDs
@@ -3631,6 +3726,7 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
       $me.removeAttr("title")
       .attr("title", $me.data("KAT.Annotation.orgTitleAttr")) // and set it back to what it was before.
       .removeData("KAT.Annotation.orgTitleAttr")
+      .removeData("KAT.Annotation.content")
       .removeData("KAT.Annotation.hasTCache");
 
     } else {
@@ -3640,9 +3736,12 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
 
       // for now, just take the first annotation that is bound to the element.
       // TODO: What do we do if there are multiple annotations?
-      var me = store.find(annotations[annotations.length - 1]);
+
+      //for the coloring, just use the last one until we figure things out with the canvas
+      var me = store.find(annotations[annotations.length-1]);
 
       // set the background color to this one
+      // TODO: I think this is where the canvas that Kohlhase mentioned comes into play
       var color = me.concept.displayColour;
 
       // we need to differentiate between MathML and non-mathml nodes here
@@ -3678,8 +3777,18 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
         .data("KAT.Annotation.orgTitleAttr", $me.attr("title"));
       }
 
-      // and recompute the tooltip.
-      $me.attr("title", me.recomputeTooltip());
+
+      //just compute the tooltip for each element and add all of them into a single annotation
+      var computedTooltip = "";
+      $(annotations).each(function(i, annot){
+        computedTooltip += "<p>"+store.find(annot).recomputeTooltip()+"</p>";
+      });
+
+      // and insert the result
+      $me
+      .removeAttr("title")
+      .data("KAT.Annotation.content", computedTooltip);
+
     }
 
   });
@@ -3731,47 +3840,93 @@ KAT.storage.Annotation.prototype.recomputeTooltip = function(){
 
   var me = this;
 
-  function getWordsBetweenCurlies(str) {
-    var results = [], re = /{([^}]+)}/g, text;
-    while((text = re.exec(str))?true:false) {
-      results.push(text[1]);
-    }
-    return results;
-  }
+  // the display we will fill with doT.js
+  var display = me.concept.display;
 
-  //find the values to be inserted for {x}
-  var m = getWordsBetweenCurlies(me.concept.display);
-
-  var tmp = document.createElement("div");
-  tmp.innerHTML = me.concept.display;
-  var hovertext = tmp.textContent || tmp.innerText || "";
-
-  var capitalize = function(string) {
-    return string[0].toUpperCase() + string.slice(1).toLowerCase();
+  // a replacer function for backward compatibility.
+  var replacer = function(name){
+    return "{{= "+name+".map(function(val){return val.toString()}).join() }}";
   };
 
-  var getJSONValue;
-  $.each(m, function(j, key) {
+  var keys = [];
 
-    //check 'type' of the field
-    switch(me.concept.fields[j].type) {
+  for(var key in me.values){
+    if(me.values.hasOwnProperty(key)){
 
-      case KAT.model.Field.types.reference:
-        break;
+      // backward compatibilize the old display tag.
+      display = display
+        .replace("{"+key+"}", replacer(key))
+        .replace("{"+key.toLowerCase()+"}", replacer(key));
 
-      case KAT.model.Field.types.select:
-        getJSONValue = me.values[key][0].value || "";
-        hovertext = hovertext.replace("{"+m[j]+"}", getJSONValue);
-        break;
+      //add the key to the variables
+      keys.push(key);
+    }
+  }
 
-      default: //text; just print the text.
-        getJSONValue = me.values[key] || me.values[capitalize(key)] || "";
-        hovertext = hovertext.replace("{"+m[j]+"}", getJSONValue);
+  // a cache for annotation objects.
+  var annotationCache = {};
+
+
+  var mapAnnotationObject = function(annot){
+
+    // if we have already mapped this, return it form the cache.
+    // this will prevent bugs with circular annotations.
+    if(annotationCache.hasOwnProperty(annot.uuid)){
+      return annotationCache[annot.uuid];
     }
 
-  });
+    // an object of parameters we store in the cache.
+    var valObject = annotationCache[annot.uuid] = {};
 
-  return hovertext;
+    // map each of the fields.
+    $.each(annot.concept.fields, function(i, field) {
+      if(field.type === KAT.model.Field.types.reference){
+        // for references, point to the sub object.
+        valObject[field.value] = annot.values[field.value].map(mapAnnotationObject);
+      } else if(field.type === KAT.model.Field.types.select) {
+        // for selects, use the name (or value if it is missing)
+        valObject[field.value] = annot.values[field.value].map(function(field){return field.name || field.value; });
+      } else {
+        // for texts, simply make a copy of the strings.
+        valObject[field.value] = annot.values[field.value].slice();
+      }
+    });
+
+    // and store the self reference as an "_"
+    valObject._ = annot;
+
+    // now return the object. 
+    return valObject;
+  };
+
+  // get a nice json object.
+  var myObj = mapAnnotationObject(me);
+
+  // and build a template.
+  var fn = doT.template(
+    display,
+    {
+      evaluate:    /\{\{([\s\S]+?(\}?)+)\}\}/g,
+			interpolate: /\{\{=([\s\S]+?)\}\}/g,
+			encode:      /\{\{!([\s\S]+?)\}\}/g,
+			use:         /\{\{#([\s\S]+?)\}\}/g,
+			useParams:   /(^|[^\w$])def(?:\.|\[[\'\"])([\w$\.]+)(?:[\'\"]\])?\s*\:\s*([\w$\.]+|\"[^\"]+\"|\'[^\']+\'|\{[^\}]+\})/g,
+			define:      /\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,
+			defineParams:/^\s*([\w$]+):([\s\S]+)/,
+			conditional: /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
+			iterate:     /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
+			varname: "_,"+keys.join(","),
+			strip:		true,
+			append:		true,
+			selfcontained: false,
+			doNotSkipEncoded: false
+    }
+  );
+
+  var args = [myObj].concat(keys.map(function(k, i){return myObj[k]; }));
+
+  // and fill in the function.
+  return fn.apply(this, args);
 };
 
 /**
@@ -3794,6 +3949,59 @@ KAT.storage.Annotation.prototype.flash = function(){
     me.updateDrawing();
   });
 };
+
+/**
+* Brings an annotation into focus.
+*
+* @function
+* @name focus
+* @memberof KAT.storage.Annotation
+*/
+
+KAT.storage.Annotation.prototype.focus = function() {
+
+  //idea: create 2 divs, one which covers annotation and another one that covers all of screen
+
+  var selection = this.store.gui
+   .getRange(this.selection).stop();
+  
+  selection.css({ "position": "relative",
+                  "z-index": 2
+                });
+
+  var div = $("<div>")
+    .addClass("focus")
+    .css({"width": "100%",
+          "height": "100%",
+          "background": "#000",
+          "opacity": 0.4,
+          "top": 0,
+          "left": 0,
+          "position": "fixed",
+          "z-index": 1
+    })
+    .appendTo("body");
+
+  KAT.storage.Annotation.prototype.unfocus = function(){
+    div.remove();
+    selection.css({ "position": "",
+                    "z-index": 0
+                  });
+    KAT.storage.Annotation.prototype.unfocus = function(){};
+  };
+
+};
+
+/**
+* Reverts the changes of KAT.storage.Annotation.prototype.focus
+*
+* @function
+* @name unfocus
+* @memberof KAT.storage.Annotation
+*/
+
+KAT.storage.Annotation.prototype.unfocus = function(){};
+
 
 KAT.module = {
   /* Module Info / Meta Data */
@@ -3833,7 +4041,7 @@ KAT.module = {
     this.store = new KAT.storage.Store(this.gui, documentURL);
 
     // initialise the tooltip libarary
-    JOBADInstance.element.tooltip();
+    // JOBADInstance.element.tooltip({html:true});
 
     // initialise the gui
     KAT.sidebar.init(this.store);
@@ -3842,7 +4050,12 @@ KAT.module = {
     collection.init();
     collection.assignDisplayColour();
   },
-
+  hoverText: function(target){
+    var content = target.data("KAT.Annotation.content");
+    if(content){
+      return $("<div>").html(content);
+    }
+  },
   contextMenuEntries: function(target, JOBADInstance){
     // reference to self
     var me = this;
@@ -3863,103 +4076,96 @@ KAT.module = {
     // the menu to return
     var menu = {};
 
-    var initializeMenuBar = function(annotationModeBool) {
+    var initializeMenuBar = function() {
 
-      //Menu item 1 : Toggle annotation mode
-      if(annotationModeBool) {
-        menu[annot_modeOff] = function(){
-          KAT.sidebar.toggleAnnotationMode();
-        };
-      } else {
-        menu[annot_modeOn] = function(){
-          KAT.sidebar.toggleAnnotationMode();
-        };
-      }
-
-      //Menu item 2
+      //Menu item 1
       menu[storage_import] = me.store.showImportDialog.bind(me.store);
 
-      //Menu item 3
+      //Menu item 2
       menu[storage_export] = me.store.showExportDialog.bind(me.store);
 
   };
 
-    // Case A: Annotation Mode is disabled
-    if (!KAT.sidebar.annotationMode){
+    
+    switch(KAT.sidebar.annotationMode) {
 
-      initializeMenuBar(false);
+      case "Annotation":
 
-    }
+        var selection;
 
-    // Case B: Annotation Mode is enabled
-    else {
-
-      var selection;
-
-      try{
-        selection = this.gui.getSelection();
-      } catch(e){}
+        try{
+          selection = this.gui.getSelection();
+        } catch(e){}
 
 
-      if(!selection || selection.isEmpty){
+        if(!selection || selection.isEmpty){
 
-        /* Subcase B1:
-          User has not made a selection
-          Right click is not on an annotation
-        */
+          /* Subcase B1:
+            User has not made a selection
+            Right click is not on an annotation
+          */
+          initializeMenuBar();
 
-        initializeMenuBar(true);
+          //find all the annotations.
+          var annots = this.store.findfromElement(target);
 
-        //find all the annotations.
-        var annots = this.store.findfromElement(target);
+          if(annots.length !== 0){
+            menu = {};
+            menu[text_remove] = {};
+            menu[text_highlight] = {};
+            menu[text_edit] = {};
 
-        if(annots.length !== 0){
-          menu = {};
-          menu[text_remove] = {};
-          menu[text_highlight] = {};
-          menu[text_edit] = {};
+            //iterate over all the annotations.
+            $.each(annots, function(i, annotation){
 
-          //iterate over all the annotations.
-          $.each(annots, function(i, annotation){
+              //Menu item B2.1 : Delete annotation
+              menu[text_remove][annotation.uuid] = function(){
+                annotation.delete();
+              };
 
-            //Menu item B2.1 : Delete annotation
-            menu[text_remove][annotation.uuid] = function(){
-              annotation.delete();
-            };
+              //Menu item B2.2 : Highlight annotation
+              menu[text_highlight][annotation.uuid] = function(){
+                annotation.flash();
+              };
 
-            //Menu item B2.2 : Highlight annotation
-            menu[text_highlight][annotation.uuid] = function(){
-              annotation.flash();
-            };
+              //Menu item B2.3 : Edit annotation
+              menu[text_edit][annotation.uuid] = function(){
+                annotation.edit(me);
+              };
+            });
+          }
+        } else {
+          /* Subcase B3:
+            User has made a selection
+          */
+           if(!(selection.start == selection.end && selection.startOffset == selection.endOffset)){
 
-            //Menu item B2.3 : Edit annotation
-            menu[text_edit][annotation.uuid] = function(){
-              annotation.edit(me);
-            };
-          });
+            //Menu item B3.n : Add annotation with nth concept found in Kannspec
+            $.each(this.gui.collection.findConcepts(), function(index, concept){
+              menu[concept.getFullName()] = function(){
+                // create a new annotation form.
+                KAT.sidebar.generateAnnotationForm(
+                  me,
+                  me.store.addNew.bind(me.store),
+                  undefined,
+                  selection,
+                  concept
+                );
+              };
+            });
+          }
         }
-      } else {
-        /* Subcase B3:
-          User has made a selection
-        */
-         if(!(selection.start == selection.end && selection.startOffset == selection.endOffset)){
+      break; // end case Annotation; refactor code!!!
 
-          //Menu item B3.n : Add annotation with nth concept found in Kannspec
-          $.each(this.gui.collection.findConcepts(), function(index, concept){
-            menu[concept.getFullName()] = function(){
-              // create a new annotation form.
-              KAT.sidebar.generateAnnotationForm(
-                me,
-                me.store.addNew.bind(me.store),
-                undefined,
-                selection,
-                concept
-              );
-            };
-          });
-        }
+      case "Review":
+        initializeMenuBar();
+
+        break;
+
+      default:
+        initializeMenuBar();
+
       }
-    }
 
     //return the menu.
     return menu;
@@ -3968,6 +4174,147 @@ KAT.module = {
 
 
 JOBAD.modules.register(KAT.module); //register the module.
+
+// doT.js
+// 2011-2014, Laura Doktorova, https://github.com/olado/doT
+// Licensed under the MIT license.
+
+(function() {
+	"use strict";
+
+	var doT = {
+		version: "1.0.3",
+		templateSettings: {
+			evaluate:    /\{\{([\s\S]+?(\}?)+)\}\}/g,
+			interpolate: /\{\{=([\s\S]+?)\}\}/g,
+			encode:      /\{\{!([\s\S]+?)\}\}/g,
+			use:         /\{\{#([\s\S]+?)\}\}/g,
+			useParams:   /(^|[^\w$])def(?:\.|\[[\'\"])([\w$\.]+)(?:[\'\"]\])?\s*\:\s*([\w$\.]+|\"[^\"]+\"|\'[^\']+\'|\{[^\}]+\})/g,
+			define:      /\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,
+			defineParams:/^\s*([\w$]+):([\s\S]+)/,
+			conditional: /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
+			iterate:     /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
+			varname:	"it",
+			strip:		true,
+			append:		true,
+			selfcontained: false,
+			doNotSkipEncoded: false
+		},
+		template: undefined, //fn, compile template
+		compile:  undefined  //fn, for express
+	}, _globals;
+
+	doT.encodeHTMLSource = function(doNotSkipEncoded) {
+		var encodeHTMLRules = { "&": "&#38;", "<": "&#60;", ">": "&#62;", '"': "&#34;", "'": "&#39;", "/": "&#47;" },
+			matchHTML = doNotSkipEncoded ? /[&<>"'\/]/g : /&(?!#?\w+;)|<|>|"|'|\//g;
+		return function(code) {
+			return code ? code.toString().replace(matchHTML, function(m) {return encodeHTMLRules[m] || m;}) : "";
+		};
+	};
+
+	_globals = (function(){ return this || (0,eval)("this"); }());
+
+	if (typeof module !== "undefined" && module.exports) {
+		module.exports = doT;
+	} else if (typeof define === "function" && define.amd) {
+		define(function(){return doT;});
+	} else {
+		_globals.doT = doT;
+	}
+
+	var startend = {
+		append: { start: "'+(",      end: ")+'",      startencode: "'+encodeHTML(" },
+		split:  { start: "';out+=(", end: ");out+='", startencode: "';out+=encodeHTML(" }
+	}, skip = /$^/;
+
+	function resolveDefs(c, block, def) {
+		return ((typeof block === "string") ? block : block.toString())
+		.replace(c.define || skip, function(m, code, assign, value) {
+			if (code.indexOf("def.") === 0) {
+				code = code.substring(4);
+			}
+			if (!(code in def)) {
+				if (assign === ":") {
+					if (c.defineParams) value.replace(c.defineParams, function(m, param, v) {
+						def[code] = {arg: param, text: v};
+					});
+					if (!(code in def)) def[code]= value;
+				} else {
+					new Function("def", "def['"+code+"']=" + value)(def);
+				}
+			}
+			return "";
+		})
+		.replace(c.use || skip, function(m, code) {
+			if (c.useParams) code = code.replace(c.useParams, function(m, s, d, param) {
+				if (def[d] && def[d].arg && param) {
+					var rw = (d+":"+param).replace(/'|\\/g, "_");
+					def.__exp = def.__exp || {};
+					def.__exp[rw] = def[d].text.replace(new RegExp("(^|[^\\w$])" + def[d].arg + "([^\\w$])", "g"), "$1" + param + "$2");
+					return s + "def.__exp['"+rw+"']";
+				}
+			});
+			var v = new Function("def", "return " + code)(def);
+			return v ? resolveDefs(c, v, def) : v;
+		});
+	}
+
+	function unescape(code) {
+		return code.replace(/\\('|\\)/g, "$1").replace(/[\r\t\n]/g, " ");
+	}
+
+	doT.template = function(tmpl, c, def) {
+		c = c || doT.templateSettings;
+		var cse = c.append ? startend.append : startend.split, needhtmlencode, sid = 0, indv,
+			str  = (c.use || c.define) ? resolveDefs(c, tmpl, def || {}) : tmpl;
+
+		str = ("var out='" + (c.strip ? str.replace(/(^|\r|\n)\t* +| +\t*(\r|\n|$)/g," ")
+					.replace(/\r|\n|\t|\/\*[\s\S]*?\*\//g,""): str)
+			.replace(/'|\\/g, "\\$&")
+			.replace(c.interpolate || skip, function(m, code) {
+				return cse.start + unescape(code) + cse.end;
+			})
+			.replace(c.encode || skip, function(m, code) {
+				needhtmlencode = true;
+				return cse.startencode + unescape(code) + cse.end;
+			})
+			.replace(c.conditional || skip, function(m, elsecase, code) {
+				return elsecase ?
+					(code ? "';}else if(" + unescape(code) + "){out+='" : "';}else{out+='") :
+					(code ? "';if(" + unescape(code) + "){out+='" : "';}out+='");
+			})
+			.replace(c.iterate || skip, function(m, iterate, vname, iname) {
+				if (!iterate) return "';} } out+='";
+				sid+=1; indv=iname || "i"+sid; iterate=unescape(iterate);
+				return "';var arr"+sid+"="+iterate+";if(arr"+sid+"){var "+vname+","+indv+"=-1,l"+sid+"=arr"+sid+".length-1;while("+indv+"<l"+sid+"){"
+					+vname+"=arr"+sid+"["+indv+"+=1];out+='";
+			})
+			.replace(c.evaluate || skip, function(m, code) {
+				return "';" + unescape(code) + "out+='";
+			})
+			+ "';return out;")
+			.replace(/\n/g, "\\n").replace(/\t/g, '\\t').replace(/\r/g, "\\r")
+			.replace(/(\s|;|\}|^|\{)out\+='';/g, '$1').replace(/\+''/g, "");
+			//.replace(/(\s|;|\}|^|\{)out\+=''\+/g,'$1out+=');
+
+		if (needhtmlencode) {
+			if (!c.selfcontained && _globals && !_globals._encodeHTML) _globals._encodeHTML = doT.encodeHTMLSource(c.doNotSkipEncoded);
+			str = "var encodeHTML = typeof _encodeHTML !== 'undefined' ? _encodeHTML : ("
+				+ doT.encodeHTMLSource.toString() + "(" + (c.doNotSkipEncoded || '') + "));"
+				+ str;
+		}
+		try {
+			return new Function(c.varname, str);
+		} catch (e) {
+			if (typeof console !== "undefined") console.log("Could not create a template function: " + str);
+			throw e;
+		}
+	};
+
+	doT.compile = function(tmpl, def) {
+		return doT.template(tmpl, null, def);
+	};
+}());
 
 })({},function(){return this}());
 //# sourceMappingURL=KAT.js.map

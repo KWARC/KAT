@@ -22,12 +22,17 @@ module.exports = function(grunt) {
 
     'src/KAT/sidebar/index.js',
     'src/KAT/sidebar/editor.js',
+    'src/KAT/sidebar/review.js',
 
     'src/KAT/storage/index.js',
     'src/KAT/storage/store.js',
     'src/KAT/storage/annotation.js',
 
     'src/KAT/module/index.js'
+  ];
+
+  var lib_files = [
+    'src/KAT/libs/doT.js'
   ];
 
   //The dist files.
@@ -51,7 +56,7 @@ module.exports = function(grunt) {
         footer: "\n})({},function(){return this}());"
       },
       dist: {
-        src: source_files,
+        src: source_files.concat(lib_files),
         dest: dist_files[0]
       },
     },
@@ -88,7 +93,7 @@ module.exports = function(grunt) {
         wrap: "KAT",
       },
       build: {
-        src: source_files,
+        src: source_files.concat(lib_files),
         dest: dist_files[1]
       }
     },

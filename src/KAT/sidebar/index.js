@@ -17,23 +17,55 @@ KAT.sidebar = {};
 */
 KAT.sidebar.init = function(store){
 
+  this.store = store;
+
   //mode of the sidebar.
   var mode;
 
-  //which is either Reading or Annotation.
-  if (KAT.sidebar.annotationMode){ mode = "Reading"; } else { mode = "Annotation"; }
+  switch(KAT.sidebar.annotationMode) {
+    
+    case "Review":
+      mode = "Review";
+      break;
+
+    case "Annotation":
+      mode = "Annotation";
+      break;
+
+    default:
+      mode = "Reading";
+  }
 
   //get the height of the window.
   var winHeight = jQuery(window).height();
 
   //create a button to toggle annotations
-  KAT.sidebar.modeToggleButton = $("<button>")
-  .text("Enable " +mode+ " Mode")
-  .addClass("annotationToggle")
-  .addClass("btn btn-default").BS()
-  .click(function(){
-    KAT.sidebar.toggleAnnotationMode();
-  });
+  KAT.sidebar.modeButtonGroup = $("<div>")
+    .addClass("btn-group")
+    .attr("role", "group");
+   //.BS();
+
+  //add Button for each option
+  ["Reading", "Annotation", "Review"].map( function(label) {
+
+    //set some button initially active
+    var isActive = "";
+    if(label == mode) 
+      isActive = "active";
+
+    $("<button>")
+      .attr("type", "button")
+      .attr("mode", label)
+      .addClass("btn btn-default")
+      .addClass(isActive)
+      .text(label)
+      .click(function(){
+        KAT.sidebar.toggleAnnotationMode(label);
+      })
+      .appendTo(KAT.sidebar.modeButtonGroup);
+
+  } );
+
 
   //create collapsible sidebar
   var collapsibleMenu = jQuery('<div>').addClass("collapsible")
@@ -46,7 +78,7 @@ KAT.sidebar.init = function(store){
     $("<div>").addClass("KATSidebarButtons")
     .append(
       //to toggle the mode
-      KAT.sidebar.modeToggleButton,
+      KAT.sidebar.modeButtonGroup,
       "<br/>",
       "<br/>",
 
@@ -85,7 +117,8 @@ KAT.sidebar.init = function(store){
   var collapsibleToggle = $("<button>")
   .text("«")
   .addClass("collapseToggle")
-  .css({'height': winHeight-10})
+  .css({'height': winHeight-10, 
+        'z-index': 100})
   .click(KAT.sidebar.toggleSidebar).prependTo(collapsibleMenu); //adapted from init function below
 
   //Make sure to show the sidebar
@@ -166,17 +199,23 @@ KAT.sidebar.toggleSidebar = function(){
 * @name toggleAnnotationMode
 * @memberof KAT.sidebar
 */
-KAT.sidebar.toggleAnnotationMode = function(){
-  KAT.sidebar.annotationMode = !KAT.sidebar.annotationMode;
+KAT.sidebar.toggleAnnotationMode = function(label){
 
-  var mode;
-  if (KAT.sidebar.annotationMode){
-    mode = "Reading";
-    KAT.sidebar.showSidebar();
-  } else {
-    mode = "Annotation";
+  if(KAT.sidebar.annotationMode == "Review") {
+    //remove specific menu
+    KAT.storage.Annotation.prototype.unfocus();
+    KAT.sidebar.removeReviewForm();
+
   }
-  KAT.sidebar.modeToggleButton.text("Enable " +mode+ " Mode");
+
+  KAT.sidebar.annotationMode = label;
+  KAT.sidebar.modeButtonGroup.find(".active").removeClass("active");
+  KAT.sidebar.modeButtonGroup.find("[mode='"+label+"']").addClass("active");
+
+  if(label == "Review")
+    KAT.sidebar.generateReviewForm(this.store);
+
+
 };
 
 /**
@@ -219,14 +258,7 @@ KAT.sidebar.animateLength = 100;
 * Contains a reference to the mode toggle button in the sidebar.
 *
 * @type {jQuery}
-* @name KAT.sidebar.modeToggleButton
+* @name KAT.sidebar.modeButtonGroup
 */
-KAT.sidebar.modeToggleButton = undefined;
+KAT.sidebar.modeButtonGroup = undefined;
 
-/**
-* Contains a reference to the mode toggle button in the sidebar.
-*
-* @type {jQuery}
-* @name KAT.sidebar.modeToggleButton
-*/
-KAT.sidebar.modeToggleButton = undefined;
