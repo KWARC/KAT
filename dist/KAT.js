@@ -2715,9 +2715,24 @@ KAT.sidebar.generateReviewForm = function(store) {
 	if(annots.length === 0)
 		return;
 
+	var appendAnnotationText = function() {
+
+		var x = $(".review.annotationtext").remove() || undefined;
+
+		//just compute the tooltip and show it in the review menu
+		var computedTooltip = annots[annotationPointer % annots.length].recomputeTooltip();
+
+	  	$("<div>")
+	  	.addClass("review annotationtext")
+	  	.html("Annotation: " + computedTooltip)
+	  	.appendTo(navigation);
+
+	}
+
 	var next = function() {
 		var x = annots[0].unfocus() || undefined;
 		annots[++annotationPointer % annots.length].focus();
+		appendAnnotationText();
 	};
 
 	var prev = function() {
@@ -2728,11 +2743,13 @@ KAT.sidebar.generateReviewForm = function(store) {
 		}
 
 		annots[--annotationPointer % annots.length].focus();
+		appendAnnotationText();
 	};
+
 
 	var navigation = $("<li>")
 	.addClass("review navigation")
-	.append("Navigate")
+	.append("Navigate: ")
   	.appendTo(".KATMenuItems");
 
   	var nextButton = $("<button>")
@@ -2743,8 +2760,7 @@ KAT.sidebar.generateReviewForm = function(store) {
   	var previousButton = $("<button>")
   	.text("Previous")
   	.click(function() { prev(); })
-  	.appendTo(navigation);
-
+  	.appendTo(navigation);	
 
   	//initialize with focus on first annotation
   	next();
@@ -3741,7 +3757,6 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
       var me = store.find(annotations[annotations.length-1]);
 
       // set the background color to this one
-      // TODO: I think this is where the canvas that Kohlhase mentioned comes into play
       var color = me.concept.displayColour;
 
       // we need to differentiate between MathML and non-mathml nodes here

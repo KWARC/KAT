@@ -16,9 +16,24 @@ KAT.sidebar.generateReviewForm = function(store) {
 	if(annots.length === 0)
 		return;
 
+	var appendAnnotationText = function() {
+
+		var x = $(".review.annotationtext").remove() || undefined;
+
+		//just compute the tooltip and show it in the review menu
+		var computedTooltip = annots[annotationPointer % annots.length].recomputeTooltip();
+
+	  	$("<div>")
+	  	.addClass("review annotationtext")
+	  	.html("Annotation: " + computedTooltip)
+	  	.appendTo(navigation);
+
+	}
+
 	var next = function() {
 		var x = annots[0].unfocus() || undefined;
 		annots[++annotationPointer % annots.length].focus();
+		appendAnnotationText();
 	};
 
 	var prev = function() {
@@ -29,11 +44,13 @@ KAT.sidebar.generateReviewForm = function(store) {
 		}
 
 		annots[--annotationPointer % annots.length].focus();
+		appendAnnotationText();
 	};
+
 
 	var navigation = $("<li>")
 	.addClass("review navigation")
-	.append("Navigate")
+	.append("Navigate: ")
   	.appendTo(".KATMenuItems");
 
   	var nextButton = $("<button>")
@@ -44,8 +61,7 @@ KAT.sidebar.generateReviewForm = function(store) {
   	var previousButton = $("<button>")
   	.text("Previous")
   	.click(function() { prev(); })
-  	.appendTo(navigation);
-
+  	.appendTo(navigation);	
 
   	//initialize with focus on first annotation
   	next();

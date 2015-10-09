@@ -476,7 +476,6 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
       var me = store.find(annotations[annotations.length-1]);
 
       // set the background color to this one
-      // TODO: I think this is where the canvas that Kohlhase mentioned comes into play
       var color = me.concept.displayColour;
 
       // we need to differentiate between MathML and non-mathml nodes here
