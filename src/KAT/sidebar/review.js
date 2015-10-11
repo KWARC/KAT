@@ -28,7 +28,7 @@ KAT.sidebar.generateReviewForm = function(store) {
 	  	.html("Annotation: " + computedTooltip)
 	  	.appendTo(navigation);
 
-	}
+	};
 
 	var next = function() {
 		var x = annots[0].unfocus() || undefined;

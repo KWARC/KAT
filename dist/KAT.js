@@ -1866,6 +1866,19 @@ KAT.sidebar.init = function(store){
       }),
       "<br/>",
       "<br/>",
+
+      //to 
+      $("<button>")
+      .text("Report Issue")
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+        //open github issues page
+        window.open("https://github.com/KWARC/KAT/issues", "_blank");
+      }),
+      "<br/>",
+      "<br/>",
+
       "<br/>"
     ),
     $("<ul>").addClass("KATMenuItems")
@@ -1873,14 +1886,14 @@ KAT.sidebar.init = function(store){
   .css({
     'position':'fixed',
     'right': KAT.sidebar.hideWidth,
-    'height': winHeight-10
+    'height': winHeight
   }).prependTo("body");
 
   // create button to toggle collapse and resurection of sidemenu and define properties
   var collapsibleToggle = $("<button>")
   .text("«")
   .addClass("collapseToggle")
-  .css({'height': winHeight-10, 
+  .css({'height': winHeight-20, 
         'z-index': 100})
   .click(KAT.sidebar.toggleSidebar).prependTo(collapsibleMenu); //adapted from init function below
 
@@ -1895,11 +1908,11 @@ KAT.sidebar.init = function(store){
     collapsibleMenu.css({
       'position':'fixed',
       'right': KAT.sidebar.hideWidth,
-      'height': winHeight-10
+      'height': winHeight
     });
 
     collapsibleToggle.css({
-      'height': winHeight-10
+      'height': winHeight-20
     });
   });
 };
@@ -2727,7 +2740,7 @@ KAT.sidebar.generateReviewForm = function(store) {
 	  	.html("Annotation: " + computedTooltip)
 	  	.appendTo(navigation);
 
-	}
+	};
 
 	var next = function() {
 		var x = annots[0].unfocus() || undefined;
