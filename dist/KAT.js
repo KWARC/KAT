@@ -3992,17 +3992,31 @@ KAT.storage.Annotation.prototype.focus = function() {
 
   var selection = this.store.gui
    .getRange(this.selection).stop();
-  
-  selection.css({ "position": "relative",
-                  "z-index": 2
-                });
+
+  var wrapper = $("<div>")
+    .addClass("focusWrapper");
+
+  selection.closest("div").css({  
+      "position": "relative",
+      "z-index": 2
+        })
+  .addClass("focused");
+
+
+  $(".focused").find("*").not(selection).each(function(index) {
+    var mathCheck = typeof $(this).attr("xml:id") !== typeof undefined && $(this).attr("xml:id") !== false; //make function out of this
+    if(mathCheck && $(this).attr("mathbackground") !== undefined) { //if it is a math element which is annotated-> change the color
+      var oldColor = $(this).attr("mathbackground");
+      $(this).attr("oldColor", oldColor);
+      $(this).attr("mathbackground", "#999999"); //ATTENTION: Color hardcoded; has to match color of the .focus-div
+    }
+  });
 
   var div = $("<div>")
     .addClass("focus")
     .css({"width": "100%",
           "height": "100%",
-          "background": "#000",
-          "opacity": 0.4,
+          "background": 'rgba(0,0,0,0.4)',
           "top": 0,
           "left": 0,
           "position": "fixed",
@@ -4012,9 +4026,23 @@ KAT.storage.Annotation.prototype.focus = function() {
 
   KAT.storage.Annotation.prototype.unfocus = function(){
     div.remove();
-    selection.css({ "position": "",
-                    "z-index": 0
-                  });
+
+    //remove the overlay color and go back to old colors
+    $(".focused").find("*").not(selection).each(function(index) {
+    var mathCheck = typeof $(this).attr("xml:id") !== typeof undefined && $(this).attr("xml:id") !== false; //make function out of this
+    if(mathCheck) {
+      var oldColor = $(this).attr("oldColor");
+      $(this).removeAttr("oldColor");
+      $(this).attr("mathbackground", oldColor);
+    }
+  });
+
+
+    $(".focused")
+      .css({  "position": "",
+              "z-index": 0
+    })
+      .removeClass("focused");
     KAT.storage.Annotation.prototype.unfocus = function(){};
   };
 
