@@ -3988,6 +3988,25 @@ KAT.storage.Annotation.prototype.flash = function(){
 
 KAT.storage.Annotation.prototype.focus = function() {
 
+  /* both taken from http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb/5624139#5624139 */
+  function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+  }
+
+  function rgbToHex(r, g, b) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+  }
+
+  function colorBlending(canvasColor, elementColor, alpha) {
+    //return ((1-alpha)*elementColor + canvasColor);
+    return Math.round(canvasColor * (1-alpha));
+  }
+
   //idea: create 2 divs, one which covers annotation and another one that covers all of screen
 
   var selection = this.store.gui
@@ -4002,14 +4021,18 @@ KAT.storage.Annotation.prototype.focus = function() {
         })
   .addClass("focused");
 
+  
 
   $(".focused").find("*").not(selection).each(function(index) {
     var mathCheck = typeof $(this).attr("xml:id") !== typeof undefined && $(this).attr("xml:id") !== false; //make function out of this
     if(mathCheck && $(this).attr("mathbackground") !== undefined) { //if it is a math element which is annotated-> change the color
       var oldColor = $(this).attr("mathbackground");
       $(this).attr("oldColor", oldColor);
-      $(this).attr("mathbackground", "#999999"); //ATTENTION: Color hardcoded; has to match color of the .focus-div
-    }
+      var newColor = rgbToHex(colorBlending(parseInt(hexToRgb(oldColor).r), parseInt(hexToRgb("#FFFFFF").r), 0.4),
+                              colorBlending(parseInt(hexToRgb(oldColor).g), parseInt(hexToRgb("#FFFFFF").g), 0.4),
+                              colorBlending(parseInt(hexToRgb(oldColor).b), parseInt(hexToRgb("#FFFFFF").b), 0.4));
+      $(this).attr("mathbackground", newColor); //ATTENTION: Color hardcoded; has to match color of the .focus-div
+    }                                              //try to add the colors instead
   });
 
   var div = $("<div>")
@@ -4030,7 +4053,7 @@ KAT.storage.Annotation.prototype.focus = function() {
     //remove the overlay color and go back to old colors
     $(".focused").find("*").not(selection).each(function(index) {
     var mathCheck = typeof $(this).attr("xml:id") !== typeof undefined && $(this).attr("xml:id") !== false; //make function out of this
-    if(mathCheck) {
+    if(mathCheck && $(this).attr("mathbackground") !== undefined) {
       var oldColor = $(this).attr("oldColor");
       $(this).removeAttr("oldColor");
       $(this).attr("mathbackground", oldColor);
