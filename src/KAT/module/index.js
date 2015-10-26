@@ -41,11 +41,13 @@ KAT.module = {
     //create a store with the right documentURL
     this.store = new KAT.storage.Store(this.gui, documentURL);
 
+    this.reviewStore = new KAT.reviewStore.Store();
+
     // initialise the tooltip libarary
     // JOBADInstance.element.tooltip({html:true});
 
     // initialise the gui
-    KAT.sidebar.init(this.store);
+    KAT.sidebar.init(this.store, this.reviewStore);
 
     //initialise gui collection
     collection.init();

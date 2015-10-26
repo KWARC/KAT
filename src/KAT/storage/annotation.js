@@ -761,6 +761,10 @@ KAT.storage.Annotation.prototype.focus = function() {
     })
     .appendTo("body");
 
+    //center the selected annotation on the screen
+    $(window).scrollTop(selection.scrollTop());
+    console.log($(".focused").scrollTop());
+
   KAT.storage.Annotation.prototype.unfocus = function(){
     div.remove();
 

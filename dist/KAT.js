@@ -1772,15 +1772,17 @@ KAT.sidebar = {};
 * Set up and insert Annotation Toolkit sidemenu
 *
 * @param {KAT.Storage.Store} store - Annotation Store to bind to.
+* @param {KAT.reviewStore.store} reviewStore - Store that maps reviews to annotation id's
 *
 * @function
 * @static
 * @name init
 * @memberof KAT.sidebar
 */
-KAT.sidebar.init = function(store){
+KAT.sidebar.init = function(store, reviewStore){
 
   this.store = store;
+  this.reviewStore = reviewStore;
 
   //mode of the sidebar.
   var mode;
@@ -1989,7 +1991,7 @@ KAT.sidebar.toggleAnnotationMode = function(label){
   KAT.sidebar.modeButtonGroup.find("[mode='"+label+"']").addClass("active");
 
   if(label == "Review")
-    KAT.sidebar.generateReviewForm(this.store);
+    KAT.sidebar.generateReviewForm();
 
 
 };
@@ -2720,25 +2722,24 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
   revalidate();
 };
 
-KAT.sidebar.generateReviewForm = function(store) {
+KAT.sidebar.generateReviewForm = function() {
+
+	console.log(this.reviewStore);
+
+	var annotationText;
 
 	var annotationPointer = -1;
-	var annots = store.annotations;
+	var annots = this.store.annotations;
 
 	if(annots.length === 0)
 		return;
 
 	var appendAnnotationText = function() {
 
-		var x = $(".review.annotationtext").remove() || undefined;
-
 		//just compute the tooltip and show it in the review menu
 		var computedTooltip = annots[annotationPointer % annots.length].recomputeTooltip();
 
-	  	$("<div>")
-	  	.addClass("review annotationtext")
-	  	.html("Annotation: " + computedTooltip)
-	  	.appendTo(navigation);
+	  	annotationText.html("Annotation: " + computedTooltip);
 
 	};
 
@@ -2761,19 +2762,57 @@ KAT.sidebar.generateReviewForm = function(store) {
 
 
 	var navigation = $("<li>")
-	.addClass("review navigation")
-	.append("Navigate: ")
-  	.appendTo(".KATMenuItems");
+		.addClass("review navigation")
+		.append("Navigate: ")
+	  	.appendTo(".KATMenuItems");
+
+	/**********************************************/
+
+	var navBtnGroup = $("<div>")
+		.addClass("btn-group")
+		.appendTo(navigation);
 
   	var nextButton = $("<button>")
-  	.text("Next")
-  	.click(function() { next(); })
-  	.appendTo(navigation);
+	  	.text("Next")
+	  	.click(function() { next(); })
+	  	.appendTo(navBtnGroup);
 
   	var previousButton = $("<button>")
-  	.text("Previous")
-  	.click(function() { prev(); })
-  	.appendTo(navigation);	
+	  	.text("Previous")
+	  	.click(function() { prev(); })
+	  	.appendTo(navBtnGroup);
+
+	/**********************************************/
+
+		annotationText = $("<div>")
+		.addClass("annotationText")
+		.appendTo(navigation);
+
+	/**********************************************/
+
+	var rateBtnGroup = $("<div>")
+		.addClass("btn-group")
+		.appendTo(navigation);
+
+	var likeButton = $("<button>")
+		.click(function() { reviewStore.annotationReviews[annots[annotationPointer].uuid] = "like"; } )
+		.appendTo(rateBtnGroup);
+
+	$("<span>")
+		.addClass("glyphicon glyphicon-thumbs-up")
+		.appendTo(likeButton);
+
+	var reviewStore = this.reviewStore;
+
+	var dislikeButton = $("<button>")
+		.click(function() { reviewStore.annotationReviews[annots[annotationPointer].uuid] = "dislike"; } )
+		.appendTo(rateBtnGroup);
+
+	$("<span>")
+		.addClass("glyphicon glyphicon-thumbs-down")
+		.appendTo(dislikeButton);
+
+	/**********************************************/
 
   	//initialize with focus on first annotation
   	next();
@@ -4055,6 +4094,10 @@ KAT.storage.Annotation.prototype.focus = function() {
     })
     .appendTo("body");
 
+    //center the selected annotation on the screen
+    $(window).scrollTop(selection.scrollTop());
+    console.log($(".focused").scrollTop());
+
   KAT.storage.Annotation.prototype.unfocus = function(){
     div.remove();
 
@@ -4092,6 +4135,34 @@ KAT.storage.Annotation.prototype.focus = function() {
 KAT.storage.Annotation.prototype.unfocus = function(){};
 
 
+KAT.reviewStore = {};
+
+
+/** Creates a new reviewStore instance.
+*
+*
+* @name KAT.reviewStore.Store
+* @this {KAT.reviewStore.Store}
+* @Alias KAT.reviewStore.Store
+* @class
+*/
+
+KAT.reviewStore.Store = function() {
+
+	/**
+	  * Stores annotationReviews by mapping to annotation-uuids
+	  * Contains string "like" and "dislike" as values
+	  *
+	  * @type {KAT.reviewStore.annotationReviews[]}
+	  * @name KAT.reviewStore.Store#annotationReviews
+	  */
+
+	this.annotationReviews = [];
+
+
+
+
+};
 KAT.module = {
   /* Module Info / Meta Data */
   info:{
@@ -4129,11 +4200,13 @@ KAT.module = {
     //create a store with the right documentURL
     this.store = new KAT.storage.Store(this.gui, documentURL);
 
+    this.reviewStore = new KAT.reviewStore.Store();
+
     // initialise the tooltip libarary
     // JOBADInstance.element.tooltip({html:true});
 
     // initialise the gui
-    KAT.sidebar.init(this.store);
+    KAT.sidebar.init(this.store, this.reviewStore);
 
     //initialise gui collection
     collection.init();

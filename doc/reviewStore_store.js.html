@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: storage/index.js</title>
+    <title>JSDoc: Source: reviewStore/store.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: storage/index.js</h1>
+    <h1 class="page-title">Source: reviewStore/store.js</h1>
 
     
 
@@ -27,64 +27,39 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
-* Namespace for storage used by KAT.
+* Namespace for reviewStore used by KAT.
 * @namespace
-* @alias KAT.storage
+* @alias KAT.reviewStore
 */
-KAT.storage = {};
 
-/**
-  * Resolves a relative url.
-	* @param {string} url	Url to resolve
-	* @param {string} [base = "."]	Optional. Base url to use.
-	* @param {boolean} [isDir = false]	Optional. If set to true, will return a directory name ending with a slash.
+KAT.reviewStore = {};
 
-  * @returns {string} - An absolute (resolved) url.
-  * @function
-  * @static
-  * @name resolve
-  * @memberof KAT.storage
-  */
-KAT.storage.resolve = function(url, base, isDir){
 
-  // read in parameters
-	var resolveWithBase = false;
-	var baseUrl, oldBase, newBase;
+/** Creates a new reviewStore instance.
+*
+*
+* @name KAT.reviewStore.Store
+* @this {KAT.reviewStore.Store}
+* @Alias KAT.reviewStore.Store
+* @class
+*/
 
-  // do we have a base to resolve first?
-	if(typeof base === "string"){
-		resolveWithBase = true;
+KAT.reviewStore.Store = function() {
 
-    //resolve the &lt;base>
-		baseUrl = arguments.callee(base, true);
+	/**
+	  * Stores annotationReviews by mapping to annotation-uuids
+	  * Contains string "like" and "dislike" as values
+	  *
+	  * @type {KAT.reviewStore.annotationReviews[]}
+	  * @name KAT.reviewStore.Store#annotationReviews
+	  */
 
-		oldBase = jQuery("base").detach();
-		newBase = jQuery("&lt;base>").attr("href", baseUrl).appendTo("head");
-	}
+	this.annotationReviews = [];
 
-  // create a link with the right url.
-  // TODO: Cleanup this code.
-  var el = document.createElement('div');
-  el.innerHTML = '&lt;a href="'+jQuery('&lt;span/>').text(url).html()+'">x&lt;/a>';
 
-  // take the absolute url from the div.
-  var absUrl = el.firstChild.href;
 
-  // remove the base if it was added.
-  if(resolveWithBase){
-  	newBase.remove();
-  	oldBase.appendTo("head");
-  }
 
-  // add a slash to the directory.
-  if( (base === true || isDir === true ) &amp;&amp; absUrl[absUrl.length - 1] != "/"){
-    absUrl = absUrl + "/";
-  }
-
-  // return the absolute URL.
-  return absUrl;
-}; 
-</code></pre>
+};</code></pre>
         </article>
     </section>
 

@@ -28,6 +28,8 @@ module.exports = function(grunt) {
     'src/KAT/storage/store.js',
     'src/KAT/storage/annotation.js',
 
+    'src/KAT/reviewStore/store.js',
+
     'src/KAT/module/index.js'
   ];
 

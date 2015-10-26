@@ -2,31 +2,29 @@
 /**
 * Opens Form in the sidebar for Review Mode
 *
-* @param {KAT.Storage.store} storage to retrieve annotations from
 * @function
 * @name generateReviewForm
 * @memberof KAT.sidebar
 */
 
-KAT.sidebar.generateReviewForm = function(store) {
+KAT.sidebar.generateReviewForm = function() {
+
+	console.log(this.reviewStore);
+
+	var annotationText;
 
 	var annotationPointer = -1;
-	var annots = store.annotations;
+	var annots = this.store.annotations;
 
 	if(annots.length === 0)
 		return;
 
 	var appendAnnotationText = function() {
 
-		var x = $(".review.annotationtext").remove() || undefined;
-
 		//just compute the tooltip and show it in the review menu
 		var computedTooltip = annots[annotationPointer % annots.length].recomputeTooltip();
 
-	  	$("<div>")
-	  	.addClass("review annotationtext")
-	  	.html("Annotation: " + computedTooltip)
-	  	.appendTo(navigation);
+	  	annotationText.html("Annotation: " + computedTooltip);
 
 	};
 
@@ -49,19 +47,57 @@ KAT.sidebar.generateReviewForm = function(store) {
 
 
 	var navigation = $("<li>")
-	.addClass("review navigation")
-	.append("Navigate: ")
-  	.appendTo(".KATMenuItems");
+		.addClass("review navigation")
+		.append("Navigate: ")
+	  	.appendTo(".KATMenuItems");
+
+	/**********************************************/
+
+	var navBtnGroup = $("<div>")
+		.addClass("btn-group")
+		.appendTo(navigation);
 
   	var nextButton = $("<button>")
-  	.text("Next")
-  	.click(function() { next(); })
-  	.appendTo(navigation);
+	  	.text("Next")
+	  	.click(function() { next(); })
+	  	.appendTo(navBtnGroup);
 
   	var previousButton = $("<button>")
-  	.text("Previous")
-  	.click(function() { prev(); })
-  	.appendTo(navigation);	
+	  	.text("Previous")
+	  	.click(function() { prev(); })
+	  	.appendTo(navBtnGroup);
+
+	/**********************************************/
+
+		annotationText = $("<div>")
+		.addClass("annotationText")
+		.appendTo(navigation);
+
+	/**********************************************/
+
+	var rateBtnGroup = $("<div>")
+		.addClass("btn-group")
+		.appendTo(navigation);
+
+	var likeButton = $("<button>")
+		.click(function() { reviewStore.annotationReviews[annots[annotationPointer].uuid] = "like"; } )
+		.appendTo(rateBtnGroup);
+
+	$("<span>")
+		.addClass("glyphicon glyphicon-thumbs-up")
+		.appendTo(likeButton);
+
+	var reviewStore = this.reviewStore;
+
+	var dislikeButton = $("<button>")
+		.click(function() { reviewStore.annotationReviews[annots[annotationPointer].uuid] = "dislike"; } )
+		.appendTo(rateBtnGroup);
+
+	$("<span>")
+		.addClass("glyphicon glyphicon-thumbs-down")
+		.appendTo(dislikeButton);
+
+	/**********************************************/
 
   	//initialize with focus on first annotation
   	next();

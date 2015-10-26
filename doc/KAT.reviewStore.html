@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: storage/index.js</title>
+    <title>JSDoc: Namespace: reviewStore</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,76 +17,108 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: storage/index.js</h1>
+    <h1 class="page-title">Namespace: reviewStore</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
-* Namespace for storage used by KAT.
-* @namespace
-* @alias KAT.storage
-*/
-KAT.storage = {};
+        <h2>
+            <span class="ancestors"><a href="KAT.html">KAT</a>.</span>
+        
+        reviewStore
+        </h2>
+        
+    
+</header>
 
-/**
-  * Resolves a relative url.
-	* @param {string} url	Url to resolve
-	* @param {string} [base = "."]	Optional. Base url to use.
-	* @param {boolean} [isDir = false]	Optional. If set to true, will return a directory name ending with a slash.
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description">Namespace for reviewStore used by KAT.</div>
+        
 
-  * @returns {string} - An absolute (resolved) url.
-  * @function
-  * @static
-  * @name resolve
-  * @memberof KAT.storage
-  */
-KAT.storage.resolve = function(url, base, isDir){
+        
 
-  // read in parameters
-	var resolveWithBase = false;
-	var baseUrl, oldBase, newBase;
 
-  // do we have a base to resolve first?
-	if(typeof base === "string"){
-		resolveWithBase = true;
+<dl class="details">
 
-    //resolve the &lt;base>
-		baseUrl = arguments.callee(base, true);
+    
 
-		oldBase = jQuery("base").detach();
-		newBase = jQuery("&lt;base>").attr("href", baseUrl).appendTo("head");
-	}
+    
 
-  // create a link with the right url.
-  // TODO: Cleanup this code.
-  var el = document.createElement('div');
-  el.innerHTML = '&lt;a href="'+jQuery('&lt;span/>').text(url).html()+'">x&lt;/a>';
+    
 
-  // take the absolute url from the div.
-  var absUrl = el.firstChild.href;
+    
 
-  // remove the base if it was added.
-  if(resolveWithBase){
-  	newBase.remove();
-  	oldBase.appendTo("head");
-  }
+    
 
-  // add a slash to the directory.
-  if( (base === true || isDir === true ) &amp;&amp; absUrl[absUrl.length - 1] != "/"){
-    absUrl = absUrl + "/";
-  }
+    
 
-  // return the absolute URL.
-  return absUrl;
-}; 
-</code></pre>
-        </article>
-    </section>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="reviewStore_store.js.html">reviewStore/store.js</a>, <a href="reviewStore_store.js.html#line7">line 7</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="KAT.reviewStore.Store.html">Store</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

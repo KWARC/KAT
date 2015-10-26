@@ -9,15 +9,17 @@ KAT.sidebar = {};
 * Set up and insert Annotation Toolkit sidemenu
 *
 * @param {KAT.Storage.Store} store - Annotation Store to bind to.
+* @param {KAT.reviewStore.store} reviewStore - Store that maps reviews to annotation id's
 *
 * @function
 * @static
 * @name init
 * @memberof KAT.sidebar
 */
-KAT.sidebar.init = function(store){
+KAT.sidebar.init = function(store, reviewStore){
 
   this.store = store;
+  this.reviewStore = reviewStore;
 
   //mode of the sidebar.
   var mode;
@@ -226,7 +228,7 @@ KAT.sidebar.toggleAnnotationMode = function(label){
   KAT.sidebar.modeButtonGroup.find("[mode='"+label+"']").addClass("active");
 
   if(label == "Review")
-    KAT.sidebar.generateReviewForm(this.store);
+    KAT.sidebar.generateReviewForm();
 
 
 };
