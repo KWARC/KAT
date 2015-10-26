@@ -106,7 +106,29 @@ KAT.sidebar.init = function(store, reviewStore){
       "<br/>",
       "<br/>",
 
-      //to 
+      //to import reviews
+      $("<button>")
+      .text("Import Reviews")
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+        reviewStore.importReviews();
+      }),
+      "<br/>",
+      "<br/>",
+
+      // to export reviews
+      $("<button>")
+      .text("Export Reviews")
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+        reviewStore.exportReviews();
+      }),
+      "<br/>",
+      "<br/>",
+
+      //to report an issue
       $("<button>")
       .text("Report Issue")
       .addClass("helpButton")

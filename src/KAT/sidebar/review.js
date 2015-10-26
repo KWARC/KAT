@@ -59,11 +59,13 @@ KAT.sidebar.generateReviewForm = function() {
 
   	var nextButton = $("<button>")
 	  	.text("Next")
+	  	.addClass("btn btn-default")
 	  	.click(function() { next(); })
 	  	.appendTo(navBtnGroup);
 
   	var previousButton = $("<button>")
 	  	.text("Previous")
+	  	.addClass("btn btn-default")
 	  	.click(function() { prev(); })
 	  	.appendTo(navBtnGroup);
 
@@ -80,6 +82,7 @@ KAT.sidebar.generateReviewForm = function() {
 		.appendTo(navigation);
 
 	var likeButton = $("<button>")
+		.addClass("btn btn-default")
 		.click(function() { reviewStore.annotationReviews[annots[annotationPointer].uuid] = "like"; } )
 		.appendTo(rateBtnGroup);
 
@@ -90,6 +93,7 @@ KAT.sidebar.generateReviewForm = function() {
 	var reviewStore = this.reviewStore;
 
 	var dislikeButton = $("<button>")
+		.addClass("btn btn-default")
 		.click(function() { reviewStore.annotationReviews[annots[annotationPointer].uuid] = "dislike"; } )
 		.appendTo(rateBtnGroup);
 
