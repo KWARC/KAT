@@ -9,8 +9,6 @@
 
 KAT.sidebar.generateReviewForm = function() {
 
-	console.log(this.reviewStore);
-
 	var annotationText;
 
 	var annotationPointer = -1;
@@ -28,10 +26,23 @@ KAT.sidebar.generateReviewForm = function() {
 
 	};
 
+
 	var next = function() {
 		var x = annots[0].unfocus() || undefined;
 		annots[++annotationPointer % annots.length].focus();
 		appendAnnotationText();
+
+		removeButtonClass();
+
+		if ( reviewStore.annotationReviews[annots[annotationPointer % annots.length].uuid] == "approve" ) {
+
+			navigation.find(".like").addClass("btn-success");
+
+		} else if ( reviewStore.annotationReviews[annots[annotationPointer % annots.length].uuid] == "disapprove" ) {
+
+			navigation.find(".dislike").addClass("btn-danger");
+
+		}
 	};
 
 	var prev = function() {
@@ -82,8 +93,8 @@ KAT.sidebar.generateReviewForm = function() {
 		.appendTo(navigation);
 
 	var likeButton = $("<button>")
-		.addClass("btn btn-default")
-		.click(function() { reviewStore.annotationReviews[annots[annotationPointer].uuid] = "like"; } )
+		.addClass("btn btn-default like") //remove btn-danger -> function
+		.click(function() { removeButtonClass(); likeButton.addClass("btn-success"); reviewStore.annotationReviews[annots[annotationPointer % annots.length].uuid] = "approve"; } )
 		.appendTo(rateBtnGroup);
 
 	$("<span>")
@@ -93,13 +104,21 @@ KAT.sidebar.generateReviewForm = function() {
 	var reviewStore = this.reviewStore;
 
 	var dislikeButton = $("<button>")
-		.addClass("btn btn-default")
-		.click(function() { reviewStore.annotationReviews[annots[annotationPointer].uuid] = "dislike"; } )
+		.addClass("btn btn-default dislike")
+		.click(function() { removeButtonClass(); dislikeButton.addClass("btn-danger"); reviewStore.annotationReviews[annots[annotationPointer % annots.length].uuid] = "disapprove"; } )
 		.appendTo(rateBtnGroup);
 
 	$("<span>")
 		.addClass("glyphicon glyphicon-thumbs-down")
 		.appendTo(dislikeButton);
+
+
+	var removeButtonClass = function() {
+
+		navigation.find("button").removeClass("btn-danger btn-success");
+
+	};
+
 
 	/**********************************************/
 
