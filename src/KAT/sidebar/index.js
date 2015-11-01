@@ -79,8 +79,19 @@ KAT.sidebar.init = function(store, reviewStore){
     // and a lot of buttons
     $("<div>").addClass("KATSidebarButtons")
     .append(
-      //to toggle the mode
+      //to change the mode
       KAT.sidebar.modeButtonGroup,
+      "<br/>",
+      "<br/>",
+
+      //to import annotations
+      $("<button>")
+      .text("Request new document")
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+          //do stuff to load new document
+      }),
       "<br/>",
       "<br/>",
 

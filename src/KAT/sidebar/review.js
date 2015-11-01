@@ -22,7 +22,7 @@ KAT.sidebar.generateReviewForm = function() {
 		//just compute the tooltip and show it in the review menu
 		var computedTooltip = annots[annotationPointer % annots.length].recomputeTooltip();
 
-	  	annotationText.html("Annotation: " + computedTooltip);
+	  	annotationText.html(computedTooltip);
 
 	};
 
@@ -32,17 +32,7 @@ KAT.sidebar.generateReviewForm = function() {
 		annots[++annotationPointer % annots.length].focus();
 		appendAnnotationText();
 
-		removeButtonClass();
-
-		if ( reviewStore.annotationReviews[annots[annotationPointer % annots.length].uuid] == "approve" ) {
-
-			navigation.find(".like").addClass("btn-success");
-
-		} else if ( reviewStore.annotationReviews[annots[annotationPointer % annots.length].uuid] == "disapprove" ) {
-
-			navigation.find(".dislike").addClass("btn-danger");
-
-		}
+		checkButtonStatus();
 	};
 
 	var prev = function() {
@@ -54,13 +44,21 @@ KAT.sidebar.generateReviewForm = function() {
 
 		annots[--annotationPointer % annots.length].focus();
 		appendAnnotationText();
+
+		checkButtonStatus();
 	};
 
 
 	var navigation = $("<li>")
 		.addClass("review navigation")
-		.append("Navigate: ")
 	  	.appendTo(".KATMenuItems");
+
+
+	/**********************************************/
+
+		annotationText = $("<div>")
+		.addClass("annotationText")
+		.appendTo(navigation);
 
 	/**********************************************/
 
@@ -79,12 +77,6 @@ KAT.sidebar.generateReviewForm = function() {
 	  	.addClass("btn btn-default")
 	  	.click(function() { prev(); })
 	  	.appendTo(navBtnGroup);
-
-	/**********************************************/
-
-		annotationText = $("<div>")
-		.addClass("annotationText")
-		.appendTo(navigation);
 
 	/**********************************************/
 
@@ -116,6 +108,22 @@ KAT.sidebar.generateReviewForm = function() {
 	var removeButtonClass = function() {
 
 		navigation.find("button").removeClass("btn-danger btn-success");
+
+	};
+
+	var checkButtonStatus = function() {
+
+		removeButtonClass();
+
+		if ( reviewStore.annotationReviews[annots[annotationPointer % annots.length].uuid] == "approve" ) {
+
+			likeButton.addClass("btn-success");
+
+		} else if ( reviewStore.annotationReviews[annots[annotationPointer % annots.length].uuid] == "disapprove" ) {
+
+			dislikeButton.addClass("btn-danger");
+
+		}
 
 	};
 

@@ -19,8 +19,8 @@ KAT.reviewStore = {};
 KAT.reviewStore.Store = function() {
 
 	/**
-	  * Stores annotationReviews by mapping to annotation-uuids
-	  * Contains string "like" and "dislike" as values
+	  * Stores annotationReviews by mapping to annotation-uuids.
+	  * Contains string "approve" and "disapprove" as values.
 	  *
 	  * @type {KAT.reviewStore.annotationReviews[]}
 	  * @name KAT.reviewStore.Store#annotationReviews
