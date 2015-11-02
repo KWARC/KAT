@@ -85,7 +85,7 @@ KAT.sidebar.generateReviewForm = function() {
 		.appendTo(navigation);
 
 	var likeButton = $("<button>")
-		.addClass("btn btn-default like") //remove btn-danger -> function
+		.addClass("btn btn-default like")
 		.click(function() { removeButtonClass(); likeButton.addClass("btn-success"); reviewStore.annotationReviews[annots[annotationPointer % annots.length].uuid] = "approve"; } )
 		.appendTo(rateBtnGroup);
 

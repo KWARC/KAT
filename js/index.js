@@ -5,13 +5,22 @@ jQuery.noConflict();
   // on startup, we load KAT and everything up.
   // TODO: Wrap this somewhere else.
   $(function(){
-    getKATStarted("content/sample1.html", "KAnnSpecs/omdoc-annotations.xml");
+    //getKATStarted("content/sample1.html", "KAnnSpecs/omdoc-annotations.xml", getKATStarted);
+    getKATStarted("http://localhost:4000/docs/1311.0043.xhtml", "KAnnSpecs/omdoc-annotations.xml", getKATStarted);
   });
 
-  function getKATStarted(documentURL, KAnnSpecURL){
+  function getKATStarted(documentURL, KAnnSpecURL, callback){
 
     //load the document
     $.get(documentURL, function(documentData){
+
+      //if response is XML it has to be parsed into a string first
+      var xmlCheck = documentData.contentType == "text/xml" || undefined;
+      if(xmlCheck) {
+
+        documentData = (new XMLSerializer()).serializeToString(documentData);
+
+      }
 
       //some contants
       var data = $("#content").html(documentData);
@@ -23,7 +32,7 @@ jQuery.noConflict();
         var myJOBADInstance = new JOBAD(data);
 
         //and set up KAT
-        myJOBADInstance.modules.load('KAT.module', [[KannSpecXML, KAnnSpecURL], documentURL], function(){
+        myJOBADInstance.modules.load('KAT.module', [[KannSpecXML, KAnnSpecURL], documentURL, callback], function(){
           this.Setup();
           var myKAT = this.modules.getLoadedModule("KAT.module");
           console.log("loaded KAT", myKAT);  

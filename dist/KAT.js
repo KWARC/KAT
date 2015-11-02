@@ -1779,7 +1779,7 @@ KAT.sidebar = {};
 * @name init
 * @memberof KAT.sidebar
 */
-KAT.sidebar.init = function(store, reviewStore){
+KAT.sidebar.init = function(store, reviewStore, callback){
 
   this.store = store;
   this.reviewStore = reviewStore;
@@ -1854,6 +1854,17 @@ KAT.sidebar.init = function(store, reviewStore){
       .addClass("btn btn-default")
       .click(function(){
           //do stuff to load new document
+          $.get("http://localhost:4000/get_task", function(data, textStatus, jqXHR) {
+
+              if(textStatus == "200")
+                console.log("success");
+              else
+                console.log("failure");
+
+              console.log(data);
+              callback('http://localhost:4000/'+data.path, 'KAnnSpecs/omdoc-annotations.xml', callback);
+
+          }, "json");
       }),
       "<br/>",
       "<br/>",
@@ -2833,7 +2844,7 @@ KAT.sidebar.generateReviewForm = function() {
 		.appendTo(navigation);
 
 	var likeButton = $("<button>")
-		.addClass("btn btn-default like") //remove btn-danger -> function
+		.addClass("btn btn-default like")
 		.click(function() { removeButtonClass(); likeButton.addClass("btn-success"); reviewStore.annotationReviews[annots[annotationPointer % annots.length].uuid] = "approve"; } )
 		.appendTo(rateBtnGroup);
 
@@ -4302,7 +4313,10 @@ KAT.module = {
     'async': false,
     'hasCleanNamespace': false
   },
-  init: function(JOBADInstance, collection_or_kannspec_and_url, documentURL){
+  init: function(JOBADInstance, collection_or_kannspec_and_url, documentURL, callback){
+    console.log("Given as argument: ");
+    console.log(callback); //callback is the function to be called to instantiate a new KAT with a new document
+
 
     // first of all create a collection
     var collection;
@@ -4328,7 +4342,7 @@ KAT.module = {
     // JOBADInstance.element.tooltip({html:true});
 
     // initialise the gui
-    KAT.sidebar.init(this.store, this.reviewStore);
+    KAT.sidebar.init(this.store, this.reviewStore, callback);
 
     //initialise gui collection
     collection.init();

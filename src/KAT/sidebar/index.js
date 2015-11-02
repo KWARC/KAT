@@ -16,7 +16,7 @@ KAT.sidebar = {};
 * @name init
 * @memberof KAT.sidebar
 */
-KAT.sidebar.init = function(store, reviewStore){
+KAT.sidebar.init = function(store, reviewStore, callback){
 
   this.store = store;
   this.reviewStore = reviewStore;
@@ -91,6 +91,17 @@ KAT.sidebar.init = function(store, reviewStore){
       .addClass("btn btn-default")
       .click(function(){
           //do stuff to load new document
+          $.get("http://localhost:4000/get_task", function(data, textStatus, jqXHR) {
+
+              if(textStatus == "200")
+                console.log("success");
+              else
+                console.log("failure");
+
+              console.log(data);
+              callback('http://localhost:4000/'+data.path, 'KAnnSpecs/omdoc-annotations.xml', callback);
+
+          }, "json");
       }),
       "<br/>",
       "<br/>",

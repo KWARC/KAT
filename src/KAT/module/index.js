@@ -21,7 +21,10 @@ KAT.module = {
     'async': false,
     'hasCleanNamespace': false
   },
-  init: function(JOBADInstance, collection_or_kannspec_and_url, documentURL){
+  init: function(JOBADInstance, collection_or_kannspec_and_url, documentURL, callback){
+    console.log("Given as argument: ");
+    console.log(callback); //callback is the function to be called to instantiate a new KAT with a new document
+
 
     // first of all create a collection
     var collection;
@@ -47,7 +50,7 @@ KAT.module = {
     // JOBADInstance.element.tooltip({html:true});
 
     // initialise the gui
-    KAT.sidebar.init(this.store, this.reviewStore);
+    KAT.sidebar.init(this.store, this.reviewStore, callback);
 
     //initialise gui collection
     collection.init();
