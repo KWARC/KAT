@@ -5,8 +5,7 @@ jQuery.noConflict();
   // on startup, we load KAT and everything up.
   // TODO: Wrap this somewhere else.
   $(function(){
-    //getKATStarted("content/sample1.html", "KAnnSpecs/omdoc-annotations.xml", getKATStarted);
-    getKATStarted("http://localhost:4000/docs/1311.0043.xhtml", "KAnnSpecs/omdoc-annotations.xml", getKATStarted);
+    getKATStarted("content/sample1.html", "KAnnSpecs/omdoc-annotations.xml", getKATStarted);
   });
 
   function getKATStarted(documentURL, KAnnSpecURL, callback){
