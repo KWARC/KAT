@@ -42,6 +42,17 @@ KAT.storage.Store = function(gui, docURL){
   this.annotations = [];
 };
 
+/** Removes all annotations in this Store.
+*
+* @function
+* @instance
+* @name clear
+* @memberof KAT.storage.Store
+*/
+KAT.storage.Store.prototype.clear = function() {
+  this.annotations = [];
+};
+
 /** Adds a new annotation to this Store.
 *
 * @param {KAT.gui.selection} selection - Selection of new Annotation.

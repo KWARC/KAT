@@ -1779,10 +1779,10 @@ KAT.sidebar = {};
 * @name init
 * @memberof KAT.sidebar
 */
-KAT.sidebar.init = function(store, reviewStore, callback){
+KAT.sidebar.init = function(store, reviewStore){
 
-  this.store = store;
-  this.reviewStore = reviewStore;
+  KAT.sidebar.store = store;
+  KAT.sidebar.reviewStore = reviewStore;
 
   //mode of the sidebar.
   var mode;
@@ -1856,13 +1856,34 @@ KAT.sidebar.init = function(store, reviewStore, callback){
           //do stuff to load new document
           $.get("http://localhost:4000/get_task", function(data, textStatus, jqXHR) {
 
-              if(textStatus == "200")
-                console.log("success");
-              else
-                console.log("failure");
+              if(textStatus == "success"){
 
-              console.log(data);
-              callback('http://localhost:4000/'+data.path, 'KAnnSpecs/omdoc-annotations.xml', callback);
+                $.get("http://localhost:4000/"+data.path, function(documentData){
+
+                  //if response is XML it has to be parsed into a string first
+                  var xmlCheck = documentData.contentType == "text/xml" || undefined;
+                  if(xmlCheck) {
+                    documentData = (new XMLSerializer()).serializeToString(documentData);
+                  }
+
+                  store.clear();
+                  reviewStore.clear();
+
+                  $("#content").html(documentData);
+
+                  $(collapsibleMenu).remove();
+
+                  KAT.sidebar.annotationMode = "Reading";
+                  KAT.sidebar.init(store, reviewStore);
+
+                });
+
+
+              } else {
+
+                console.log("failed when trying to retrieve new document from cortex");
+
+              }
 
           }, "json");
       }),
@@ -2994,6 +3015,17 @@ KAT.storage.Store = function(gui, docURL){
   * @type {KAT.storage.Annotation[]}
   * @name KAT.storage.Store#annotations
   */
+  this.annotations = [];
+};
+
+/** Removes all annotations in this Store.
+*
+* @function
+* @instance
+* @name clear
+* @memberof KAT.storage.Store
+*/
+KAT.storage.Store.prototype.clear = function() {
   this.annotations = [];
 };
 
@@ -4237,6 +4269,17 @@ KAT.reviewStore.Store = function() {
 
 };
 
+/** Removes all reviews in this reviewStore.
+*
+* @function
+* @instance
+* @name clear
+* @memberof KAT.reviewStore.Store
+*/
+KAT.reviewStore.Store.prototype.clear = function() {
+  this.annotationReviews = {};
+};
+
 
 /** Export reviews by showing a dialog.
 *
@@ -4342,7 +4385,7 @@ KAT.module = {
     // JOBADInstance.element.tooltip({html:true});
 
     // initialise the gui
-    KAT.sidebar.init(this.store, this.reviewStore, callback);
+    KAT.sidebar.init(this.store, this.reviewStore);
 
     //initialise gui collection
     collection.init();

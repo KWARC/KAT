@@ -31,6 +31,17 @@ KAT.reviewStore.Store = function() {
 
 };
 
+/** Removes all reviews in this reviewStore.
+*
+* @function
+* @instance
+* @name clear
+* @memberof KAT.reviewStore.Store
+*/
+KAT.reviewStore.Store.prototype.clear = function() {
+  this.annotationReviews = {};
+};
+
 
 /** Export reviews by showing a dialog.
 *
