@@ -21,6 +21,57 @@ KAT.sidebar.init = function(store, reviewStore){
   KAT.sidebar.store = store;
   KAT.sidebar.reviewStore = reviewStore;
 
+  var requestNewDocument = function() {
+
+    var stringAnnotationsReviews = JSON.stringify({"store":store.toRDF(), "annotations":reviewStore.toJSON()});
+
+    if(KAT.sidebar.jobID) { //if postPath set, then post annotations and reviews there
+      var response = "id="+KAT.sidebar.jobID+"&content="+stringAnnotationsReviews;
+      var testString = "id=hello, ";//JSON.stringify({id:34});
+      $.post("http://localhost:4000/dumps", response, function(data){
+        if(data.success === true) 
+          console.log("Posted annotations and reviews");
+        else
+          console.log("An error occured while posting annotations and reviews: "+ data); //maybe cancel the request for new document then as well?
+      });
+    }
+
+    $.get("http://localhost:4000/get_task", function(data, textStatus, jqXHR) {
+
+      function loadNewDocument() {
+
+        $.get("http://localhost:4000/"+data.path, function(documentData){
+
+            //if response is XML it has to be parsed into a string first
+            var xmlCheck = documentData.contentType == "text/xml" || undefined;
+            if(xmlCheck) {
+              documentData = (new XMLSerializer()).serializeToString(documentData);
+            }
+
+            store.clear();
+            reviewStore.clear();
+
+            $("#content").html(documentData);
+
+            $(collapsibleMenu).remove();
+
+            KAT.sidebar.annotationMode = "Reading";
+            KAT.sidebar.init(store, reviewStore);
+
+            KAT.sidebar.jobID = data.id;
+        });
+
+      }
+
+      if(textStatus == "success") {
+        loadNewDocument();
+      } else {
+        console.log("failed when trying to retrieve new document from cortex");
+      }
+
+    }, "json");
+  };
+
   //mode of the sidebar.
   var mode;
 
@@ -89,41 +140,9 @@ KAT.sidebar.init = function(store, reviewStore){
       .text("Request new document")
       .addClass("helpButton")
       .addClass("btn btn-default")
-      .click(function(){
-          //do stuff to load new document
-          $.get("http://localhost:4000/get_task", function(data, textStatus, jqXHR) {
-
-              if(textStatus == "success"){
-
-                $.get("http://localhost:4000/"+data.path, function(documentData){
-
-                  //if response is XML it has to be parsed into a string first
-                  var xmlCheck = documentData.contentType == "text/xml" || undefined;
-                  if(xmlCheck) {
-                    documentData = (new XMLSerializer()).serializeToString(documentData);
-                  }
-
-                  store.clear();
-                  reviewStore.clear();
-
-                  $("#content").html(documentData);
-
-                  $(collapsibleMenu).remove();
-
-                  KAT.sidebar.annotationMode = "Reading";
-                  KAT.sidebar.init(store, reviewStore);
-
-                });
-
-
-              } else {
-
-                console.log("failed when trying to retrieve new document from cortex");
-
-              }
-
-          }, "json");
-      }),
+      .click(
+        requestNewDocument
+      ),
       "<br/>",
       "<br/>",
 

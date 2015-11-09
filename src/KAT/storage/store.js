@@ -320,9 +320,6 @@ KAT.storage.Store.prototype.toRDF = function(){
   // get an rdf string
   var rdfString = rdfTopLevel.get(0).outerHTML;
 
-  // TODO: Remove this
-  console.log(rdfString);
-
   return rdfString;
 };
 

@@ -43,6 +43,19 @@ KAT.reviewStore.Store.prototype.clear = function() {
 };
 
 
+/** Returns JSON-string of stored reviews.
+*
+* @returns {string} - JSON of stored reviews.
+* @function
+* @instance
+* @name toJSON
+* @memberof KAT.reviewStore.Store
+*/
+
+KAT.reviewStore.Store.prototype.toJSON = function() {
+	return JSON.stringify(this.annotationReviews);
+};
+
 /** Export reviews by showing a dialog.
 *
 * @function
@@ -53,7 +66,7 @@ KAT.reviewStore.Store.prototype.clear = function() {
 
 KAT.reviewStore.Store.prototype.exportReviews = function() {
 
-	var json = JSON.stringify(this.annotationReviews);
+	var json = this.toJSON();
 
 	//and a textarea with it.
 	  var textarea = $("<textarea rows='20' readonly='readonly'>").addClass("form-control").text(json); 
