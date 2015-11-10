@@ -3064,7 +3064,15 @@ KAT.storage.Store.prototype.addNew = function(selection, concept, values){
   var newAnnotation = new KAT.storage.Annotation(this, selection, concept, values );
 
   //store it in this store.
-  this.annotations.push(newAnnotation);
+  //this loops over all annotations and inserts at the position corresponding to the first occurence in the dom tree
+  var index = 0; 
+  for(var i = 0; i < this.annotations.length; i++) {
+    if((this.gui.getRange(this.annotations[i].selection).stop()[0].offsetTop) <  (this.gui.getRange(selection).stop()[0].offsetTop)) {
+      index++;
+    }
+  } 
+
+  this.annotations.splice(index, 0, newAnnotation);
 
   //and return it.
   return newAnnotation;
