@@ -4210,17 +4210,33 @@ KAT.storage.Annotation.prototype.focus = function() {
   $(".focused").find("*").not(selection).each(function(index) { 
 
     //if it is a math element which is annotated-> change the color
-    if(isMathML(this) && $(this).attr("mathbackground") !== undefined) { 
+    if(isMathML(this) ) {
 
-      var oldColor = $(this).attr("mathbackground");
-      $(this).attr("oldColor", oldColor);
+      if( $(this).attr("mathbackground") !== undefined) { 
 
-      //compute the new color out of old color
-      var newColor = rgbToHex(colorBlending(parseInt(hexToRgb(oldColor).r), parseInt(hexToRgb("#000000").r), 0.4),
+        var oldColor = $(this).attr("mathbackground");
+        $(this).attr("oldcolor", oldColor);
+
+        //compute the new color out of old color
+        var newColor = rgbToHex(colorBlending(parseInt(hexToRgb(oldColor).r), parseInt(hexToRgb("#000000").r), 0.4),
                               colorBlending(parseInt(hexToRgb(oldColor).g), parseInt(hexToRgb("#000000").g), 0.4),
                               colorBlending(parseInt(hexToRgb(oldColor).b), parseInt(hexToRgb("#000000").b), 0.4));
-      $(this).attr("mathbackground", newColor);
-    }                                             
+        $(this).attr("mathbackground", newColor);
+
+      }
+
+    } else if($(this).css("background-color") !== undefined && $(this).css("background-color").match(/\d+/g)) {
+      
+      var oldStyle = $(this).css("background-color");
+      $(this).attr("oldstyle", oldStyle);
+
+      //compute the new color out of old color
+      var newStyle = rgbToHex(colorBlending(parseInt($(this).css("background-color").match(/\d+/g)[0]), parseInt(hexToRgb("#000000").r), 0.4),
+                              colorBlending(parseInt($(this).css("background-color").match(/\d+/g)[1]), parseInt(hexToRgb("#000000").g), 0.4),
+                              colorBlending(parseInt($(this).css("background-color").match(/\d+/g)[2]), parseInt(hexToRgb("#000000").b), 0.4));
+      $(this).css("background-color", newStyle);
+
+    }
   });
 
   var div = $("<div>")
@@ -4236,8 +4252,8 @@ KAT.storage.Annotation.prototype.focus = function() {
     .appendTo("body");
 
     //center the selected annotation on the screen
-    $(window).scrollTop(selection.scrollTop());
-    console.log($(".focused").scrollTop());
+    //$(window).scrollTop(selection.scrollTop());
+    //console.log($(".focused").scrollTop());
 
   KAT.storage.Annotation.prototype.unfocus = function(){
     div.remove();
@@ -4245,13 +4261,18 @@ KAT.storage.Annotation.prototype.focus = function() {
     //remove the overlay color and go back to old colors
     $(".focused").find("*").not(selection).each(function(index) {
 
-    if(isMathML(this) && $(this).attr("mathbackground") !== undefined) {
+      if(isMathML(this) && $(this).attr("mathbackground") !== undefined) {
 
-      var oldColor = $(this).attr("oldColor");
-      $(this).removeAttr("oldColor");
-      $(this).attr("mathbackground", oldColor);
+        var oldColor = $(this).attr("oldcolor");
+        $(this).removeAttr("oldcolor");
+        $(this).attr("mathbackground", oldColor);
 
-    }
+      } else if($(this).attr("oldstyle") !== undefined) {
+
+         $(this).css("background-color", $(this).attr("oldstyle"));
+         $(this).removeAttr("oldstyle");
+
+      }
   });
 
 
