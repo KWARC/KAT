@@ -1784,27 +1784,34 @@ KAT.sidebar.init = function(store, reviewStore){
   KAT.sidebar.store = store;
   KAT.sidebar.reviewStore = reviewStore;
 
-  var requestNewDocument = function() {
+  var sendToServer = function() {
 
     var stringAnnotationsReviews = JSON.stringify({"store":store.toRDF(), "annotations":reviewStore.toJSON()});
+    var response = "id="+KAT.sidebar.jobID+"&content="+stringAnnotationsReviews;
 
-    if(KAT.sidebar.jobID) { //if postPath set, then post annotations and reviews there
-      var response = "id="+KAT.sidebar.jobID+"&content="+stringAnnotationsReviews;
-      var testString = "id=hello, ";//JSON.stringify({id:34});
       $.post("http://localhost:4000/dumps", response, function(data){
-        if(data.success === true) 
+        if(data.success === true) {
           console.log("Posted annotations and reviews");
-        else
-          console.log("An error occured while posting annotations and reviews: "+ data); //maybe cancel the request for new document then as well?
-      });
-    }
 
-    $.get("http://localhost:4000/get_task", function(data, textStatus, jqXHR) {
+       	  $(".contactServer").text("Request new document");
+          $(".contactServer").off("click"); //remove old eventHandler
+          $(".contactServer").click(getNewDocument);
+        } else {
+          window.alert("The document couldn't be posted to the server.");
+        }
+    });
+
+  };
+
+  var getNewDocument = function() {
+
+     $.get("http://localhost:4000/get_task", function(data, textStatus, jqXHR) {
 
       function loadNewDocument() {
 
-        $.get("http://localhost:4000/"+data.path, function(documentData){
+        console.log("Retrieving and parsing new document");
 
+        $.get("http://localhost:4000/"+data.path, function(documentData){
             //if response is XML it has to be parsed into a string first
             var xmlCheck = documentData.contentType == "text/xml" || undefined;
             if(xmlCheck) {
@@ -1819,9 +1826,8 @@ KAT.sidebar.init = function(store, reviewStore){
             $(collapsibleMenu).remove();
 
             KAT.sidebar.annotationMode = "Reading";
-            KAT.sidebar.init(store, reviewStore);
-
             KAT.sidebar.jobID = data.id;
+            KAT.sidebar.init(store, reviewStore);
         });
 
       }
@@ -1829,7 +1835,7 @@ KAT.sidebar.init = function(store, reviewStore){
       if(textStatus == "success") {
         loadNewDocument();
       } else {
-        console.log("failed when trying to retrieve new document from cortex");
+        window.alert("Couldn't reach CorTeX");
       }
 
     }, "json");
@@ -1898,14 +1904,18 @@ KAT.sidebar.init = function(store, reviewStore){
       "<br/>",
       "<br/>",
 
-      //to import annotations
+      //to send document to server/get new document
       $("<button>")
-      .text("Request new document")
-      .addClass("helpButton")
+      .text(KAT.sidebar.jobID?"Send document to server":"Request new document")
+      .addClass("helpButton contactServer")
       .addClass("btn btn-default")
-      .click(
-        requestNewDocument
-      ),
+      .click(function(){
+        if(KAT.sidebar.jobID) {
+          sendToServer();
+        } else {
+          getNewDocument();
+        }
+      }),
       "<br/>",
       "<br/>",
 
