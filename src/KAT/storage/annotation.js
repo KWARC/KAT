@@ -391,9 +391,12 @@ KAT.storage.Annotation.prototype.draw = function(){
   // find the elements in the selection.
   this.store.gui.getRange(this.selection)
 
-  // and iteratate over them
+  // and iterate over them
   .each(function(){
     var $me = $(this);
+
+    //register eventListener for left-clicks to show references
+    $me.click( function() { me.showReferences(); } );
 
     // store the id of this annotation on the element itself
     // however some other annotations might already be registered to this element.
@@ -545,6 +548,9 @@ KAT.storage.Annotation.prototype.undraw = function(){
   //remove the class and data
   range.each(function(){
     var $me = $(this);
+
+    //unregister eventListener for all click events 
+    $me.off("click");
 
     //the current data
     var current = $(this).data("KAT.Annotation.UUID") || [];
@@ -828,3 +834,51 @@ KAT.storage.Annotation.prototype.focus = function() {
 
 KAT.storage.Annotation.prototype.unfocus = function(){};
 
+
+/**
+* Show the references of this annotation.
+*
+* @function
+* @name showReferences
+* @memberof KAT.storage.Annotation
+*/
+
+KAT.storage.Annotation.prototype.showReferences = function() {
+
+  var me = this;
+  console.log(this);
+
+  var selection = this.store.gui.getRange(this.selection).stop();
+  var arrowStartX = selection[0].offsetLeft;
+  var arrowStartY = selection[0].offsetTop;
+
+  //create svg area that covers the whole document and is first in hierarchy
+  var overlayDiv = $("<div>")
+    .css({'width':'100%',
+         'height': $(document).height(), //set to actual document height
+         'top':0,
+         'left':0,
+         'position':'absolute',
+         'z-index':1})
+    .appendTo("body"); 
+
+  var overlay = $("<svg>").attr("xmlns", "http://www.w3.org/2000/svg").attr("height", $(document).height()).attr("width","100%").appendTo(overlayDiv);
+
+  $.each(this.concept.fields, function(index, field) {
+    if(field.type == "reference") {
+      console.log(field);
+      console.log(me.values[field.name][0]);
+      $.each( me.values[field.name], function(index, referencedAnnot) {
+        var referenceSelection = this.store.gui.getRange(this.selection).stop();
+        var arrowEndX = referenceSelection[0].offsetLeft;
+        var arrowEndY = referenceSelection[0].offsetTop;
+
+        $("<path d=\"M"+"100"+" "+"200"+" L "+"100"+" "+"400"+"\" stroke=\"black\" />")
+          .appendTo(overlay); 
+      });
+    }
+  });
+
+  //remove overlay again when somebody clicks on the document
+  overlayDiv.click( function() { console.log("clicked"); overlayDiv.remove(); } );
+};
