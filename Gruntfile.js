@@ -49,7 +49,7 @@ module.exports = function(grunt) {
     //read the package config
     pkg: grunt.file.readJSON('package.json'),
 
-    //we want to conatinate files
+    //we want to concatinate files
     concat: {
       options: {
         sourceMap: true,

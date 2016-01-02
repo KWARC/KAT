@@ -845,40 +845,26 @@ KAT.storage.Annotation.prototype.unfocus = function(){};
 
 KAT.storage.Annotation.prototype.showReferences = function() {
 
-  var me = this;
-  console.log(this);
-
   var selection = this.store.gui.getRange(this.selection).stop();
   var arrowStartX = selection[0].offsetLeft;
   var arrowStartY = selection[0].offsetTop;
 
-  //create svg area that covers the whole document and is first in hierarchy
-  var overlayDiv = $("<div>")
-    .css({'width':'100%',
-         'height': $(document).height(), //set to actual document height
-         'top':0,
-         'left':0,
-         'position':'absolute',
-         'z-index':1})
-    .appendTo("body"); 
-
-  var overlay = $("<svg>").attr("xmlns", "http://www.w3.org/2000/svg").attr("height", $(document).height()).attr("width","100%").appendTo(overlayDiv);
+  var canvas = Raphael(0, 0, "100%", "100%");
 
   $.each(this.concept.fields, function(index, field) {
     if(field.type == "reference") {
-      console.log(field);
-      console.log(me.values[field.name][0]);
       $.each( me.values[field.name], function(index, referencedAnnot) {
         var referenceSelection = this.store.gui.getRange(this.selection).stop();
         var arrowEndX = referenceSelection[0].offsetLeft;
         var arrowEndY = referenceSelection[0].offsetTop;
 
-        $("<path d=\"M"+"100"+" "+"200"+" L "+"100"+" "+"400"+"\" stroke=\"black\" />")
-          .appendTo(overlay); 
+        canvas.path("M"+arrowStartX+" "+arrowStartY+" L "+arrowEndX+" "+arrowEndY)
+          .attr("stroke", "black")
+          .attr("stroke-width", "5");
       });
     }
   });
 
   //remove overlay again when somebody clicks on the document
-  overlayDiv.click( function() { console.log("clicked"); overlayDiv.remove(); } );
+  $("svg").click( function() { $("svg").remove(); } );
 };
