@@ -64,7 +64,7 @@ The library itself has been tested with latest Chrome and Firefox versions. If y
 
 KAT is licensed under GPL.
 
-Copyright (c) 2014-15 by the KWARC Group (http://kwarc.info)
+Copyright (c) 2014-16 by the KWARC Group (http://kwarc.info)
 
 KAT is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

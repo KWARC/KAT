@@ -4319,6 +4319,8 @@ KAT.storage.Annotation.prototype.unfocus = function(){};
 
 KAT.storage.Annotation.prototype.showReferences = function() {
 
+  var me = this;
+
   var selection = this.store.gui.getRange(this.selection).stop();
   var arrowStartX = selection[0].offsetLeft;
   var arrowStartY = selection[0].offsetTop;
@@ -4340,7 +4342,7 @@ KAT.storage.Annotation.prototype.showReferences = function() {
   });
 
   //remove overlay again when somebody clicks on the document
-  $("svg").click( function() { $("svg").remove(); } );
+  $(document).click( function() { $("svg").remove(); } );
 };
 
 KAT.reviewStore = {};
