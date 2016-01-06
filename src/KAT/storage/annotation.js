@@ -860,7 +860,10 @@ KAT.storage.Annotation.prototype.showReferences = function() {
         var arrowEndX = referenceSelection[0].offsetLeft;
         var arrowEndY = referenceSelection[0].offsetTop;
 
-        canvas.path("M"+arrowStartX+" "+arrowStartY+" L "+arrowEndX+" "+arrowEndY)
+        var controlX = arrowStartX + (arrowEndX - arrowStartX)/2 - 30;
+        var controlY = Math.min(arrowStartY, arrowEndY) - 100;
+
+        canvas.path("M"+arrowStartX+" "+arrowStartY+" Q "+controlX+" "+controlY+" "+arrowEndX+" "+arrowEndY)
           .attr("stroke", "black")
           .attr("stroke-width", "5");
       });
