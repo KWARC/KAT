@@ -851,7 +851,7 @@ KAT.storage.Annotation.prototype.showReferences = function() {
   var arrowStartX = selection[0].offsetLeft;
   var arrowStartY = selection[0].offsetTop;
 
-  var canvas = Raphael(0, 0, "100%", "100%");
+  var canvas = Raphael(0, 0, "100%", $(document).height());
 
   $.each(this.concept.fields, function(index, field) {
     if(field.type == "reference") {
@@ -871,5 +871,5 @@ KAT.storage.Annotation.prototype.showReferences = function() {
   });
 
   //remove overlay again when somebody clicks on the document
-  $(document).click( function() { $("svg").remove(); } );
+  $(document).click( function() { canvas.remove(); } );
 };
