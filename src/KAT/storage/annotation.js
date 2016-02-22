@@ -878,5 +878,5 @@ KAT.storage.Annotation.prototype.showReferences = function() {
   });
 
   //remove overlay again when somebody clicks on the document
-  $(document).click( function() { canvas.remove(); } );
+  $(document).click(function() { $("svg").remove(); } );
 };
