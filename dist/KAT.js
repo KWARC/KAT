@@ -4328,9 +4328,11 @@ KAT.storage.Annotation.prototype.showReferences = function() {
   //initialize canvas for all graphs to be drawn on
   var canvas = Raphael(0, 0, "100%", $(document).height());
 
+  //for debugging : KAT.sidebar.store.annotations[0].concept
   $.each(this.concept.fields, function(index, field) {
     if(field.type == "reference") {
-      $.each( me.values[field.name], function(index, referencedAnnot) {
+ 
+      $.each( me.values[field.value], function(index, referencedAnnot) {
         var referenceSelection = this.store.gui.getRange(this.selection).stop();
         var arrowEndX = referenceSelection[0].offsetLeft;
         var arrowEndY = referenceSelection[0].offsetTop;
@@ -4347,7 +4349,7 @@ KAT.storage.Annotation.prototype.showReferences = function() {
         var labelY = (arrowEndY + arrowStartY)/2; 
         canvas.text(labelX, labelY, field.name)
           .attr({"font-family": "serif", "font-size": "40", "font-weight": "bold"});
-      });
+     });
     }
   });
 
