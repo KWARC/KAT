@@ -835,18 +835,10 @@ KAT.model.Concept = function(xml, KAnnSpec){
     index++;
   }
 
-  //do we have a field
-  var hasField = false;
-
   //fields
   while(children.eq(index).is("field") && index < children.length){
-    hasField = true;
     this.fields.push(new KAT.model.Field(children.eq(index), this));
     index++;
-  }
-
-  if(!hasField){
-    throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML for concept '"+this.getFullName()+"' (Missing at least one declared <field>). ", children);
   }
 
   //display
