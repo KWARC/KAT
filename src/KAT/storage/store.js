@@ -42,6 +42,17 @@ KAT.storage.Store = function(gui, docURL){
   this.annotations = [];
 };
 
+/** Removes all annotations in this Store.
+*
+* @function
+* @instance
+* @name clear
+* @memberof KAT.storage.Store
+*/
+KAT.storage.Store.prototype.clear = function() {
+  this.annotations = [];
+};
+
 /** Adds a new annotation to this Store.
 *
 * @param {KAT.gui.selection} selection - Selection of new Annotation.
@@ -58,7 +69,15 @@ KAT.storage.Store.prototype.addNew = function(selection, concept, values){
   var newAnnotation = new KAT.storage.Annotation(this, selection, concept, values );
 
   //store it in this store.
-  this.annotations.push(newAnnotation);
+  //this loops over all annotations and inserts at the position corresponding to the first occurence in the dom tree
+  var index = 0; 
+  for(var i = 0; i < this.annotations.length; i++) {
+    if((this.gui.getRange(this.annotations[i].selection).stop()[0].offsetTop) <  (this.gui.getRange(selection).stop()[0].offsetTop)) {
+      index++;
+    }
+  } 
+
+  this.annotations.splice(index, 0, newAnnotation);
 
   //and return it.
   return newAnnotation;
@@ -308,9 +327,6 @@ KAT.storage.Store.prototype.toRDF = function(){
 
   // get an rdf string
   var rdfString = rdfTopLevel.get(0).outerHTML;
-
-  // TODO: Remove this
-  console.log(rdfString);
 
   return rdfString;
 };

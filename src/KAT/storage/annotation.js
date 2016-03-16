@@ -391,9 +391,12 @@ KAT.storage.Annotation.prototype.draw = function(){
   // find the elements in the selection.
   this.store.gui.getRange(this.selection)
 
-  // and iteratate over them
+  // and iterate over them
   .each(function(){
     var $me = $(this);
+
+    //register eventListener for left-clicks to show references
+    $me.click( function() { me.showReferences(); } );
 
     // store the id of this annotation on the element itself
     // however some other annotations might already be registered to this element.
@@ -476,7 +479,6 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
       var me = store.find(annotations[annotations.length-1]);
 
       // set the background color to this one
-      // TODO: I think this is where the canvas that Kohlhase mentioned comes into play
       var color = me.concept.displayColour;
 
       // we need to differentiate between MathML and non-mathml nodes here
@@ -546,6 +548,9 @@ KAT.storage.Annotation.prototype.undraw = function(){
   //remove the class and data
   range.each(function(){
     var $me = $(this);
+
+    //unregister eventListener for all click events 
+    $me.off("click");
 
     //the current data
     var current = $(this).data("KAT.Annotation.UUID") || [];
@@ -695,21 +700,82 @@ KAT.storage.Annotation.prototype.flash = function(){
 
 KAT.storage.Annotation.prototype.focus = function() {
 
+  /* both taken from http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb/5624139#5624139 */
+  function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+  }
+
+  function rgbToHex(r, g, b) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+  }
+
+  function colorBlending(canvasColor, elementColor, alpha) {
+    return Math.round((1-alpha)*canvasColor + elementColor);
+  }
+
+  function isMathML(element){
+    return (typeof $(element).attr("xml:id") !== typeof undefined && $(element).attr("xml:id") !== false);
+  }
+
   //idea: create 2 divs, one which covers annotation and another one that covers all of screen
 
   var selection = this.store.gui
    .getRange(this.selection).stop();
+
+  var wrapper = $("<div>")
+    .addClass("focusWrapper");
+
+  //find closest div and change z-index, so it appears in front of overlay
+  selection.closest("div").css({  
+      "position": "relative",
+      "z-index": 2
+        })
+  .addClass("focused");
+
   
-  selection.css({ "position": "relative",
-                  "z-index": 2
-                });
+  //take all elements in next highest div and change color of MathML elements that are not in selection
+  $(".focused").find("*").not(selection).each(function(index) { 
+
+    //if it is a math element which is annotated-> change the color
+    if(isMathML(this) ) {
+
+      if( $(this).attr("mathbackground") !== undefined) { 
+
+        var oldColor = $(this).attr("mathbackground");
+        $(this).attr("oldcolor", oldColor);
+
+        //compute the new color out of old color
+        var newColor = rgbToHex(colorBlending(parseInt(hexToRgb(oldColor).r), parseInt(hexToRgb("#000000").r), 0.4),
+                              colorBlending(parseInt(hexToRgb(oldColor).g), parseInt(hexToRgb("#000000").g), 0.4),
+                              colorBlending(parseInt(hexToRgb(oldColor).b), parseInt(hexToRgb("#000000").b), 0.4));
+        $(this).attr("mathbackground", newColor);
+
+      }
+
+    } else if($(this).css("background-color") !== undefined && $(this).css("background-color").match(/\d+/g)) {
+      
+      var oldStyle = $(this).css("background-color");
+      $(this).attr("oldstyle", oldStyle);
+
+      //compute the new color out of old color
+      var newStyle = rgbToHex(colorBlending(parseInt($(this).css("background-color").match(/\d+/g)[0]), parseInt(hexToRgb("#000000").r), 0.4),
+                              colorBlending(parseInt($(this).css("background-color").match(/\d+/g)[1]), parseInt(hexToRgb("#000000").g), 0.4),
+                              colorBlending(parseInt($(this).css("background-color").match(/\d+/g)[2]), parseInt(hexToRgb("#000000").b), 0.4));
+      $(this).css("background-color", newStyle);
+
+    }
+  });
 
   var div = $("<div>")
     .addClass("focus")
     .css({"width": "100%",
           "height": "100%",
-          "background": "#000",
-          "opacity": 0.4,
+          "background": 'rgba(0,0,0,0.4)',
           "top": 0,
           "left": 0,
           "position": "fixed",
@@ -717,11 +783,42 @@ KAT.storage.Annotation.prototype.focus = function() {
     })
     .appendTo("body");
 
+  //center the selected annotation on the screen
+  var offset = $(selection[0]).offset().top;
+  var halfScreen = Math.round($(window).height() / 2);
+  var newOffset = offset - halfScreen;
+  
+  if(newOffset > 0)
+    window.scrollTo(0, newOffset);
+  else
+    window.scrollTo(0, 0);
+
   KAT.storage.Annotation.prototype.unfocus = function(){
     div.remove();
-    selection.css({ "position": "",
-                    "z-index": 0
-                  });
+
+    //remove the overlay color and go back to old colors
+    $(".focused").find("*").not(selection).each(function(index) {
+
+      if(isMathML(this) && $(this).attr("mathbackground") !== undefined) {
+
+        var oldColor = $(this).attr("oldcolor");
+        $(this).removeAttr("oldcolor");
+        $(this).attr("mathbackground", oldColor);
+
+      } else if($(this).attr("oldstyle") !== undefined) {
+
+         $(this).css("background-color", $(this).attr("oldstyle"));
+         $(this).removeAttr("oldstyle");
+
+      }
+  });
+
+
+    $(".focused") //remove changes
+      .css({  "position": "",
+              "z-index": 0
+    })
+      .removeClass("focused");
     KAT.storage.Annotation.prototype.unfocus = function(){};
   };
 
@@ -737,3 +834,51 @@ KAT.storage.Annotation.prototype.focus = function() {
 
 KAT.storage.Annotation.prototype.unfocus = function(){};
 
+
+/**
+* Show the references of this annotation.
+*
+* @function
+* @name showReferences
+* @memberof KAT.storage.Annotation
+*/
+
+KAT.storage.Annotation.prototype.showReferences = function() {
+
+  var me = this;
+
+  var selection = this.store.gui.getRange(this.selection).stop();
+  var arrowStartX = selection[0].offsetLeft;
+  var arrowStartY = selection[0].offsetTop;
+
+  //initialize canvas for all graphs to be drawn on
+  var canvas = Raphael(0, 0, "100%", $(document).height());
+
+  //for debugging : KAT.sidebar.store.annotations[0].concept
+  $.each(this.concept.fields, function(index, field) {
+    if(field.type == "reference") {
+ 
+      $.each( me.values[field.value], function(index, referencedAnnot) {
+        var referenceSelection = this.store.gui.getRange(this.selection).stop();
+        var arrowEndX = referenceSelection[0].offsetLeft;
+        var arrowEndY = referenceSelection[0].offsetTop;
+
+        var controlX = (arrowStartX + arrowEndX)/2 - 30;
+        var controlY = Math.min(arrowStartY, arrowEndY) - 100;
+
+        canvas.path("M"+arrowStartX+" "+arrowStartY+" Q "+controlX+" "+controlY+" "+arrowEndX+" "+arrowEndY)
+          .attr("stroke", "black")
+          .attr("stroke-width", "5");
+
+        //show label for which relationship a graph is depicting
+        var labelX = (arrowEndX + arrowStartX)/2; 
+        var labelY = (arrowEndY + arrowStartY)/2; 
+        canvas.text(labelX, labelY, field.name)
+          .attr({"font-family": "serif", "font-size": "40", "font-weight": "bold"});
+     });
+    }
+  });
+
+  //remove overlay again when somebody clicks on the document
+  $(document).click(function() { $("svg").remove(); } );
+};

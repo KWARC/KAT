@@ -9,15 +9,74 @@ KAT.sidebar = {};
 * Set up and insert Annotation Toolkit sidemenu
 *
 * @param {KAT.Storage.Store} store - Annotation Store to bind to.
+* @param {KAT.reviewStore.store} reviewStore - Store that maps reviews to annotation id's
 *
 * @function
 * @static
 * @name init
 * @memberof KAT.sidebar
 */
-KAT.sidebar.init = function(store){
+KAT.sidebar.init = function(store, reviewStore){
 
-  this.store = store;
+  KAT.sidebar.store = store;
+  KAT.sidebar.reviewStore = reviewStore;
+
+  var sendToServer = function() {
+
+    var stringAnnotationsReviews = JSON.stringify({"store":store.toRDF(), "annotations":reviewStore.toJSON()});
+    var response = "id="+KAT.sidebar.jobID+"&content="+stringAnnotationsReviews;
+
+      $.post("http://localhost:4000/dumps", response, function(data){
+        if(data.success === true) {
+          console.log("Posted annotations and reviews");
+
+       	  $(".contactServer").text("Request new document");
+          $(".contactServer").off("click"); //remove old eventHandler
+          $(".contactServer").click(getNewDocument);
+        } else {
+          window.alert("The document couldn't be posted to the server.");
+        }
+    });
+
+  };
+
+  var getNewDocument = function() {
+
+     $.get("http://localhost:4000/get_task", function(data, textStatus, jqXHR) {
+
+      function loadNewDocument() {
+
+        console.log("Retrieving and parsing new document");
+
+        $.get("http://localhost:4000/"+data.path, function(documentData){
+            //if response is XML it has to be parsed into a string first
+            var xmlCheck = documentData.contentType == "text/xml" || undefined;
+            if(xmlCheck) {
+              documentData = (new XMLSerializer()).serializeToString(documentData);
+            }
+
+            store.clear();
+            reviewStore.clear();
+
+            $("#content").html(documentData);
+
+            $(collapsibleMenu).remove();
+
+            KAT.sidebar.annotationMode = "Reading";
+            KAT.sidebar.jobID = data.id;
+            KAT.sidebar.init(store, reviewStore);
+        });
+
+      }
+
+      if(textStatus == "success") {
+        loadNewDocument();
+      } else {
+        window.alert("Couldn't reach CorTeX");
+      }
+
+    }, "json");
+  };
 
   //mode of the sidebar.
   var mode;
@@ -77,8 +136,23 @@ KAT.sidebar.init = function(store){
     // and a lot of buttons
     $("<div>").addClass("KATSidebarButtons")
     .append(
-      //to toggle the mode
+      //to change the mode
       KAT.sidebar.modeButtonGroup,
+      "<br/>",
+      "<br/>",
+
+      //to send document to server/get new document
+      $("<button>")
+      .text(KAT.sidebar.jobID?"Send document to server":"Request new document")
+      .addClass("helpButton contactServer")
+      .addClass("btn btn-default")
+      .click(function(){
+        if(KAT.sidebar.jobID) {
+          sendToServer();
+        } else {
+          getNewDocument();
+        }
+      }),
       "<br/>",
       "<br/>",
 
@@ -103,6 +177,41 @@ KAT.sidebar.init = function(store){
       }),
       "<br/>",
       "<br/>",
+
+      //to import reviews
+      $("<button>")
+      .text("Import Reviews")
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+        reviewStore.importReviews();
+      }),
+      "<br/>",
+      "<br/>",
+
+      // to export reviews
+      $("<button>")
+      .text("Export Reviews")
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+        reviewStore.exportReviews();
+      }),
+      "<br/>",
+      "<br/>",
+
+      //to report an issue
+      $("<button>")
+      .text("Report Issue")
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+        //open github issues page
+        window.open("https://github.com/KWARC/KAT/issues", "_blank");
+      }),
+      "<br/>",
+      "<br/>",
+
       "<br/>"
     ),
     $("<ul>").addClass("KATMenuItems")
@@ -110,14 +219,14 @@ KAT.sidebar.init = function(store){
   .css({
     'position':'fixed',
     'right': KAT.sidebar.hideWidth,
-    'height': winHeight-10
+    'height': winHeight
   }).prependTo("body");
 
   // create button to toggle collapse and resurection of sidemenu and define properties
   var collapsibleToggle = $("<button>")
   .text("«")
   .addClass("collapseToggle")
-  .css({'height': winHeight-10, 
+  .css({'height': winHeight-20, 
         'z-index': 100})
   .click(KAT.sidebar.toggleSidebar).prependTo(collapsibleMenu); //adapted from init function below
 
@@ -132,11 +241,11 @@ KAT.sidebar.init = function(store){
     collapsibleMenu.css({
       'position':'fixed',
       'right': KAT.sidebar.hideWidth,
-      'height': winHeight-10
+      'height': winHeight
     });
 
     collapsibleToggle.css({
-      'height': winHeight-10
+      'height': winHeight-20
     });
   });
 };
@@ -213,7 +322,7 @@ KAT.sidebar.toggleAnnotationMode = function(label){
   KAT.sidebar.modeButtonGroup.find("[mode='"+label+"']").addClass("active");
 
   if(label == "Review")
-    KAT.sidebar.generateReviewForm(this.store);
+    KAT.sidebar.generateReviewForm();
 
 
 };

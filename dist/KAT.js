@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2014-15 by the KWARC Group (http://kwarc.info)
+Copyright (c) 2014-2016 by the KWARC Group (http://kwarc.info)
 
 KAT is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -835,18 +835,10 @@ KAT.model.Concept = function(xml, KAnnSpec){
     index++;
   }
 
-  //do we have a field
-  var hasField = false;
-
   //fields
   while(children.eq(index).is("field") && index < children.length){
-    hasField = true;
     this.fields.push(new KAT.model.Field(children.eq(index), this));
     index++;
-  }
-
-  if(!hasField){
-    throw new KAT.model.ParsingError("KAT.model.Concept: Invalid XML for concept '"+this.getFullName()+"' (Missing at least one declared <field>). ", children);
   }
 
   //display
@@ -1772,15 +1764,74 @@ KAT.sidebar = {};
 * Set up and insert Annotation Toolkit sidemenu
 *
 * @param {KAT.Storage.Store} store - Annotation Store to bind to.
+* @param {KAT.reviewStore.store} reviewStore - Store that maps reviews to annotation id's
 *
 * @function
 * @static
 * @name init
 * @memberof KAT.sidebar
 */
-KAT.sidebar.init = function(store){
+KAT.sidebar.init = function(store, reviewStore){
 
-  this.store = store;
+  KAT.sidebar.store = store;
+  KAT.sidebar.reviewStore = reviewStore;
+
+  var sendToServer = function() {
+
+    var stringAnnotationsReviews = JSON.stringify({"store":store.toRDF(), "annotations":reviewStore.toJSON()});
+    var response = "id="+KAT.sidebar.jobID+"&content="+stringAnnotationsReviews;
+
+      $.post("http://localhost:4000/dumps", response, function(data){
+        if(data.success === true) {
+          console.log("Posted annotations and reviews");
+
+       	  $(".contactServer").text("Request new document");
+          $(".contactServer").off("click"); //remove old eventHandler
+          $(".contactServer").click(getNewDocument);
+        } else {
+          window.alert("The document couldn't be posted to the server.");
+        }
+    });
+
+  };
+
+  var getNewDocument = function() {
+
+     $.get("http://localhost:4000/get_task", function(data, textStatus, jqXHR) {
+
+      function loadNewDocument() {
+
+        console.log("Retrieving and parsing new document");
+
+        $.get("http://localhost:4000/"+data.path, function(documentData){
+            //if response is XML it has to be parsed into a string first
+            var xmlCheck = documentData.contentType == "text/xml" || undefined;
+            if(xmlCheck) {
+              documentData = (new XMLSerializer()).serializeToString(documentData);
+            }
+
+            store.clear();
+            reviewStore.clear();
+
+            $("#content").html(documentData);
+
+            $(collapsibleMenu).remove();
+
+            KAT.sidebar.annotationMode = "Reading";
+            KAT.sidebar.jobID = data.id;
+            KAT.sidebar.init(store, reviewStore);
+        });
+
+      }
+
+      if(textStatus == "success") {
+        loadNewDocument();
+      } else {
+        window.alert("Couldn't reach CorTeX");
+      }
+
+    }, "json");
+  };
 
   //mode of the sidebar.
   var mode;
@@ -1840,8 +1891,23 @@ KAT.sidebar.init = function(store){
     // and a lot of buttons
     $("<div>").addClass("KATSidebarButtons")
     .append(
-      //to toggle the mode
+      //to change the mode
       KAT.sidebar.modeButtonGroup,
+      "<br/>",
+      "<br/>",
+
+      //to send document to server/get new document
+      $("<button>")
+      .text(KAT.sidebar.jobID?"Send document to server":"Request new document")
+      .addClass("helpButton contactServer")
+      .addClass("btn btn-default")
+      .click(function(){
+        if(KAT.sidebar.jobID) {
+          sendToServer();
+        } else {
+          getNewDocument();
+        }
+      }),
       "<br/>",
       "<br/>",
 
@@ -1866,6 +1932,41 @@ KAT.sidebar.init = function(store){
       }),
       "<br/>",
       "<br/>",
+
+      //to import reviews
+      $("<button>")
+      .text("Import Reviews")
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+        reviewStore.importReviews();
+      }),
+      "<br/>",
+      "<br/>",
+
+      // to export reviews
+      $("<button>")
+      .text("Export Reviews")
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+        reviewStore.exportReviews();
+      }),
+      "<br/>",
+      "<br/>",
+
+      //to report an issue
+      $("<button>")
+      .text("Report Issue")
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+        //open github issues page
+        window.open("https://github.com/KWARC/KAT/issues", "_blank");
+      }),
+      "<br/>",
+      "<br/>",
+
       "<br/>"
     ),
     $("<ul>").addClass("KATMenuItems")
@@ -1873,14 +1974,14 @@ KAT.sidebar.init = function(store){
   .css({
     'position':'fixed',
     'right': KAT.sidebar.hideWidth,
-    'height': winHeight-10
+    'height': winHeight
   }).prependTo("body");
 
   // create button to toggle collapse and resurection of sidemenu and define properties
   var collapsibleToggle = $("<button>")
   .text("«")
   .addClass("collapseToggle")
-  .css({'height': winHeight-10, 
+  .css({'height': winHeight-20, 
         'z-index': 100})
   .click(KAT.sidebar.toggleSidebar).prependTo(collapsibleMenu); //adapted from init function below
 
@@ -1895,11 +1996,11 @@ KAT.sidebar.init = function(store){
     collapsibleMenu.css({
       'position':'fixed',
       'right': KAT.sidebar.hideWidth,
-      'height': winHeight-10
+      'height': winHeight
     });
 
     collapsibleToggle.css({
-      'height': winHeight-10
+      'height': winHeight-20
     });
   });
 };
@@ -1976,7 +2077,7 @@ KAT.sidebar.toggleAnnotationMode = function(label){
   KAT.sidebar.modeButtonGroup.find("[mode='"+label+"']").addClass("active");
 
   if(label == "Review")
-    KAT.sidebar.generateReviewForm(this.store);
+    KAT.sidebar.generateReviewForm();
 
 
 };
@@ -2707,17 +2808,32 @@ KAT.sidebar.generateAnnotationForm = function(env, callback, annotation, selecti
   revalidate();
 };
 
-KAT.sidebar.generateReviewForm = function(store) {
+KAT.sidebar.generateReviewForm = function() {
+
+	var annotationText;
 
 	var annotationPointer = -1;
-	var annots = store.annotations;
+	var annots = this.store.annotations;
 
 	if(annots.length === 0)
 		return;
 
+	var appendAnnotationText = function() {
+
+		//just compute the tooltip and show it in the review menu
+		var computedTooltip = annots[annotationPointer % annots.length].recomputeTooltip();
+
+	  	annotationText.html(computedTooltip);
+
+	};
+
+
 	var next = function() {
 		var x = annots[0].unfocus() || undefined;
 		annots[++annotationPointer % annots.length].focus();
+		appendAnnotationText();
+
+		checkButtonStatus();
 	};
 
 	var prev = function() {
@@ -2728,23 +2844,92 @@ KAT.sidebar.generateReviewForm = function(store) {
 		}
 
 		annots[--annotationPointer % annots.length].focus();
+		appendAnnotationText();
+
+		checkButtonStatus();
 	};
 
+
 	var navigation = $("<li>")
-	.addClass("review navigation")
-	.append("Navigate")
-  	.appendTo(".KATMenuItems");
+		.addClass("review navigation")
+	  	.appendTo(".KATMenuItems");
+
+
+	/**********************************************/
+
+		annotationText = $("<div>")
+		.addClass("annotationText")
+		.appendTo(navigation);
+
+	/**********************************************/
+
+	var navBtnGroup = $("<div>")
+		.addClass("btn-group")
+		.appendTo(navigation);
 
   	var nextButton = $("<button>")
-  	.text("Next")
-  	.click(function() { next(); })
-  	.appendTo(navigation);
+	  	.text("Next")
+	  	.addClass("btn btn-default")
+	  	.click(function() { next(); })
+	  	.appendTo(navBtnGroup);
 
   	var previousButton = $("<button>")
-  	.text("Previous")
-  	.click(function() { prev(); })
-  	.appendTo(navigation);
+	  	.text("Previous")
+	  	.addClass("btn btn-default")
+	  	.click(function() { prev(); })
+	  	.appendTo(navBtnGroup);
 
+	/**********************************************/
+
+	var rateBtnGroup = $("<div>")
+		.addClass("btn-group")
+		.appendTo(navigation);
+
+	var likeButton = $("<button>")
+		.addClass("btn btn-default like")
+		.click(function() { removeButtonClass(); likeButton.addClass("btn-success"); reviewStore.annotationReviews[annots[annotationPointer % annots.length].uuid] = "approve"; } )
+		.appendTo(rateBtnGroup);
+
+	$("<span>")
+		.addClass("glyphicon glyphicon-thumbs-up")
+		.appendTo(likeButton);
+
+	var reviewStore = this.reviewStore;
+
+	var dislikeButton = $("<button>")
+		.addClass("btn btn-default dislike")
+		.click(function() { removeButtonClass(); dislikeButton.addClass("btn-danger"); reviewStore.annotationReviews[annots[annotationPointer % annots.length].uuid] = "disapprove"; } )
+		.appendTo(rateBtnGroup);
+
+	$("<span>")
+		.addClass("glyphicon glyphicon-thumbs-down")
+		.appendTo(dislikeButton);
+
+
+	var removeButtonClass = function() {
+
+		navigation.find("button").removeClass("btn-danger btn-success");
+
+	};
+
+	var checkButtonStatus = function() {
+
+		removeButtonClass();
+
+		if ( reviewStore.annotationReviews[annots[annotationPointer % annots.length].uuid] == "approve" ) {
+
+			likeButton.addClass("btn-success");
+
+		} else if ( reviewStore.annotationReviews[annots[annotationPointer % annots.length].uuid] == "disapprove" ) {
+
+			dislikeButton.addClass("btn-danger");
+
+		}
+
+	};
+
+
+	/**********************************************/
 
   	//initialize with focus on first annotation
   	next();
@@ -2854,6 +3039,17 @@ KAT.storage.Store = function(gui, docURL){
   this.annotations = [];
 };
 
+/** Removes all annotations in this Store.
+*
+* @function
+* @instance
+* @name clear
+* @memberof KAT.storage.Store
+*/
+KAT.storage.Store.prototype.clear = function() {
+  this.annotations = [];
+};
+
 /** Adds a new annotation to this Store.
 *
 * @param {KAT.gui.selection} selection - Selection of new Annotation.
@@ -2870,7 +3066,15 @@ KAT.storage.Store.prototype.addNew = function(selection, concept, values){
   var newAnnotation = new KAT.storage.Annotation(this, selection, concept, values );
 
   //store it in this store.
-  this.annotations.push(newAnnotation);
+  //this loops over all annotations and inserts at the position corresponding to the first occurence in the dom tree
+  var index = 0; 
+  for(var i = 0; i < this.annotations.length; i++) {
+    if((this.gui.getRange(this.annotations[i].selection).stop()[0].offsetTop) <  (this.gui.getRange(selection).stop()[0].offsetTop)) {
+      index++;
+    }
+  } 
+
+  this.annotations.splice(index, 0, newAnnotation);
 
   //and return it.
   return newAnnotation;
@@ -3120,9 +3324,6 @@ KAT.storage.Store.prototype.toRDF = function(){
 
   // get an rdf string
   var rdfString = rdfTopLevel.get(0).outerHTML;
-
-  // TODO: Remove this
-  console.log(rdfString);
 
   return rdfString;
 };
@@ -3656,9 +3857,12 @@ KAT.storage.Annotation.prototype.draw = function(){
   // find the elements in the selection.
   this.store.gui.getRange(this.selection)
 
-  // and iteratate over them
+  // and iterate over them
   .each(function(){
     var $me = $(this);
+
+    //register eventListener for left-clicks to show references
+    $me.click( function() { me.showReferences(); } );
 
     // store the id of this annotation on the element itself
     // however some other annotations might already be registered to this element.
@@ -3741,7 +3945,6 @@ KAT.storage.Annotation.prototype.updateDrawing = function(){
       var me = store.find(annotations[annotations.length-1]);
 
       // set the background color to this one
-      // TODO: I think this is where the canvas that Kohlhase mentioned comes into play
       var color = me.concept.displayColour;
 
       // we need to differentiate between MathML and non-mathml nodes here
@@ -3811,6 +4014,9 @@ KAT.storage.Annotation.prototype.undraw = function(){
   //remove the class and data
   range.each(function(){
     var $me = $(this);
+
+    //unregister eventListener for all click events 
+    $me.off("click");
 
     //the current data
     var current = $(this).data("KAT.Annotation.UUID") || [];
@@ -3960,21 +4166,82 @@ KAT.storage.Annotation.prototype.flash = function(){
 
 KAT.storage.Annotation.prototype.focus = function() {
 
+  /* both taken from http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb/5624139#5624139 */
+  function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+  }
+
+  function rgbToHex(r, g, b) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+  }
+
+  function colorBlending(canvasColor, elementColor, alpha) {
+    return Math.round((1-alpha)*canvasColor + elementColor);
+  }
+
+  function isMathML(element){
+    return (typeof $(element).attr("xml:id") !== typeof undefined && $(element).attr("xml:id") !== false);
+  }
+
   //idea: create 2 divs, one which covers annotation and another one that covers all of screen
 
   var selection = this.store.gui
    .getRange(this.selection).stop();
+
+  var wrapper = $("<div>")
+    .addClass("focusWrapper");
+
+  //find closest div and change z-index, so it appears in front of overlay
+  selection.closest("div").css({  
+      "position": "relative",
+      "z-index": 2
+        })
+  .addClass("focused");
+
   
-  selection.css({ "position": "relative",
-                  "z-index": 2
-                });
+  //take all elements in next highest div and change color of MathML elements that are not in selection
+  $(".focused").find("*").not(selection).each(function(index) { 
+
+    //if it is a math element which is annotated-> change the color
+    if(isMathML(this) ) {
+
+      if( $(this).attr("mathbackground") !== undefined) { 
+
+        var oldColor = $(this).attr("mathbackground");
+        $(this).attr("oldcolor", oldColor);
+
+        //compute the new color out of old color
+        var newColor = rgbToHex(colorBlending(parseInt(hexToRgb(oldColor).r), parseInt(hexToRgb("#000000").r), 0.4),
+                              colorBlending(parseInt(hexToRgb(oldColor).g), parseInt(hexToRgb("#000000").g), 0.4),
+                              colorBlending(parseInt(hexToRgb(oldColor).b), parseInt(hexToRgb("#000000").b), 0.4));
+        $(this).attr("mathbackground", newColor);
+
+      }
+
+    } else if($(this).css("background-color") !== undefined && $(this).css("background-color").match(/\d+/g)) {
+      
+      var oldStyle = $(this).css("background-color");
+      $(this).attr("oldstyle", oldStyle);
+
+      //compute the new color out of old color
+      var newStyle = rgbToHex(colorBlending(parseInt($(this).css("background-color").match(/\d+/g)[0]), parseInt(hexToRgb("#000000").r), 0.4),
+                              colorBlending(parseInt($(this).css("background-color").match(/\d+/g)[1]), parseInt(hexToRgb("#000000").g), 0.4),
+                              colorBlending(parseInt($(this).css("background-color").match(/\d+/g)[2]), parseInt(hexToRgb("#000000").b), 0.4));
+      $(this).css("background-color", newStyle);
+
+    }
+  });
 
   var div = $("<div>")
     .addClass("focus")
     .css({"width": "100%",
           "height": "100%",
-          "background": "#000",
-          "opacity": 0.4,
+          "background": 'rgba(0,0,0,0.4)',
           "top": 0,
           "left": 0,
           "position": "fixed",
@@ -3982,11 +4249,42 @@ KAT.storage.Annotation.prototype.focus = function() {
     })
     .appendTo("body");
 
+  //center the selected annotation on the screen
+  var offset = $(selection[0]).offset().top;
+  var halfScreen = Math.round($(window).height() / 2);
+  var newOffset = offset - halfScreen;
+  
+  if(newOffset > 0)
+    window.scrollTo(0, newOffset);
+  else
+    window.scrollTo(0, 0);
+
   KAT.storage.Annotation.prototype.unfocus = function(){
     div.remove();
-    selection.css({ "position": "",
-                    "z-index": 0
-                  });
+
+    //remove the overlay color and go back to old colors
+    $(".focused").find("*").not(selection).each(function(index) {
+
+      if(isMathML(this) && $(this).attr("mathbackground") !== undefined) {
+
+        var oldColor = $(this).attr("oldcolor");
+        $(this).removeAttr("oldcolor");
+        $(this).attr("mathbackground", oldColor);
+
+      } else if($(this).attr("oldstyle") !== undefined) {
+
+         $(this).css("background-color", $(this).attr("oldstyle"));
+         $(this).removeAttr("oldstyle");
+
+      }
+  });
+
+
+    $(".focused") //remove changes
+      .css({  "position": "",
+              "z-index": 0
+    })
+      .removeClass("focused");
     KAT.storage.Annotation.prototype.unfocus = function(){};
   };
 
@@ -4003,6 +4301,164 @@ KAT.storage.Annotation.prototype.focus = function() {
 KAT.storage.Annotation.prototype.unfocus = function(){};
 
 
+/**
+* Show the references of this annotation.
+*
+* @function
+* @name showReferences
+* @memberof KAT.storage.Annotation
+*/
+
+KAT.storage.Annotation.prototype.showReferences = function() {
+
+  var me = this;
+
+  var selection = this.store.gui.getRange(this.selection).stop();
+  var arrowStartX = selection[0].offsetLeft;
+  var arrowStartY = selection[0].offsetTop;
+
+  //initialize canvas for all graphs to be drawn on
+  var canvas = Raphael(0, 0, "100%", $(document).height());
+
+  //for debugging : KAT.sidebar.store.annotations[0].concept
+  $.each(this.concept.fields, function(index, field) {
+    if(field.type == "reference") {
+ 
+      $.each( me.values[field.value], function(index, referencedAnnot) {
+        var referenceSelection = this.store.gui.getRange(this.selection).stop();
+        var arrowEndX = referenceSelection[0].offsetLeft;
+        var arrowEndY = referenceSelection[0].offsetTop;
+
+        var controlX = (arrowStartX + arrowEndX)/2 - 30;
+        var controlY = Math.min(arrowStartY, arrowEndY) - 100;
+
+        canvas.path("M"+arrowStartX+" "+arrowStartY+" Q "+controlX+" "+controlY+" "+arrowEndX+" "+arrowEndY)
+          .attr("stroke", "black")
+          .attr("stroke-width", "5");
+
+        //show label for which relationship a graph is depicting
+        var labelX = (arrowEndX + arrowStartX)/2; 
+        var labelY = (arrowEndY + arrowStartY)/2; 
+        canvas.text(labelX, labelY, field.name)
+          .attr({"font-family": "serif", "font-size": "40", "font-weight": "bold"});
+     });
+    }
+  });
+
+  //remove overlay again when somebody clicks on the document
+  $(document).click(function() { $("svg").remove(); } );
+};
+
+KAT.reviewStore = {};
+
+
+/** Creates a new reviewStore instance.
+*
+*
+* @name KAT.reviewStore.Store
+* @this {KAT.reviewStore.Store}
+* @Alias KAT.reviewStore.Store
+* @class
+*/
+
+KAT.reviewStore.Store = function() {
+
+	/**
+	  * Stores annotationReviews by mapping to annotation-uuids.
+	  * Contains string "approve" and "disapprove" as values.
+	  *
+	  * @type {KAT.reviewStore.annotationReviews[]}
+	  * @name KAT.reviewStore.Store#annotationReviews
+	  */
+
+	this.annotationReviews = {};
+
+
+};
+
+/** Removes all reviews in this reviewStore.
+*
+* @function
+* @instance
+* @name clear
+* @memberof KAT.reviewStore.Store
+*/
+KAT.reviewStore.Store.prototype.clear = function() {
+  this.annotationReviews = {};
+};
+
+
+/** Returns JSON-string of stored reviews.
+*
+* @returns {string} - JSON of stored reviews.
+* @function
+* @instance
+* @name toJSON
+* @memberof KAT.reviewStore.Store
+*/
+
+KAT.reviewStore.Store.prototype.toJSON = function() {
+	return JSON.stringify(this.annotationReviews);
+};
+
+/** Export reviews by showing a dialog.
+*
+* @function
+* @instance
+* @name exportReviews
+* @memberof KAT.reviewStore.Store
+*/
+
+KAT.reviewStore.Store.prototype.exportReviews = function() {
+
+	var json = this.toJSON();
+
+	//and a textarea with it.
+	  var textarea = $("<textarea rows='20' readonly='readonly'>").addClass("form-control").text(json); 
+
+	  // make a dialog
+	  var dialog = KAT.gui.dialog("Export Reviews", "", ["OK"], function(){this.close();});
+
+
+	  // and add the document
+	  dialog.$content.append(
+	    $("<form>").addClass("form").append(textarea)
+	  );
+
+	  //add some magic focusing code.
+	  textarea.focus(function() {
+	    textarea
+	    .select()
+	    .mouseup(function(){
+	      textarea.unbind("mouseup");
+	      return false;
+	    });
+	  });
+
+	  // and make it focus on click.
+	  textarea.click(function(){
+	    textarea.focus();
+	  }).click();
+
+};
+
+/** Shows an import dialog and import received JSON.
+*
+* @function
+* @instance
+* @name importReviews
+* @memberof KAT.reviewStore.Store
+*/
+
+KAT.reviewStore.Store.prototype.importReviews = function() {
+
+	//TODO: check if JSON valid
+
+	var json = prompt("Paste reviews to import here: ");
+
+	this.annotationReviews = JSON.parse(json);
+
+};
 KAT.module = {
   /* Module Info / Meta Data */
   info:{
@@ -4020,7 +4476,10 @@ KAT.module = {
     'async': false,
     'hasCleanNamespace': false
   },
-  init: function(JOBADInstance, collection_or_kannspec_and_url, documentURL){
+  init: function(JOBADInstance, collection_or_kannspec_and_url, documentURL, callback){
+    console.log("Given as argument: ");
+    console.log(callback); //callback is the function to be called to instantiate a new KAT with a new document
+
 
     // first of all create a collection
     var collection;
@@ -4040,11 +4499,13 @@ KAT.module = {
     //create a store with the right documentURL
     this.store = new KAT.storage.Store(this.gui, documentURL);
 
+    this.reviewStore = new KAT.reviewStore.Store();
+
     // initialise the tooltip libarary
     // JOBADInstance.element.tooltip({html:true});
 
     // initialise the gui
-    KAT.sidebar.init(this.store);
+    KAT.sidebar.init(this.store, this.reviewStore);
 
     //initialise gui collection
     collection.init();
