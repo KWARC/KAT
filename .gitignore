@@ -2,3 +2,4 @@ node_modules
 dest
 null.txt
 *.swp
+doc
