@@ -200,6 +200,18 @@ KAT.sidebar.init = function(store, reviewStore){
       "<br/>",
       "<br/>",
 
+      //redirects to the GitHub wiki
+      $("<button>")
+      .text("Help")
+      .addClass("helpButton")
+      .addClass("btn btn-default")
+      .click(function(){
+        //open github issues page
+        window.open("https://github.com/KWARC/KAT/wiki", "_blank");
+      }),
+      "<br/>",
+      "<br/>",
+
       //to report an issue
       $("<button>")
       .text("Report Issue")
