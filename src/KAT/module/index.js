@@ -1,18 +1,18 @@
 /**
-* Namespace for KAT JOBAD module.
-* @namespace
-* @alias KAT.module
-*/
+ * Namespace for KAT JOBAD module.
+ * @namespace
+ * @alias KAT.module
+ */
 
 KAT.module = {
   /* Module Info / Meta Data */
-  info:{
-    'identifier':   'KAT.module',
-    'title':    'KAT module',
-    'author':   'The KWARC group',
-    'description':  'A module for KAT',
+  info: {
+    'identifier': 'KAT.module',
+    'title': 'KAT module',
+    'author': 'The KWARC group',
+    'description': 'A module for KAT',
     'url': 'http://kwarc.github.io/KAT',
-    'version':  '2.0',
+    'version': '2.0',
     'dependencies': [],
     'externals': {
       "js": [],
@@ -21,7 +21,8 @@ KAT.module = {
     'async': false,
     'hasCleanNamespace': false
   },
-  init: function(JOBADInstance, collection_or_kannspec_and_url, documentURL, callback){
+  init: function(JOBADInstance, collection_or_kannspec_and_url, documentURL,
+    callback) {
     console.log("Given as argument: ");
     console.log(callback); //callback is the function to be called to instantiate a new KAT with a new document
 
@@ -30,12 +31,13 @@ KAT.module = {
     var collection;
 
     // if a collection has been parsed, we have it already.
-    if(collection_or_kannspec_and_url instanceof KAT.model.KAnnSpecCollection){
+    if (collection_or_kannspec_and_url instanceof KAT.model.KAnnSpecCollection) {
       collection = collection_or_kannspec_and_url;
     } else {
       // if not, we still need to create that.
       collection = new KAT.model.KAnnSpecCollection();
-      collection.addNewKAnnSpec(collection_or_kannspec_and_url[0], collection_or_kannspec_and_url[1]);
+      collection.addNewKAnnSpec(collection_or_kannspec_and_url[0],
+        collection_or_kannspec_and_url[1]);
     }
 
     // create a new gui bound to the right element.
@@ -56,26 +58,26 @@ KAT.module = {
     collection.init();
     collection.assignDisplayColour();
   },
-  hoverText: function(target){
+  hoverText: function(target) {
     var content = target.data("KAT.Annotation.content");
-    if(content){
+    if (content) {
       return $("<div>").html(content);
     }
   },
-  contextMenuEntries: function(target, JOBADInstance){
+  contextMenuEntries: function(target, JOBADInstance) {
     // reference to self
     var me = this;
 
     // Lots of Text
-    var text_new        = "Add new Annotation";
-    var text_remove     = "Delete Annotation";
-    var text_highlight  = "Highlight Annotation";
-    var text_edit       = "Edit Annotation";
-    var text_rdf        = "View RDF";
-    var annot_modeOn    = "Enable Annotation Mode";
-    var annot_modeOff   = "Enable Reading Mode";
-    var storage_import  = "Import Annotations";
-    var storage_export  = "Export Annotations";
+    var text_new = "Add new Annotation";
+    var text_remove = "Delete Annotation";
+    var text_highlight = "Highlight Annotation";
+    var text_edit = "Edit Annotation";
+    var text_rdf = "View RDF";
+    var annot_modeOn = "Enable Annotation Mode";
+    var annot_modeOff = "Enable Reading Mode";
+    var storage_import = "Import Annotations";
+    var storage_export = "Export Annotations";
 
     // TODO: Callbacks.
 
@@ -90,21 +92,21 @@ KAT.module = {
       //Menu item 2
       menu[storage_export] = me.store.showExportDialog.bind(me.store);
 
-  };
+    };
 
-    
-    switch(KAT.sidebar.annotationMode) {
+
+    switch (KAT.sidebar.annotationMode) {
 
       case "Annotation":
 
         var selection;
 
-        try{
+        try {
           selection = this.gui.getSelection();
-        } catch(e){}
+        } catch (e) {}
 
 
-        if(!selection || selection.isEmpty){
+        if (!selection || selection.isEmpty) {
 
           /* Subcase B1:
             User has not made a selection
@@ -115,27 +117,27 @@ KAT.module = {
           //find all the annotations.
           var annots = this.store.findfromElement(target);
 
-          if(annots.length !== 0){
+          if (annots.length !== 0) {
             menu = {};
             menu[text_remove] = {};
             menu[text_highlight] = {};
             menu[text_edit] = {};
 
             //iterate over all the annotations.
-            $.each(annots, function(i, annotation){
+            $.each(annots, function(i, annotation) {
 
               //Menu item B2.1 : Delete annotation
-              menu[text_remove][annotation.uuid] = function(){
+              menu[text_remove][annotation.uuid] = function() {
                 annotation.delete();
               };
 
               //Menu item B2.2 : Highlight annotation
-              menu[text_highlight][annotation.uuid] = function(){
+              menu[text_highlight][annotation.uuid] = function() {
                 annotation.flash();
               };
 
               //Menu item B2.3 : Edit annotation
-              menu[text_edit][annotation.uuid] = function(){
+              menu[text_edit][annotation.uuid] = function() {
                 annotation.edit(me);
               };
             });
@@ -144,11 +146,13 @@ KAT.module = {
           /* Subcase B3:
             User has made a selection
           */
-           if(!(selection.start == selection.end && selection.startOffset == selection.endOffset)){
+          if (!(selection.start == selection.end && selection.startOffset ==
+              selection.endOffset)) {
 
             //Menu item B3.n : Add annotation with nth concept found in Kannspec
-            $.each(this.gui.collection.findConcepts(), function(index, concept){
-              menu[concept.getFullName()] = function(){
+            $.each(this.gui.collection.findConcepts(), function(index,
+              concept) {
+              menu[concept.getFullName()] = function() {
                 // create a new annotation form.
                 KAT.sidebar.generateAnnotationForm(
                   me,
@@ -161,7 +165,7 @@ KAT.module = {
             });
           }
         }
-      break; // end case Annotation; refactor code!!!
+        break; // end case Annotation; refactor code!!!
 
       case "Review":
         initializeMenuBar();
@@ -171,7 +175,7 @@ KAT.module = {
       default:
         initializeMenuBar();
 
-      }
+    }
 
     //return the menu.
     return menu;

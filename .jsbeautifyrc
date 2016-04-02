@@ -1,0 +1,7 @@
+{
+  "braceStyle": "collapse",
+  "indentSize": 2,
+  "indentWithTabs": false,
+  "wrapLineLength": 80,
+  "endWithNewline": true
+}

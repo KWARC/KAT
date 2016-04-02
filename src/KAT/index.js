@@ -1,8 +1,8 @@
 /**
-* Namespace everything used by KAT
-* @namespace
-* @alias KAT
-*/
+ * Namespace everything used by KAT
+ * @namespace
+ * @alias KAT
+ */
 
 // define the global KAT object we will export.
 var KAT = exports;
