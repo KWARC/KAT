@@ -4535,11 +4535,32 @@ KAT.storage.Annotation.prototype.unfocus = function() {};
 
 KAT.storage.Annotation.prototype.showReferences = function() {
 
+  //helper function to find a selection element that contains position information
+  var findArrowPoint = function(selection) {
+    index = 0;
+    while (selection[index] && selection[index].offsetLeft === undefined) {
+      ++index;
+    }
+    if (selection[index] === undefined) {
+      console.log("No starting position for arrow found.");
+      return -1;
+    }
+
+    return index;
+  };
+
   var me = this;
 
   var selection = this.store.gui.getRange(this.selection).stop();
-  var arrowStartX = selection[0].offsetLeft;
-  var arrowStartY = selection[0].offsetTop;
+
+  //find an element that can be pointed to
+  var index = findArrowPoint(selection);
+  if (index == -1) {
+    return;
+  }
+
+  var arrowStartX = selection[index].offsetLeft;
+  var arrowStartY = selection[index].offsetTop;
 
   //initialize canvas all arrows are drawn on 
   var canvas = Raphael(0, 0, "100%", $(document).height());
@@ -4553,8 +4574,15 @@ KAT.storage.Annotation.prototype.showReferences = function() {
       $.each(me.values[field.value], function(index, referencedAnnot) {
         var referenceSelection = this.store.gui.getRange(this.selection)
           .stop();
-        var arrowEndX = referenceSelection[0].offsetLeft;
-        var arrowEndY = referenceSelection[0].offsetTop;
+
+        //find an element that can be pointed to
+        index = findArrowPoint(referenceSelection);
+        if (index == -1) {
+          return;
+        }
+
+        var arrowEndX = referenceSelection[index].offsetLeft;
+        var arrowEndY = referenceSelection[index].offsetTop;
 
         var controlX = (arrowStartX + arrowEndX) / 2 - 30;
         var controlY = Math.min(arrowStartY, arrowEndY) - 100;
