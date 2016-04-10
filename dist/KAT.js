@@ -4379,7 +4379,8 @@ KAT.storage.Annotation.prototype.flash = function() {
 
 KAT.storage.Annotation.prototype.focus = function() {
 
-  /* both taken from http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb/5624139#5624139 */
+  /* both taken from 
+   * http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb/5624139#5624139 */
   function hexToRgb(hex) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? {
@@ -4403,7 +4404,8 @@ KAT.storage.Annotation.prototype.focus = function() {
       element).attr("xml:id") !== false);
   }
 
-  //idea: create 2 divs, one which covers annotation and another one that covers all of screen
+  //idea: create 2 divs, one which covers annotation and another one
+  //      that covers all of screen
 
   var selection = this.store.gui
     .getRange(this.selection).stop();
@@ -4415,7 +4417,8 @@ KAT.storage.Annotation.prototype.focus = function() {
     })
     .addClass("focused");
 
-  //take all elements in next highest div and change color of MathML elements that are not in selection
+  //take all elements in next highest div and change color of MathML 
+  //elements not in selection
   $(".focused").find("*").not(selection).each(function(index) {
 
     //if it is a math element which is annotated-> change the color
@@ -4559,8 +4562,8 @@ KAT.storage.Annotation.prototype.showReferences = function() {
     return;
   }
 
-  var arrowStartX = selection[index].offsetLeft;
-  var arrowStartY = selection[index].offsetTop;
+  var arrowStartX = $(selection[index]).offset().left;
+  var arrowStartY = $(selection[index]).offset().top;
 
   //initialize canvas all arrows are drawn on 
   var canvas = Raphael(0, 0, "100%", $(document).height());
@@ -4581,8 +4584,8 @@ KAT.storage.Annotation.prototype.showReferences = function() {
           return;
         }
 
-        var arrowEndX = referenceSelection[index].offsetLeft;
-        var arrowEndY = referenceSelection[index].offsetTop;
+        var arrowEndX = $(referenceSelection[index]).offset().left;
+        var arrowEndY = $(referenceSelection[index]).offset().top;
 
         var controlX = (arrowStartX + arrowEndX) / 2 - 30;
         var controlY = Math.min(arrowStartY, arrowEndY) - 100;
