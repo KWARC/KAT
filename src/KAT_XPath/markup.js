@@ -1,4 +1,21 @@
 /**
+ * @brief Gets the offset of the text (innerHTML) of the given element to
+ *   the start of the outerHTML of given ancestor.
+ *
+ * @param element Element we want to compute the offset for.
+ * @param ancestor Element to which offset is computed.
+ */
+function getRelativeOffset(element, ancestor) {
+  var anchor = "TOO_WEIRD_TO_OCCUR_IN_AN_ACTUAL_DOCUMENT";
+  element.innerHTML = anchor + element.innerHTML;
+
+  var offset = ancestor.outerHTML.search(anchor);
+
+  element.innerHTML = element.innerHTML.substring(anchor.length);
+  return offset;
+}
+
+/**
  * @brief Highlights the given interval on an xml document.
  * 
  * @param start Start of the interval. Consists of an array of an XPath
@@ -22,46 +39,41 @@ function highlight(start, end)
   var endElement = endIterator.iterateNext();
   var endText = endElement.innerHTML;
 
-  var commonAncestor = $(startElement).parents().has(endElement).first();
+  var commonAncestor = $(startElement).parents().has(endElement).first()[0];
 
-  var shadow = commonAncestor.context.createShadowRoot();
-  var commonHTML = commonAncestor.context.outerHTML;
+  var shadow = commonAncestor.createShadowRoot();
+  var commonHTML = commonAncestor.outerHTML;
 
   /* Find absolute offsets relative to least common ancestor. 
-   * @bug This will not always work. 
    */  
-  var startOffset = commonHTML.search(startText) + start[1];
-  var endOffset = commonHTML.search(endText) + end[1];
+  var startOffset = getRelativeOffset(startElement, commonAncestor) + start[1];
+  var endOffset = getRelativeOffset(endElement, commonAncestor) + end[1];
 
   /* Split string around interval */
   var beforeIntervalString = commonHTML.substring(0, startOffset);
-  var intervalString = commonHTML.substring(startOffset,
-                       commonHTML.length - endOffset);
-  var afterIntervalString = commonHTML.substring(commonHTML.length - endOffset, 
+  var intervalString = commonHTML.substring(startOffset, endOffset);
+  var afterIntervalString = commonHTML.substring(endOffset, 
                             commonHTML.length);
 
-  shadow.innerHTML = beforeIntervalString;
-
-  console.log(beforeIntervalString);
-  console.log(intervalString);
-  console.log(afterIntervalString);
+  var shadowBuffer = beforeIntervalString;
 
   /* Should match every html-tag. */
   var regex = /(<.*?>)/g;
   
   /* Split string into html-tags and strings and wrap strings. */
   var arr = intervalString.split(regex);
+  console.log(arr);
   $.each(arr, function(index, el) {
     if(regex.test(el)) {
-      shadow.innerHTML += el;  
+      shadowBuffer += el;  
     } else {
-      shadow.innerHTML += "<span>" + el + "</span>";
+      shadowBuffer += "<span class='highlight'>" + el + "</span>";
     }
   });
+  shadowBuffer += afterIntervalString;
 
-  shadow.innerHTML += afterIntervalString;
-
+  shadow.innerHTML = shadowBuffer;
   shadow.innerHTML += '<style>' +
-    'span {color: Red;}' +
+    '.highlight {color: Red;}' +
     '</style>';
 }
