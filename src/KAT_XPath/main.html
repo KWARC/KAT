@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <script src='../../libs/jquery/jquery-2.1.4.min.js'></script>
+    <script src="markup.js"></script>
+
+    <script>
+      $(document).ready(function()
+        {
+          $.get("document.xhtml", function(xml) 
+            {
+              $("body").html($(xml).children());
+
+              highlight(["//*[@id='S1.p2']/p[1]", 18], 
+                ["//*[@id='S1.p2']/p[1]", 40]);
+            }, 'xml');
+        });
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
