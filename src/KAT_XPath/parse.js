@@ -5,8 +5,6 @@
 * ARANGE_END          = ARANGE_POINT
 * ARANGE_POINT        = ARANGE_STRINGINDEX | ARANGE_LEFT | ARANGE_RIGHT | XPATH
 * ARANGE_STRINGINDEX  = string-index(XPATH, INT)
-* ARANGE_LEFT         = left(XPATH)
-* ARANGE_RIGHT        = right(XPATH)
 * XPATH               = [^,\)]*
 * adapted mostly from http://www.tei-c.org/release/doc/tei-p5-doc/en/html/SA.html#SATSRN
 **/
@@ -15,10 +13,6 @@
 var RX_arange = /^arange\((.*)\)$/;
 // string-index(XPATH, \d*)
 var RX_StringIndex = /^string-index\(([^,]*),\s*(\d+)\)(,|$)/;
-// left(XPATH)
-var RX_Left = /^left\(([^\)]*)\)(,|$)/;
-// right(XPATH)
-var RX_Right = /^right\(([^\)]*)\)(,|$)/;
 // XPath
 var RX_XPath = /^([^,]*)(,|$)/;
 
@@ -26,7 +20,7 @@ var RX_XPath = /^([^,]*)(,|$)/;
  * @brief Parses a arange() scheme into a list of pairs of [XPath, index_or_spec]
  *
  * @param string s String we want to parse
- * @return Returns a list of pairs [XPath, index_or_spec] where index_or_spec is either null (meaning the boundary of the element), a non-negative integer or the string 'left' or 'right'
+ * @return Returns a list of pairs [XPath, index_or_spec] where omdex is either null (meaning the boundary of the element) or an integer
  * 
  */
 var XPointerParse = function(s){
@@ -62,35 +56,6 @@ var XPointerParse = function(s){
       
       // and we are done with this one
       substr = substr.replace(RX_StringIndex, ''); 
-      continue; 
-    }
-    
-    // check if we have a left
-    var lMatch = substr.match(RX_Left); 
-    
-    if(lMatch) {
-      // add a new pair
-      pairs.push([
-        lMatch[1],
-        'left'
-      ]); 
-      
-      // and we are done with this one
-      substr = substr.replace(RX_Left, ''); 
-      continue; 
-    }
-    
-    // check if we have a right
-    var rMatch = substr.match(RX_Right); 
-    if(rMatch) {
-      // add a new pair
-      pairs.push([
-        rMatch[1],
-        'right'
-      ]); 
-      
-      // and we are done with this one
-      substr = substr.replace(RX_Right, ''); 
       continue; 
     }
     
@@ -142,10 +107,6 @@ var XPointerCreate = function(parts){
     // reassemble
     if(index === null) {
       strParts.push(xpath)
-    } else if (index === 'left') {
-      strParts.push('left('+xpath+')')
-    } else if (index == 'right') {
-      strParts.push('right('+xpath+')')
     } else {
       strParts.push('string-index('+xpath+','+index+')')
     }
@@ -156,11 +117,7 @@ var XPointerCreate = function(parts){
   
 }
 
-// console.log(XPointerParse('arange(//div[1], //div[2])'))
-// console.log(XPointerCreate([ [ '//div[1]', null ], [ '//div[2]', null ] ]))
-// console.log(XPointerParse('arange(left(//div[1]), right(//div[2]))'))
-// console.log(XPointerCreate([ [ '//div[1]', 'left' ], [ '//div[2]', 'right' ] ]))
-// console.log(XPointerParse('arange(//div[1], right(//div[2]))'))
-// console.log(XPointerCreate([ [ '//div[1]', null ], [ '//div[2]', 'right' ] ]))
-// console.log(XPointerParse('arange(string-index(//div[1], 134),//div[2])'))
-// console.log(XPointerCreate([ [ '//div[1]', 134 ], [ '//div[2]', null ] ]))
+console.log(XPointerParse('arange(//div[1], //div[2])'))
+console.log(XPointerCreate([ [ '//div[1]', null ], [ '//div[2]', null ] ]))
+console.log(XPointerParse('arange(string-index(//div[1], 134),//div[2])'))
+console.log(XPointerCreate([ [ '//div[1]', 134 ], [ '//div[2]', null ] ]))
