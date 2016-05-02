@@ -1,9 +1,26 @@
-var RX_Range = /^arange\((.*)\)$/; // a arange(...)
+/**
+* arange annotation scheme
+* ARANGE              = arange(ARANGE_START, ARANGE_END)
+* ARANGE_START        = ARANGE_POINT
+* ARANGE_END          = ARANGE_POINT
+* ARANGE_POINT        = ARANGE_STRINGINDEX | ARANGE_LEFT | ARANGE_RIGHT | XPATH
+* ARANGE_STRINGINDEX  = string-index(XPATH, INT)
+* ARANGE_LEFT         = left(XPATH)
+* ARANGE_RIGHT        = right(XPATH)
+* XPATH               = [^,\)]*
+* adapted mostly from http://www.tei-c.org/release/doc/tei-p5-doc/en/html/SA.html#SATSRN
+**/
 
-var RX_StringIndex = /^string-index\(([^,]*),\s*(\d+)\)(,|$)/; // string-index(..., OFFSET)
-var RX_Left = /^left\(([^\)]*)\)(,|$)/; // left(...)
-var RX_Right = /^right\(([^\)]*)\)(,|$)/; // right(...)
-var RX_XPath = /^([^,]*)(,|$)/; // some xpath
+// arange(ARANGE_POINT)
+var RX_arange = /^arange\((.*)\)$/;
+// string-index(XPATH, \d*)
+var RX_StringIndex = /^string-index\(([^,]*),\s*(\d+)\)(,|$)/;
+// left(XPATH)
+var RX_Left = /^left\(([^\)]*)\)(,|$)/;
+// right(XPATH)
+var RX_Right = /^right\(([^\)]*)\)(,|$)/;
+// XPath
+var RX_XPath = /^([^,]*)(,|$)/;
 
 /**
  * @brief Parses a arange() scheme into a list of pairs of [XPath, index_or_spec]
@@ -13,28 +30,11 @@ var RX_XPath = /^([^,]*)(,|$)/; // some xpath
  * 
  */
 var XPointerParse = function(s){
-  
-  /**
-  * Parses the following ARANGE (as in "annotation range") scheme
-  * ARANGE              = arange(ARANGE_START, ARANGE_END)
-  * ARANGE_START        = ARANGE_POINT
-  * ARANGE_END          = ARANGE_POINT
-  * ARANGE_POINT        = ARANGE_STRINGINDEX | ARANGE_LEFT | ARANGE_RIGHT | XPATH
-  * ARANGE_STRINGINDEX  = string-index(XPATH, INT)
-  * ARANGE_LEFT         = left(XPATH)
-  * ARANGE_RIGHT        = right(XPATH)
-  * XPATH               = [^,\)]*
-  * adapted mostly from http://www.tei-c.org/release/doc/tei-p5-doc/en/html/SA.html#SATSRN
-  **/
-  
-  
-  
-  
   // pairs we want to return
   var pairs = []; 
   
   // remove the outer range(...)
-  var rangeMatch = s.match(RX_Range);
+  var rangeMatch = s.match(RX_arange);
   
   // and check the inner path
   if(!rangeMatch){
@@ -113,7 +113,6 @@ var XPointerParse = function(s){
   
   // check that we have 2
   if(pairs.length != 2) {
-    console.log(pairs); 
     throw Error('XPointer is not a valid arange(...)'); 
   }
   
@@ -121,8 +120,47 @@ var XPointerParse = function(s){
   return pairs; 
 }
 
+/**
+ * @brief Turns a parsed arange() object back into a string
+ *
+ * @param Array list of pairs [XPath, Index_or_spec] containing the points
+ * @return Returns a string
+ * 
+ */
+var XPointerCreate = function(parts){
+  
+  // create variables needed
+  var strParts = []; 
+  var xpth, index;
+  
+  // iterate
+  for(var i = 0; i < parts.length; i++) {
+    // extract parts
+    xpath = parts[i][0]; 
+    index = parts[i][1]; 
+    
+    // reassemble
+    if(index === null) {
+      strParts.push(xpath)
+    } else if (index === 'left') {
+      strParts.push('left('+xpath+')')
+    } else if (index == 'right') {
+      strParts.push('right('+xpath+')')
+    } else {
+      strParts.push('string-index('+xpath+','+index+')')
+    }
+  }
+  
+  // add the outer arange(...) thing
+  return 'arange('+strParts.join(',')+')'; 
+  
+}
 
 // console.log(XPointerParse('arange(//div[1], //div[2])'))
+// console.log(XPointerCreate([ [ '//div[1]', null ], [ '//div[2]', null ] ]))
 // console.log(XPointerParse('arange(left(//div[1]), right(//div[2]))'))
+// console.log(XPointerCreate([ [ '//div[1]', 'left' ], [ '//div[2]', 'right' ] ]))
 // console.log(XPointerParse('arange(//div[1], right(//div[2]))'))
+// console.log(XPointerCreate([ [ '//div[1]', null ], [ '//div[2]', 'right' ] ]))
 // console.log(XPointerParse('arange(string-index(//div[1], 134),//div[2])'))
+// console.log(XPointerCreate([ [ '//div[1]', 134 ], [ '//div[2]', null ] ]))
