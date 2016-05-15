@@ -1,7 +1,7 @@
 <html>
   <head>
     <script src='../../libs/jquery/jquery-2.1.4.min.js'></script>
-    <script src="markup.js"></script>
+    <script src="markup_original.js"></script>
 
     <script>
       $(document).ready(function()
@@ -9,9 +9,16 @@
           $.get("document.xhtml", function(xml) 
             {
               $("body").html($(xml).children());
-
-              highlight(["//*[@id='XM5f']", 0], 
-                ["//*[@id='XM37f']", 0]);
+          
+              var h = new KAT.AnnotationHighlighter();
+              h.highlight({"start":["/html/body/html/body/div/div[1]/div/div[1]/span/span[1]", 0], 
+                "end":["/html/body/html/body/div/div[1]/div/div[1]/span/span[2]", 0], "id":"foo"});
+/*********************************************/
+              h.highlight({"start":["/html/body/html/body/div/div[1]/div/div[1]/span/span[1]", 4], 
+                "end":["/html/body/html/body/div/div[1]/div/div[1]/span/span[2]", 0], "id":"bar"});
+/*********************************************/
+ //             h.highlight(["//*[@id='XM5f']", 0], 
+ //               ["//*[@id='XM37f']", 0]);
             }, 'xml');
         });
     </script>
