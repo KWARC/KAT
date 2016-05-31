@@ -1,7 +1,7 @@
 <html>
   <head>
     <script src='../../libs/jquery/jquery-2.1.4.min.js'></script>
-    <script src="markup_original.js"></script>
+    <script src="markup.js"></script>
 
     <script>
       $(document).ready(function()
@@ -12,13 +12,16 @@
           
               var h = new KAT.AnnotationHighlighter();
               h.highlight({"start":["/html/body/html/body/div/div[1]/div/div[1]/span/span[1]", 0], 
-                "end":["/html/body/html/body/div/div[1]/div/div[1]/span/span[2]", 0], "id":"foo"});
-/*********************************************/
+                "end":["/html/body/html/body/div/div[1]/div/div[1]/span/span[2]", 0], "id":"foo",
+                "color": "rgba(255,0,0,0.5)", "colorMath" : "#00FF00" });
+
               h.highlight({"start":["/html/body/html/body/div/div[1]/div/div[1]/span/span[1]", 4], 
-                "end":["/html/body/html/body/div/div[1]/div/div[1]/span/span[2]", 0], "id":"bar"});
-/*********************************************/
- //             h.highlight(["//*[@id='XM5f']", 0], 
- //               ["//*[@id='XM37f']", 0]);
+                "end":["/html/body/html/body/div/div[1]/div/div[1]/span/span[2]", 0], "id":"bar",
+                "color" : "rgba(0,255,0,0.5)", "colorMath" : "#FF0000" });
+
+               h.highlight({"start":["//*[@id='XM5f']", 0], 
+                "end":["//*[@id='XM37f']", 0], "id":"third",
+                "color" : "rgba(0,255,0,0.5)", "colorMath" : "#00FF00" });
             }, 'xml');
         });
     </script>

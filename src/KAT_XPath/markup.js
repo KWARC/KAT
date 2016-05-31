@@ -106,16 +106,17 @@ function (arr, color, id)
     return el == "</span>";
   }
 
-  //TODO: use classes for MathML as well
   var buffer = "";
   $.each(arr, function(index, el) {
     if (isHTMLTag(el)) {
       if(isMathML(el) && isOpeningTag(el)) {
-        var dummyObject = $(el).attr("mathbackground", color)[0];
+        //add class to math
+        //TODO: add css rule for merging colors -> just check over hashtable (what about efficiency?)
+        var dummyObject = $(el).addClass(id + " " + "math")[0];
         var tag = dummyObject.outerHTML.match(regex)[0];
         buffer += tag;
       } else if(isOpeningMarkup(el) && isClosingMarkup(arr[Math.min(arr.length-1, index+2)])) { 
-//concentrate annotations in 'highlight'-spans
+        //concentrate annotations in 'highlight'-spans
         var openingTag = $(el).addClass(id)[0];
         buffer += el;
       } else {
@@ -125,7 +126,7 @@ function (arr, color, id)
       /* @bug this might be inaccurate sometimes
        * (what happens if there is L,</math> ?)
        */
-//skip if next AND prev are highlighted
+      //skip if next AND prev are highlighted
       var prev = arr[Math.max(0, index-1)];
       var next = arr[Math.min(arr.length-1, index+1)];
       if(!(isMathML(prev) || isMathML(next)) &&
@@ -135,8 +136,6 @@ function (arr, color, id)
         buffer += el;
       }
     }
-
-    //console.log(buffer);
   });
 
   return buffer;
@@ -156,6 +155,7 @@ function (arr, color, id)
 KAT.AnnotationHighlighter.prototype.highlight = 
 function (annotation)
 {
+  //TODO: use only a single color attribute on annotations
   this.annotations.push(annotation);
   var start = annotation.start;
   var end = annotation.end;
@@ -171,7 +171,6 @@ function (annotation)
 
   var commonAncestor = $(startElement).parents().has(endElement).first()[0];
 
-  //var shadow = commonAncestor.createShadowRoot();
   var commonHTML = commonAncestor.outerHTML;
 
   /* Find offsets relative to least common ancestor. */  
@@ -186,20 +185,21 @@ function (annotation)
   var afterIntervalString = commonHTML.substring(endOffset, 
                             commonHTML.length);
 
-  var shadowBuffer = beforeIntervalString;
+  var buffer = beforeIntervalString;
 
   /* Split string into html-tags and strings. */
   var arr = intervalString.split(regex);
   arr = arr.filter(function(element) { return element !== ""; });
 
-  var x = this.applyColor(arr, "#FF0000", annotation["id"]);
+  var x = this.applyColor(arr, annotation["colorMath"], annotation["id"]);
 
-  shadowBuffer += x;
-  shadowBuffer += afterIntervalString;
+  buffer += x;
+  buffer += afterIntervalString;
 
-  commonAncestor.outerHTML = shadowBuffer;
-  $("span.foo").css("background-color", "red");
-  $("span.bar").css("background-color", "blue");
+  commonAncestor.outerHTML = buffer;
+  $("span."+annotation["id"]).css("background-color", annotation["color"]);
+
+  var math = $(".math").filter("."+annotation["id"]).attr("mathbackground", annotation["colorMath"]);
 }
 
 
@@ -219,7 +219,7 @@ var resolveXPath = function(from, path) {
 
   var compare = function(e) {
     if(((e.tagName || e.nodeName).toLowerCase() == "span") &&
-         e.classList.contains("highlight")) {
+         e.classList.contains("highlight")) { //TODO: make this a global constant
       return false;
     }
     return (e.tagName || e.nodeName).toLowerCase() == tagName.toLowerCase();
