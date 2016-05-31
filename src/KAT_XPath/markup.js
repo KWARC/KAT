@@ -14,7 +14,7 @@ KAT = {};
 /**
  * @brief Constructor
  *
- * @param {JavaScript representation of DOM node} root - Root of DOM
+ * @param root - Root of DOM
  */
 KAT.AnnotationHighlighter = function() {
   /**
@@ -35,17 +35,17 @@ KAT.AnnotationHighlighter = function() {
  * @param ancestor Element to which offset is computed.
  * @return Character offset of element to ancestor.
  */
-KAT.AnnotationHighlighter.prototype.getRelativeOffset =
-  function(element, ancestor) {
+KAT.AnnotationHighlighter.prototype.getRelativeOffset = 
+    function (element, ancestor) {
 
-    var anchor = "TOO_WEIRD_TO_OCCUR_IN_AN_ACTUAL_DOCUMENT";
-    element.innerHTML = anchor + element.innerHTML;
+  var anchor = "TOO_WEIRD_TO_OCCUR_IN_AN_ACTUAL_DOCUMENT";
+  element.innerHTML = anchor + element.innerHTML;
 
-    var offset = ancestor.outerHTML.search(anchor);
+  var offset = ancestor.outerHTML.search(anchor);
 
-    element.innerHTML = element.innerHTML.substring(anchor.length);
-    return offset;
-  }
+  element.innerHTML = element.innerHTML.substring(anchor.length);
+  return offset;
+}
 
 /**
  * @brief Gets the offset of actual text to the beginning of the next element.
@@ -55,33 +55,27 @@ KAT.AnnotationHighlighter.prototype.getRelativeOffset =
  * @param offset Number of text characters to be offset
  * @return New relative offset.
  */
-KAT.AnnotationHighlighter.prototype.getRelativeOffsetSpans = function(
-  startOffset, commonAncestor, offset) {
+KAT.AnnotationHighlighter.prototype.getRelativeOffsetSpans = function (startOffset, commonAncestor, offset) { 
   var text = commonAncestor.outerHTML;
   text = text.substring(startOffset, text.length);
-
+  
   var arr = text.split(regex);
 
   var answer = 0;
   var count = 0;
   var i = 0;
-  while (count < offset && i < arr.length) {
+  while(count < offset && i < arr.length) {
     var el = arr[i];
-    if (isHTMLTag(el)) {
+    if(isHTMLTag(el)) {
       answer += el.length;
     } else {
-      if ((count + el.length) >= offset) {
-        answer += offset;
-        break;
-      } else {
-        answer += el.length;
-        count += el.length;
-      }
+      if((count + el.length) >= offset) { answer += offset; break; }
+      else { answer += el.length; count += el.length; }
     }
-    ++i;
+    ++i;     
   }
 
-  if (i >= arr.length) {
+  if(i >= arr.length) {
     console.log("Error in getRelativeOffsetSpans: Offset out of bounds");
     return 0;
   }
@@ -90,67 +84,62 @@ KAT.AnnotationHighlighter.prototype.getRelativeOffsetSpans = function(
 }
 
 function isMathML(element) {
-  /* Makes critical assumption here that MathML
-   * can be recognized by initial m
-   */
-  return (element.substring(0, 5) !== "<math" &&
-      element.substring(0, 6) !== "</math") &&
-    (element.substring(0, 2) === "<m" ||
-      element.substring(0, 3) === "</m");
+    /* Makes critical assumption here that MathML
+     * can be recognized by initial m
+     */
+    return (element.substring(0,5) !== "<math" && 
+     element.substring(0,6) !== "</math") &&
+     (element.substring(0,2) === "<m" ||
+      element.substring(0,3) === "</m");
 }
 
 KAT.AnnotationHighlighter.prototype.applyColor =
-  function(arr, color, id) {
-    function isOpeningTag(str) {
-      //also shouldn't be mrow as otherwise too much is colored
-      return (str[1] !== "/" && str.substring(0, 5) !== "<mrow");
-    }
-
-    function isOpeningMarkup(el) {
-      return isOpeningTag(el) && $(el).hasClass(highlightClass);
-    }
-
-    function isClosingMarkup(el) {
-      return el == "</span>";
-    }
-
-    var buffer = "";
-    $.each(arr, function(index, el) {
-      if (isHTMLTag(el)) {
-        if (isMathML(el) && isOpeningTag(el)) {
-          //add class to math
-          //TODO: add css rule for merging colors -> just check over hashtable (what about efficiency?)
-          var dummyObject = $(el).addClass("math").addClass(id)[0];
-          var tag = dummyObject.outerHTML.match(regex)[0];
-          buffer += tag;
-        } else if (isOpeningMarkup(el) && isClosingMarkup(arr[Math.min(arr.length -
-            1, index + 2)])) {
-          //concentrate annotations in 'highlight'-spans
-          var openingTag = $(el).addClass(id)[0];
-          buffer += el;
-        } else {
-          buffer += el;
-        }
-      } else {
-        /* @bug this might be inaccurate sometimes
-         * (what happens if there is L,</math> ?)
-         */
-        //skip if next AND prev are highlighted
-        var prev = arr[Math.max(0, index - 1)];
-        var next = arr[Math.min(arr.length - 1, index + 1)];
-        if (!(isMathML(prev) || isMathML(next)) &&
-          !(isOpeningMarkup(prev) && isClosingMarkup(next))) {
-          var newSpan = $("<span>").addClass("highlight").addClass(id)[0];
-          newSpan.innerHTML = el;
-          buffer += newSpan.outerHTML;
-        } else {
-          buffer += el;
-        }
-      }
-    });
-
-    return buffer;
+function (arr, id)
+{
+  function isOpeningTag(str) {
+    //also shouldn't be mrow as otherwise too much is colored
+    return (str[1] !== "/" && str.substring(0,5) !== "<mrow");
   }
+
+  function isOpeningMarkup(el) {
+    return isOpeningTag(el) && $(el).hasClass(highlightClass);
+  }
+  
+  function isClosingMarkup(el) {
+    return el == "</span>";
+  }
+
+  var buffer = "";
+  $.each(arr, function(index, el) {
+    if (isHTMLTag(el)) {
+      if(isMathML(el) && isOpeningTag(el)) {
+        //add class to math
+        //TODO: add css rule for merging colors -> just check over hashtable (what about efficiency?)
+        var dummyObject = $(el).addClass("math").addClass(id)[0];
+        var tag = dummyObject.outerHTML.match(regex)[0];
+        buffer += tag;
+      } else {
+        buffer += el;
+      }
+    } else {
+      /* @bug this might be inaccurate sometimes
+       * (what happens if there is L,</math> ?)
+       */
+      //skip if next AND prev are highlighted
+      var prev = arr[Math.max(0, index-1)];
+      var next = arr[Math.min(arr.length-1, index+1)];
+      if(!(isMathML(prev) || isMathML(next))) {
+        var newSpan = $("<span>").addClass("highlight").addClass(id)[0];
+        newSpan.innerHTML = el;
+        buffer += newSpan.outerHTML;
+      } else {
+        buffer += el;
+      }
+    }
+  });
+
+  return buffer;
+}
 
 /**
  * @brief Highlights the given interval on an xml document.
@@ -163,79 +152,72 @@ KAT.AnnotationHighlighter.prototype.applyColor =
  * @param end   End of the interval. Format as for start.
  * @return Void.
  */
-KAT.AnnotationHighlighter.prototype.highlight =
-  function(annotation) {
-    //TODO: use only a single color attribute on annotations
-    //      (create colorMath and color locally)
-    this.annotations.push(annotation);
-    var start = annotation.start;
-    var end = annotation.end;
+KAT.AnnotationHighlighter.prototype.highlight = 
+function (annotation)
+{
+  this.annotations.push(annotation);
+  var start = annotation.start;
+  var end = annotation.end;
 
-    //TODO: split function up into subtasks
+  //TODO: split function up into subtasks
 
-    var startElement = resolveXPath(document, start[0]);
-    var startText = startElement.innerHTML;
+  var startElement = resolveXPath(document, start[0]);
+  var startText = startElement.innerHTML;
 
-    var endElement = resolveXPath(document, end[0]);
-    var endText = endElement.innerHTML;
+  var endElement = resolveXPath(document, end[0]);
+  var endText = endElement.innerHTML;
 
-    var commonAncestor = $(startElement).parents().has(endElement).first()[0];
+  var commonAncestor = $(startElement).parents().has(endElement).first()[0];
 
-    var commonHTML = commonAncestor.outerHTML;
+  var commonHTML = commonAncestor.outerHTML;
 
-    /* Find offsets relative to least common ancestor. */
-    var startOffset = this.getRelativeOffset(startElement, commonAncestor);
-    startOffset += this.getRelativeOffsetSpans(startOffset, commonAncestor,
-      start[1]);
-    var endOffset = this.getRelativeOffset(endElement, commonAncestor);
-    endOffset += this.getRelativeOffsetSpans(endOffset, commonAncestor, end[1]);
+  /* Find offsets relative to least common ancestor. */  
+  var startOffset = this.getRelativeOffset(startElement, commonAncestor);
+  startOffset += this.getRelativeOffsetSpans(startOffset, commonAncestor, start[1]);
+  var endOffset = this.getRelativeOffset(endElement, commonAncestor);
+  endOffset += this.getRelativeOffsetSpans(endOffset, commonAncestor, end[1]);
 
-    /* Split string around interval */
-    var beforeIntervalString = commonHTML.substring(0, startOffset);
-    var intervalString = commonHTML.substring(startOffset, endOffset);
-    var afterIntervalString = commonHTML.substring(endOffset,
-      commonHTML.length);
+  /* Split string around interval */
+  var beforeIntervalString = commonHTML.substring(0, startOffset);
+  var intervalString = commonHTML.substring(startOffset, endOffset);
+  var afterIntervalString = commonHTML.substring(endOffset, 
+                            commonHTML.length);
 
-    var buffer = beforeIntervalString;
+  var buffer = beforeIntervalString;
 
-    /* Split string into html-tags and strings. */
-    var arr = intervalString.split(regex);
-    arr = arr.filter(function(element) {
-      return element !== "";
-    });
+  /* Split string into html-tags and strings. */
+  var arr = intervalString.split(regex);
+  arr = arr.filter(function(element) { return element !== ""; });
 
-    var x = this.applyColor(arr, annotation["colorMath"], annotation["id"]);
+  buffer += this.applyColor(arr, annotation["id"]);
+  buffer += afterIntervalString;
 
-    buffer += x;
-    buffer += afterIntervalString;
+  commonAncestor.outerHTML = buffer;
+  $("span."+annotation["id"]).css("background-color", annotation["color"]);
 
-    commonAncestor.outerHTML = buffer;
-    $("span." + annotation["id"]).css("background-color", annotation["color"]);
+  $(".math").filter("."+annotation["id"]).attr("mathbackground", annotation["color"]);
 
-    $(".math").filter("." + annotation["id"]).attr("mathbackground", annotation[
-      "colorMath"]);
-
-    console.log(end[0]);
-    var s = getXPath(document, endElement);
-    console.log(s);
-  }
+  console.log(end[0]);
+  var s = getXPath(document, endElement);
+  console.log(s);
+}
 
 /** @brief Remove the highlighting for a certain annotation again.
- *  @param id The id of the annotation to be removed.
+ *  @param {string} id The id of the annotation to be removed.
  *  @return Void.
  */
-KAT.AnnotationHighlighter.prototype.removeAnnotation =
-  function(id) {
-    //remove highlighting on math
-    $(".math").filter("." + id).attr("mathbackground", "#FFFFFF").removeClass(
-      id);
+KAT.AnnotationHighlighter.prototype.removeAnnotation = 
+function (id)
+{
+  //remove highlighting on math
+  $(".math").filter("."+id).removeAttr("mathbackground").removeClass(id); 
 
-    //remove highlighting of normal text
-    $("span." + id).remove()
+  //remove highlighting of normal text
+  $("span."+id).remove()
 
-    //TODO: remove annotation from annotations-dictionary 
-    //  delete removeStuff;
-  }
+  //TODO: remove annotation from annotations-dictionary 
+  //  delete removeStuff;
+}
 
 var resolveXPath = function(from, path) {
   //try and match for id
@@ -252,8 +234,8 @@ var resolveXPath = function(from, path) {
   var part, tagName, elementIndex, _element;
 
   var compare = function(e) {
-    if (((e.tagName || e.nodeName).toLowerCase() == "span") &&
-      e.classList.contains(highlightClass)) {
+    if(((e.tagName || e.nodeName).toLowerCase() == "span") &&
+         e.classList.contains(highlightClass)) {
       return false;
     }
     return (e.tagName || e.nodeName).toLowerCase() == tagName.toLowerCase();
@@ -314,8 +296,8 @@ var getXPath = function(from, to) {
         continue;
       }
 
-      if (((sibling.tagName || sibling.nodeName).toLowerCase() == "span") &&
-        sibling.classList.contains("highlight")) {
+      if(((sibling.tagName || sibling.nodeName).toLowerCase() == "span") &&
+         sibling.classList.contains("highlight")) {
         continue;
       }
 
@@ -330,3 +312,4 @@ var getXPath = function(from, to) {
 
   return paths.length ? "/" + paths.join("/") : null;
 };
+
