@@ -118,6 +118,10 @@ function (arr, id)
         var dummyObject = $(el).addClass("math").addClass(id)[0];
         var tag = dummyObject.outerHTML.match(regex)[0];
         buffer += tag;
+      } else if(isOpeningMarkup(el) && isClosingMarkup(arr[Math.min(arr.length-1, index+2)])) { 
+        //concentrate annotations in 'highlight'-spans
+        var openingTag = $(el).addClass(id)[0];
+        buffer += openingTag.outerHTML.split(regex).filter(function(str, i) {return str.length > 0;})[0];
       } else {
         buffer += el;
       }
@@ -128,7 +132,8 @@ function (arr, id)
       //skip if next AND prev are highlighted
       var prev = arr[Math.max(0, index-1)];
       var next = arr[Math.min(arr.length-1, index+1)];
-      if(!(isMathML(prev) || isMathML(next))) {
+      if(!(isMathML(prev) || isMathML(next)) &&
+         !(isOpeningMarkup(prev) && isClosingMarkup(next))) {
         var newSpan = $("<span>").addClass("highlight").addClass(id)[0];
         newSpan.innerHTML = el;
         buffer += newSpan.outerHTML;
@@ -143,13 +148,6 @@ function (arr, id)
 
 /**
  * @brief Highlights the given interval on an xml document.
- *        Currently doesn't work with multiple annotations that have
- *        the same least common ancestor.
- * 
- * @param start Start of the interval. Consists of an array of an XPath
- *              pointing to an element and an integer representing an 
- *              offset.
- * @param end   End of the interval. Format as for start.
  * @return Void.
  */
 KAT.AnnotationHighlighter.prototype.highlight = 
@@ -196,10 +194,6 @@ function (annotation)
   $("span."+annotation["id"]).css("background-color", annotation["color"]);
 
   $(".math").filter("."+annotation["id"]).attr("mathbackground", annotation["color"]);
-
-  console.log(end[0]);
-  var s = getXPath(document, endElement);
-  console.log(s);
 }
 
 /** @brief Remove the highlighting for a certain annotation again.
