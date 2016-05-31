@@ -111,8 +111,14 @@ KAT.gui.getXPath = function(from, to) {
     var index = 0;
     for (var sibling = element.previousSibling; sibling; sibling = sibling.previousSibling) {
       // Ignore document type declaration.
-      if (sibling.nodeType == Node.DOCUMENT_TYPE_NODE)
+      if (sibling.nodeType == Node.DOCUMENT_TYPE_NODE) {
         continue;
+      }
+
+      if (((sibling.tagName || sibling.nodeName).toLowerCase() == "span") &&
+        sibling.classList.contains("highlight")) {
+        continue;
+      }
 
       if (sibling.nodeName == element.nodeName)
         ++index;
@@ -139,7 +145,6 @@ KAT.gui.getXPath = function(from, to) {
  * @memberof KAT.gui
  */
 KAT.gui.resolveXPath = function(from, path) {
-
   //try and match for id
   var match = path.match(/^\/\/\*\[@id='([^']+)'\]$/);
 
@@ -153,8 +158,11 @@ KAT.gui.resolveXPath = function(from, path) {
 
   var part, tagName, elementIndex, _element;
 
-
   var compare = function(e) {
+    if (((e.tagName || e.nodeName).toLowerCase() == "span") &&
+      e.classList.contains("highlight")) {
+      return false;
+    }
     return (e.tagName || e.nodeName).toLowerCase() == tagName.toLowerCase();
   };
 
@@ -170,8 +178,6 @@ KAT.gui.resolveXPath = function(from, path) {
     //find the next element
     element = Array.prototype.filter.call(element.children, compare)[
       elementIndex];
-
-
 
     //woops, it's undefined
     if (element === undefined) {
