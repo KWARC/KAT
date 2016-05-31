@@ -1,6 +1,9 @@
 /** @brief Regular expression to match html-tags */
 var regex = /(<.*?>)/;
 
+/** @brief Class for highlight spans */
+var highlightClass = "highlight";
+
 
 function isHTMLTag(str) {
   return regex.test(str);
@@ -99,7 +102,7 @@ function (arr, color, id)
   }
 
   function isOpeningMarkup(el) {
-    return isOpeningTag(el) && $(el).hasClass("highlight");
+    return isOpeningTag(el) && $(el).hasClass(highlightClass);
   }
   
   function isClosingMarkup(el) {
@@ -112,7 +115,7 @@ function (arr, color, id)
       if(isMathML(el) && isOpeningTag(el)) {
         //add class to math
         //TODO: add css rule for merging colors -> just check over hashtable (what about efficiency?)
-        var dummyObject = $(el).addClass(id + " " + "math")[0];
+        var dummyObject = $(el).addClass("math").addClass(id)[0];
         var tag = dummyObject.outerHTML.match(regex)[0];
         buffer += tag;
       } else if(isOpeningMarkup(el) && isClosingMarkup(arr[Math.min(arr.length-1, index+2)])) { 
@@ -131,7 +134,9 @@ function (arr, color, id)
       var next = arr[Math.min(arr.length-1, index+1)];
       if(!(isMathML(prev) || isMathML(next)) &&
          !(isOpeningMarkup(prev) && isClosingMarkup(next))) {
-        buffer += "<span class='highlight " + id + "'>" + el + "</span>"; //TODO: use jQuery
+        var newSpan = $("<span>").addClass("highlight").addClass(id)[0];
+        newSpan.innerHTML = el;
+        buffer += newSpan.outerHTML;
       } else {
         buffer += el;
       }
@@ -156,12 +161,12 @@ KAT.AnnotationHighlighter.prototype.highlight =
 function (annotation)
 {
   //TODO: use only a single color attribute on annotations
+  //      (create colorMath and color locally)
   this.annotations.push(annotation);
   var start = annotation.start;
   var end = annotation.end;
 
   //TODO: split function up into subtasks
-  console.log(start + "\n" + end);
 
   var startElement = resolveXPath(document, start[0]);
   var startText = startElement.innerHTML;
@@ -199,9 +204,25 @@ function (annotation)
   commonAncestor.outerHTML = buffer;
   $("span."+annotation["id"]).css("background-color", annotation["color"]);
 
-  var math = $(".math").filter("."+annotation["id"]).attr("mathbackground", annotation["colorMath"]);
+  $(".math").filter("."+annotation["id"]).attr("mathbackground", annotation["colorMath"]);
 }
 
+/** @brief Remove the highlighting for a certain annotation again.
+ *  @param id The id of the annotation to be removed.
+ *  @return Void.
+ */
+KAT.AnnotationHighlighter.prototype.removeAnnotation = 
+function (id)
+{
+  //remove highlighting on math
+  $(".math").filter("."+id).attr("mathbackground", "#FFFFFF").removeClass(id); 
+
+  //remove highlighting of normal text
+  $("span."+id).remove()
+
+  //remove annotation from annotations-dictionary 
+//  delete removeStuff;
+}
 
 var resolveXPath = function(from, path) {
   //try and match for id
@@ -219,7 +240,7 @@ var resolveXPath = function(from, path) {
 
   var compare = function(e) {
     if(((e.tagName || e.nodeName).toLowerCase() == "span") &&
-         e.classList.contains("highlight")) { //TODO: make this a global constant
+         e.classList.contains(highlightClass)) { //TODO: make this a global constant
       return false;
     }
     return (e.tagName || e.nodeName).toLowerCase() == tagName.toLowerCase();
