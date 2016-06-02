@@ -81,6 +81,23 @@ module.exports = function(grunt) {
         }
       }
     },
+ 
+    //for consistent formatting
+    'jsbeautifier' : {
+      'beautify' : {
+        'src' : ['src/**/*.js'],
+        'options' : {
+          'config' : '.jsbeautifyrc' 
+        }
+      },
+      'check' : {
+        'src' : ['src/**/*.js'],
+        'options' : {
+          'config' : '.jsbeautifyrc', 
+          'mode' : 'VERIFY_ONLY'
+        }
+      }
+    },
 
     //For writing clean code
     jshint: {
@@ -142,6 +159,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-jsdoc-ng');
+  grunt.loadNpmTasks('grunt-jsbeautifier');
 
   // For building
   grunt.registerTask('docs', [
@@ -160,11 +178,15 @@ module.exports = function(grunt) {
   grunt.registerTask('build', [
     'jshint',
     'docs',
+    'jsbeautifier:beautify',
     'rebuild'
   ]);
 
-  //Have the serve task
+  grunt.registerTask('beautify', [
+    'jsbeautifier:beautify'
+  ]);
 
+  //Have the serve task
   grunt.registerTask('run', [
     'build',
     'connect:keepalive'

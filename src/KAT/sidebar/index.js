@@ -1,75 +1,83 @@
 /**
-* Namespace for the sidebar
-* @namespace
-* @alias KAT.sidebar
-*/
+ * Namespace for the sidebar
+ * @namespace
+ * @alias KAT.sidebar
+ */
 KAT.sidebar = {};
 
 /**
-* Set up and insert Annotation Toolkit sidemenu
-*
-* @param {KAT.Storage.Store} store - Annotation Store to bind to.
-* @param {KAT.reviewStore.store} reviewStore - Store that maps reviews to annotation id's
-*
-* @function
-* @static
-* @name init
-* @memberof KAT.sidebar
-*/
-KAT.sidebar.init = function(store, reviewStore){
+ * Set up and insert Annotation Toolkit sidemenu
+ *
+ * @param {KAT.Storage.Store} store - Annotation Store to bind to.
+ * @param {KAT.reviewStore.store} reviewStore - Store that maps reviews to annotation id's
+ *
+ * @function
+ * @static
+ * @name init
+ * @memberof KAT.sidebar
+ */
+KAT.sidebar.init = function(store, reviewStore) {
 
   KAT.sidebar.store = store;
   KAT.sidebar.reviewStore = reviewStore;
 
   var sendToServer = function() {
 
-    var stringAnnotationsReviews = JSON.stringify({"store":store.toRDF(), "annotations":reviewStore.toJSON()});
-    var response = "id="+KAT.sidebar.jobID+"&content="+stringAnnotationsReviews;
+    var stringAnnotationsReviews = JSON.stringify({
+      "store": store.toRDF(),
+      "annotations": reviewStore.toJSON()
+    });
+    var response = "id=" + KAT.sidebar.jobID + "&content=" +
+      stringAnnotationsReviews;
 
-      $.post("http://localhost:4000/dumps", response, function(data){
-        if(data.success === true) {
-          console.log("Posted annotations and reviews");
+    $.post("http://localhost:4000/dumps", response, function(data) {
+      if (data.success === true) {
+        console.log("Posted annotations and reviews");
 
-       	  $(".contactServer").text("Request new document");
-          $(".contactServer").off("click"); //remove old eventHandler
-          $(".contactServer").click(getNewDocument);
-        } else {
-          window.alert("The document couldn't be posted to the server.");
-        }
+        $(".contactServer").text("Request new document");
+        $(".contactServer").off("click"); //remove old eventHandler
+        $(".contactServer").click(getNewDocument);
+      } else {
+        window.alert("The document couldn't be posted to the server.");
+      }
     });
 
   };
 
   var getNewDocument = function() {
 
-     $.get("http://localhost:4000/get_task", function(data, textStatus, jqXHR) {
+    $.get("http://localhost:4000/get_task", function(data, textStatus,
+      jqXHR) {
 
       function loadNewDocument() {
 
         console.log("Retrieving and parsing new document");
 
-        $.get("http://localhost:4000/"+data.path, function(documentData){
-            //if response is XML it has to be parsed into a string first
-            var xmlCheck = documentData.contentType == "text/xml" || undefined;
-            if(xmlCheck) {
-              documentData = (new XMLSerializer()).serializeToString(documentData);
-            }
+        $.get("http://localhost:4000/" + data.path, function(
+          documentData) {
+          //if response is XML it has to be parsed into a string first
+          var xmlCheck = documentData.contentType == "text/xml" ||
+            undefined;
+          if (xmlCheck) {
+            documentData = (new XMLSerializer()).serializeToString(
+              documentData);
+          }
 
-            store.clear();
-            reviewStore.clear();
+          store.clear();
+          reviewStore.clear();
 
-            $("#content").html(documentData);
+          $("#content").html(documentData);
 
-            $(collapsibleMenu).remove();
+          $(collapsibleMenu).remove();
 
-            KAT.sidebar.annotationMode = "Reading";
-            KAT.sidebar.jobID = data.id;
-            KAT.sidebar.init(store, reviewStore);
+          KAT.sidebar.annotationMode = "Reading";
+          KAT.sidebar.jobID = data.id;
+          KAT.sidebar.init(store, reviewStore);
         });
 
       }
 
-      if(textStatus == "success") {
+      if (textStatus == "success") {
         loadNewDocument();
       } else {
         window.alert("Couldn't reach CorTeX");
@@ -81,8 +89,8 @@ KAT.sidebar.init = function(store, reviewStore){
   //mode of the sidebar.
   var mode;
 
-  switch(KAT.sidebar.annotationMode) {
-    
+  switch (KAT.sidebar.annotationMode) {
+
     case "Review":
       mode = "Review";
       break;
@@ -102,14 +110,14 @@ KAT.sidebar.init = function(store, reviewStore){
   KAT.sidebar.modeButtonGroup = $("<div>")
     .addClass("btn-group")
     .attr("role", "group");
-   //.BS();
+  //.BS();
 
   //add Button for each option
-  ["Reading", "Annotation", "Review"].map( function(label) {
+  ["Reading", "Annotation", "Review"].map(function(label) {
 
     //set some button initially active
     var isActive = "";
-    if(label == mode) 
+    if (label == mode)
       isActive = "active";
 
     $("<button>")
@@ -118,180 +126,199 @@ KAT.sidebar.init = function(store, reviewStore){
       .addClass("btn btn-default")
       .addClass(isActive)
       .text(label)
-      .click(function(){
+      .click(function() {
         KAT.sidebar.toggleAnnotationMode(label);
       })
       .appendTo(KAT.sidebar.modeButtonGroup);
 
-  } );
+  });
 
 
   //create collapsible sidebar
   var collapsibleMenu = jQuery('<div>').addClass("collapsible")
 
   .append(
-    //add a heading
-    $("<div>").addClass("KATTitle").html("<h3>KWARC Annotation Tool</h3>"),
+      //add a heading
+      $("<div>").addClass("KATTitle").html("<h3>KWARC Annotation Tool</h3>"),
 
-    // and a lot of buttons
-    $("<div>").addClass("KATSidebarButtons")
-    .append(
-      //to change the mode
-      KAT.sidebar.modeButtonGroup,
-      "<br/>",
-      "<br/>",
+      // and a lot of buttons
+      $("<div>").addClass("KATSidebarButtons")
+      .append(
+        //to change the mode
+        KAT.sidebar.modeButtonGroup,
+        "<br/>",
+        "<br/>",
 
-      //to send document to server/get new document
-      $("<button>")
-      .text(KAT.sidebar.jobID?"Send document to server":"Request new document")
-      .addClass("helpButton contactServer")
-      .addClass("btn btn-default")
-      .click(function(){
-        if(KAT.sidebar.jobID) {
-          sendToServer();
-        } else {
-          getNewDocument();
-        }
-      }),
-      "<br/>",
-      "<br/>",
+        //to send document to server/get new document
+        $("<button>")
+        .text(KAT.sidebar.jobID ? "Send document to server" :
+          "Request new document")
+        .addClass("helpButton contactServer")
+        .addClass("btn btn-default")
+        .click(function() {
+          if (KAT.sidebar.jobID) {
+            sendToServer();
+          } else {
+            getNewDocument();
+          }
+        }),
+        "<br/>",
+        "<br/>",
 
-      //to import annotations
-      $("<button>")
-      .text("Import Annotations")
-      .addClass("helpButton")
-      .addClass("btn btn-default")
-      .click(function(){
-        store.showImportDialog();
-      }),
-      "<br/>",
-      "<br/>",
+        //to import annotations
+        $("<button>")
+        .text("Import Annotations")
+        .addClass("helpButton")
+        .addClass("btn btn-default")
+        .click(function() {
+          store.showImportDialog();
+        }),
+        "<br/>",
+        "<br/>",
 
-      // to export annotations
-      $("<button>")
-      .text("Export Annotations")
-      .addClass("helpButton")
-      .addClass("btn btn-default")
-      .click(function(){
-        store.showExportDialog();
-      }),
-      "<br/>",
-      "<br/>",
+        // to export annotations
+        $("<button>")
+        .text("Export Annotations")
+        .addClass("helpButton")
+        .addClass("btn btn-default")
+        .click(function() {
+          store.showExportDialog();
+        }),
+        "<br/>",
+        "<br/>",
 
-      //to import reviews
-      $("<button>")
-      .text("Import Reviews")
-      .addClass("helpButton")
-      .addClass("btn btn-default")
-      .click(function(){
-        reviewStore.importReviews();
-      }),
-      "<br/>",
-      "<br/>",
+        //to import reviews
+        $("<button>")
+        .text("Import Reviews")
+        .addClass("helpButton")
+        .addClass("btn btn-default")
+        .click(function() {
+          reviewStore.importReviews();
+        }),
+        "<br/>",
+        "<br/>",
 
-      // to export reviews
-      $("<button>")
-      .text("Export Reviews")
-      .addClass("helpButton")
-      .addClass("btn btn-default")
-      .click(function(){
-        reviewStore.exportReviews();
-      }),
-      "<br/>",
-      "<br/>",
+        // to export reviews
+        $("<button>")
+        .text("Export Reviews")
+        .addClass("helpButton")
+        .addClass("btn btn-default")
+        .click(function() {
+          reviewStore.exportReviews();
+        }),
+        "<br/>",
+        "<br/>",
 
-      //to report an issue
-      $("<button>")
-      .text("Report Issue")
-      .addClass("helpButton")
-      .addClass("btn btn-default")
-      .click(function(){
-        //open github issues page
-        window.open("https://github.com/KWARC/KAT/issues", "_blank");
-      }),
-      "<br/>",
-      "<br/>",
+        //redirects to the GitHub wiki
+        $("<button>")
+        .text("Help")
+        .addClass("helpButton")
+        .addClass("btn btn-default")
+        .click(function() {
+          //open github issues page
+          window.open("https://github.com/KWARC/KAT/wiki", "_blank");
+        }),
+        "<br/>",
+        "<br/>",
 
-      "<br/>"
-    ),
-    $("<ul>").addClass("KATMenuItems")
-  )
-  .css({
-    'position':'fixed',
-    'right': KAT.sidebar.hideWidth,
-    'height': winHeight
-  }).prependTo("body");
+        //to report an issue
+        $("<button>")
+        .text("Report Issue")
+        .addClass("helpButton")
+        .addClass("btn btn-default")
+        .click(function() {
+          //open github issues page
+          window.open("https://github.com/KWARC/KAT/issues", "_blank");
+        }),
+        "<br/>",
+        "<br/>",
+
+        "<br/>"
+      ),
+      $("<ul>").addClass("KATMenuItems")
+    )
+    .css({
+      'position': 'fixed',
+      'right': KAT.sidebar.hideWidth,
+      'height': winHeight
+    }).prependTo("body");
 
   // create button to toggle collapse and resurection of sidemenu and define properties
   var collapsibleToggle = $("<button>")
-  .text("«")
-  .addClass("collapseToggle")
-  .css({'height': winHeight-20, 
-        'z-index': 100})
-  .click(KAT.sidebar.toggleSidebar).prependTo(collapsibleMenu); //adapted from init function below
+    .text("«")
+    .addClass("collapseToggle")
+    .css({
+      'height': winHeight - 20,
+      'z-index': 100
+    })
+    .click(KAT.sidebar.toggleSidebar).prependTo(collapsibleMenu); //adapted from init function below
 
   //Make sure to show the sidebar
   KAT.sidebar.showSidebar();
 
   // define changes to sidemenu when page is resized
   // this seems hacky, try to make it all relative with global CSS
-  jQuery( window ).resize(function() {
+  jQuery(window).resize(function() {
     winHeight = jQuery(window).height();
 
     collapsibleMenu.css({
-      'position':'fixed',
+      'position': 'fixed',
       'right': KAT.sidebar.hideWidth,
       'height': winHeight
     });
 
     collapsibleToggle.css({
-      'height': winHeight-20
+      'height': winHeight - 20
     });
   });
 };
 
 /**
-* Shows the sidebar.
-*
-* @function
-* @static
-* @name hideSidebar
-* @memberof KAT.sidebar
-*/
-KAT.sidebar.showSidebar = function(){
+ * Shows the sidebar.
+ *
+ * @function
+ * @static
+ * @name hideSidebar
+ * @memberof KAT.sidebar
+ */
+KAT.sidebar.showSidebar = function() {
   KAT.sidebar.extended = true;
 
   jQuery(".collapseToggle")
-  .text("»")
-  .parent().animate({right: "0"}, KAT.sidebar.animateLength );
+    .text("»")
+    .parent().animate({
+      right: "0"
+    }, KAT.sidebar.animateLength);
 };
 
 /**
-* Hides the sidebar.
-*
-* @function
-* @static
-* @name hideSidebar
-* @memberof KAT.sidebar
-*/
-KAT.sidebar.hideSidebar = function(){
+ * Hides the sidebar.
+ *
+ * @function
+ * @static
+ * @name hideSidebar
+ * @memberof KAT.sidebar
+ */
+KAT.sidebar.hideSidebar = function() {
   KAT.sidebar.extended = false;
 
   jQuery(".collapseToggle")
-  .text("«") // Change text of button.
-  .parent().animate({right: KAT.sidebar.hideWidth}, KAT.sidebar.animateLength);
+    .text("«") // Change text of button.
+    .parent().animate({
+      right: KAT.sidebar.hideWidth
+    }, KAT.sidebar.animateLength);
 };
 
 /**
-* Toggles the state of the sidebar.
-*
-* @function
-* @static
-* @name toggleSidebar
-* @memberof KAT.sidebar
-*/
-KAT.sidebar.toggleSidebar = function(){
-  if (KAT.sidebar.extended){
+ * Toggles the state of the sidebar.
+ *
+ * @function
+ * @static
+ * @name toggleSidebar
+ * @memberof KAT.sidebar
+ */
+KAT.sidebar.toggleSidebar = function() {
+  if (KAT.sidebar.extended) {
     //we are now hidden
     KAT.sidebar.hideSidebar();
   } else {
@@ -301,16 +328,16 @@ KAT.sidebar.toggleSidebar = function(){
 };
 
 /**
-* Toggles the annotation mode of KAT.
-*
-* @function
-* @static
-* @name toggleAnnotationMode
-* @memberof KAT.sidebar
-*/
-KAT.sidebar.toggleAnnotationMode = function(label){
+ * Toggles the annotation mode of KAT.
+ *
+ * @function
+ * @static
+ * @name toggleAnnotationMode
+ * @memberof KAT.sidebar
+ */
+KAT.sidebar.toggleAnnotationMode = function(label) {
 
-  if(KAT.sidebar.annotationMode == "Review") {
+  if (KAT.sidebar.annotationMode == "Review") {
     //remove specific menu
     KAT.storage.Annotation.prototype.unfocus();
     KAT.sidebar.removeReviewForm();
@@ -319,55 +346,55 @@ KAT.sidebar.toggleAnnotationMode = function(label){
 
   KAT.sidebar.annotationMode = label;
   KAT.sidebar.modeButtonGroup.find(".active").removeClass("active");
-  KAT.sidebar.modeButtonGroup.find("[mode='"+label+"']").addClass("active");
+  KAT.sidebar.modeButtonGroup.find("[mode='" + label + "']").addClass(
+    "active");
 
-  if(label == "Review")
+  if (label == "Review")
     KAT.sidebar.generateReviewForm();
 
 
 };
 
 /**
-* Stores if the sidebar is extended.
-* Should be read-only.
-*
-* @type {boolean}
-* @name KAT.sidebar.extended
-*/
+ * Stores if the sidebar is extended.
+ * Should be read-only.
+ *
+ * @type {boolean}
+ * @name KAT.sidebar.extended
+ */
 KAT.sidebar.extended = false;
 
 /**
-* Stores if KAT is in annotation Mode.
-* Should be readonly.
-*
-* @type {boolean}
-* @name KAT.sidebar.annotationMode
-*/
+ * Stores if KAT is in annotation Mode.
+ * Should be readonly.
+ *
+ * @type {boolean}
+ * @name KAT.sidebar.annotationMode
+ */
 KAT.sidebar.annotationMode = false;
 
 /**
-* Width of the sidebar that will be hidden
-*
-* @type {integer}
-* @default -480
-* @name KAT.sidebar.hideWidth
-*/
+ * Width of the sidebar that will be hidden
+ *
+ * @type {integer}
+ * @default -480
+ * @name KAT.sidebar.hideWidth
+ */
 KAT.sidebar.hideWidth = -480;
 
 /**
-* Duration of animation
-*
-* @type {integer}
-* @default 100
-* @name KAT.sidebar.animateLength
-*/
+ * Duration of animation
+ *
+ * @type {integer}
+ * @default 100
+ * @name KAT.sidebar.animateLength
+ */
 KAT.sidebar.animateLength = 100;
 
 /**
-* Contains a reference to the mode toggle button in the sidebar.
-*
-* @type {jQuery}
-* @name KAT.sidebar.modeButtonGroup
-*/
+ * Contains a reference to the mode toggle button in the sidebar.
+ *
+ * @type {jQuery}
+ * @name KAT.sidebar.modeButtonGroup
+ */
 KAT.sidebar.modeButtonGroup = undefined;
-

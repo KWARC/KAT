@@ -18,6 +18,7 @@ rm -rf node_modules
 # The order is VERY important.
 npm install grunt-jsdoc-ng
 npm install jsdoc
+npm install grunt-jsbeautifier
 npm install .
 # run either one of the commands below
 grunt run # To just start a server
