@@ -65,14 +65,6 @@ KAT.sidebar.generateReviewForm = function() {
     .addClass("btn-group")
     .appendTo(navigation);
 
-  var nextButton = $("<button>")
-    .text("Next")
-    .addClass("btn btn-default")
-    .click(function() {
-      next();
-    })
-    .appendTo(navBtnGroup);
-
   var previousButton = $("<button>")
     .text("Previous")
     .addClass("btn btn-default")
@@ -81,6 +73,14 @@ KAT.sidebar.generateReviewForm = function() {
     })
     .appendTo(navBtnGroup);
 
+  var nextButton = $("<button>")
+    .text("Next")
+    .addClass("btn btn-default")
+    .click(function() {
+      next();
+    })
+    .appendTo(navBtnGroup);
+  
   /**********************************************/
 
   var rateBtnGroup = $("<div>")
