@@ -177,7 +177,7 @@ module.exports = function(grunt) {
   // creates everything.
   grunt.registerTask('build', [
     'jshint',
-    'docs',
+    // 'docs',
     'jsbeautifier:beautify',
     'rebuild'
   ]);
