@@ -80,7 +80,7 @@ KAT.sidebar.generateReviewForm = function() {
       next();
     })
     .appendTo(navBtnGroup);
-  
+
   /**********************************************/
 
   var rateBtnGroup = $("<div>")
