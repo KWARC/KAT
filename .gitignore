@@ -3,3 +3,8 @@ dest
 null.txt
 *.swp
 doc
+
+# LaTeX paper
+*.aux
+*.log
+*.synctex.gz

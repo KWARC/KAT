@@ -64,20 +64,14 @@ module.exports = function(grunt) {
     },
 
     //For building documentation
-    'jsdoc-ng' : {
+    jsdoc : {
       kat : {
-        src: ['src', 'README.md'],
-        dest: 'doc',
+        src: ['src/**/*.js', 'README.md'],
         options: {
-          source: {
-              includePattern: '.+\\.js(doc)?$',
-              excludePattern: '(^|\\/|\\\\)_'
-          },
-          opts: {
-              destination: 'doc',
-              recurse: true,
-              private: true
-          }
+          destination: 'doc', 
+          template : "node_modules/ink-docstrap/template",
+          configure : "node_modules/ink-docstrap/template/jsdoc.conf.json", 
+          private: true
         }
       }
     },
@@ -153,17 +147,17 @@ module.exports = function(grunt) {
   });
 
   // Load the tasks
+  grunt.loadNpmTasks('grunt-jsdoc');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-jsdoc-ng');
   grunt.loadNpmTasks('grunt-jsbeautifier');
 
   // For building
   grunt.registerTask('docs', [
-    'jsdoc-ng'
+    'jsdoc:kat'
   ]);
 
   // For quickly rebuilding
