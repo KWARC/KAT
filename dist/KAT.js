@@ -1513,14 +1513,8 @@ KAT.gui.getXPath = function(from, to) {
     var index = 0;
     for (var sibling = element.previousSibling; sibling; sibling = sibling.previousSibling) {
       // Ignore document type declaration.
-      if (sibling.nodeType == Node.DOCUMENT_TYPE_NODE) {
+      if (sibling.nodeType == Node.DOCUMENT_TYPE_NODE)
         continue;
-      }
-
-      if (((sibling.tagName || sibling.nodeName).toLowerCase() == "span") &&
-        sibling.classList.contains("highlight")) {
-        continue;
-      }
 
       if (sibling.nodeName == element.nodeName)
         ++index;
@@ -1547,6 +1541,7 @@ KAT.gui.getXPath = function(from, to) {
  * @memberof KAT.gui
  */
 KAT.gui.resolveXPath = function(from, path) {
+
   //try and match for id
   var match = path.match(/^\/\/\*\[@id='([^']+)'\]$/);
 
@@ -1560,11 +1555,8 @@ KAT.gui.resolveXPath = function(from, path) {
 
   var part, tagName, elementIndex, _element;
 
+
   var compare = function(e) {
-    if (((e.tagName || e.nodeName).toLowerCase() == "span") &&
-      e.classList.contains("highlight")) {
-      return false;
-    }
     return (e.tagName || e.nodeName).toLowerCase() == tagName.toLowerCase();
   };
 
@@ -1580,6 +1572,8 @@ KAT.gui.resolveXPath = function(from, path) {
     //find the next element
     element = Array.prototype.filter.call(element.children, compare)[
       elementIndex];
+
+
 
     //woops, it's undefined
     if (element === undefined) {
@@ -3035,19 +3029,19 @@ KAT.sidebar.generateReviewForm = function() {
     .addClass("btn-group")
     .appendTo(navigation);
 
-  var previousButton = $("<button>")
-    .text("Previous")
-    .addClass("btn btn-default")
-    .click(function() {
-      prev();
-    })
-    .appendTo(navBtnGroup);
-
   var nextButton = $("<button>")
     .text("Next")
     .addClass("btn btn-default")
     .click(function() {
       next();
+    })
+    .appendTo(navBtnGroup);
+
+  var previousButton = $("<button>")
+    .text("Previous")
+    .addClass("btn btn-default")
+    .click(function() {
+      prev();
     })
     .appendTo(navBtnGroup);
 
@@ -3768,7 +3762,7 @@ KAT.storage.Annotation.fromRDF = function(rdf, id, store) {
       console.log(
         "Currently loaded document does not match RDF annotation, loading it anyways ... "
       );
-      partURL = decodeURIComponent(url.indexOf("#") + 1);
+      partURL = decodeURIComponent(url.substring(url.indexOf("#") + 1));
     } else {
       throw new Error("Malformed RDF: Unable to parse selection URL. ");
     }
@@ -4058,6 +4052,9 @@ KAT.storage.Annotation.prototype.draw = function() {
   //this is me.
   var me = this;
 
+  console.log(this);
+  console.log(this.selection);
+
   // find the elements in the selection.
   this.store.gui.getRange(this.selection)
 
@@ -4226,7 +4223,7 @@ KAT.storage.Annotation.prototype.undraw = function() {
   range.each(function() {
     var $me = $(this);
 
-    //unregister eventListener for all click events 
+    //unregister eventListener for all click events
     $me.off("click");
 
     //the current data
@@ -4317,7 +4314,7 @@ KAT.storage.Annotation.prototype.recomputeTooltip = function() {
     // and store the self reference as an "_"
     valObject._ = annot;
 
-    // now return the object. 
+    // now return the object.
     return valObject;
   };
 
@@ -4385,7 +4382,7 @@ KAT.storage.Annotation.prototype.flash = function() {
 
 KAT.storage.Annotation.prototype.focus = function() {
 
-  /* both taken from 
+  /* both taken from
    * http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb/5624139#5624139 */
   function hexToRgb(hex) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -4423,7 +4420,7 @@ KAT.storage.Annotation.prototype.focus = function() {
     })
     .addClass("focused");
 
-  //take all elements in next highest div and change color of MathML 
+  //take all elements in next highest div and change color of MathML
   //elements not in selection
   $(".focused").find("*").not(selection).each(function(index) {
 
@@ -4571,7 +4568,7 @@ KAT.storage.Annotation.prototype.showReferences = function() {
   var arrowStartX = $(selection[index]).offset().left;
   var arrowStartY = $(selection[index]).offset().top;
 
-  //initialize canvas all arrows are drawn on 
+  //initialize canvas all arrows are drawn on
   var canvas = Raphael(0, 0, "100%", $(document).height());
 
   //for debugging : KAT.sidebar.store.annotations[0].concept
